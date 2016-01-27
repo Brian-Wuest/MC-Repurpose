@@ -1,5 +1,9 @@
 package wuest.utilities;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -16,12 +20,11 @@ public class HomeCommand extends CommandBase
 {
 
 	@Override
-	public String getName() 
+	public String getCommandName() 
 	{
-		// Name of the command "home" will be called by "/home"
-		return "home";	
+		return "home";
 	}
-
+	
 	@Override
 	public String getCommandUsage(ICommandSender sender) 
 	{
@@ -31,7 +34,7 @@ public class HomeCommand extends CommandBase
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void execute(ICommandSender sender, String[] args)
+	public void processCommand(ICommandSender sender, String[] args)
 			throws CommandException 
 	{
 		/*
