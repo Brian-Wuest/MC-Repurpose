@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wuestUtilities",
+  "name": "Wuest Utilities",
+  "description": "This is my first mod!.",
+  "version": "1.0",
+  "mcversion": "1.8.9",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["WuestMan"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
