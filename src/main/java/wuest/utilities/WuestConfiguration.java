@@ -22,7 +22,7 @@ public class WuestConfiguration
 		addBed = config.getBoolean("Add Bed", OPTIONS, true, "Option to include a bed in the house");
 		addCrafingtable = config.getBoolean("Add Crafting Table", OPTIONS, true, "Option to include a crafting table and a furnace in the house");
 		addChest = config.getBoolean("Add Chest", OPTIONS, true, "Option to include a chest in the house");
-		addChestContents = config.getBoolean("Add Chest Contents", OPTIONS, false, "Option to include some starting contents in the chest");
+		addChestContents = config.getBoolean("Add Chest Contents", OPTIONS, true, "Option to include some starting contents in the chest");
 		addFarm = config.getBoolean("Add Farm", OPTIONS , true, "Option to include a small farm outside of the house");
 		    
 	    if (config.hasChanged()) 
