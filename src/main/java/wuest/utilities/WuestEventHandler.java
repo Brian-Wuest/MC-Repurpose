@@ -40,7 +40,7 @@ public class WuestEventHandler
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
-		if (event.action == Action.RIGHT_CLICK_BLOCK)
+		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestConfiguration.rightClickCropHarvest)
 		{
 			EntityPlayer p = event.entityPlayer;
 			

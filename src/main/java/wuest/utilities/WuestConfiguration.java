@@ -10,6 +10,7 @@ public class WuestConfiguration
 	public static boolean addChest;
 	public static boolean addChestContents;
 	public static boolean addFarm;
+	public static boolean rightClickCropHarvest;
   
 	public static void syncConfig()
 	{
@@ -18,13 +19,14 @@ public class WuestConfiguration
     
 		String OPTIONS = "general" + "." + "options";
 
-		addTorches = config.getBoolean("Add Torches", OPTIONS, true, "Option to include torches in the house");
-		addBed = config.getBoolean("Add Bed", OPTIONS, true, "Option to include a bed in the house");
-		addCrafingtable = config.getBoolean("Add Crafting Table", OPTIONS, true, "Option to include a crafting table and a furnace in the house");
-		addChest = config.getBoolean("Add Chest", OPTIONS, true, "Option to include a chest in the house");
-		addChestContents = config.getBoolean("Add Chest Contents", OPTIONS, true, "Option to include some starting contents in the chest");
-		addFarm = config.getBoolean("Add Farm", OPTIONS , true, "Option to include a small farm outside of the house");
-		    
+		WuestConfiguration.addTorches = config.getBoolean("Add Torches", OPTIONS, true, "Option to include torches in the house");
+		WuestConfiguration.addBed = config.getBoolean("Add Bed", OPTIONS, true, "Option to include a bed in the house");
+		WuestConfiguration.addCrafingtable = config.getBoolean("Add Crafting Table", OPTIONS, true, "Option to include a crafting table and a furnace in the house");
+		WuestConfiguration.addChest = config.getBoolean("Add Chest", OPTIONS, true, "Option to include a chest in the house");
+		WuestConfiguration.addChestContents = config.getBoolean("Add Chest Contents", OPTIONS, true, "Option to include some starting contents in the chest");
+		WuestConfiguration.addFarm = config.getBoolean("Add Farm", OPTIONS , true, "Option to include a small farm outside of the house");
+		WuestConfiguration.rightClickCropHarvest = config.getBoolean("Right Click Crop Harvest", OPTIONS, false, "Determines if right-clicking crops will harvest them.");
+		
 	    if (config.hasChanged()) 
 	    {
 	      config.save();
