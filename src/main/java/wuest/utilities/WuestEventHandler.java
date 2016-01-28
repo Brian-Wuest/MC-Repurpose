@@ -111,7 +111,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
 	{
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) 
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP && WuestConfiguration.addHouseItem) 
 		{
 			System.out.println("Player joined world, checking to see if the house builder should be provided.");
 			

@@ -56,45 +56,48 @@ public class ItemStartHouse extends Item
 	 * Does something when the item is right-clicked.
 	 */
     @Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos hitBlockPos, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-    	BlockPos playerPosition = player.getPosition();
-    	MovingObjectPosition varX = player.rayTrace(100.0D, 1.0F);
-    	
-    	if (varX.typeOfHit == MovingObjectType.BLOCK && varX.sideHit == EnumFacing.UP)
+    	if (!world.isRemote)
     	{
-    		BlockPos hitBlockPos = varX.getBlockPos();
-    		IBlockState hitBlockState = world.getBlockState(hitBlockPos);
-    		
-    		if (hitBlockState != null)
-    		{
-    			Block hitBlock = hitBlockState.getBlock();
-    			
-    			if (hitBlock != null)
-    			{
-    				// We hit a block, let's start building!!!!!
-    				BlockPos startingPosition = hitBlockPos.up();
-    				
-    				// Teleport the player to the middle of the house so they don't die while house is created.
-    				player.setPositionAndUpdate(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
-    				
-    				this.ClearSpace(world, startingPosition);
-    				
-    				// Build the basic structure.
-    				this.BuildStructure(world, startingPosition);
-    				
-    				// Build the interior.
-    				this.BuildInterior(world, startingPosition, player);
-    				
-    				// Set up the exterior.
-    				this.BuildExterior(world, startingPosition, player);
-    				
-    				player.inventory.consumeInventoryItem(this);
-    			}
-    		}
+	    	BlockPos playerPosition = player.getPosition();
+	    	
+	    	if (side == EnumFacing.UP)
+	    	{
+	    		IBlockState hitBlockState = world.getBlockState(hitBlockPos);
+	    		
+	    		if (hitBlockState != null)
+	    		{
+	    			Block hitBlock = hitBlockState.getBlock();
+	    			
+	    			if (hitBlock != null)
+	    			{
+	    				// We hit a block, let's start building!!!!!
+	    				BlockPos startingPosition = hitBlockPos.up();
+	    				
+	    				// Teleport the player to the middle of the house so they don't die while house is created.
+	    				player.setPositionAndUpdate(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
+	    				
+	    				this.ClearSpace(world, startingPosition);
+	    				
+	    				// Build the basic structure.
+	    				this.BuildStructure(world, startingPosition);
+	    				
+	    				// Build the interior.
+	    				this.BuildInterior(world, startingPosition, player);
+	    				
+	    				// Set up the exterior.
+	    				this.BuildExterior(world, startingPosition, player);
+	    				
+	    				player.inventory.consumeInventoryItem(this);
+	    			}
+	    		}
+	    		
+	    		return true;
+	    	}
     	}
     	
-        return stack;
+        return false;
     }
     
     public void ReplaceBlock(World world, BlockPos pos, Block replacementBlock)
