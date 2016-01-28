@@ -136,14 +136,18 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void onClone(PlayerEvent.Clone event) 
 	{
-		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
-	    NBTTagCompound originalTag = event.original.getEntityData();
-	    
-	    if (originalTag.hasKey("IsPlayerNew"))
-	    {
-	    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-	    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
-	    }
+		// Don't add the tag unless the house item was added. This way it can be added if the feature is turned on.
+		if (WuestConfiguration.addHouseItem)
+		{
+			// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
+		    NBTTagCompound originalTag = event.original.getEntityData();
+		    
+		    if (originalTag.hasKey("IsPlayerNew"))
+		    {
+		    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+		    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
+		    }
+		}
 	}
 
 	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
