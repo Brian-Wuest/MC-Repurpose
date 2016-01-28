@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
@@ -131,6 +132,19 @@ public class WuestEventHandler
 		    }
 		}
 	}
+	
+	@SubscribeEvent
+	public void onClone(PlayerEvent.Clone event) 
+	{
+		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
+	    NBTTagCompound originalTag = event.original.getEntityData();
+	    
+	    if (originalTag.hasKey("IsPlayerNew"))
+	    {
+	    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+	    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
+	    }
+	}
 
 	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
 	{
@@ -149,19 +163,6 @@ public class WuestEventHandler
 			tag.setTag("IsPlayerNew", newPlayerTag);
 		}
 		
-		// Get/create a tab used to keep a value determining if the starting house has been created.
-		NBTTagCompound modTag = null;
-		
-		if (newPlayerTag.hasKey("wuestHouse"))
-		{
-			modTag = newPlayerTag.getCompoundTag("wuestHouse");
-		}
-		else
-		{
-			modTag = new NBTTagCompound();
-			newPlayerTag.setTag("wuestHouse", modTag);
-		}
-		
-		return modTag;
+		return newPlayerTag;
 	}
 }
