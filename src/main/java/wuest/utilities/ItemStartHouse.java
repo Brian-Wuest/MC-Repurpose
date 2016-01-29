@@ -5,7 +5,10 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -146,14 +149,63 @@ public class ItemStartHouse extends Item
     
     private void BuildStructure(World world, BlockPos startingPosition)
     {
+    	// Make sure that the area beneath the house is all there. Don't want the house to be hanging in the air.
+    	this.SetFloor(world, startingPosition, Blocks.dirt);
+    	
+    	Block floor = null;
+    	
+    	switch (WuestConfiguration.floorBlock)
+    	{
+	    	case 1:
+	    	{
+	    		floor = Blocks.brick_block;
+	    		break;
+	    	}
+	    	
+	    	case 2:
+	    	{
+	    		floor = Blocks.sandstone;
+	    		break;
+	    	}
+	    	
+	    	default:
+	    	{
+	    		floor = Blocks.stonebrick;
+	    		break;
+	    	}
+    	}
+    	
 		// Create the floor.
-		this.SetFloor(world, startingPosition);
+		this.SetFloor(world, startingPosition, floor);
 		
 		// Create the walls.
-		this.SetWalls(world, startingPosition);
+		this.SetWalls(world, startingPosition, ((BlockPlanks) Blocks.planks).getStateFromMeta(WuestConfiguration.wallWoodType));
+		
+    	Block ceiling = null;
+    	
+    	switch (WuestConfiguration.ceilingBlock )
+    	{
+	    	case 1:
+	    	{
+	    		ceiling = Blocks.brick_block;
+	    		break;
+	    	}
+	    	
+	    	case 2:
+	    	{
+	    		ceiling = Blocks.sandstone;
+	    		break;
+	    	}
+	    	
+	    	default:
+	    	{
+	    		ceiling = Blocks.stonebrick;
+	    		break;
+	    	}
+    	}
 		
 		// Set the ceiling.
-		this.SetFloor(world, startingPosition.up(4));
+		this.SetFloor(world, startingPosition.up(4), ceiling);
     }
     
     private void BuildInterior(World world, BlockPos startingPosition, EntityPlayer player)
@@ -215,7 +267,7 @@ public class ItemStartHouse extends Item
     	}
     }
     
-    private void SetFloor(World world, BlockPos pos)
+    private void SetFloor(World world, BlockPos pos, Block block)
     {
     	// Go north 4 and east 4 from block position, this will be an 8 X 8 house.
     	pos = pos.north(4).east(4);
@@ -226,7 +278,7 @@ public class ItemStartHouse extends Item
     		for (int j = 0; j <= 8; j++)
     		{
     			// j is the north/south counter.
-    			this.ReplaceBlock(world, pos, Blocks.stonebrick);
+    			this.ReplaceBlock(world, pos, block);
     			
     			pos = pos.south();
     		}
@@ -236,14 +288,14 @@ public class ItemStartHouse extends Item
     	}
     }
     
-    private void SetWalls(World world, BlockPos pos)
+    private void SetWalls(World world, BlockPos pos, IBlockState block)
     {
     	// Get the north east corner.
     	pos = pos.north(4).east(4);
     	
     	for (int i = 0; i <= 4; i++)
     	{
-    		// i height, j is a facing, k is the acual wall counter.
+    		// i height, j is a facing, k is the actual wall counter.
     		for (int j = 0; j <= 3; j++)
     		{
     			EnumFacing facing = EnumFacing.SOUTH;
@@ -276,7 +328,7 @@ public class ItemStartHouse extends Item
     			for (int k = 0; k <= offsetCount; k++)
     			{
 	    			// j is the north/south counter.
-	    			this.ReplaceBlock(world, pos, Blocks.planks);
+	    			this.ReplaceBlock(world, pos, block);
 	    			
 	    			pos = pos.offset(facing);
     			}
@@ -323,9 +375,57 @@ public class ItemStartHouse extends Item
     private void DecorateDoor(World world, BlockPos cornerPosition)
     {
     	BlockPos itemPosition = cornerPosition.west();;
-    	
     	world.setBlockToAir(itemPosition.up());
-    	ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, Blocks.oak_door);
+    	
+    	Block door = null;
+    	Block stairs = null;
+    	
+    	switch (WuestConfiguration.wallWoodType)
+    	{
+	    	case 1:
+	    	{
+	    		door = Blocks.spruce_door;
+	    		stairs = Blocks.spruce_stairs;
+	    		break;
+	    	}
+	    	
+	    	case 2:
+	    	{	
+	    		door = Blocks.birch_door;
+	    		stairs = Blocks.birch_stairs;
+	    		break;
+	    	}
+	    	
+	    	case 3:
+	    	{	
+	    		door = Blocks.jungle_door;
+	    		stairs = Blocks.jungle_stairs;
+	    		break;
+	    	}
+	    	
+	    	case 4:
+	    	{
+	    		door = Blocks.acacia_door;
+	    		stairs = Blocks.acacia_stairs;
+	    		break;
+	    	}
+	    	
+	    	case 5:
+	    	{	
+	    		door = Blocks.dark_oak_door;
+	    		stairs = Blocks.dark_oak_stairs;
+	    		break;
+	    	}
+	    	
+	    	default:
+	    	{	
+	    		door = Blocks.oak_door;
+	    		stairs = Blocks.oak_stairs;
+	    		break;
+	    	}
+    	}
+    	
+    	ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, door);
     	
     	// Put a glass pane above the door.
     	this.ReplaceBlock(world, itemPosition.up(2), Blocks.glass_pane);
@@ -336,7 +436,7 @@ public class ItemStartHouse extends Item
     	
     	// Place a stairs.
     	itemPosition = itemPosition.north(2).down();
-    	this.ReplaceBlock(world, itemPosition, Blocks.oak_stairs.getBlockState().getBaseState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT));
+    	this.ReplaceBlock(world, itemPosition, stairs.getBlockState().getBaseState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT));
     }
 
     private void PlaceBed(World world, BlockPos cornerPosition)
