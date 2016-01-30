@@ -1,10 +1,13 @@
 package wuest.utilities;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStairs;
@@ -98,6 +101,12 @@ public class ItemStartHouse extends Item
 	    				// Set up the exterior.
 	    				this.BuildExterior(world, startingPosition, player);
 	    				
+	    				if (WuestConfiguration.addMineShaft)
+	    				{
+		    				// Set up the mineshaft.
+		    				this.PlaceMineShaft(world, startingPosition);
+	    				}
+	    				
 	    				player.inventory.consumeInventoryItem(this);
 	    			}
 	    		}
@@ -156,7 +165,7 @@ public class ItemStartHouse extends Item
     private void BuildStructure(World world, BlockPos startingPosition)
     {
     	// Make sure that the area beneath the house is all there. Don't want the house to be hanging in the air.
-    	this.SetFloor(world, startingPosition, Blocks.dirt);
+    	this.SetFloor(world, startingPosition, Blocks.dirt, 4, new ArrayList<ItemStack>());
     	
     	Block floor = null;
     	
@@ -182,7 +191,7 @@ public class ItemStartHouse extends Item
     	}
     	
 		// Create the floor.
-		this.SetFloor(world, startingPosition, floor);
+		this.SetFloor(world, startingPosition, floor, 4, new ArrayList<ItemStack>());
 		
 		// Create the walls.
 		this.SetWalls(world, startingPosition, ((BlockPlanks) Blocks.planks).getStateFromMeta(WuestConfiguration.wallWoodType));
@@ -277,16 +286,22 @@ public class ItemStartHouse extends Item
     	}
     }
     
-    private void SetFloor(World world, BlockPos pos, Block block)
+    private ArrayList<ItemStack> SetFloor(World world, BlockPos pos, Block block, int floorRadius, ArrayList<ItemStack> originalStack)
     {
     	// Go north 4 and east 4 from block position, this will be an 8 X 8 house.
-    	pos = pos.north(4).east(4);
+    	pos = pos.north(floorRadius).east(floorRadius);
     	
-    	for (int i = 0; i <= 8; i++)
+    	for (int i = 0; i <= floorRadius*2; i++)
     	{
     		// i is the east/west counter.
-    		for (int j = 0; j <= 8; j++)
+    		for (int j = 0; j <= floorRadius*2; j++)
     		{
+    			// Get the drops for this block (if any) and add it to the stack.
+    			for (ItemStack stack : world.getBlockState(pos).getBlock().getDrops(world, pos, world.getBlockState(pos), 1))
+				{
+    				originalStack.add(stack);
+				}
+    			
     			// j is the north/south counter.
     			this.ReplaceBlock(world, pos, block);
     			
@@ -294,8 +309,10 @@ public class ItemStartHouse extends Item
     		}
     		
     		pos = pos.west();
-    		pos = pos.north(9);
+    		pos = pos.north((floorRadius*2) + 1);
     	}
+    	
+    	return originalStack;
     }
     
     private void SetCeiling(World world, BlockPos pos, Block block, Block stairs)
@@ -303,7 +320,7 @@ public class ItemStartHouse extends Item
     	// If the ceiling is flat, call SetFloor since it's laid out the same.
     	if (WuestConfiguration.isCeilingFlat)
     	{
-    		this.SetFloor(world, pos, block);
+    		this.SetFloor(world, pos, block, 8, new ArrayList<ItemStack>());
     		return;
     	}
     	
@@ -758,4 +775,240 @@ public class ItemStartHouse extends Item
     	this.ReplaceBlock(world, farmStart.south().east(), Blocks.farmland);
     }
 
+    private void PlaceMineShaft(World world, BlockPos pos)
+    {
+    	// The initial position is where the character was teleported too, go back 3 blocks and start building the mine shaft.
+    	pos = pos.south(3);
+    	
+    	// Keep track of all of the items to add to the chest at the end of the shaft.
+    	ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+    	
+    	stacks = this.CreateLadderShaft(world, pos, stacks);
+    	
+    	pos = pos.down(pos.getY() - 10);
+    	
+    	ArrayList<ItemStack> tempStacks = new ArrayList<ItemStack>();
+    	
+    	// The entire ladder has been created. Create a platform at this level and place a chest next to the ladder.
+    	tempStacks = this.SetFloor(world, pos, Blocks.stone, 3, tempStacks);
+    	
+    	// Now that the floor has been set, go up 1 block to star creating the walls.
+    	pos = pos.up();
+    	
+    	// Clear a space around the ladder pillar and make walls. The walls are necessary if there is a lot of lava down here.
+    	// Make a wall of air then a wall of stone.
+    	
+    	// South wall.
+    	tempStacks.addAll(this.CreateWall(world, 3, 3, EnumFacing.EAST, pos.south(2).west(), Blocks.air));
+    	tempStacks.addAll(this.CreateWall(world, 3, 3, EnumFacing.EAST, pos.south(3).west(), Blocks.stone));
+    	
+    	// East wall.
+    	tempStacks.addAll(this.CreateWall(world, 3, 4, EnumFacing.NORTH, pos.south(2).east(), Blocks.air));
+    	tempStacks.addAll(this.CreateWall(world, 3, 4, EnumFacing.NORTH, pos.south(2).east(2), Blocks.stone));
+    	
+    	// North wall.
+    	tempStacks.addAll(this.CreateWall(world, 3, 3, EnumFacing.WEST, pos.north().east(), Blocks.air));
+    	tempStacks.addAll(this.CreateWall(world, 3, 3, EnumFacing.WEST, pos.north(2).east(), Blocks.stone));
+    	
+    	// West wall.
+    	tempStacks.addAll(this.CreateWall(world, 3, 4, EnumFacing.SOUTH, pos.north().west(), Blocks.air));
+    	tempStacks.addAll(this.CreateWall(world, 3, 4, EnumFacing.SOUTH, pos.north(1).west(2), Blocks.stone));
+    	
+    	// Consolidate the stacks.
+    	for (ItemStack tempStack : tempStacks)
+    	{
+    		Boolean foundStack = false;
+			
+			for (ItemStack existingStack : stacks)
+			{
+				if (ItemStack.areItemsEqual(existingStack, tempStack))
+				{
+					// Make sure that this combined stack is at or smaller than the max.
+					if (existingStack.stackSize + tempStack.stackSize <= tempStack.getMaxStackSize())
+					{
+						existingStack.stackSize = existingStack.stackSize + tempStack.stackSize;
+						foundStack = true;
+						break;
+					}
+				}
+			}
+			
+			if (!foundStack)
+			{
+				stacks.add(tempStack);
+			}
+    	}
+    	
+    	// Place a torch to the left of the  ladder.
+    	IBlockState blockState = Blocks.torch.getStateFromMeta(5);
+    	this.ReplaceBlock(world, pos.west(), blockState);
+    	
+    	// Place a chest to the right of the ladder.
+    	this.ReplaceBlock(world, pos.east(), Blocks.chest);
+    	TileEntity tileEntity = world.getTileEntity(pos.east());
+    	
+    	if (tileEntity instanceof TileEntityChest)
+    	{
+    		TileEntityChest chestTile = (TileEntityChest)tileEntity;
+    		
+    		int i = 0;
+    		// All of the stacks should be consolidated at this point.
+    		for(ItemStack stack : stacks)
+    		{
+    			chestTile.setInventorySlotContents(i, stack);
+    			i++;
+    		}
+    	}
+    }
+    
+    private ArrayList<ItemStack> CreateLadderShaft(World world, BlockPos pos, ArrayList<ItemStack> originalStacks)
+    {
+    	int torchCounter = 0;
+    	
+    	while (pos.getY() > 8)
+    	{
+    		IBlockState state = world.getBlockState(pos);    		
+    		Block block = state.getBlock();
+    		torchCounter++;
+    		
+    		// Make sure all blocks around this one are solid, if they are not replace them with stone.
+    		for (int i = 0; i < 4; i++)
+    		{
+    			EnumFacing facing = EnumFacing.NORTH;
+    			
+    			switch (i)
+    			{
+	    			case 1:
+	    			{
+	    				facing = EnumFacing.EAST;
+	    				break;
+	    			}
+	    			case 2:
+	    			{
+	    				facing = EnumFacing.SOUTH;
+	    				break;
+	    			}
+	    			case 3:
+	    			{
+	    				facing = EnumFacing.WEST;
+	    				break;
+	    			}
+    				default:
+    				{
+    					facing = EnumFacing.NORTH;
+    				}
+    			}
+    			
+    			// Every 6 blocks, place a torch on the west wall.
+    			// If we are close to the bottom, don't place a torch. Do the normal processing.
+    			if (facing == EnumFacing.WEST && torchCounter == 6 && pos.getY() > 14)
+    			{
+    				// First make sure the block behind this block is stone, then place the torch.
+    				BlockPos tempPos = pos.offset(facing, 2);
+	    			IBlockState surroundingState = world.getBlockState(tempPos);
+	    			Block surroundingBlock = surroundingState.getBlock();
+	    			
+	    			if (!surroundingBlock.isBlockNormalCube())
+	    			{
+	    				// This is not a solid block. Get the drops then replace it with stone.
+	    				this.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
+	    				
+	    				this.ReplaceBlock(world, tempPos, Blocks.stone);
+	    			}
+	    			
+	    			IBlockState torchState = Blocks.torch.getStateFromMeta(5);
+	    	    	this.ReplaceBlock(world, pos.west(), torchState);
+	    	    	
+	    	    	torchCounter = 0;
+    			}
+    			else
+    			{
+	    			BlockPos tempPos = pos.offset(facing);
+	    			IBlockState surroundingState = world.getBlockState(tempPos);
+	    			Block surroundingBlock = surroundingState.getBlock();
+	    			
+	    			if (!surroundingBlock.isBlockNormalCube())
+	    			{
+	    				// This is not a solid block. Get the drops then replace it with stone.
+	    				this.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
+	    				
+	    				this.ReplaceBlock(world, tempPos, Blocks.stone);
+	    			}
+    			}
+    		}
+    		
+    		// Get the block drops then replace it with a ladder.
+    		this.ConsolidateDrops(block, world, pos, state, originalStacks);
+    		
+    		// Don't place a ladder at this location since it will be destroyed.
+    		if (pos.getY() != 9)
+    		{
+	    		// Ladders by default face north, this is the way it should be.
+	    		this.ReplaceBlock(world, pos, Blocks.ladder);
+    		}
+    		
+    		pos = pos.down();
+    	}
+    	
+    	return originalStacks;
+    }
+    
+    private ArrayList<ItemStack> ConsolidateDrops(Block block, World world, BlockPos pos, IBlockState state, ArrayList<ItemStack> originalStacks)
+    {
+		for(ItemStack stack : block.getDrops(world, pos, state, 1))
+		{
+			// Check to see if this stack's item is equal to an existing item stack. If it is just add the count.
+			Boolean foundStack = false;
+			
+			for (ItemStack existingStack : originalStacks)
+			{
+				if (ItemStack.areItemsEqual(existingStack, stack))
+				{
+					// Make sure that this combined stack is at or smaller than the max.
+					if (existingStack.stackSize + stack.stackSize <= stack.getMaxStackSize())
+					{
+						existingStack.stackSize = existingStack.stackSize + stack.stackSize;
+						foundStack = true;
+						break;
+					}
+				}
+			}
+			
+			if (!foundStack)
+			{
+				originalStacks.add(stack);
+			}
+		}
+		
+		return originalStacks;
+    }
+    
+    private ArrayList<ItemStack> CreateWall(World world, int height, int length, EnumFacing direction, BlockPos startingPosition, Block replacementBlock)
+    {
+    	ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
+    	
+    	BlockPos wallPos = startingPosition;
+    	
+    	// i height, j is the actual wall counter.
+    	for (int i = 0; i < height; i++)
+    	{
+    		// Reset wall building position to the starting position up by the height counter.
+    		wallPos = startingPosition.up(i);
+    		
+			for (int j = 0; j < length; j++)
+			{
+				for (ItemStack stack : world.getBlockState(wallPos).getBlock().getDrops(world, wallPos, world.getBlockState(wallPos), 1))
+				{
+					itemsDropped.add(stack);
+				}
+				
+    			// j is the north/south counter.
+    			this.ReplaceBlock(world, wallPos, replacementBlock);
+    			
+    			wallPos = wallPos.offset(direction);
+			}
+    	}
+    	
+    	return itemsDropped;
+    }
 }

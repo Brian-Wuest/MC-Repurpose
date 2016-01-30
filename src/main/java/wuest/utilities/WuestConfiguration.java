@@ -17,6 +17,7 @@ public class WuestConfiguration
 	public static int ceilingBlock;
 	public static int wallWoodType;
 	public static boolean isCeilingFlat;
+	public static boolean addMineShaft;
 	
 	public static void syncConfig()
 	{
@@ -37,6 +38,7 @@ public class WuestConfiguration
 		WuestConfiguration.ceilingBlock = config.getInt("Ceiling Stone Type", OPTIONS, 0, 0, 2, "Determines the ceiling material type.\r\n0 = Stone Brick, 1 = Brick, 2 = SandStone");
 		WuestConfiguration.wallWoodType = config.getInt("Wall Wood Type", OPTIONS, 0, 0, 5, "Determines what type of wood the walls (and door/stair) are made of.\r\n0 = Oak, 1 = Spruce, 2 = Birch, 3 = Jungle, 4 = Acacia, 5 = Dark Oak");
 		WuestConfiguration.isCeilingFlat = config.getBoolean("Is Ceiling Flat", OPTIONS, true, "Determines if the ceiling is flat or if it is made of stairs.");
+		WuestConfiguration.addMineShaft = config.getBoolean("Build Mineshaft", OPTIONS, true, "Determines if a mineshaft is built from the house to Y10.\r\nAll blocks broken are added to a chest at the bottom of the shaft.");
 		
 	    if (config.hasChanged()) 
 	    {
