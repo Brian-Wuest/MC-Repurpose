@@ -1,14 +1,15 @@
 package wuest.utilities;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -37,6 +38,10 @@ public class CommonProxy implements IGuiHandler
 		GeneralRecipes.LoadRecipies();
 
 		this.RegisterEventListeners();
+	}
+	
+	public void postinit(FMLPostInitializationEvent event)
+	{
 	}
 	
 	private void RegisterEventListeners()

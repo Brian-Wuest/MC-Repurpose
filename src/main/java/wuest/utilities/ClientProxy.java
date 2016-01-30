@@ -5,8 +5,10 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.IThreadListener;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -26,8 +28,13 @@ public class ClientProxy extends CommonProxy
 	{
 		super.init(event);
 		
-		// After all items have been registered and all recipes loaded, register any necessary renderers.
+		// After all items have been registered and all recipes loaded, register any necessary renderer.
 		WuestUtilities.proxy.registerRenderers();
+	}
+	
+	@Override
+	public void postinit(FMLPostInitializationEvent event)
+	{
 	}
 	
 	@Override

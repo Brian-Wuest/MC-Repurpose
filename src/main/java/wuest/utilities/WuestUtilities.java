@@ -30,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.*;
 
 @Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.8], [1.8.9]")
@@ -59,6 +60,12 @@ public class WuestUtilities
 	public void init(FMLInitializationEvent event)
 	{
 		WuestUtilities.proxy.init(event);
+	}
+	
+	@EventHandler
+	public void postinit(FMLPostInitializationEvent event)
+	{
+		WuestUtilities.proxy.postinit(event);
 	}
 	
     // The method that gets called when a server starts up(Singleplayer and multiplayer are both affected)

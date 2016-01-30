@@ -29,7 +29,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkCache;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemStartHouse extends Item
@@ -78,10 +83,11 @@ public class ItemStartHouse extends Item
 	    				// We hit a block, let's start building!!!!!
 	    				BlockPos startingPosition = hitBlockPos.up();
 	    				
+	    				// Clear the space before the user is teleported. This is in-case they right-click on a space that is only 1 block tall.
+	    				this.ClearSpace(world, startingPosition);
+	    				
 	    				// Teleport the player to the middle of the house so they don't die while house is created.
 	    				player.setPositionAndUpdate(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
-	    				
-	    				this.ClearSpace(world, startingPosition);
 	    				
 	    				// Build the basic structure.
 	    				this.BuildStructure(world, startingPosition);
@@ -105,12 +111,12 @@ public class ItemStartHouse extends Item
     
     public void ReplaceBlock(World world, BlockPos pos, Block replacementBlock)
     {
-    	this.ReplaceBlock(world, pos, replacementBlock.getDefaultState(), 0);
+    	this.ReplaceBlock(world, pos, replacementBlock.getDefaultState(), 3);
     }
     
     public void ReplaceBlock(World world, BlockPos pos, IBlockState replacementBlockState)
     {
-    	this.ReplaceBlock(world, pos, replacementBlockState, 0);
+    	this.ReplaceBlock(world, pos, replacementBlockState, 3);
     }
     
     public void ReplaceBlock(World world, BlockPos pos, IBlockState replacementBlockState, int flags)
@@ -182,30 +188,34 @@ public class ItemStartHouse extends Item
 		this.SetWalls(world, startingPosition, ((BlockPlanks) Blocks.planks).getStateFromMeta(WuestConfiguration.wallWoodType));
 		
     	Block ceiling = null;
+    	Block stairs = null;
     	
     	switch (WuestConfiguration.ceilingBlock )
     	{
 	    	case 1:
 	    	{
 	    		ceiling = Blocks.brick_block;
+	    		stairs = Blocks.brick_stairs;
 	    		break;
 	    	}
 	    	
 	    	case 2:
 	    	{
 	    		ceiling = Blocks.sandstone;
+	    		stairs = Blocks.sandstone_stairs;
 	    		break;
 	    	}
 	    	
 	    	default:
 	    	{
 	    		ceiling = Blocks.stonebrick;
+	    		stairs = Blocks.stone_brick_stairs;
 	    		break;
 	    	}
     	}
 		
 		// Set the ceiling.
-		this.SetFloor(world, startingPosition.up(4), ceiling);
+		this.SetCeiling(world, startingPosition.up(4), ceiling, stairs);
     }
     
     private void BuildInterior(World world, BlockPos startingPosition, EntityPlayer player)
@@ -286,6 +296,74 @@ public class ItemStartHouse extends Item
     		pos = pos.west();
     		pos = pos.north(9);
     	}
+    }
+    
+    private void SetCeiling(World world, BlockPos pos, Block block, Block stairs)
+    {
+    	// If the ceiling is flat, call SetFloor since it's laid out the same.
+    	if (WuestConfiguration.isCeilingFlat)
+    	{
+    		this.SetFloor(world, pos, block);
+    		return;
+    	}
+    	
+    	// Get to the north east corner.
+    	pos = pos.north(4).east(4);
+    	
+    	// Get the stairs state without the facing since it will change.
+    	IBlockState stateWithoutFacing = stairs.getBlockState().getBaseState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT); 
+    	
+    	int wallLength = 7;
+    	
+    	while (wallLength > 0)
+    	{
+	    	for (int j = 0; j < 4; j++)
+	    	{
+	    		// I is the wall side starting on the east side.
+				EnumFacing facing = EnumFacing.WEST;
+				EnumFacing flowDirection = EnumFacing.SOUTH;
+				
+				switch (j)
+				{
+	    			case 1:
+	    			{
+	    				facing = EnumFacing.NORTH;
+	    				flowDirection = EnumFacing.WEST;
+	    				break;
+	    			}
+	    			
+	    			case 2:
+	    			{
+	    				facing = EnumFacing.EAST;
+	    				flowDirection = EnumFacing.NORTH;
+	    				break;
+	    			}
+	    			
+	    			case 3:
+	    			{
+	    				facing = EnumFacing.SOUTH;
+	    				flowDirection = EnumFacing.EAST;
+	    				break;
+	    			}
+				}
+	    			
+				for (int k = 0; k <= wallLength; k++)
+				{
+	    			// j is the north/south counter.
+	    			this.ReplaceBlock(world, pos, stateWithoutFacing.withProperty(BlockStairs.FACING, facing));
+	    			
+	    			pos = pos.offset(flowDirection);
+				}
+	    	}
+	    	
+	    	pos = pos.west().south().up();
+	    	wallLength = wallLength - 2;
+    	}
+    	
+    	this.ReplaceBlock(world, pos, block);
+    	
+    	IBlockState blockState = Blocks.torch.getStateFromMeta(5);
+    	this.ReplaceBlock(world, pos.up(), blockState);
     }
     
     private void SetWalls(World world, BlockPos pos, IBlockState block)
@@ -506,7 +584,7 @@ public class ItemStartHouse extends Item
     	
     	// Place a furnace next to the crafting table and fill it with 20 coal.
     	itemPosition =itemPosition.east();
-    	this.ReplaceBlock(world, itemPosition, Blocks.furnace.getDefaultState().withProperty(BlockFurnace.FACING, EnumFacing.NORTH), 3);
+    	this.ReplaceBlock(world, itemPosition, Blocks.furnace.getDefaultState().withProperty(BlockFurnace.FACING, EnumFacing.NORTH));
 
     	TileEntity tileEntity = world.getTileEntity(itemPosition);
 
@@ -679,4 +757,5 @@ public class ItemStartHouse extends Item
     	this.ReplaceBlock(world, farmStart.south(), Blocks.farmland);
     	this.ReplaceBlock(world, farmStart.south().east(), Blocks.farmland);
     }
+
 }
