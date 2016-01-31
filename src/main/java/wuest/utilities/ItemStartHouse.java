@@ -320,7 +320,7 @@ public class ItemStartHouse extends Item
     	// If the ceiling is flat, call SetFloor since it's laid out the same.
     	if (WuestConfiguration.isCeilingFlat)
     	{
-    		this.SetFloor(world, pos, block, 8, new ArrayList<ItemStack>());
+    		this.SetFloor(world, pos, block, 4, new ArrayList<ItemStack>());
     		return;
     	}
     	
