@@ -101,7 +101,7 @@ public class ItemStartHouse extends Item
 	    				// Set up the exterior.
 	    				this.BuildExterior(world, startingPosition, player);
 	    				
-	    				if (WuestConfiguration.addMineShaft)
+	    				if (WuestConfiguration.addMineShaft && startingPosition.getY() > 15)
 	    				{
 		    				// Set up the mineshaft.
 		    				this.PlaceMineShaft(world, startingPosition);
@@ -385,52 +385,25 @@ public class ItemStartHouse extends Item
     
     private void SetWalls(World world, BlockPos pos, IBlockState block)
     {
-    	// Get the north east corner.
-    	pos = pos.north(4).east(4);
+    	BlockPos initialPos = pos;
     	
-    	for (int i = 0; i <= 4; i++)
-    	{
-    		// i height, j is a facing, k is the actual wall counter.
-    		for (int j = 0; j <= 3; j++)
-    		{
-    			EnumFacing facing = EnumFacing.SOUTH;
-    			int offsetCount = 7;
-    			
-    			switch (j)
-    			{
-	    			case 1:
-	    			{
-	    				facing = EnumFacing.WEST;
-	    				offsetCount = 7;
-	    				break;
-	    			}
-	    			
-	    			case 2:
-	    			{
-	    				facing = EnumFacing.NORTH;
-	    				offsetCount = 7;
-	    				break;
-	    			}
-	    			
-	    			case 3:
-	    			{
-	    				facing = EnumFacing.EAST;
-	    				offsetCount = 7;
-	    				break;
-	    			}
-    			}
-    			
-    			for (int k = 0; k <= offsetCount; k++)
-    			{
-	    			// j is the north/south counter.
-	    			this.ReplaceBlock(world, pos, block);
-	    			
-	    			pos = pos.offset(facing);
-    			}
-    		}
-
-    		pos = pos.up();
-    	}
+    	// Get the north east corner.
+    	pos = initialPos.north(4).east(4);
+    	
+    	// East Wall.
+    	this.CreateWall(world, 4, 8, EnumFacing.SOUTH, pos, block);
+    	
+    	// South Wall.
+    	pos = initialPos.south(4).east(4);
+    	this.CreateWall(world, 4, 8, EnumFacing.WEST, pos, block);
+    	
+    	// West Wall.
+    	pos = initialPos.south(4).west(4);
+    	this.CreateWall(world, 4, 8, EnumFacing.NORTH, pos, block);
+    	
+    	// North Wall.
+    	pos = initialPos.north(4).west(4);
+    	this.CreateWall(world, 4, 8, EnumFacing.EAST, pos, block);
     }
 
     private void PlaceInsideTorches(World world, BlockPos cornerPosition)
@@ -684,49 +657,52 @@ public class ItemStartHouse extends Item
     	blockState = Blocks.torch.getStateFromMeta(1);
     	this.ReplaceBlock(world, itemPosition, blockState);
     	
-    	// Roof Torches
-    	// Re-set the corner position to be on the roof.
-    	cornerPosition = cornerPosition.south().up(4);
-    	
-    	// North east corner.
-    	itemPosition = cornerPosition;
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// East middle.
-    	itemPosition = itemPosition.south(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// South east corner
-    	itemPosition = itemPosition.south(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// South middle
-    	itemPosition = itemPosition.west(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// South west corner.
-    	itemPosition = itemPosition.west(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// West middle
-    	itemPosition = itemPosition.north(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// North West corner.
-    	itemPosition = itemPosition.north(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
-    	
-    	// North middle
-    	itemPosition = itemPosition.east(4);
-    	blockState = Blocks.torch.getStateFromMeta(5);
-    	this.ReplaceBlock(world, itemPosition, blockState);
+    	if (WuestConfiguration.isCeilingFlat)
+    	{
+	    	// Roof Torches
+	    	// Re-set the corner position to be on the roof.
+	    	cornerPosition = cornerPosition.south().up(4);
+	    	
+	    	// North east corner.
+	    	itemPosition = cornerPosition;
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// East middle.
+	    	itemPosition = itemPosition.south(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// South east corner
+	    	itemPosition = itemPosition.south(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// South middle
+	    	itemPosition = itemPosition.west(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// South west corner.
+	    	itemPosition = itemPosition.west(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// West middle
+	    	itemPosition = itemPosition.north(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// North West corner.
+	    	itemPosition = itemPosition.north(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+	    	
+	    	// North middle
+	    	itemPosition = itemPosition.east(4);
+	    	blockState = Blocks.torch.getStateFromMeta(5);
+	    	this.ReplaceBlock(world, itemPosition, blockState);
+    	}
     }
 
     private void PlaceSmallFarm(World world, BlockPos cornerPosition)
@@ -984,6 +960,35 @@ public class ItemStartHouse extends Item
     }
     
     private ArrayList<ItemStack> CreateWall(World world, int height, int length, EnumFacing direction, BlockPos startingPosition, Block replacementBlock)
+    {
+    	ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
+    	
+    	BlockPos wallPos = startingPosition;
+    	
+    	// i height, j is the actual wall counter.
+    	for (int i = 0; i < height; i++)
+    	{
+    		// Reset wall building position to the starting position up by the height counter.
+    		wallPos = startingPosition.up(i);
+    		
+			for (int j = 0; j < length; j++)
+			{
+				for (ItemStack stack : world.getBlockState(wallPos).getBlock().getDrops(world, wallPos, world.getBlockState(wallPos), 1))
+				{
+					itemsDropped.add(stack);
+				}
+				
+    			// j is the north/south counter.
+    			this.ReplaceBlock(world, wallPos, replacementBlock);
+    			
+    			wallPos = wallPos.offset(direction);
+			}
+    	}
+    	
+    	return itemsDropped;
+    }
+    
+    private ArrayList<ItemStack> CreateWall(World world, int height, int length, EnumFacing direction, BlockPos startingPosition, IBlockState replacementBlock)
     {
     	ArrayList<ItemStack> itemsDropped = new ArrayList<ItemStack>();
     	
