@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -28,7 +29,8 @@ public class CommonProxy implements IGuiHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		WuestUtilities.config = new Configuration(event.getSuggestedConfigurationFile());
-	    WuestConfiguration.syncConfig();
+	    WuestUtilities.config.load();
+		WuestConfiguration.syncConfig();
 	}
 	
 	public void init(FMLInitializationEvent event)
@@ -37,6 +39,7 @@ public class CommonProxy implements IGuiHandler
 		ItemStartHouse.RegisterItem();
 		GeneralRecipes.LoadRecipies();
 
+		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
 	}
 	
@@ -77,5 +80,4 @@ public class CommonProxy implements IGuiHandler
 	{
 	  return null;
 	}
-
 }

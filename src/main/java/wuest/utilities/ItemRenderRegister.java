@@ -46,6 +46,7 @@ public final class ItemRenderRegister
 	 */
 	public static void regBlock(Block block)
 	{
-		ItemRenderRegister.regItem(Item.getItemFromBlock(block));
+		Item itemBlock = Item.getItemFromBlock(block);
+		ItemRenderRegister.regItem(itemBlock);
 	}
 }

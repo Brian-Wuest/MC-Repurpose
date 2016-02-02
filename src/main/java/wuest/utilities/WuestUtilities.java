@@ -33,7 +33,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.*;
 
-@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.8], [1.8.9]")
+@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.8.9]", guiFactory = "wuest.utilities.ConfigGuiFactory")
 public class WuestUtilities 
 {
 	public static final String MODID = "wuestUtilities";
