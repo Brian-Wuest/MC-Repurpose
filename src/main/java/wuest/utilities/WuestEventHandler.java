@@ -1,6 +1,7 @@
 package wuest.utilities;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -36,13 +37,15 @@ import net.minecraft.world.World;
 public class WuestEventHandler 
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
+	public static boolean sentConfiguration = false;
 	
-	@SideOnly(Side.CLIENT)
+	@SideOnly(Side.SERVER)
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
-		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestConfiguration.rightClickCropHarvest)
+		// Can use the proxies configuration since this is on the client.
+		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest)
 		{
 			EntityPlayer p = event.entityPlayer;
 			
@@ -79,18 +82,24 @@ public class WuestEventHandler
 				
 				for (ItemStack drop : drops)
 				{
-					event.entityPlayer.inventory.addItemStackToInventory(drop);
-					
 					Item dropItem = drop.getItem();
 					
-					if (p.inventory.hasItem(dropItem) && !replanted)
+					if (!replanted)
 					{
 						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.world, farmlandPosition, event.face, 0, 0, 0);
 						
 						if (replanted)
 						{
-							p.inventory.consumeInventoryItem(dropItem);
+							continue;
 						}
+					}
+					
+					boolean addedItem = p.inventory.addItemStackToInventory(drop);
+					p.inventoryContainer.detectAndSendChanges();
+					
+					if (addedItem)
+					{
+						continue;
 					}
 				}
 				
@@ -99,11 +108,18 @@ public class WuestEventHandler
 					// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
 					// This should work with other plants that override BlockCrops.GetItem with their own seed.
 					BlockCrops blockCrop = (BlockCrops)crop;
-					Item seed = blockCrop.getItem(event.world, event.pos);
+					
+					// Make sure to re-set the age to 0 to get the seed.
+					IBlockState tempState = cropState.withProperty(BlockCrops.AGE, 0);
+					
+					// Get the seed item and check to see fi the player has this in their inventory. If they do we can use it to replant.
+					Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
 					
 					if (seed != null && p.inventory.hasItem(seed))
 					{
 						seed.onItemUse(new ItemStack(seed), p, event.world, farmlandPosition, event.face, 0, 0, 0);
+						p.inventory.consumeInventoryItem(seed);
+						p.inventoryContainer.detectAndSendChanges();
 					}
 				}
 			}
@@ -113,7 +129,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
 	{
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP && WuestConfiguration.addHouseItem) 
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) 
 		{
 			System.out.println("Player joined world, checking to see if the house builder should be provided.");
 			
@@ -132,23 +148,38 @@ public class WuestEventHandler
 		        persistTag.setBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG, true);
 		    }
 		}
+		
+		if (event.entity.worldObj.isRemote && !WuestEventHandler.sentConfiguration)
+		{
+			WuestUtilities.network.sendToServer(new WuestMessage(WuestUtilities.proxy.proxyConfiguration.WriteToNBTTagCompound()));
+			WuestEventHandler.sentConfiguration = true;
+		}
 	}
 	
 	@SubscribeEvent
 	public void onClone(PlayerEvent.Clone event) 
 	{
 		// Don't add the tag unless the house item was added. This way it can be added if the feature is turned on.
-		if (WuestConfiguration.addHouseItem)
-		{
-			// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
-		    NBTTagCompound originalTag = event.original.getEntityData();
-		    
-		    if (originalTag.hasKey("IsPlayerNew"))
-		    {
-		    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-		    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
-		    }
-		}
+		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
+	    NBTTagCompound originalTag = event.original.getEntityData();
+	    
+	    if (originalTag.hasKey(WuestConfiguration.tagKey))
+	    {
+	    	WuestConfiguration config = WuestConfiguration.ReadFromNBTTagCompound((NBTTagCompound)originalTag.getTag(WuestConfiguration.tagKey));
+	    
+	    	if (config.addHouseItem)
+	    	{
+			    if (originalTag.hasKey("IsPlayerNew"))
+			    {
+			    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+			    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
+			    }
+	    	}
+	    	
+	    	// Save the configuration tag.
+	    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+	    	newPlayerTag.setTag(WuestConfiguration.tagKey, originalTag.getTag(WuestConfiguration.tagKey));
+	    }
 	}
 
 	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
@@ -177,6 +208,15 @@ public class WuestEventHandler
         if(onConfigChangedEvent.modID.equals("wuestUtilities"))
         {
             WuestConfiguration.syncConfig();
+            WuestEventHandler.sentConfiguration = false;
+            
+            // Don't send the message if the configuration was changed in the main menu.
+            if (onConfigChangedEvent.isWorldRunning)
+            {
+	            // Re-send the message when the configuration changes.
+	            WuestUtilities.network.sendToServer(new WuestMessage(WuestUtilities.proxy.proxyConfiguration.WriteToNBTTagCompound()));
+	            WuestEventHandler.sentConfiguration = true;
+            }
         }
     }
 }

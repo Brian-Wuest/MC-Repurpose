@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ExistingSubstitutionException;
 import net.minecraftforge.fml.common.registry.GameRegistry.Type;
@@ -45,6 +46,8 @@ public class WuestUtilities
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "wuest.utilities.ClientProxy", serverSide = "wuest.utilities.CommonProxy")
 	public static CommonProxy proxy;
+	
+	public static SimpleNetworkWrapper network;
 	
 	public static ArrayList<Item> ModItems = new ArrayList<Item>();
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();

@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ItemStartHouse extends Item {
 	public static ItemStartHouse RegisteredItem;
 
+	private WuestConfiguration currentConfiguration = null;
+	
 	public ItemStartHouse() {
 		super();
 
@@ -54,6 +57,7 @@ public class ItemStartHouse extends Item {
 			float hitZ) {
 		if (!world.isRemote) {
 			BlockPos playerPosition = player.getPosition();
+			this.currentConfiguration = WuestConfiguration.ReadFromNBTTagCompound((NBTTagCompound)player.getEntityData().getTag(WuestConfiguration.tagKey));
 
 			if (side == EnumFacing.UP) {
 				IBlockState hitBlockState = world.getBlockState(hitBlockPos);
@@ -85,7 +89,7 @@ public class ItemStartHouse extends Item {
 						// Set up the exterior.
 						this.BuildExterior(world, startingPosition, player);
 
-						if (WuestConfiguration.addMineShaft
+						if (this.currentConfiguration.addMineShaft
 								&& startingPosition.getY() > 15) {
 							// Set up the mineshaft.
 							this.PlaceMineShaft(world, startingPosition);
@@ -149,7 +153,7 @@ public class ItemStartHouse extends Item {
 
 		Block floor = null;
 
-		switch (WuestConfiguration.floorBlock) {
+		switch (this.currentConfiguration.floorBlock) {
 		case 1: {
 			floor = Blocks.brick_block;
 			break;
@@ -172,12 +176,12 @@ public class ItemStartHouse extends Item {
 
 		// Create the walls.
 		this.SetWalls(world, startingPosition, ((BlockPlanks) Blocks.planks)
-				.getStateFromMeta(WuestConfiguration.wallWoodType));
+				.getStateFromMeta(this.currentConfiguration.wallWoodType));
 
 		Block ceiling = null;
 		Block stairs = null;
 
-		switch (WuestConfiguration.ceilingBlock) {
+		switch (this.currentConfiguration.ceilingBlock) {
 		case 1: {
 			ceiling = Blocks.brick_block;
 			stairs = Blocks.brick_stairs;
@@ -216,7 +220,7 @@ public class ItemStartHouse extends Item {
 		// Use a separate position for each item.
 		BlockPos itemPosition = northEastCornerPosition;
 
-		if (WuestConfiguration.addTorches) {
+		if (this.currentConfiguration.addTorches) {
 			// Set the torch locations so it's not dark in the house.
 			this.PlaceInsideTorches(world, northEastCornerPosition);
 		}
@@ -224,17 +228,17 @@ public class ItemStartHouse extends Item {
 		// Create an oak door in the north east corner
 		this.DecorateDoor(world, northEastCornerPosition);
 
-		if (WuestConfiguration.addBed) {
+		if (this.currentConfiguration.addBed) {
 			// Place a bed in the north west corner.
 			this.PlaceBed(world, northWestCornerPosition);
 		}
 
-		if (WuestConfiguration.addChest) {
+		if (this.currentConfiguration.addChest) {
 			// Place a double chest in the south east corner.
 			this.PlaceAndFillChest(world, southEastCornerPosition);
 		}
 
-		if (WuestConfiguration.addCrafingtable) {
+		if (this.currentConfiguration.addCraftingTable) {
 			// Place a crafting table in the south west corner.
 			this.PlaceAndFillCraftingMachines(world, southWestCornerPosition);
 		}
@@ -253,11 +257,11 @@ public class ItemStartHouse extends Item {
 		BlockPos southWestCornerPosition = startingPosition.south(4).west(4)
 				.up();
 
-		if (WuestConfiguration.addTorches) {
+		if (this.currentConfiguration.addTorches) {
 			this.PlaceOutsideTorches(world, northEastCornerPosition);
 		}
 
-		if (WuestConfiguration.addFarm) {
+		if (this.currentConfiguration.addFarm) {
 			this.PlaceSmallFarm(world, northEastCornerPosition.down());
 		}
 	}
@@ -293,7 +297,7 @@ public class ItemStartHouse extends Item {
 
 	private void SetCeiling(World world, BlockPos pos, Block block, Block stairs) {
 		// If the ceiling is flat, call SetFloor since it's laid out the same.
-		if (WuestConfiguration.isCeilingFlat) {
+		if (this.currentConfiguration.isCeilingFlat) {
 			this.SetFloor(world, pos, block, 4, new ArrayList<ItemStack>());
 			return;
 		}
@@ -413,7 +417,7 @@ public class ItemStartHouse extends Item {
 		Block door = null;
 		Block stairs = null;
 
-		switch (WuestConfiguration.wallWoodType) {
+		switch (this.currentConfiguration.wallWoodType) {
 		case 1: {
 			door = Blocks.spruce_door;
 			stairs = Blocks.spruce_stairs;
@@ -499,7 +503,7 @@ public class ItemStartHouse extends Item {
 		itemPosition = itemPosition.west();
 		this.ReplaceBlock(world, itemPosition, Blocks.chest);
 
-		if (WuestConfiguration.addChestContents) {
+		if (this.currentConfiguration.addChestContents) {
 			// Add each stone tool to the chest and leather armor.
 			TileEntity tileEntity = world.getTileEntity(itemPosition);
 
@@ -632,7 +636,7 @@ public class ItemStartHouse extends Item {
 		blockState = Blocks.torch.getStateFromMeta(1);
 		this.ReplaceBlock(world, itemPosition, blockState);
 
-		if (WuestConfiguration.isCeilingFlat) {
+		if (this.currentConfiguration.isCeilingFlat) {
 			// Roof Torches
 			// Re-set the corner position to be on the roof.
 			cornerPosition = cornerPosition.south().up(4);

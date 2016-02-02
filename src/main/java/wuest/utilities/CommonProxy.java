@@ -20,6 +20,8 @@ public class CommonProxy implements IGuiHandler
 {
 	// This should be static in order for the events to be processed on server and client.
 	private static WuestEventHandler eventHandler = new WuestEventHandler();
+	
+	public static WuestConfiguration proxyConfiguration;
 
 	/*
 	  * Methods for ClientProxy to Override
@@ -31,6 +33,10 @@ public class CommonProxy implements IGuiHandler
 		WuestUtilities.config = new Configuration(event.getSuggestedConfigurationFile());
 	    WuestUtilities.config.load();
 		WuestConfiguration.syncConfig();
+		
+		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
+	       WuestUtilities.network.registerMessage(WuestMessage.Handler.class, WuestMessage.class, 0, Side.SERVER);
+	       // network.registerMessage(SecondMessage.Handler.class, SecondMessage.class, 1, Side.CLIENT);
 	}
 	
 	public void init(FMLInitializationEvent event)
