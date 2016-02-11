@@ -33,8 +33,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.*;
+import wuest.utilities.*;
+import wuest.utilities.Events.HomeCommand;
+import wuest.utilities.Proxy.CommonProxy;
 
-@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.8.9]", guiFactory = "wuest.utilities.ConfigGuiFactory")
+@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.8.9]", guiFactory = "wuest.utilities.Gui.ConfigGuiFactory")
 public class WuestUtilities 
 {
 	public static final String MODID = "wuestUtilities";
@@ -44,7 +47,7 @@ public class WuestUtilities
 	public static WuestUtilities instance;
 	
 	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide = "wuest.utilities.ClientProxy", serverSide = "wuest.utilities.CommonProxy")
+	@SidedProxy(clientSide = "wuest.utilities.Proxy.ClientProxy", serverSide = "wuest.utilities.Proxy.CommonProxy")
 	public static CommonProxy proxy;
 	
 	public static SimpleNetworkWrapper network;

@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +15,11 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import wuest.utilities.*;
+import wuest.utilities.Blocks.*;
+import wuest.utilities.Events.*;
+import wuest.utilities.Gui.*;
+import wuest.utilities.Items.*;
 
 public class CommonProxy implements IGuiHandler 
 {
@@ -35,7 +40,7 @@ public class CommonProxy implements IGuiHandler
 		WuestConfiguration.syncConfig();
 		
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
-	       WuestUtilities.network.registerMessage(WuestMessage.Handler.class, WuestMessage.class, 0, Side.SERVER);
+		WuestUtilities.network.registerMessage(WuestMessage.Handler.class, WuestMessage.class, 0, Side.SERVER);
 	       // network.registerMessage(SecondMessage.Handler.class, SecondMessage.class, 1, Side.CLIENT);
 	}
 	

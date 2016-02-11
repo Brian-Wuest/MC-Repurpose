@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Gui;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.IConfigElement;
+import wuest.utilities.*;
 
 public class GuiWuest extends GuiConfig
 {

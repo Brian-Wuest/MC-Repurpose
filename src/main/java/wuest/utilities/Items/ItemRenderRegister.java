@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Items;
 
 import java.lang.*;
 import net.minecraft.block.Block;
@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import wuest.utilities.*;
 
 public final class ItemRenderRegister 
 {

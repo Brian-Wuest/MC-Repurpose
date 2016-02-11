@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Events;
 
 import java.util.ArrayList;
 import java.util.Collections;

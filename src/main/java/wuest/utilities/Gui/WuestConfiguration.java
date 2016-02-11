@@ -1,10 +1,11 @@
-package wuest.utilities;
+package wuest.utilities.Gui;
 
 import java.io.File;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import wuest.utilities.*;
 
 public class WuestConfiguration 
 {

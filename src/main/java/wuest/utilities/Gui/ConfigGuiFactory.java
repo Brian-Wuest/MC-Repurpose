@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Gui;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import wuest.utilities.*;
+import wuest.utilities.Items.ItemRenderRegister;
 
 public class ClientProxy extends CommonProxy 
 { 

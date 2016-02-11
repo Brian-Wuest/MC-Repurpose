@@ -312,6 +312,35 @@ public class GeneralRecipes
 		GameRegistry.addSmelting(Items.diamond_chestplate, new ItemStack(Items.diamond, 8), 1f);
 		GameRegistry.addSmelting(Items.diamond_leggings, new ItemStack(Items.diamond, 7), 1f);
 		GameRegistry.addSmelting(Items.diamond_boots, new ItemStack(Items.diamond, 4), 1f);
+		
+		// Chainmail recipes.
+		GameRegistry.addRecipe(new ItemStack(Items.chainmail_helmet, 1), 
+				"xxx",
+				"y y",
+				"   ",
+				'x', Items.iron_ingot, 
+				'y', Items.leather);
+		
+		GameRegistry.addRecipe(new ItemStack(Items.chainmail_chestplate, 1), 
+				"y y",
+				"yxy",
+				"xxx",
+				'x', Items.iron_ingot, 
+				'y', Items.leather);
+		
+		GameRegistry.addRecipe(new ItemStack(Items.chainmail_leggings, 1), 
+				"xxx",
+				"y y",
+				"y y",
+				'x', Items.iron_ingot, 
+				'y', Items.leather);
+		
+		GameRegistry.addRecipe(new ItemStack(Items.chainmail_boots, 1), 
+				"   ",
+				"y y",
+				"x x",
+				'x', Items.iron_ingot, 
+				'y', Items.leather);
 	}
 	
 	private  static void LoadMiscRecipes()

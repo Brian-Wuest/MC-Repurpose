@@ -1,4 +1,4 @@
-package wuest.utilities;
+package wuest.utilities.Items;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import wuest.utilities.*;
+import wuest.utilities.Gui.WuestConfiguration;
 
 public class ItemStartHouse extends Item {
 	public static ItemStartHouse RegisteredItem;

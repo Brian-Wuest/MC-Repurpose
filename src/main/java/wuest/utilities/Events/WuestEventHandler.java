@@ -1,14 +1,19 @@
-package wuest.utilities;
+package wuest.utilities.Events;
 
 import java.util.List;
 import java.util.Random;
 
+import wuest.utilities.*;
+import wuest.utilities.Gui.WuestConfiguration;
+import wuest.utilities.Items.ItemStartHouse;
+import wuest.utilities.Proxy.WuestMessage;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
