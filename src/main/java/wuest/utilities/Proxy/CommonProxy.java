@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.*;
-import wuest.utilities.Blocks.*;
 import wuest.utilities.Events.*;
 import wuest.utilities.Gui.*;
 import wuest.utilities.Items.*;
