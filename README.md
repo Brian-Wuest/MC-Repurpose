@@ -43,6 +43,10 @@ This mod is designed to be an "Ease of Life" mod.
     * The ceiling can be flat or vaulted (made of stairs).
     * Torches can be added on the inside of the house.
         *There will be 1 torch per wall.
+	* A sign will be posted outside the house next to the stair with the following message.
+		* This is
+		* [Insert Players Name]
+		* House!
     * The house can be decorated with the following items. These can all be turned off in the configuration.
         * Bed
         * Crafting table (with furnace that has 20 coal).
@@ -54,6 +58,9 @@ This mod is designed to be an "Ease of Life" mod.
             * 3 potatoes.
             * 3 carrots.
             * Full set of leather armor.
+			* Full stack of cobblestone
+			* Full stack of dirt
+			* 3 Oak saplings
         * Outside torches. There will be multiple torches on each wall.
             * If the ceiling is flat there will be multiple torches on the roof.
         * If the ceiling is vaulted it will have 1 torch at it's peak.

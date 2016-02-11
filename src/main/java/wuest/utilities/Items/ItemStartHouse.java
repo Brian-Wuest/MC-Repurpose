@@ -7,6 +7,8 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,7 +22,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -208,7 +212,8 @@ public class ItemStartHouse extends Item {
 	}
 
 	private void BuildInterior(World world, BlockPos startingPosition,
-			EntityPlayer player) {
+			EntityPlayer player) 
+	{
 		// Keep the corner positions since they are important.
 		BlockPos northEastCornerPosition = startingPosition.north(4).east(4)
 				.up();
@@ -228,7 +233,7 @@ public class ItemStartHouse extends Item {
 		}
 
 		// Create an oak door in the north east corner
-		this.DecorateDoor(world, northEastCornerPosition);
+		this.DecorateDoor(world, northEastCornerPosition, player);
 
 		if (this.currentConfiguration.addBed) {
 			// Place a bed in the north west corner.
@@ -411,7 +416,7 @@ public class ItemStartHouse extends Item {
 		this.ReplaceBlock(world, itemPosition, blockState);
 	}
 
-	private void DecorateDoor(World world, BlockPos cornerPosition) {
+	private void DecorateDoor(World world, BlockPos cornerPosition, EntityPlayer player) {
 		BlockPos itemPosition = cornerPosition.west();
 		;
 		world.setBlockToAir(itemPosition.up());
@@ -479,6 +484,31 @@ public class ItemStartHouse extends Item {
 								BlockStairs.EnumHalf.BOTTOM)
 						.withProperty(BlockStairs.SHAPE,
 								BlockStairs.EnumShape.STRAIGHT));
+		
+		// Place a sign.
+		itemPosition = itemPosition.west();
+		BlockSign sign = (BlockSign)Blocks.standing_sign;
+		
+		this.ReplaceBlock(world, itemPosition, sign.getStateFromMeta(8));
+		
+		TileEntity tileEntity = world.getTileEntity(itemPosition);
+		
+		if (tileEntity instanceof TileEntitySign)
+		{
+			TileEntitySign signTile = (TileEntitySign)tileEntity;
+			signTile.signText[0] = new ChatComponentText("This is");
+			
+			if (player.getDisplayNameString().length() >= 15)
+			{
+				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString());
+			}
+			else
+			{
+				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString() + "'s");
+			}
+			
+			signTile.signText[2] = new ChatComponentText("house!");
+		}
 	}
 
 	private void PlaceBed(World world, BlockPos cornerPosition) {
@@ -549,6 +579,15 @@ public class ItemStartHouse extends Item {
 				// Add seeds.
 				chestTile.setInventorySlotContents(12, new ItemStack(
 						Items.wheat_seeds, 3));
+				
+				// Add Cobblestone.
+				chestTile.setInventorySlotContents(13, new ItemStack(Item.getItemFromBlock(Blocks.cobblestone), 64));
+				
+				// Add Dirt.
+				chestTile.setInventorySlotContents(14, new ItemStack(Item.getItemFromBlock(Blocks.dirt), 64));
+				
+				// Add oak sapling.
+				chestTile.setInventorySlotContents(15, new ItemStack(Item.getItemFromBlock(Blocks.sapling), 3));
 			}
 		}
 	}
