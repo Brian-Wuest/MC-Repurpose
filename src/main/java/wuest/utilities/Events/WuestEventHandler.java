@@ -44,13 +44,13 @@ public class WuestEventHandler
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
 	public static boolean sentConfiguration = false;
 	
-	@SideOnly(Side.SERVER)
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	@SubscribeEvent
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
 		// Can use the proxies configuration since this is on the client.
-		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest)
+		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
+				&& !event.world.isRemote)
 		{
 			EntityPlayer p = event.entityPlayer;
 			
