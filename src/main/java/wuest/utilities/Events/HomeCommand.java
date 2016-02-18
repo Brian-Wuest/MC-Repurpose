@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import wuest.utilities.WuestUtilities;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -61,8 +62,13 @@ public class HomeCommand extends CommandBase
 		 */
 		if(sender instanceof EntityPlayer) 
 		{
-			// Turn the sender into a player entity.
 			EntityPlayer player = (EntityPlayer)sender;
+			
+			if (!WuestUtilities.proxy.proxyConfiguration.enableHomeCommand)
+			{
+				player.addChatComponentMessage(new ChatComponentText("This command has not been enabled on the server."));
+			}
+
 			BlockPos bedLocation = player.getBedLocation().east().south();
 			
 			if (bedLocation != null)

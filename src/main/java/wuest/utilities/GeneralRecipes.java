@@ -17,15 +17,35 @@ public class GeneralRecipes
 {
 	public static void LoadRecipies()
 	{
-		GeneralRecipes.LoadMetalRecipes();
+		if (WuestUtilities.proxy.proxyConfiguration.addMetalRecipes)
+		{
+			GeneralRecipes.LoadMetalRecipes();
+		}
 		
-		GeneralRecipes.LoadWoodRecipes();
+		if (WuestUtilities.proxy.proxyConfiguration.addWoodRecipes)
+		{
+			GeneralRecipes.LoadWoodRecipes();
+		}
 		
-		GeneralRecipes.LoadStoneRecipes();
+		if (WuestUtilities.proxy.proxyConfiguration.addStoneRecipes)
+		{
+			GeneralRecipes.LoadStoneRecipes();
+		}
 		
-		GeneralRecipes.LoadArmorRecipes();
+		if (WuestUtilities.proxy.proxyConfiguration.addArmorRecipes)
+		{
+			GeneralRecipes.LoadArmorRecipes();
+		}
 		
-		GeneralRecipes.LoadMiscRecipes();
+		if (WuestUtilities.proxy.proxyConfiguration.addMiscRecipes)
+		{
+			GeneralRecipes.LoadMiscRecipes();
+		}
+		
+		if (WuestUtilities.proxy.proxyConfiguration.addNetherStarRecipe)
+		{
+			GeneralRecipes.LoadNetherStarRecipe();
+		}
 	}
 	
 	private static void LoadMetalRecipes()
@@ -74,68 +94,15 @@ public class GeneralRecipes
 		{
 			// wood slabs into sticks.
 			GameRegistry.addRecipe(new ItemStack(Items.stick, 4), 
-					"xx ",
-					"xx ", 
-					'x', 
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Items.stick, 4), 
-					" xx",
-					" xx", 
-					'x', 
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Items.stick, 4), 
-					"   ",
-					"xx ",
-					"xx ",
-					'x', 
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Items.stick, 4), 
-					"   ",
-					" xx",
-					" xx",
+					"xx",
+					"xx", 
 					'x', 
 					new ItemStack(Blocks.wooden_slab, 1, i));
 			
 			// Wooden slabs into planks.
 			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					"x  ",
-					"x  ",
-					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					" x ",
-					" x ",
-					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					"  x",
-					"  x",
-					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					"   ",
-					"x  ",
-					"x  ",
-					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					"   ",
-					" x ",
-					" x ",
-					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
-			
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
-					"   ",
-					"  x",
-					"  x",
+					"x",
+					"x",
 					'x',
 					new ItemStack(Blocks.wooden_slab, 1, i));
 		}
@@ -148,6 +115,7 @@ public class GeneralRecipes
 		stairs.put(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick, 3));
 		stairs.put(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick, 3));
 		stairs.put(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone, 3));
+		stairs.put(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone, 3));
 		stairs.put(Blocks.spruce_stairs, new ItemStack(Blocks.planks, 3,1));
 		stairs.put(Blocks.birch_stairs, new ItemStack(Blocks.planks, 3, 2));
 		stairs.put(Blocks.jungle_stairs, new ItemStack(Blocks.planks, 3, 3));
@@ -159,36 +127,8 @@ public class GeneralRecipes
 		{
 			// Add recipe to turn 2 stairs into 3 blocks. This gets us back to 6 blocks used to make 4 stairs.
 			GameRegistry.addRecipe(set.getValue(),
-					"x  ",
-					"x  ",
-					'x', new ItemStack(set.getKey()));
-			
-			GameRegistry.addRecipe(set.getValue(),
-					" x ",
-					" x ",
-					'x', new ItemStack(set.getKey()));
-			
-			GameRegistry.addRecipe(set.getValue(),
-					"  x",
-					"  x",
-					'x', new ItemStack(set.getKey()));
-			
-			GameRegistry.addRecipe(set.getValue(),
-					"   ",
-					"x  ",
-					"x  ",
-					'x', new ItemStack(set.getKey()));
-			
-			GameRegistry.addRecipe(set.getValue(),
-					"   ",
-					" x ",
-					" x ",
-					'x', new ItemStack(set.getKey()));
-			
-			GameRegistry.addRecipe(set.getValue(),
-					"   ",
-					"  x",
-					"  x",
+					"x",
+					"x",
 					'x', new ItemStack(set.getKey()));
 		}
 	}
@@ -198,7 +138,7 @@ public class GeneralRecipes
 		// Make slabs back into full blocks.
 		for (int i = 0; i < 8; i++)
 		{
-			Block currentBlock = null;
+			ItemStack currentBlock = null;
 			ItemStack currentSlab = new ItemStack(Blocks.stone_slab, 1, i);
 			
 			// 2 is stone wood and is no longer craftable.
@@ -211,80 +151,70 @@ public class GeneralRecipes
 			{
 				case (0):
 				{
-					currentBlock = Blocks.stone;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.stone));
 					break;
 				}
 				
 				case (1):
 				{
-					currentBlock = Blocks.sandstone;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.sandstone));
 					break;
 				}
 				
 				case (3):
 				{
-					currentBlock = Blocks.cobblestone;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.cobblestone));
 					break;
 				}
 				
 				case (4):
 				{
-					currentBlock = Blocks.brick_block;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.brick_block));
 					break;
 				}
 				
 				case (5):
 				{
-					currentBlock = Blocks.stonebrick;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.stonebrick));
 					break;
 				}
 				
 				case (6):
 				{
-					currentBlock = Blocks.nether_brick;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.nether_brick));
 					break;
 				}
 				
 				case (7):
 				{
-					currentBlock = Blocks.quartz_block;
+					currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.quartz_block));
 					break;
 				}
 			}
 			
-			GameRegistry.addRecipe(new ItemStack(currentBlock), 
-					"x  ",
-					"x  ",
-					'x', currentSlab);
-			
-			GameRegistry.addRecipe(new ItemStack(currentBlock),
-					" x ",
-					" x ",
-					'x', currentSlab);
-			
-			GameRegistry.addRecipe(new ItemStack(currentBlock),
-					"  x",
-					"  x",
-					'x', currentSlab);
-			
-			GameRegistry.addRecipe(new ItemStack(currentBlock), 
-					"   ",
-					"x  ",
-					"x  ",
-					'x', currentSlab);
-			
-			GameRegistry.addRecipe(new ItemStack(currentBlock),
-					"   ",
-					" x ",
-					" x ",
-					'x', currentSlab);
-			
-			GameRegistry.addRecipe(new ItemStack(currentBlock),
-					"   ",
-					"  x",
-					"  x",
-					'x', currentSlab);
+			GeneralRecipes.AddSlabRecipe(currentBlock, currentSlab, i);
 		}
+		
+		GeneralRecipes.AddSlabRecipe(new ItemStack(Item.getItemFromBlock(Blocks.red_sandstone)), new ItemStack(Item.getItemFromBlock(Blocks.stone_slab2)), 1);
+	}
+	
+	private static void AddSlabRecipe(ItemStack currentBlock, ItemStack currentSlab, int i)
+	{
+		// Need a different recipe for stone brick as this will interfere with the chiseled stone.
+		if (i == 5 || i == 1 || i == 7)
+		{
+			GameRegistry.addRecipe(currentBlock, 
+					"xx",
+					"xx",
+					'x', currentSlab);
+			
+			return;
+		}
+		
+		GameRegistry.addRecipe(currentBlock, 
+				"x",
+				"x",
+				'x', currentSlab);
 	}
 
 	private static void LoadArmorRecipes()
@@ -343,7 +273,7 @@ public class GeneralRecipes
 				'y', Items.leather);
 	}
 	
-	private  static void LoadMiscRecipes()
+	private static void LoadMiscRecipes()
 	{
 		// Rotten Flesh to leather.
 		GameRegistry.addSmelting(Items.rotten_flesh, new ItemStack(Items.leather), 1f);
@@ -356,15 +286,6 @@ public class GeneralRecipes
 				'x', 
 				Items.feather, 'y', Items.string);
 		
-		// 4 Quartz Blocks + 4 wither skulls + 1 Diamond Block = Nether Star
-		GameRegistry.addRecipe(new ItemStack(Items.nether_star, 1), 
-				"yxy",
-				"xzx",
-				"yxy",
-				'x', new ItemStack(Item.getItemFromBlock(Blocks.quartz_block)), 
-				'y', new ItemStack(Items.skull, 1, 1), 
-				'z',  new ItemStack(Item.getItemFromBlock(Blocks.diamond_block)));
-		
 		// Make a recipe for Clay: Sand + Water Bucket = Clay.
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(Blocks.clay), 2), 
 				new ItemStack(Items.water_bucket),
@@ -376,5 +297,17 @@ public class GeneralRecipes
 				new ItemStack(Items.redstone),
 				new ItemStack(Items.gunpowder),
 				new ItemStack(Items.dye, 1, 11));
+	}
+
+	private static void LoadNetherStarRecipe()
+	{
+		// 4 Quartz Blocks + 4 wither skulls + 1 Diamond Block = Nether Star
+		GameRegistry.addRecipe(new ItemStack(Items.nether_star, 1), 
+				"yxy",
+				"xzx",
+				"yxy",
+				'x', new ItemStack(Item.getItemFromBlock(Blocks.quartz_block)), 
+				'y', new ItemStack(Items.skull, 1, 1), 
+				'z',  new ItemStack(Item.getItemFromBlock(Blocks.diamond_block)));
 	}
 }

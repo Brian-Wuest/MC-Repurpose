@@ -172,7 +172,8 @@ public class WuestEventHandler
 	    {
 	    	WuestConfiguration config = WuestConfiguration.ReadFromNBTTagCompound((NBTTagCompound)originalTag.getTag(WuestConfiguration.tagKey));
 	    
-	    	if (config.addHouseItem)
+	    	// Use the server configuration to determine if the house should be added for this player.
+	    	if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
 	    	{
 			    if (originalTag.hasKey("IsPlayerNew"))
 			    {
@@ -181,7 +182,7 @@ public class WuestEventHandler
 			    }
 	    	}
 	    	
-	    	// Save the configuration tag.
+	    	// Save the configuration tag to the player.
 	    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
 	    	newPlayerTag.setTag(WuestConfiguration.tagKey, originalTag.getTag(WuestConfiguration.tagKey));
 	    }
