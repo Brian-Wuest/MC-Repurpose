@@ -17,6 +17,8 @@ This mod is designed to be an "Ease of Life" mod.
     * 1 Quartz block on each side of the Diamond Block.
 * Added recipes for the chainmail armor.
 	* These recipes will include iron and leather.
+* Added recipe to make glowstone dust.
+    * 1 Redstone Dust + 1 Gun powder + 1 Yellow Dye = 2 Glowstone Dust
 * If Copper, Tin or Aluminum ingots have been registered in the OreDictionary, a recipe for Shears and Bucket will be registered for those ingots.
 
 # Commands:

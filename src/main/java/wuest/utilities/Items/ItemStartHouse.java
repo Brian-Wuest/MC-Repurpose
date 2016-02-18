@@ -159,13 +159,14 @@ public class ItemStartHouse extends Item {
 
 		Block floor = null;
 
-		switch (this.currentConfiguration.floorBlock) {
-		case 1: {
+		switch (this.currentConfiguration.floorBlock) 
+		{
+		case Brick: {
 			floor = Blocks.brick_block;
 			break;
 		}
 
-		case 2: {
+		case SandStone: {
 			floor = Blocks.sandstone;
 			break;
 		}
@@ -182,19 +183,19 @@ public class ItemStartHouse extends Item {
 
 		// Create the walls.
 		this.SetWalls(world, startingPosition, ((BlockPlanks) Blocks.planks)
-				.getStateFromMeta(this.currentConfiguration.wallWoodType));
+				.getStateFromMeta(this.currentConfiguration.wallWoodType.getValue()));
 
 		Block ceiling = null;
 		Block stairs = null;
 
 		switch (this.currentConfiguration.ceilingBlock) {
-		case 1: {
+		case Brick: {
 			ceiling = Blocks.brick_block;
 			stairs = Blocks.brick_stairs;
 			break;
 		}
 
-		case 2: {
+		case SandStone: {
 			ceiling = Blocks.sandstone;
 			stairs = Blocks.sandstone_stairs;
 			break;
@@ -425,31 +426,31 @@ public class ItemStartHouse extends Item {
 		Block stairs = null;
 
 		switch (this.currentConfiguration.wallWoodType) {
-		case 1: {
+		case Spruce: {
 			door = Blocks.spruce_door;
 			stairs = Blocks.spruce_stairs;
 			break;
 		}
 
-		case 2: {
+		case Birch: {
 			door = Blocks.birch_door;
 			stairs = Blocks.birch_stairs;
 			break;
 		}
 
-		case 3: {
+		case Jungle: {
 			door = Blocks.jungle_door;
 			stairs = Blocks.jungle_stairs;
 			break;
 		}
 
-		case 4: {
+		case Acacia: {
 			door = Blocks.acacia_door;
 			stairs = Blocks.acacia_stairs;
 			break;
 		}
 
-		case 5: {
+		case DarkOak: {
 			door = Blocks.dark_oak_door;
 			stairs = Blocks.dark_oak_stairs;
 			break;

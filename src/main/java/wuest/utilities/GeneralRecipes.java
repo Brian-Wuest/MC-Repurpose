@@ -365,10 +365,16 @@ public class GeneralRecipes
 				'y', new ItemStack(Items.skull, 1, 1), 
 				'z',  new ItemStack(Item.getItemFromBlock(Blocks.diamond_block)));
 		
-		// Make a recipe for Clay + Sand + Water Bucket = Clay.
+		// Make a recipe for Clay: Sand + Water Bucket = Clay.
 		GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(Blocks.clay), 2), 
 				new ItemStack(Items.water_bucket),
 				new ItemStack(Item.getItemFromBlock(Blocks.sand)),
 				new ItemStack(Item.getItemFromBlock(Blocks.gravel)));
+		
+		// Make a recipe for glowstone: redstone + gun powder + yellow dye.
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.glowstone_dust, 2), 
+				new ItemStack(Items.redstone),
+				new ItemStack(Items.gunpowder),
+				new ItemStack(Items.dye, 1, 11));
 	}
 }

@@ -27,6 +27,21 @@ public class WuestConfiguration
 	private static String isCeilingFlatTag = "isCeilingFlat";
 	private static String addMineShaftTag = "addMineShaft";
 	
+	// Config file option names.
+	private static String addHouseItemName = "Add House Item On New Player Join";
+	private static String addTorchesName = "Add Torches";
+	private static String addBedName = "Add Bed";
+	private static String addCraftingTableName = "Add Crafting Table";
+	private static String addChestName = "Add Chest";
+	private static String addChestContentsName = "Add Chest Contents";
+	private static String addFarmName = "Add Farm";
+	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
+	private static String floorBlockName = "Floor Stone Type";
+	private static String ceilingBlockName = "Ceiling Stone Type";
+	private static String wallWoodTypeName = "Wall Wood Type";
+	private static String isCeilingFlatName = "Is Ceiling Flat";
+	private static String addMineShaftName = "Build Mineshaft";
+	
 	// Configuration Options.
 	public boolean addHouseItem;
 	public boolean addTorches;
@@ -36,9 +51,9 @@ public class WuestConfiguration
 	public boolean addChestContents;
 	public boolean addFarm;
 	public boolean rightClickCropHarvest;
-	public int floorBlock;
-	public int ceilingBlock;
-	public int wallWoodType;
+	public CeilingFloorBlockType floorBlock;
+	public CeilingFloorBlockType ceilingBlock;
+	public WallBlockType wallWoodType;
 	public boolean isCeilingFlat;
 	public boolean addMineShaft;
 	
@@ -52,9 +67,9 @@ public class WuestConfiguration
 		this.addChestContents = true;
 		this.addFarm = true;
 		this.rightClickCropHarvest = false;
-		this.floorBlock = 0;
-		this.ceilingBlock = 0;
-		this.wallWoodType = 0;
+		this.floorBlock = CeilingFloorBlockType.StoneBrick;
+		this.ceilingBlock = CeilingFloorBlockType.StoneBrick;
+		this.wallWoodType = WallBlockType.Oak;
 		this.isCeilingFlat = true;
 		this.addMineShaft = true;
 	}
@@ -76,9 +91,9 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addFarm = config.getBoolean("Add Farm", WuestConfiguration.OPTIONS , true, "Option to include a small farm outside of the house.");
 		WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest = config.getBoolean("Right Click Crop Harvest", WuestConfiguration.OPTIONS, false, "Determines if right-clicking crops will harvest them.");
 		WuestUtilities.proxy.proxyConfiguration.addHouseItem = config.getBoolean("Add House Item On New Player Join", WuestConfiguration.OPTIONS, true, "Determines if the house item is added to player inventory when joining the world for the first time.");
-		WuestUtilities.proxy.proxyConfiguration.floorBlock = config.getInt("Floor Stone Type", WuestConfiguration.OPTIONS, 0, 0, 2, "Determines the floor material type.\r\n0 = Stone Brick, 1 = Brick, 2 = SandStone");
-		WuestUtilities.proxy.proxyConfiguration.ceilingBlock = config.getInt("Ceiling Stone Type", WuestConfiguration.OPTIONS, 0, 0, 2, "Determines the ceiling material type.\r\n0 = Stone Brick, 1 = Brick, 2 = SandStone");
-		WuestUtilities.proxy.proxyConfiguration.wallWoodType = config.getInt("Wall Wood Type", WuestConfiguration.OPTIONS, 0, 0, 5, "Determines what type of wood the walls (and door/stair) are made of.\r\n0 = Oak, 1 = Spruce, 2 = Birch, 3 = Jungle, 4 = Acacia, 5 = Dark Oak");
+		WuestUtilities.proxy.proxyConfiguration.floorBlock = CeilingFloorBlockType.ValueOf(config.getInt("Floor Stone Type", WuestConfiguration.OPTIONS, 0, 0, 2, "Determines the floor material type.\r\n0 = Stone Brick, 1 = Brick, 2 = SandStone"));
+		WuestUtilities.proxy.proxyConfiguration.ceilingBlock = CeilingFloorBlockType.ValueOf(config.getInt("Ceiling Stone Type", WuestConfiguration.OPTIONS, 0, 0, 2, "Determines the ceiling material type.\r\n0 = Stone Brick, 1 = Brick, 2 = SandStone"));
+		WuestUtilities.proxy.proxyConfiguration.wallWoodType = WallBlockType.ValueOf(config.getInt("Wall Wood Type", WuestConfiguration.OPTIONS, 0, 0, 5, "Determines what type of wood the walls (and door/stair) are made of.\r\n0 = Oak, 1 = Spruce, 2 = Birch, 3 = Jungle, 4 = Acacia, 5 = Dark Oak"));
 		WuestUtilities.proxy.proxyConfiguration.isCeilingFlat = config.getBoolean("Is Ceiling Flat", WuestConfiguration.OPTIONS, true, "Determines if the ceiling is flat or if it is made of stairs.");
 		WuestUtilities.proxy.proxyConfiguration.addMineShaft = config.getBoolean("Build Mineshaft", WuestConfiguration.OPTIONS, true, "Determines if a mineshaft is built from the house to Y10.\r\nAll blocks broken are added to a chest at the bottom of the shaft.");
 		
@@ -86,6 +101,21 @@ public class WuestConfiguration
 	    {
 	    	config.save();
 	    }
+	}
+	
+	public static String GetIntegerOptionStringValue(String name, int value)
+	{
+		if (name.equals(WuestConfiguration.ceilingBlockName)
+				|| name.equals(WuestConfiguration.floorBlockName))
+		{
+			return " - " + CeilingFloorBlockType.ValueOf(value).name();
+		}
+		else if (name.equals(WuestConfiguration.wallWoodTypeName))
+		{
+			return " - " + WallBlockType.ValueOf(value).name();
+		}
+		
+		return "";
 	}
 
 	public NBTTagCompound WriteToNBTTagCompound()
@@ -100,9 +130,9 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.addChestContentsTag, this.addChestContents);
 		tag.setBoolean(WuestConfiguration.addFarmTag, this.addFarm);
 		tag.setBoolean(WuestConfiguration.rightClickCropHarvestTag, this.rightClickCropHarvest);
-		tag.setInteger(WuestConfiguration.floorBlockTag, this.floorBlock);
-		tag.setInteger(WuestConfiguration.ceilingBlockTag, this.ceilingBlock);
-		tag.setInteger(WuestConfiguration.wallWoodTypeTag, this.wallWoodType);
+		tag.setInteger(WuestConfiguration.floorBlockTag, this.floorBlock.getValue());
+		tag.setInteger(WuestConfiguration.ceilingBlockTag, this.ceilingBlock.getValue());
+		tag.setInteger(WuestConfiguration.wallWoodTypeTag, this.wallWoodType.getValue());
 		tag.setBoolean(WuestConfiguration.isCeilingFlatTag, this.isCeilingFlat);
 		tag.setBoolean(WuestConfiguration.addMineShaftTag, this.addMineShaft);
 		
@@ -155,17 +185,17 @@ public class WuestConfiguration
 		
 		if (tag.hasKey(WuestConfiguration.floorBlockTag))
 		{
-			config.floorBlock = tag.getInteger(WuestConfiguration.floorBlockTag);
+			config.floorBlock = CeilingFloorBlockType.ValueOf(tag.getInteger(WuestConfiguration.floorBlockTag));
 		}
 		
 		if (tag.hasKey(WuestConfiguration.ceilingBlockTag))
 		{
-			config.ceilingBlock = tag.getInteger(WuestConfiguration.ceilingBlockTag);
+			config.ceilingBlock = CeilingFloorBlockType.ValueOf(tag.getInteger(WuestConfiguration.ceilingBlockTag));
 		}
 		
 		if (tag.hasKey(WuestConfiguration.wallWoodTypeTag))
 		{
-			config.wallWoodType = tag.getInteger(WuestConfiguration.wallWoodTypeTag);
+			config.wallWoodType = WallBlockType.ValueOf(tag.getInteger(WuestConfiguration.wallWoodTypeTag));
 		}
 		
 		if (tag.hasKey(WuestConfiguration.isCeilingFlatTag))
@@ -179,5 +209,97 @@ public class WuestConfiguration
 		}
 		
 		return config;
+	}
+
+	public enum CeilingFloorBlockType
+	{
+		StoneBrick(0),
+		Brick(1),
+		SandStone(2);
+		
+        private final int value;
+
+        CeilingFloorBlockType(int newValue) 
+        {
+            value = newValue;
+        }
+
+        public int getValue() { return value; }
+        
+        public static CeilingFloorBlockType ValueOf(int value)
+        {
+        	switch (value)
+        	{
+	        	case 1:
+	        	{
+	        		return CeilingFloorBlockType.Brick;
+	        	}
+	        	
+	        	case 2:
+	        	{
+	        		return CeilingFloorBlockType.SandStone;
+	        	}
+	        	
+	        	default:
+	        	{
+	        		return CeilingFloorBlockType.StoneBrick;
+	        	}
+        	}
+        }
+	}
+	
+	public enum WallBlockType
+	{
+		Oak(0),
+		Spruce(1),
+		Birch(2),
+		Jungle(3),
+		Acacia(4),
+		DarkOak(5);
+		
+        private final int value;
+
+        WallBlockType(final int newValue) 
+        {
+            value = newValue;
+        }
+
+        public int getValue() { return value; }
+        
+        public static WallBlockType ValueOf(int value)
+        {
+        	switch (value)
+        	{
+	        	case 1:
+	        	{
+	        		return WallBlockType.Spruce;
+	        	}
+	        	
+	        	case 2:
+	        	{
+	        		return WallBlockType.Birch;
+	        	}
+	        	
+	        	case 3:
+	        	{
+	        		return WallBlockType.Jungle;
+	        	}
+	        	
+	        	case 4:
+	        	{
+	        		return WallBlockType.Acacia;
+	        	}
+	        	
+	        	case 5:
+	        	{
+	        		return WallBlockType.DarkOak;
+	        	}
+	        	
+	        	default:
+	        	{
+	        		return WallBlockType.Oak;
+	        	}
+        	}
+        }
 	}
 }

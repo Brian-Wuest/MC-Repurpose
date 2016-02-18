@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.state.BlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,12 +20,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class HomeCommand extends CommandBase 
 {
-
 	@Override
 	public String getCommandName() 
 	{
 		return "home";
 	}
+	
+    /**
+     * Return the required permission level for this command.
+     */
+    @Override
+	public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+    
+    /**
+     * Returns true if the given command sender is allowed to use this command.
+     */
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+        return true;
+    }
 	
 	@Override
 	public String getCommandUsage(ICommandSender sender) 
@@ -32,7 +51,6 @@ public class HomeCommand extends CommandBase
 		return "Teleports the player to the last bed they slept in.";
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void processCommand(ICommandSender sender, String[] args)
 			throws CommandException 
@@ -45,10 +63,12 @@ public class HomeCommand extends CommandBase
 		{
 			// Turn the sender into a player entity.
 			EntityPlayer player = (EntityPlayer)sender;
-			BlockPos bedLocation = player.getBedLocation();
+			BlockPos bedLocation = player.getBedLocation().east().south();
 			
 			if (bedLocation != null)
 			{
+				World world = player.worldObj;
+
 				// Teleport the player back to their bed.
 				player.setPositionAndUpdate(bedLocation.getX(), bedLocation.getY(), bedLocation.getZ());
 			}
