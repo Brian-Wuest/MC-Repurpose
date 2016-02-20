@@ -40,7 +40,7 @@ public class CommonProxy implements IGuiHandler
 		
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
 		WuestUtilities.network.registerMessage(WuestMessage.Handler.class, WuestMessage.class, 0, Side.SERVER);
-	       // network.registerMessage(SecondMessage.Handler.class, SecondMessage.class, 1, Side.CLIENT);
+		WuestUtilities.network.registerMessage(HouseMessage.HouseHandler.class, HouseMessage.class, 1, Side.SERVER);
 	}
 	
 	public void init(FMLInitializationEvent event)
@@ -82,12 +82,17 @@ public class CommonProxy implements IGuiHandler
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
-	  return null;
+		return null;
 	}
 	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
-	  return null;
+		if (ID == GuiHouseItem.GUI_ID)
+		{
+            return new GuiHouseItem(x, y, z);
+		}
+		
+		return null;
 	}
 }

@@ -253,18 +253,9 @@ public class GuiWuest extends GuiConfig
         	
             if (configElement.getType() == ConfigGuiType.INTEGER)
             {
-//            	String comment = configElement.getComment();
             	int currentValue = this.getValueInt();
             	
-            	this.suffix = WuestConfiguration.GetIntegerOptionStringValue(configElement.getName(), currentValue);
-//            	comment = comment.substring(comment.indexOf(Integer.toString(currentValue) + " = ") + 3);
-//            	
-//            	if (comment.contains(","))
-//            	{
-//            		comment = comment.substring(0, comment.indexOf(","));
-//            	}
-//            	
-//            	this.suffix = comment;
+            	this.suffix = HouseConfiguration.GetIntegerOptionStringValue(configElement.getName(), currentValue);
             }
         }
     }

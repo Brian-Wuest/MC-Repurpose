@@ -42,7 +42,6 @@ import net.minecraft.world.World;
 public class WuestEventHandler 
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
-	public static boolean sentConfiguration = false;
 	
 	@SubscribeEvent(receiveCanceled = true)
 	public void PlayerRightClicked(PlayerInteractEvent event)
@@ -156,12 +155,6 @@ public class WuestEventHandler
 		        persistTag.setBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG, true);
 		    }
 		}
-		
-		if (event.entity.worldObj.isRemote && !WuestEventHandler.sentConfiguration)
-		{
-			WuestUtilities.network.sendToServer(new WuestMessage(WuestUtilities.proxy.proxyConfiguration.WriteToNBTTagCompound()));
-			WuestEventHandler.sentConfiguration = true;
-		}
 	}
 	
 	@SubscribeEvent
@@ -173,8 +166,6 @@ public class WuestEventHandler
 	    
 	    if (originalTag.hasKey(WuestConfiguration.tagKey))
 	    {
-	    	WuestConfiguration config = WuestConfiguration.ReadFromNBTTagCompound((NBTTagCompound)originalTag.getTag(WuestConfiguration.tagKey));
-	    
 	    	// Use the server configuration to determine if the house should be added for this player.
 	    	if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
 	    	{
@@ -217,15 +208,6 @@ public class WuestEventHandler
         if(onConfigChangedEvent.modID.equals("wuestUtilities"))
         {
             WuestConfiguration.syncConfig();
-            WuestEventHandler.sentConfiguration = false;
-            
-            // Don't send the message if the configuration was changed in the main menu.
-            if (onConfigChangedEvent.isWorldRunning)
-            {
-	            // Re-send the message when the configuration changes.
-	            WuestUtilities.network.sendToServer(new WuestMessage(WuestUtilities.proxy.proxyConfiguration.WriteToNBTTagCompound()));
-	            WuestEventHandler.sentConfiguration = true;
-            }
         }
     }
 }
