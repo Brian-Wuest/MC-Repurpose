@@ -2,6 +2,7 @@ package wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import wuest.utilities.WuestUtilities;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -10,6 +11,10 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -41,7 +46,16 @@ public class RedstoneClock extends Block
 	public static void RegisterBlock()
 	{
 		RedstoneClock.RegisteredBlock = new RedstoneClock();
+		WuestUtilities.ModBlocks.add(RedstoneClock.RegisteredBlock);
 		GameRegistry.registerBlock(RedstoneClock.RegisteredBlock, "redstoneClock");
+		
+		// Register recipe.
+		GameRegistry.addRecipe(new ItemStack(RedstoneClock.RegisteredBlock),
+				"xyx",
+				"xyy",
+				"xxx",
+				'x', Item.getItemFromBlock(Blocks.stone),
+				'y', Items.redstone);
 	}
 	
 	@Override
