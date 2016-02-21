@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.*;
+import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Events.*;
 import wuest.utilities.Gui.*;
 import wuest.utilities.Items.*;
@@ -47,6 +48,7 @@ public class CommonProxy implements IGuiHandler
 	{
 		// Register items here.
 		ItemStartHouse.RegisterItem();
+		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
