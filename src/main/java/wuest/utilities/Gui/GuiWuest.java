@@ -81,9 +81,6 @@ public class GuiWuest extends GuiConfig
 		public TextNumberSliderEntry(GuiConfig owningScreen,
 				GuiConfigEntries owningEntryList, IConfigElement configElement) 
 		{
-			//super(owningScreen, owningEntryList, configElement);
-			// TODO Auto-generated constructor stub
-			
             super(owningScreen, owningEntryList, configElement, new GuiTextSlider(0, owningEntryList.controlX, 0, owningEntryList.controlWidth, 18,
                     "", "", Double.valueOf(configElement.getMinValue().toString()), Double.valueOf(configElement.getMaxValue().toString()),
                     Double.valueOf(configElement.get().toString()), configElement.getType() == ConfigGuiType.DOUBLE, true));

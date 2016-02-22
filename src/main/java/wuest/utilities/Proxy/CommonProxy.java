@@ -1,7 +1,9 @@
 package wuest.utilities.Proxy;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -20,6 +22,7 @@ import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Events.*;
 import wuest.utilities.Gui.*;
 import wuest.utilities.Items.*;
+import wuest.utilities.Tiles.TileEntityRedstoneClock;
 
 public class CommonProxy implements IGuiHandler 
 {
@@ -93,6 +96,10 @@ public class CommonProxy implements IGuiHandler
 		if (ID == GuiHouseItem.GUI_ID)
 		{
             return new GuiHouseItem(x, y, z);
+		}
+		else if (ID == GuiRedstoneClock.GUI_ID)
+		{
+			return new GuiRedstoneClock(x, y, z);
 		}
 		
 		return null;
