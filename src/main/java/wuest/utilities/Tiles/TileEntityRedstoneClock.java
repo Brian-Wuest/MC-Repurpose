@@ -37,9 +37,9 @@ public class TileEntityRedstoneClock extends TileEntity
 	@Override
     public void writeToNBT(NBTTagCompound compound) 
 	{
+		this.powerConfiguration.WriteToNBTCompound(compound);
+		
         super.writeToNBT(compound);
-        
-        this.powerConfiguration.WriteToNBTCompound(compound);
 	}
 	
 	@Override
@@ -51,15 +51,15 @@ public class TileEntityRedstoneClock extends TileEntity
 		{
 			RedstoneClock clock = (RedstoneClock)this.blockType;
 			
-			clock.setPowerConfiguration(this.powerConfiguration);
+			clock.localTileEntity = this;
 		}
 	}
 	
 	@Override
     public void readFromNBT(NBTTagCompound compound) 
 	{
+		this.powerConfiguration = PowerConfiguration.ReadFromNBTTagCompound(compound);
+		
         super.readFromNBT(compound);
-        
-        this.powerConfiguration = PowerConfiguration.ReadFromNBTTagCompound(compound);
 	}
 }

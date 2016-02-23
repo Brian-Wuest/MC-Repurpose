@@ -9,7 +9,8 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Proxy.HouseMessage;
+import wuest.utilities.Proxy.HouseTagMessage;
+import wuest.utilities.Proxy.TagMessage;
 
 public class GuiHouseItem extends GuiScreen
 {
@@ -169,7 +170,7 @@ public class GuiHouseItem extends GuiScreen
     		houseConfiguration.floorBlock = WuestConfiguration.CeilingFloorBlockType.ValueOf(this.btnFloorBlock.getValueInt());
     		houseConfiguration.wallWoodType = WuestConfiguration.WallBlockType.ValueOf(this.btnWallWoodType.getValueInt());
     		
-    		WuestUtilities.network.sendToServer(new HouseMessage(houseConfiguration.WriteToNBTTagCompound()));
+    		WuestUtilities.network.sendToServer(new HouseTagMessage(houseConfiguration.WriteToNBTTagCompound()));
     		
     		// Close this screen when this is done.
     		this.mc.displayGuiScreen(null);

@@ -39,8 +39,8 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 	public static RedstoneClock RegisteredBlock;
 	
+	public TileEntityRedstoneClock localTileEntity;
 	protected int tickRate = 20;
-	protected PowerConfiguration powerConfiguration;
 	
 	/**
 	 * A simple block that emits restone signals at regular intervals.
@@ -51,7 +51,6 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		this.setCreativeTab(CreativeTabs.tabRedstone);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
 		this.setUnlocalizedName("redstoneClock");
-		this.powerConfiguration = new PowerConfiguration();
 	}
 	
 	public static void RegisterBlock()
@@ -63,11 +62,12 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		
 		// Register recipe.
 		GameRegistry.addRecipe(new ItemStack(RedstoneClock.RegisteredBlock),
-				"xyx",
-				"xyy",
+				"xzx",
+				"xyz",
 				"xxx",
 				'x', Item.getItemFromBlock(Blocks.stone),
-				'y', Items.redstone);
+				'y', Items.repeater,
+				'z', Item.getItemFromBlock(Blocks.redstone_torch));
 	}
 	
 	/**
@@ -76,12 +76,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	 */
 	public PowerConfiguration getPowerConfiguration()
 	{
-		return this.powerConfiguration;
-	}
-	
-	public void setPowerConfiguration(PowerConfiguration value)
-	{
-		this.powerConfiguration = value;
+		return this.localTileEntity.getPowerConfiguration();
 	}
 	
 	@Override
@@ -93,6 +88,10 @@ public class RedstoneClock extends Block implements ITileEntityProvider
         }
         
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+        
+        TileEntityRedstoneClock clock = new TileEntityRedstoneClock();
+        this.localTileEntity = clock;
+        worldIn.setTileEntity(pos, clock);
     }
 	
     /**
@@ -136,7 +135,8 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     }
 	
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+    {
         if (world.isRemote) 
         {
             player.openGui(WuestUtilities.instance, GuiRedstoneClock.GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
@@ -174,7 +174,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	boolean powered = ((Boolean)state.getValue(POWERED)).booleanValue();
     	
     	// If the block is set to powered and this side is powered or the side doesn't matter.
-    	if (powered && (side == null || this.powerConfiguration.getSidePower(side.getOpposite())))
+    	if (powered && (side == null || this.getPowerConfiguration().getSidePower(side.getOpposite())))
     	{
     		return 15;
     	}
@@ -186,7 +186,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     {
     	if (side != null)
     	{
-    		this.powerConfiguration.setSidePower(side, strength > 0);
+    		this.getPowerConfiguration().setSidePower(side, strength > 0);
     	}
     	
         return state.withProperty(POWERED, Boolean.valueOf(strength > 0));
@@ -232,8 +232,13 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	{
     		return (TileEntityRedstoneClock) entity;
     	}
-    	
-    	return null;
+    	else
+    	{
+    		TileEntityRedstoneClock tileEntity = new TileEntityRedstoneClock();
+    		worldIn.setTileEntity(pos, tileEntity);
+    		
+    		return tileEntity;
+    	}
     }
     
     @Override
@@ -257,7 +262,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
         this.updateNeighbors(worldIn, pos);
         worldIn.markBlockRangeForRenderUpdate(pos, pos);
 
-        int tickDelay = i == 0 ? this.powerConfiguration.getUnPoweredTick() : this.powerConfiguration.getPoweredTick();
+        int tickDelay = i == 0 ? this.getPowerConfiguration().getUnPoweredTick() : this.getPowerConfiguration().getPoweredTick();
         
         worldIn.scheduleUpdate(pos, this, tickDelay);
     }
@@ -309,10 +314,14 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
-		TileEntityRedstoneClock entity = new TileEntityRedstoneClock();
-		entity.setPowerConfiguration(this.powerConfiguration);
+		if (this.localTileEntity == null)
+		{
+			TileEntityRedstoneClock entity = new TileEntityRedstoneClock();
+	
+			this.localTileEntity = entity;
+		}
 		
-		return entity;
+		return this.localTileEntity;
 	}
     
     public static class PowerConfiguration
@@ -320,6 +329,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	private HashMap<EnumFacing, Boolean> facingPower = new HashMap<EnumFacing, Boolean>();
     	private int poweredTick = 20;
     	private int unPoweredTick = 20;
+    	private BlockPos pos;
     	
     	/**
     	 * Initializes a new instance of the PowerConfiguration class.
@@ -408,6 +418,24 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	}
     	
     	/**
+    	 * Gets the block position.
+    	 * @return The block position for this configuration.
+    	 */
+    	public BlockPos getPos()
+    	{
+    		return this.pos;
+    	}
+    	
+    	/**
+    	 * Sets the block position for this configuration.
+    	 * @param value The block position.
+    	 */
+    	public void setPos(BlockPos value)
+    	{
+    		this.pos = value;
+    	}
+    	
+    	/**
     	 * Sets whether a side is powered.
     	 * @param facing The side to set.
     	 * @param value The value determining if the side is powered.
@@ -420,35 +448,53 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	public void WriteToNBTCompound(NBTTagCompound compound)
     	{
     		// Add the power configuration tag.
-    		NBTTagCompound powerCompound = new NBTTagCompound();
-    		powerCompound.setInteger("poweredTick", this.poweredTick);
-    		powerCompound.setInteger("unPoweredTick", this.unPoweredTick);
+    		compound.setInteger("poweredTick", this.poweredTick);
+    		compound.setInteger("unPoweredTick", this.unPoweredTick);
     		
     		for (Entry<EnumFacing, Boolean> entry : this.facingPower.entrySet())
     		{
-    			powerCompound.setBoolean(entry.getKey().getName2(), entry.getValue());
+    			compound.setBoolean(entry.getKey().getName2(), entry.getValue());
     		}
     		
-    		compound.setTag("powerTag", powerCompound);
+    		if (this.pos != null)
+    		{
+    			compound.setInteger("x", this.pos.getX());
+    			compound.setInteger("y", this.pos.getY());
+    			compound.setInteger("z", this.pos.getZ());
+    		}
+    	}
+    	
+    	/**
+    	 * Gets an NBTTagCompound which has this classes information in it.
+    	 * @return A {@link NBTTagCompound} with this classes values.
+    	 */
+    	public NBTTagCompound GetNBTTagCompound()
+    	{
+    		NBTTagCompound compound = new NBTTagCompound();
+    		this.WriteToNBTCompound(compound);
+    		return compound;
     	}
     	
     	public static PowerConfiguration ReadFromNBTTagCompound(NBTTagCompound compound)
     	{
     		PowerConfiguration configuration = new PowerConfiguration();
-    		
-    		if (compound.hasKey("powerTag"))
+
+    		if (compound.hasKey("poweredTick"))
     		{
-    			NBTTagCompound powerCompound = compound.getCompoundTag("powerTag");
-    			
-    			configuration.poweredTick = powerCompound.getInteger("poweredTick");
-    			configuration.unPoweredTick = powerCompound.getInteger("unPoweredTick");
-    			
+    			configuration.poweredTick = compound.getInteger("poweredTick");
+    			configuration.unPoweredTick = compound.getInteger("unPoweredTick");
+
     			for (EnumFacing facing : EnumFacing.values())
     			{
-    				configuration.facingPower.put(facing, powerCompound.getBoolean(facing.getName2()));
+    				configuration.facingPower.put(facing, compound.getBoolean(facing.getName2()));
+    			}
+
+    			if (compound.hasKey("x"))
+    			{
+    				configuration.pos = new BlockPos(compound.getInteger("x"), compound.getInteger("y"), compound.getInteger("z"));
     			}
     		}
-    		
+
     		return configuration;
     	}
     }

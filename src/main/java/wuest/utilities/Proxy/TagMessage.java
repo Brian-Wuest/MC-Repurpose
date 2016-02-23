@@ -12,17 +12,27 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class HouseMessage implements IMessage
+public class TagMessage implements IMessage
 {
 	private NBTTagCompound tagMessage;
 
-	public HouseMessage() 
+	public TagMessage() 
 	{
 	}
 
-	public HouseMessage(NBTTagCompound tagMessage) 
+	public TagMessage(NBTTagCompound tagMessage) 
 	{
 		this.tagMessage = tagMessage;
+	}
+	
+	public NBTTagCompound getMessageTag()
+	{
+		return this.tagMessage;
+	}
+	
+	public void setMessageTag(NBTTagCompound value)
+	{
+		this.tagMessage = value;
 	}
 
 	@Override
@@ -37,31 +47,5 @@ public class HouseMessage implements IMessage
 	public void toBytes(ByteBuf buf) 
 	{
 		ByteBufUtils.writeTag(buf, this.tagMessage);
-	}
-
-	public static class HouseHandler implements
-			IMessageHandler<HouseMessage, IMessage> 
-	{
-		@Override
-		public IMessage onMessage(final HouseMessage message,
-				final MessageContext ctx) 
-		{
-			// Or Minecraft.getMinecraft() on the client.
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; 
-
-			mainThread.addScheduledTask(new Runnable() 
-			{
-				@Override
-				public void run() 
-				{
-					// This is server side. Build the house.
-					HouseConfiguration configuration = HouseConfiguration.ReadFromNBTTagCompound(message.tagMessage);
-					ItemStartHouse.BuildHouse(ctx.getServerHandler().playerEntity, ctx.getServerHandler().playerEntity.worldObj, configuration);
-				}
-			});
-
-			// no response in this case
-			return null;
-		}
 	}
 }

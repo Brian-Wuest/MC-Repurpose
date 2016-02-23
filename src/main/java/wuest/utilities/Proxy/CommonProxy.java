@@ -43,8 +43,9 @@ public class CommonProxy implements IGuiHandler
 		WuestConfiguration.syncConfig();
 		
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
-		WuestUtilities.network.registerMessage(WuestMessage.Handler.class, WuestMessage.class, 0, Side.SERVER);
-		WuestUtilities.network.registerMessage(HouseMessage.HouseHandler.class, HouseMessage.class, 1, Side.SERVER);
+		WuestUtilities.network.registerMessage(WuestHandler.class, TagMessage.class, 0, Side.SERVER);
+		WuestUtilities.network.registerMessage(HouseHandler.class, HouseTagMessage.class, 1, Side.SERVER);
+		WuestUtilities.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
 	}
 	
 	public void init(FMLInitializationEvent event)
