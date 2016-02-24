@@ -37,6 +37,7 @@ public class WuestConfiguration
 	private static String addMiscRecipesName = "Add Misc Recipes";
 	private static String addNetherStarRecipeName = "Add Nether Star Recipe";
 	private static String enableHomeCommandName = "Enable Home Command";
+	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
 	
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
@@ -63,6 +64,7 @@ public class WuestConfiguration
 	public boolean addArmorRecipes;
 	public boolean addMiscRecipes;
 	public boolean addNetherStarRecipe;
+	public boolean addRedstoneClockRecipe;
 	
 	// Chest content options.
 	public boolean addSword;
@@ -117,6 +119,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addArmorRecipes = config.getBoolean(WuestConfiguration.addArmorRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the armor recipes are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addMiscRecipes = config.getBoolean(WuestConfiguration.addMiscRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the misc recipes are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addNetherStarRecipe = config.getBoolean(WuestConfiguration.addNetherStarRecipeName, WuestConfiguration.RecipeOptions, true, "Determines if the Nether Star recipe are added. Server configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
 		
 		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
 		

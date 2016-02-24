@@ -58,16 +58,19 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		RedstoneClock.RegisteredBlock = new RedstoneClock();
 		WuestUtilities.ModBlocks.add(RedstoneClock.RegisteredBlock);
 		GameRegistry.registerBlock(RedstoneClock.RegisteredBlock, "redstoneClock");
-		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "redstoneClock_tile_entity");
+		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
 		
-		// Register recipe.
-		GameRegistry.addRecipe(new ItemStack(RedstoneClock.RegisteredBlock),
-				"xzx",
-				"xyz",
-				"xxx",
-				'x', Item.getItemFromBlock(Blocks.stone),
-				'y', Items.repeater,
-				'z', Item.getItemFromBlock(Blocks.redstone_torch));
+		if (WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe)
+		{
+			// Register recipe.
+			GameRegistry.addRecipe(new ItemStack(RedstoneClock.RegisteredBlock),
+					"xzx",
+					"xyz",
+					"xxx",
+					'x', Item.getItemFromBlock(Blocks.stone),
+					'y', Items.repeater,
+					'z', Item.getItemFromBlock(Blocks.redstone_torch));
+		}
 	}
 	
 	/**
@@ -311,6 +314,12 @@ public class RedstoneClock extends Block implements ITileEntityProvider
         return new BlockState(this, new IProperty[] {POWERED});
     }
 
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+    	return true;
+    }
+    
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
@@ -447,21 +456,24 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     
     	public void WriteToNBTCompound(NBTTagCompound compound)
     	{
+    		NBTTagCompound powerCompound = new NBTTagCompound();
     		// Add the power configuration tag.
-    		compound.setInteger("poweredTick", this.poweredTick);
-    		compound.setInteger("unPoweredTick", this.unPoweredTick);
+    		powerCompound.setInteger("poweredTick", this.poweredTick);
+    		powerCompound.setInteger("unPoweredTick", this.unPoweredTick);
     		
     		for (Entry<EnumFacing, Boolean> entry : this.facingPower.entrySet())
     		{
-    			compound.setBoolean(entry.getKey().getName2(), entry.getValue());
+    			powerCompound.setBoolean(entry.getKey().getName2(), entry.getValue());
     		}
     		
     		if (this.pos != null)
     		{
-    			compound.setInteger("x", this.pos.getX());
-    			compound.setInteger("y", this.pos.getY());
-    			compound.setInteger("z", this.pos.getZ());
+    			powerCompound.setInteger("x", this.pos.getX());
+    			powerCompound.setInteger("y", this.pos.getY());
+    			powerCompound.setInteger("z", this.pos.getZ());
     		}
+    		
+    		compound.setTag("powerCompound", powerCompound);
     	}
     	
     	/**
@@ -479,19 +491,21 @@ public class RedstoneClock extends Block implements ITileEntityProvider
     	{
     		PowerConfiguration configuration = new PowerConfiguration();
 
-    		if (compound.hasKey("poweredTick"))
+    		if (compound.hasKey("powerCompound"))
     		{
-    			configuration.poweredTick = compound.getInteger("poweredTick");
-    			configuration.unPoweredTick = compound.getInteger("unPoweredTick");
+    			NBTTagCompound powerCompound = compound.getCompoundTag("powerCompound");
+    			
+    			configuration.poweredTick = powerCompound.getInteger("poweredTick");
+    			configuration.unPoweredTick = powerCompound.getInteger("unPoweredTick");
 
     			for (EnumFacing facing : EnumFacing.values())
     			{
-    				configuration.facingPower.put(facing, compound.getBoolean(facing.getName2()));
+    				configuration.facingPower.put(facing, powerCompound.getBoolean(facing.getName2()));
     			}
 
     			if (compound.hasKey("x"))
     			{
-    				configuration.pos = new BlockPos(compound.getInteger("x"), compound.getInteger("y"), compound.getInteger("z"));
+    				configuration.pos = new BlockPos(powerCompound.getInteger("x"), powerCompound.getInteger("y"), powerCompound.getInteger("z"));
     			}
     		}
 

@@ -3,6 +3,7 @@ package wuest.utilities.Proxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
@@ -54,7 +55,7 @@ public class CommonProxy implements IGuiHandler
 		ItemStartHouse.RegisterItem();
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
-
+		
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
 	}

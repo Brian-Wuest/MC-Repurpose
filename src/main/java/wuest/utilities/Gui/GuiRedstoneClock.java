@@ -3,6 +3,7 @@ package wuest.utilities.Gui;
 import java.awt.Color;
 import java.io.IOException;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
@@ -45,7 +46,7 @@ public class GuiRedstoneClock extends GuiScreen
 	protected GuiSlider btnPowered;
 	protected GuiSlider btnUnPowered;
 	
-	protected TileEntity tileEntity;
+	protected TileEntityRedstoneClock tileEntity;
 	
 	public GuiRedstoneClock(int x, int y, int z)
 	{
@@ -61,7 +62,7 @@ public class GuiRedstoneClock extends GuiScreen
 		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class)
 		{
 			this.powerConfiguration = ((TileEntityRedstoneClock)entity).getPowerConfiguration();
-			this.tileEntity = entity;
+			this.tileEntity = (TileEntityRedstoneClock)entity;
 		}
 		
 		this.powerConfiguration.setPos(this.pos);
@@ -213,6 +214,11 @@ public class GuiRedstoneClock extends GuiScreen
     		this.powerConfiguration.setPos(this.pos);
     		
     		WuestUtilities.network.sendToServer(new RedstoneClockMessage(this.powerConfiguration.GetNBTTagCompound()));
+    		
+    		// After sending the info to the server, make sure the client is updated to.
+    		this.tileEntity.setPowerConfiguration(this.powerConfiguration);
+    		Block block = this.mc.theWorld.getBlockState(this.tileEntity.getPos()).getBlock();
+    		this.mc.theWorld.scheduleUpdate(this.tileEntity.getPos(), block, 2);
     		
     		this.mc.displayGuiScreen(null);
     	}
