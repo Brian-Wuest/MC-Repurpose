@@ -12,7 +12,7 @@ import wuest.utilities.Gui.WuestConfiguration.WallBlockType;
 public class HouseConfiguration 
 {
 	public static String tagKey = "WuestHouseConfig";
-	
+
 	public static String addTorchesName = "Add Torches";
 	public static String addBedName = "Add Bed";
 	public static String addCraftingTableName = "Add Crafting Table";
@@ -24,7 +24,7 @@ public class HouseConfiguration
 	public static String wallWoodTypeName = "Wall Wood Type";
 	public static String isCeilingFlatName = "Is Ceiling Flat";
 	public static String addMineShaftName = "Build Mineshaft";
-	
+
 	private static String addTorchesTag = "addTorches";
 	private static String addBedTag = "addBed";
 	private static String addCraftingTableTag = "addCraftingTable";
@@ -39,7 +39,7 @@ public class HouseConfiguration
 	private static String hitXTag = "hitX";
 	private static String hitYTag = "hitY";
 	private static String hitZTag = "hitZ";
-	
+
 	public boolean addTorches;
 	public boolean addBed;
 	public boolean addCraftingTable;
@@ -54,11 +54,11 @@ public class HouseConfiguration
 	public int hitX;
 	public int hitY;
 	public int hitZ;
-	
+
 	public NBTTagCompound WriteToNBTTagCompound()
 	{
 		NBTTagCompound tag = new NBTTagCompound();
-		
+
 		// This tag should only be written for options which will NOT be overwritten by server options.
 		// Server configuration settings will be used for all other options.
 		// This is so the server admin can force a player to not use something.
@@ -76,10 +76,10 @@ public class HouseConfiguration
 		tag.setInteger(HouseConfiguration.hitXTag, this.hitX);
 		tag.setInteger(HouseConfiguration.hitYTag, this.hitY);
 		tag.setInteger(HouseConfiguration.hitZTag, this.hitZ);
-		
+
 		return tag;
 	}
-	
+
 	public static String GetIntegerOptionStringValue(String name, int value)
 	{
 		if (name.equals(HouseConfiguration.ceilingBlockName)
@@ -91,18 +91,18 @@ public class HouseConfiguration
 		{
 			return " - " + WallBlockType.ValueOf(value).name();
 		}
-		
+
 		return "";
 	}
-	
+
 	public static HouseConfiguration ReadFromNBTTagCompound(NBTTagCompound tag)
 	{
 		HouseConfiguration config = null;
-		
+
 		if (tag != null)
 		{
 			config = new HouseConfiguration();
-			
+
 			if (tag.hasKey(HouseConfiguration.addTorchesTag))
 			{
 				config.addTorches = tag.getBoolean(HouseConfiguration.addTorchesTag);
@@ -157,23 +157,23 @@ public class HouseConfiguration
 			{
 				config.addMineShaft = tag.getBoolean(HouseConfiguration.addMineShaftTag);
 			}
-			
+
 			if (tag.hasKey(HouseConfiguration.hitXTag))
 			{
 				config.hitX = tag.getInteger(HouseConfiguration.hitXTag);
 			}
-			
+
 			if (tag.hasKey(HouseConfiguration.hitYTag))
 			{
 				config.hitY = tag.getInteger(HouseConfiguration.hitYTag);
 			}
-			
+
 			if (tag.hasKey(HouseConfiguration.hitZTag))
 			{
 				config.hitZ = tag.getInteger(HouseConfiguration.hitZTag);
 			}
 		}
-		
+
 		return config;
 	}
 

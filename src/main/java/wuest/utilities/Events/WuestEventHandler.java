@@ -26,84 +26,84 @@ import wuest.utilities.Items.ItemStartHouse;
 public class WuestEventHandler 
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
-	
+
 	@SubscribeEvent(receiveCanceled = true)
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
-		// Can use the proxies configuration since this is on the client.
+		// Can use the proxy's configuration since this is on the client.
 		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
 				&& !event.world.isRemote
 				&& !event.isCanceled())
 		{
 			EntityPlayer p = event.entityPlayer;
-			
+
 			ItemStack currentStack = p.inventory.getCurrentItem();
-			
+
 			if (currentStack != null)
 			{
 				Item currentItem = currentStack.getItem();
 				ItemStack boneMealStack = new ItemStack(Items.dye, 1, 15);
 				Item boneMeal = boneMealStack.getItem();
-				
+
 				if (currentItem != null && currentItem == boneMeal)
 				{
 					return;
 				}
 			}
-			
+
 			IBlockState cropState = event.world.getBlockState(event.pos);
 			Block crop = cropState.getBlock();
-			
+
 			// Only re-plant when this is a fully grown plant.
 			if (crop instanceof BlockCrops && (Integer)cropState.getValue(BlockCrops.AGE) == 7)
 			{
 				// Get the farmland below the crop.
 				BlockPos farmlandPosition = event.pos.down();
-				
+
 				// Get the drops from this crop and add it to the inventory.
 				List<ItemStack> drops = crop.getDrops(event.world, event.pos, cropState, 1);
-				
+
 				// Break the original crop block.
 				event.world.setBlockToAir(event.pos);
-				
+
 				Boolean replanted = false;
-				
+
 				for (ItemStack drop : drops)
 				{
 					Item dropItem = drop.getItem();
-					
+
 					if (!replanted)
 					{
 						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.world, farmlandPosition, event.face, 0, 0, 0);
-						
+
 						if (replanted)
 						{
 							continue;
 						}
 					}
-					
+
 					boolean addedItem = p.inventory.addItemStackToInventory(drop);
 					p.inventoryContainer.detectAndSendChanges();
-					
+
 					if (addedItem)
 					{
 						continue;
 					}
 				}
-				
+
 				if (!replanted)
 				{
 					// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
 					// This should work with other plants that override BlockCrops.GetItem with their own seed.
 					BlockCrops blockCrop = (BlockCrops)crop;
-					
+
 					// Make sure to re-set the age to 0 to get the seed.
 					IBlockState tempState = cropState.withProperty(BlockCrops.AGE, 0);
-					
+
 					// Get the seed item and check to see fi the player has this in their inventory. If they do we can use it to replant.
 					Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
-					
+
 					if (seed != null && p.inventory.hasItem(seed))
 					{
 						seed.onItemUse(new ItemStack(seed), p, event.world, farmlandPosition, event.face, 0, 0, 0);
@@ -111,7 +111,7 @@ public class WuestEventHandler
 						p.inventoryContainer.detectAndSendChanges();
 					}
 				}
-				
+
 				event.setCanceled(true);
 			}
 		}
@@ -123,56 +123,56 @@ public class WuestEventHandler
 		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) 
 		{
 			System.out.println("Player joined world, checking to see if the house builder should be provided.");
-			
-		    EntityPlayer player = (EntityPlayer)event.entity;
-		    NBTTagCompound persistTag = this.getModIsPlayerNewTag(player);
-		    
-		    // Get the opposite of the value, if the bool doesn't exist then we can add the house to the inventory, otherwise the player isn't new and shouldn't get the item.
-		    boolean shouldGiveHousebuilder = !persistTag.getBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG);
-		      
-		    if (shouldGiveHousebuilder)
-		    {
-		        ItemStack stack = new ItemStack(ItemStartHouse.RegisteredItem);
-		        player.inventory.addItemStackToInventory(stack);
-		        
-		        // Make sure to set the tag for this player so they don't get the item again.
-		        persistTag.setBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG, true);
-		    }
+
+			EntityPlayer player = (EntityPlayer)event.entity;
+			NBTTagCompound persistTag = this.getModIsPlayerNewTag(player);
+
+			// Get the opposite of the value, if the bool doesn't exist then we can add the house to the inventory, otherwise the player isn't new and shouldn't get the item.
+			boolean shouldGiveHousebuilder = !persistTag.getBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG);
+
+			if (shouldGiveHousebuilder)
+			{
+				ItemStack stack = new ItemStack(ItemStartHouse.RegisteredItem);
+				player.inventory.addItemStackToInventory(stack);
+
+				// Make sure to set the tag for this player so they don't get the item again.
+				persistTag.setBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG, true);
+			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onClone(PlayerEvent.Clone event) 
 	{
 		// Don't add the tag unless the house item was added. This way it can be added if the feature is turned on.
 		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
-	    NBTTagCompound originalTag = event.original.getEntityData();
-	    
-	    if (originalTag.hasKey(WuestConfiguration.tagKey))
-	    {
-	    	// Use the server configuration to determine if the house should be added for this player.
-	    	if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
-	    	{
-			    if (originalTag.hasKey("IsPlayerNew"))
-			    {
-			    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-			    	newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
-			    }
-	    	}
-	    	
-	    	// Save the configuration tag to the player.
-	    	NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-	    	newPlayerTag.setTag(WuestConfiguration.tagKey, originalTag.getTag(WuestConfiguration.tagKey));
-	    }
+		NBTTagCompound originalTag = event.original.getEntityData();
+
+		if (originalTag.hasKey(WuestConfiguration.tagKey))
+		{
+			// Use the server configuration to determine if the house should be added for this player.
+			if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
+			{
+				if (originalTag.hasKey("IsPlayerNew"))
+				{
+					NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+					newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
+				}
+			}
+
+			// Save the configuration tag to the player.
+			NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+			newPlayerTag.setTag(WuestConfiguration.tagKey, originalTag.getTag(WuestConfiguration.tagKey));
+		}
 	}
 
 	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
 	{
 		NBTTagCompound tag = player.getEntityData();
-		
+
 		// Get/create a tag used to determine if this is a new player.
 		NBTTagCompound newPlayerTag = null;
-		
+
 		if (tag.hasKey("IsPlayerNew"))
 		{
 			newPlayerTag = tag.getCompoundTag("IsPlayerNew");
@@ -182,16 +182,16 @@ public class WuestEventHandler
 			newPlayerTag = new NBTTagCompound();
 			tag.setTag("IsPlayerNew", newPlayerTag);
 		}
-		
+
 		return newPlayerTag;
 	}
 
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
-    {
-        if(onConfigChangedEvent.modID.equals("wuestUtilities"))
-        {
-            WuestConfiguration.syncConfig();
-        }
-    }
+	@SubscribeEvent
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
+	{
+		if(onConfigChangedEvent.modID.equals("wuestUtilities"))
+		{
+			WuestConfiguration.syncConfig();
+		}
+	}
 }

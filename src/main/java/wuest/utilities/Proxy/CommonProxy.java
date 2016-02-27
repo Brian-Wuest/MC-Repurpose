@@ -1,16 +1,10 @@
 package wuest.utilities.Proxy;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -18,12 +12,14 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import wuest.utilities.*;
+import wuest.utilities.GeneralRecipes;
+import wuest.utilities.WuestUtilities;
 import wuest.utilities.Blocks.RedstoneClock;
-import wuest.utilities.Events.*;
-import wuest.utilities.Gui.*;
-import wuest.utilities.Items.*;
-import wuest.utilities.Tiles.TileEntityRedstoneClock;
+import wuest.utilities.Events.WuestEventHandler;
+import wuest.utilities.Gui.GuiHouseItem;
+import wuest.utilities.Gui.GuiRedstoneClock;
+import wuest.utilities.Gui.WuestConfiguration;
+import wuest.utilities.Items.ItemStartHouse;
 
 public class CommonProxy implements IGuiHandler 
 {

@@ -1,16 +1,13 @@
 package wuest.utilities.Items;
 
-import java.lang.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import wuest.utilities.*;
+import wuest.utilities.WuestUtilities;
 
 public final class ItemRenderRegister 
 {
-	
 	/**
 	 * Registers the blocks and items from the main class in the item renderer.
 	 */
@@ -28,7 +25,7 @@ public final class ItemRenderRegister
 			ItemRenderRegister.regItem(currentItem);
 		}
 	}
-	
+
 	/**
 	 * Registers an item to be rendered. This is needed for textures.
 	 * @param item The item to register.
@@ -37,10 +34,10 @@ public final class ItemRenderRegister
 	{
 		String temp = item.getUnlocalizedName().substring(5);
 		ModelResourceLocation location = new ModelResourceLocation(WuestUtilities.MODID + ":" + temp, "inventory");
-		
-	    Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, location);
+
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, location);
 	}
-	
+
 	/**
 	 * Registers a block to be rendered. This is needed for textures.
 	 * @param block The block to register.

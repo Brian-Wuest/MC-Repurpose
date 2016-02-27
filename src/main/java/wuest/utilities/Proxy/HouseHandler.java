@@ -9,7 +9,7 @@ import wuest.utilities.Gui.HouseConfiguration;
 import wuest.utilities.Items.ItemStartHouse;
 
 public class HouseHandler implements
-	IMessageHandler<HouseTagMessage, IMessage>
+IMessageHandler<HouseTagMessage, IMessage>
 {
 	@Override
 	public IMessage onMessage(final HouseTagMessage message,

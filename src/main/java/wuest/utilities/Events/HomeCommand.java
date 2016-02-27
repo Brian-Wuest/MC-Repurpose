@@ -1,11 +1,5 @@
 package wuest.utilities.Events;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import wuest.utilities.WuestUtilities;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,8 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import wuest.utilities.WuestUtilities;
 
 /**
  * This class is used to create a command which will send the user back to the last bed they slept in. 
@@ -26,25 +19,25 @@ public class HomeCommand extends CommandBase
 	{
 		return "home";
 	}
-	
-    /**
-     * Return the required permission level for this command.
-     */
-    @Override
+
+	/**
+	 * Return the required permission level for this command.
+	 */
+	@Override
 	public int getRequiredPermissionLevel()
-    {
-        return 0;
-    }
-    
-    /**
-     * Returns true if the given command sender is allowed to use this command.
-     */
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender)
-    {
-        return true;
-    }
-	
+	{
+		return 0;
+	}
+
+	/**
+	 * Returns true if the given command sender is allowed to use this command.
+	 */
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
+	{
+		return true;
+	}
+
 	@Override
 	public String getCommandUsage(ICommandSender sender) 
 	{
@@ -63,14 +56,14 @@ public class HomeCommand extends CommandBase
 		if(sender instanceof EntityPlayer) 
 		{
 			EntityPlayer player = (EntityPlayer)sender;
-			
+
 			if (!WuestUtilities.proxy.proxyConfiguration.enableHomeCommand)
 			{
 				player.addChatComponentMessage(new ChatComponentText("This command has not been enabled on the server."));
 			}
 
 			BlockPos bedLocation = player.getBedLocation().east().south();
-			
+
 			if (bedLocation != null)
 			{
 				World world = player.worldObj;

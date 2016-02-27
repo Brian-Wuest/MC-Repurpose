@@ -7,7 +7,6 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +17,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -28,17 +26,18 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import wuest.utilities.*;
+import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.HouseConfiguration;
-import wuest.utilities.Gui.WuestConfiguration;
 
-public class ItemStartHouse extends Item {
+public class ItemStartHouse extends Item 
+{
 	public static ItemStartHouse RegisteredItem;
 
 	private HouseConfiguration currentConfiguration = null;
-	
-	public ItemStartHouse() {
+
+	public ItemStartHouse() 
+	{
 		super();
 
 		this.setCreativeTab(CreativeTabs.tabMisc);
@@ -48,7 +47,8 @@ public class ItemStartHouse extends Item {
 	/**
 	 * Registers the item in the game world.
 	 */
-	public static void RegisterItem() {
+	public static void RegisterItem() 
+	{
 		ItemStartHouse.RegisteredItem = new ItemStartHouse();
 
 		GameRegistry.registerItem(ItemStartHouse.RegisteredItem,
@@ -70,7 +70,7 @@ public class ItemStartHouse extends Item {
 			{
 				// Open the client side gui to determine the house options.
 				player.openGui(WuestUtilities.instance, GuiHouseItem.GUI_ID, player.worldObj, hitBlockPos.getX(), hitBlockPos.getY(), hitBlockPos.getZ());
-			    return true;
+				return true;
 			}
 		}
 
@@ -131,7 +131,7 @@ public class ItemStartHouse extends Item {
 			player.getEntityData().removeTag(HouseConfiguration.tagKey);
 		}
 	}
-	
+
 	public static void ReplaceBlock(World world, BlockPos pos, Block replacementBlock) {
 		ItemStartHouse.ReplaceBlock(world, pos, replacementBlock.getDefaultState(), 3);
 	}
@@ -447,41 +447,41 @@ public class ItemStartHouse extends Item {
 
 		switch (configuration.wallWoodType) 
 		{
-			case Spruce: {
-				door = Blocks.spruce_door;
-				stairs = Blocks.spruce_stairs;
-				break;
-			}
-	
-			case Birch: {
-				door = Blocks.birch_door;
-				stairs = Blocks.birch_stairs;
-				break;
-			}
-	
-			case Jungle: {
-				door = Blocks.jungle_door;
-				stairs = Blocks.jungle_stairs;
-				break;
-			}
-	
-			case Acacia: {
-				door = Blocks.acacia_door;
-				stairs = Blocks.acacia_stairs;
-				break;
-			}
-	
-			case DarkOak: {
-				door = Blocks.dark_oak_door;
-				stairs = Blocks.dark_oak_stairs;
-				break;
-			}
-	
-			default: {
-				door = Blocks.oak_door;
-				stairs = Blocks.oak_stairs;
-				break;
-			}
+		case Spruce: {
+			door = Blocks.spruce_door;
+			stairs = Blocks.spruce_stairs;
+			break;
+		}
+
+		case Birch: {
+			door = Blocks.birch_door;
+			stairs = Blocks.birch_stairs;
+			break;
+		}
+
+		case Jungle: {
+			door = Blocks.jungle_door;
+			stairs = Blocks.jungle_stairs;
+			break;
+		}
+
+		case Acacia: {
+			door = Blocks.acacia_door;
+			stairs = Blocks.acacia_stairs;
+			break;
+		}
+
+		case DarkOak: {
+			door = Blocks.dark_oak_door;
+			stairs = Blocks.dark_oak_stairs;
+			break;
+		}
+
+		default: {
+			door = Blocks.oak_door;
+			stairs = Blocks.oak_stairs;
+			break;
+		}
 		}
 
 		ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, door);
@@ -500,26 +500,26 @@ public class ItemStartHouse extends Item {
 				world,
 				itemPosition,
 				stairs.getBlockState()
-						.getBaseState()
-						.withProperty(BlockStairs.FACING, EnumFacing.SOUTH)
-						.withProperty(BlockStairs.HALF,
-								BlockStairs.EnumHalf.BOTTOM)
-						.withProperty(BlockStairs.SHAPE,
-								BlockStairs.EnumShape.STRAIGHT));
-		
+				.getBaseState()
+				.withProperty(BlockStairs.FACING, EnumFacing.SOUTH)
+				.withProperty(BlockStairs.HALF,
+						BlockStairs.EnumHalf.BOTTOM)
+				.withProperty(BlockStairs.SHAPE,
+						BlockStairs.EnumShape.STRAIGHT));
+
 		// Place a sign.
 		itemPosition = itemPosition.west();
 		BlockSign sign = (BlockSign)Blocks.standing_sign;
-		
+
 		ItemStartHouse.ReplaceBlock(world, itemPosition, sign.getStateFromMeta(8));
-		
+
 		TileEntity tileEntity = world.getTileEntity(itemPosition);
-		
+
 		if (tileEntity instanceof TileEntitySign)
 		{
 			TileEntitySign signTile = (TileEntitySign)tileEntity;
 			signTile.signText[0] = new ChatComponentText("This is");
-			
+
 			if (player.getDisplayNameString().length() >= 15)
 			{
 				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString());
@@ -528,7 +528,7 @@ public class ItemStartHouse extends Item {
 			{
 				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString() + "'s");
 			}
-			
+
 			signTile.signText[2] = new ChatComponentText("house!");
 		}
 	}
@@ -565,7 +565,7 @@ public class ItemStartHouse extends Item {
 				TileEntityChest chestTile = (TileEntityChest) tileEntity;
 
 				int itemSlot = 0;
-				
+
 				// Add the tools.
 				if (WuestUtilities.proxy.proxyConfiguration.addAxe)
 				{
@@ -648,7 +648,7 @@ public class ItemStartHouse extends Item {
 					// Add oak sapling.
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.sapling), 3));
 				}
-				
+
 				if (WuestUtilities.proxy.proxyConfiguration.addTorches)
 				{
 					// Add a set of 20 torches.

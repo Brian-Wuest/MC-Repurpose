@@ -11,7 +11,7 @@ public class RedstoneClockMessage extends TagMessage
 	{
 		super(compound);
 	}
-	
+
 	public RedstoneClockMessage()
 	{
 		super();

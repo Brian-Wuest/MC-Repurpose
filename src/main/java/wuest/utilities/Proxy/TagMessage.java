@@ -1,16 +1,9 @@
 package wuest.utilities.Proxy;
 
 import io.netty.buffer.ByteBuf;
-import wuest.utilities.Gui.HouseConfiguration;
-import wuest.utilities.Gui.WuestConfiguration;
-import wuest.utilities.Items.ItemStartHouse;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class TagMessage implements IMessage
 {
@@ -24,12 +17,12 @@ public class TagMessage implements IMessage
 	{
 		this.tagMessage = tagMessage;
 	}
-	
+
 	public NBTTagCompound getMessageTag()
 	{
 		return this.tagMessage;
 	}
-	
+
 	public void setMessageTag(NBTTagCompound value)
 	{
 		this.tagMessage = value;

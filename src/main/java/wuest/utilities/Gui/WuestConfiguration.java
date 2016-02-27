@@ -1,11 +1,7 @@
 package wuest.utilities.Gui;
 
-import java.io.File;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import wuest.utilities.*;
+import wuest.utilities.WuestUtilities;
 
 public class WuestConfiguration 
 {
@@ -13,11 +9,11 @@ public class WuestConfiguration
 	public static String RecipeOptions = "general.options.recipes";
 	public static String ChestContentOptions = "general.options.chest contents";
 	public static String tagKey = "WuestConfig";
-	
+
 	// Config file option names.
 	private static String addHouseItemName = "Add House Item On New Player Join";
 	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
-	
+
 	private static String addTorchesName = "Add Torches";
 	private static String addBedName = "Add Bed";
 	private static String addCraftingTableName = "Add Crafting Table";
@@ -29,7 +25,7 @@ public class WuestConfiguration
 	private static String wallWoodTypeName = "Wall Wood Type";
 	private static String isCeilingFlatName = "Is Ceiling Flat";
 	private static String addMineShaftName = "Build Mineshaft";
-	
+
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
 	private static String addStoneRecipesName = "Add Stone Recipes";
@@ -38,7 +34,7 @@ public class WuestConfiguration
 	private static String addNetherStarRecipeName = "Add Nether Star Recipe";
 	private static String enableHomeCommandName = "Enable Home Command";
 	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
-	
+
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
 	private static String addHoeName = "Add Hoe";
@@ -51,12 +47,12 @@ public class WuestConfiguration
 	private static String addCobbleName = "Add Cobblestone";
 	private static String addSaplingsName = "Add Saplings";
 	private static String addChestTorchesName = "Add Torches";
-	
+
 	// Configuration Options.
 	public boolean addHouseItem;
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
-	
+
 	// Recipe options.
 	public boolean addMetalRecipes;
 	public boolean addWoodRecipes;
@@ -65,14 +61,14 @@ public class WuestConfiguration
 	public boolean addMiscRecipes;
 	public boolean addNetherStarRecipe;
 	public boolean addRedstoneClockRecipe;
-	
+
 	// Chest content options.
 	public boolean addSword;
 	public boolean addAxe;
 	public boolean addHoe;
 	public boolean addShovel;
 	public boolean addPickAxe;
-	
+
 	public boolean addArmor;
 	public boolean addFood;
 	public boolean addCrops;
@@ -80,7 +76,7 @@ public class WuestConfiguration
 	public boolean addCobble;
 	public boolean addSaplings;
 	public boolean addTorches;
-	
+
 	public WuestConfiguration()
 	{
 		this.addHouseItem = true;
@@ -92,26 +88,26 @@ public class WuestConfiguration
 		this.addMiscRecipes = true;
 		this.enableHomeCommand = true;
 	}
-	
+
 	public static void syncConfig()
 	{
 		Configuration config = WuestUtilities.config;
-		
+
 		if (WuestUtilities.proxy.proxyConfiguration == null)
 		{
 			WuestUtilities.proxy.proxyConfiguration = new WuestConfiguration();
 		}
-		
+
 		// General settings.
 		WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest = config.getBoolean(WuestConfiguration.rightClickCropHarvestName, WuestConfiguration.OPTIONS, false, "Determines if right-clicking crops will harvest them. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addHouseItem = config.getBoolean(WuestConfiguration.addHouseItemName, WuestConfiguration.OPTIONS, true, "Determines if the house item is added to player inventory when joining the world for the first time. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
-		
+
 		// Remove the House options.
 		config = WuestConfiguration.RemoveOldHouseOptions(config);
-		
+
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
-		
+
 		// Recipe settings.
 		WuestUtilities.proxy.proxyConfiguration.addMetalRecipes = config.getBoolean(WuestConfiguration.addMetalRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the metal recipes are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addWoodRecipes = config.getBoolean(WuestConfiguration.addWoodRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the wood recipes are added. Server configuration overrides client.");
@@ -120,9 +116,9 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addMiscRecipes = config.getBoolean(WuestConfiguration.addMiscRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the misc recipes are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addNetherStarRecipe = config.getBoolean(WuestConfiguration.addNetherStarRecipeName, WuestConfiguration.RecipeOptions, true, "Determines if the Nether Star recipe are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
-		
+
 		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
-		
+
 		WuestUtilities.proxy.proxyConfiguration.addSword = config.getBoolean(WuestConfiguration.addSwordName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Sword is added the the chest when the house is created.");
 		WuestUtilities.proxy.proxyConfiguration.addAxe = config.getBoolean(WuestConfiguration.addAxeName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Axe is added the the chest when the house is created.");
 		WuestUtilities.proxy.proxyConfiguration.addShovel = config.getBoolean(WuestConfiguration.addShovelName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Shovel is added the the chest when the house is created.");
@@ -135,71 +131,71 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addCobble = config.getBoolean(WuestConfiguration.addCobbleName, WuestConfiguration.ChestContentOptions, true, "Determines if a stack of cobble is added the the chest when the house is created.");
 		WuestUtilities.proxy.proxyConfiguration.addSaplings = config.getBoolean(WuestConfiguration.addSaplingsName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of oak saplings are added the the chest when the house is created.");
 		WuestUtilities.proxy.proxyConfiguration.addTorches = config.getBoolean(WuestConfiguration.addTorchesName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of torches are added the the chest when the house is created.");
-		
-	    if (config.hasChanged()) 
-	    {
-	    	config.save();
-	    }
+
+		if (config.hasChanged()) 
+		{
+			config.save();
+		}
 	}
-	
+
 	private static Configuration RemoveOldHouseOptions(Configuration config)
 	{
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addTorchesName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addTorchesName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addBedName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addBedName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addCraftingTableName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addCraftingTableName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addChestName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addChestName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addChestContentsName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addChestContentsName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addFarmName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addFarmName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.floorBlockName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.floorBlockName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.ceilingBlockName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.ceilingBlockName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.wallWoodTypeName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.wallWoodTypeName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.isCeilingFlatName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.isCeilingFlatName);
 		}
-		
+
 		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addMineShaftName))
 		{
 			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addMineShaftName);
 		}
-		
-		
+
+
 		return config;
 	}
 
@@ -209,38 +205,38 @@ public class WuestConfiguration
 		StoneBrick(0),
 		Brick(1),
 		SandStone(2);
-		
-        private final int value;
 
-        CeilingFloorBlockType(int newValue) 
-        {
-            value = newValue;
-        }
+		private final int value;
 
-        public int getValue() { return value; }
-        
-        public static CeilingFloorBlockType ValueOf(int value)
-        {
-        	switch (value)
-        	{
-	        	case 1:
-	        	{
-	        		return CeilingFloorBlockType.Brick;
-	        	}
-	        	
-	        	case 2:
-	        	{
-	        		return CeilingFloorBlockType.SandStone;
-	        	}
-	        	
-	        	default:
-	        	{
-	        		return CeilingFloorBlockType.StoneBrick;
-	        	}
-        	}
-        }
+		CeilingFloorBlockType(int newValue) 
+		{
+			value = newValue;
+		}
+
+		public int getValue() { return value; }
+
+		public static CeilingFloorBlockType ValueOf(int value)
+		{
+			switch (value)
+			{
+			case 1:
+			{
+				return CeilingFloorBlockType.Brick;
+			}
+
+			case 2:
+			{
+				return CeilingFloorBlockType.SandStone;
+			}
+
+			default:
+			{
+				return CeilingFloorBlockType.StoneBrick;
+			}
+			}
+		}
 	}
-	
+
 	public enum WallBlockType
 	{
 		Oak(0),
@@ -249,50 +245,50 @@ public class WuestConfiguration
 		Jungle(3),
 		Acacia(4),
 		DarkOak(5);
-		
-        private final int value;
 
-        WallBlockType(final int newValue) 
-        {
-            value = newValue;
-        }
+		private final int value;
 
-        public int getValue() { return value; }
-        
-        public static WallBlockType ValueOf(int value)
-        {
-        	switch (value)
-        	{
-	        	case 1:
-	        	{
-	        		return WallBlockType.Spruce;
-	        	}
-	        	
-	        	case 2:
-	        	{
-	        		return WallBlockType.Birch;
-	        	}
-	        	
-	        	case 3:
-	        	{
-	        		return WallBlockType.Jungle;
-	        	}
-	        	
-	        	case 4:
-	        	{
-	        		return WallBlockType.Acacia;
-	        	}
-	        	
-	        	case 5:
-	        	{
-	        		return WallBlockType.DarkOak;
-	        	}
-	        	
-	        	default:
-	        	{
-	        		return WallBlockType.Oak;
-	        	}
-        	}
-        }
+		WallBlockType(final int newValue) 
+		{
+			value = newValue;
+		}
+
+		public int getValue() { return value; }
+
+		public static WallBlockType ValueOf(int value)
+		{
+			switch (value)
+			{
+			case 1:
+			{
+				return WallBlockType.Spruce;
+			}
+
+			case 2:
+			{
+				return WallBlockType.Birch;
+			}
+
+			case 3:
+			{
+				return WallBlockType.Jungle;
+			}
+
+			case 4:
+			{
+				return WallBlockType.Acacia;
+			}
+
+			case 5:
+			{
+				return WallBlockType.DarkOak;
+			}
+
+			default:
+			{
+				return WallBlockType.Oak;
+			}
+			}
+		}
 	}
 }
