@@ -62,11 +62,12 @@ public class HomeCommand extends CommandBase
 				player.addChatComponentMessage(new ChatComponentText("This command has not been enabled on the server."));
 			}
 
-			BlockPos bedLocation = player.getBedLocation().east().south();
+			BlockPos bedLocation = player.getBedLocation();
 
 			if (bedLocation != null)
 			{
 				World world = player.worldObj;
+				bedLocation = bedLocation.east().south();
 
 				// Teleport the player back to their bed.
 				player.setPositionAndUpdate(bedLocation.getX(), bedLocation.getY(), bedLocation.getZ());

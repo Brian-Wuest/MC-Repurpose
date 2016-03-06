@@ -1,29 +1,48 @@
 package wuest.utilities.Events;
 
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.time.*;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.WuestConfiguration;
 import wuest.utilities.Items.ItemStartHouse;
+import wuest.utilities.Proxy.BedLocationMessage;
+import wuest.utilities.Proxy.RedstoneClockMessage;
 
-public class WuestEventHandler 
+public class WuestEventHandler
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
 
@@ -140,6 +159,29 @@ public class WuestEventHandler
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
+	{
+		if (event.side.isServer())
+		{
+			// Send the updated bed information to the client.
+			BedLocationMessage message = new BedLocationMessage();
+			NBTTagCompound tag = new NBTTagCompound();
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			BlockPos bedPosition = player.getBedLocation();
+
+			if (bedPosition != null)
+			{
+				tag.setInteger("bedX", bedPosition.getX());
+				tag.setInteger("bedY", bedPosition.getY());
+				tag.setInteger("bedZ", bedPosition.getZ());
+			}
+			
+			message.setMessageTag(tag);
+			WuestUtilities.network.sendTo(message, player);
+		}
+	}
 
 	@SubscribeEvent
 	public void onClone(PlayerEvent.Clone event) 
@@ -194,4 +236,6 @@ public class WuestEventHandler
 			WuestConfiguration.syncConfig();
 		}
 	}
+
+
 }

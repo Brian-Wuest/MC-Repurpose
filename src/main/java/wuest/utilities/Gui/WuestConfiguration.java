@@ -7,6 +7,7 @@ public class WuestConfiguration
 {
 	public static String OPTIONS = "general.options";
 	public static String RecipeOptions = "general.options.recipes";
+	public static String GuiOptions = "general.options.gui";
 	public static String ChestContentOptions = "general.options.chest contents";
 	public static String tagKey = "WuestConfig";
 
@@ -34,6 +35,7 @@ public class WuestConfiguration
 	private static String addNetherStarRecipeName = "Add Nether Star Recipe";
 	private static String enableHomeCommandName = "Enable Home Command";
 	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
+	private static String enableBedCompassName = "Enable Bed Compass Recipe";
 
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
@@ -47,6 +49,8 @@ public class WuestConfiguration
 	private static String addCobbleName = "Add Cobblestone";
 	private static String addSaplingsName = "Add Saplings";
 	private static String addChestTorchesName = "Add Torches";
+	
+	private static String enablePotionEffectName = "Enable Potion Effect Overlay";
 
 	// Configuration Options.
 	public boolean addHouseItem;
@@ -61,6 +65,10 @@ public class WuestConfiguration
 	public boolean addMiscRecipes;
 	public boolean addNetherStarRecipe;
 	public boolean addRedstoneClockRecipe;
+	public boolean addBedCompassRecipe;
+	
+	// Gui options
+	public boolean enablePotionEffectOverlay;
 
 	// Chest content options.
 	public boolean addSword;
@@ -116,7 +124,8 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addMiscRecipes = config.getBoolean(WuestConfiguration.addMiscRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the misc recipes are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addNetherStarRecipe = config.getBoolean(WuestConfiguration.addNetherStarRecipeName, WuestConfiguration.RecipeOptions, true, "Determines if the Nether Star recipe are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
-
+		WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe = config.getBoolean(WuestConfiguration.enableBedCompassName, WuestConfiguration.RecipeOptions, true, "Determines if the Bed Compass item recipe is enabled. Server configuration overrides client.");
+		
 		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
 
 		WuestUtilities.proxy.proxyConfiguration.addSword = config.getBoolean(WuestConfiguration.addSwordName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Sword is added the the chest when the house is created.");
@@ -132,6 +141,11 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addSaplings = config.getBoolean(WuestConfiguration.addSaplingsName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of oak saplings are added the the chest when the house is created.");
 		WuestUtilities.proxy.proxyConfiguration.addTorches = config.getBoolean(WuestConfiguration.addTorchesName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of torches are added the the chest when the house is created.");
 
+		// GUI Options
+		config.setCategoryComment(WuestConfiguration.GuiOptions, "This category is to configure the various GUI options for this mod.");
+		
+		WuestUtilities.proxy.proxyConfiguration.enablePotionEffectOverlay = config.getBoolean(WuestConfiguration.enablePotionEffectName, WuestConfiguration.GuiOptions, true, "Determines if a GUI overlay is created showing the currently active potion effects.");
+		
 		if (config.hasChanged()) 
 		{
 			config.save();

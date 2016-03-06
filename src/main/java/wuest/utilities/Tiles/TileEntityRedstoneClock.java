@@ -52,7 +52,6 @@ public class TileEntityRedstoneClock extends TileEntity
 		this.powerConfiguration = PowerConfiguration.ReadFromNBTTagCompound(compound);
 	}
 
-
 	@Override
 	public void updateContainingBlockInfo()
 	{
@@ -111,10 +110,11 @@ public class TileEntityRedstoneClock extends TileEntity
 	 * @param newState The new ID of the block (May be the same)
 	 * @return true forcing the invalidation of the existing TE, false not to invalidate the existing TE
 	 */
+	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
 	{
 		// This tile needs to persist so the data can be saved.
-		return false;
+		return (oldState.getBlock() != newSate.getBlock());
 	}
 
 	/**

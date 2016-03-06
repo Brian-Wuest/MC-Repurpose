@@ -19,6 +19,7 @@ import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.GuiRedstoneClock;
 import wuest.utilities.Gui.WuestConfiguration;
+import wuest.utilities.Items.ItemBedCompass;
 import wuest.utilities.Items.ItemStartHouse;
 
 public class CommonProxy implements IGuiHandler 
@@ -43,12 +44,14 @@ public class CommonProxy implements IGuiHandler
 		WuestUtilities.network.registerMessage(WuestHandler.class, TagMessage.class, 0, Side.SERVER);
 		WuestUtilities.network.registerMessage(HouseHandler.class, HouseTagMessage.class, 1, Side.SERVER);
 		WuestUtilities.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
+		WuestUtilities.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
 	}
 	
 	public void init(FMLInitializationEvent event)
 	{
 		// Register items here.
 		ItemStartHouse.RegisterItem();
+		ItemBedCompass.RegisterItem();
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
 		
