@@ -3,6 +3,7 @@ package wuest.utilities.Events;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.time.*;
@@ -45,6 +46,8 @@ import wuest.utilities.Proxy.RedstoneClockMessage;
 public class WuestEventHandler
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
+	
+	private static HashMap<String, BlockPos> playerBedLocation;
 
 	@SubscribeEvent(receiveCanceled = true)
 	public void PlayerRightClicked(PlayerInteractEvent event)
@@ -165,21 +168,9 @@ public class WuestEventHandler
 	{
 		if (event.side.isServer())
 		{
-			// Send the updated bed information to the client.
-			BedLocationMessage message = new BedLocationMessage();
-			NBTTagCompound tag = new NBTTagCompound();
-			EntityPlayerMP player = (EntityPlayerMP) event.player;
-			BlockPos bedPosition = player.getBedLocation();
-
-			if (bedPosition != null)
-			{
-				tag.setInteger("bedX", bedPosition.getX());
-				tag.setInteger("bedY", bedPosition.getY());
-				tag.setInteger("bedZ", bedPosition.getZ());
-			}
-			
-			message.setMessageTag(tag);
-			WuestUtilities.network.sendTo(message, player);
+			// Send the player's actual bed location to the client for the bed compass object.
+			// This is needed as the client doesn't properly store the bed location.
+			this.sendPlayerBedLocation(event);
 		}
 	}
 
@@ -237,5 +228,42 @@ public class WuestEventHandler
 		}
 	}
 
+	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
+	{
+		if (WuestEventHandler.playerBedLocation == null)
+		{
+			WuestEventHandler.playerBedLocation = new HashMap<String, BlockPos>();
+		}
+		
+		// Send the updated bed information to the client.
+		BedLocationMessage message = new BedLocationMessage();
+		NBTTagCompound tag = new NBTTagCompound();
+		EntityPlayerMP player = (EntityPlayerMP) event.player;
+		BlockPos bedPosition = player.getBedLocation();
 
+		if (bedPosition != null)
+		{
+			tag.setInteger("bedX", bedPosition.getX());
+			tag.setInteger("bedY", bedPosition.getY());
+			tag.setInteger("bedZ", bedPosition.getZ());
+		}
+		
+		message.setMessageTag(tag);
+		BlockPos existingBedPosition = null;
+		
+		if (WuestEventHandler.playerBedLocation.containsKey(player.getName()))
+		{
+			existingBedPosition = WuestEventHandler.playerBedLocation.get(player.getName());
+		}
+		else
+		{
+			WuestEventHandler.playerBedLocation.put(player.getName(), bedPosition);
+		}
+		
+		if (existingBedPosition != bedPosition)
+		{
+			// Only send the message to the client if the bed position changes.
+			WuestUtilities.network.sendTo(message, player);
+		}
+	}
 }
