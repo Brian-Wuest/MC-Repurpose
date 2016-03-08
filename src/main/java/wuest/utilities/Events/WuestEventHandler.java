@@ -123,7 +123,7 @@ public class WuestEventHandler
 					// Make sure to re-set the age to 0 to get the seed.
 					IBlockState tempState = cropState.withProperty(BlockCrops.AGE, 0);
 
-					// Get the seed item and check to see fi the player has this in their inventory. If they do we can use it to replant.
+					// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
 					Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
 
 					if (seed != null && p.inventory.hasItem(seed))
@@ -142,7 +142,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
 	{
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) 
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) 
 		{
 			System.out.println("Player joined world, checking to see if the house builder should be provided.");
 
@@ -152,7 +152,7 @@ public class WuestEventHandler
 			// Get the opposite of the value, if the bool doesn't exist then we can add the house to the inventory, otherwise the player isn't new and shouldn't get the item.
 			boolean shouldGiveHousebuilder = !persistTag.getBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG);
 
-			if (shouldGiveHousebuilder)
+			if (shouldGiveHousebuilder && WuestUtilities.proxy.proxyConfiguration.addHouseItem)
 			{
 				ItemStack stack = new ItemStack(ItemStartHouse.RegisteredItem);
 				player.inventory.addItemStackToInventory(stack);
@@ -181,21 +181,14 @@ public class WuestEventHandler
 		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
 		NBTTagCompound originalTag = event.original.getEntityData();
 
-		if (originalTag.hasKey(WuestConfiguration.tagKey))
+		// Use the server configuration to determine if the house should be added for this player.
+		if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
 		{
-			// Use the server configuration to determine if the house should be added for this player.
-			if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
+			if (originalTag.hasKey("IsPlayerNew"))
 			{
-				if (originalTag.hasKey("IsPlayerNew"))
-				{
-					NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-					newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
-				}
+				NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+				newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
 			}
-
-			// Save the configuration tag to the player.
-			NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
-			newPlayerTag.setTag(WuestConfiguration.tagKey, originalTag.getTag(WuestConfiguration.tagKey));
 		}
 	}
 
