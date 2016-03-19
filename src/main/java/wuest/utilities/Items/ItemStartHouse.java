@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
@@ -21,9 +22,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import wuest.utilities.WuestUtilities;
@@ -60,9 +63,7 @@ public class ItemStartHouse extends Item
 	 * Does something when the item is right-clicked.
 	 */
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
-			BlockPos hitBlockPos, EnumFacing side, float hitX, float hitY,
-			float hitZ) 
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos hitBlockPos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote)
 		{
@@ -70,11 +71,11 @@ public class ItemStartHouse extends Item
 			{
 				// Open the client side gui to determine the house options.
 				player.openGui(WuestUtilities.instance, GuiHouseItem.GUI_ID, player.worldObj, hitBlockPos.getX(), hitBlockPos.getY(), hitBlockPos.getZ());
-				return true;
+				return EnumActionResult.PASS;
 			}
 		}
 
-		return false;
+		return EnumActionResult.FAIL;
 	}
 
 	public static void BuildHouse(EntityPlayer player, World world, HouseConfiguration configuration)
@@ -123,7 +124,18 @@ public class ItemStartHouse extends Item
 						ItemStartHouse.PlaceMineShaft(world, startingPosition);
 					}
 
-					player.inventory.consumeInventoryItem(ItemStartHouse.RegisteredItem);
+					ItemStack houseStack = new ItemStack(ItemStartHouse.RegisteredItem);
+					ItemStack stackInSlot = player.inventory.getStackInSlot(player.inventory.getSlotFor(houseStack));
+					stackInSlot.stackSize = stackInSlot.stackSize - 1;
+					
+					if (stackInSlot.stackSize <= 0)
+					{
+						player.inventory.deleteStack(stackInSlot);
+					}
+					else
+					{
+						player.inventory.setInventorySlotContents(player.inventory.getSlotFor(houseStack), stackInSlot);
+					}
 				}
 			}
 
@@ -484,7 +496,7 @@ public class ItemStartHouse extends Item
 		}
 		}
 
-		ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, door);
+		ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, door, true);
 
 		// Put a glass pane above the door.
 		ItemStartHouse.ReplaceBlock(world, itemPosition.up(2), Blocks.glass_pane);
@@ -518,18 +530,19 @@ public class ItemStartHouse extends Item
 		if (tileEntity instanceof TileEntitySign)
 		{
 			TileEntitySign signTile = (TileEntitySign)tileEntity;
-			signTile.signText[0] = new ChatComponentText("This is");
+			signTile.signText[0] = new TextComponentString("This is");
 
 			if (player.getDisplayNameString().length() >= 15)
 			{
-				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString());
+				
+				signTile.signText[1] = new TextComponentString(player.getDisplayNameString());
 			}
 			else
 			{
-				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString() + "'s");
+				signTile.signText[1] = new TextComponentString(player.getDisplayNameString() + "'s");
 			}
 
-			signTile.signText[2] = new ChatComponentText("house!");
+			signTile.signText[2] = new TextComponentString("house!");
 		}
 	}
 
@@ -537,8 +550,8 @@ public class ItemStartHouse extends Item
 		BlockPos itemPosition = cornerPosition.east(1).south(2);
 
 		IBlockState bedFootState = Blocks.bed.getDefaultState()
+				.withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
 				.withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false))
-				.withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
 				.withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
 
 		if (world.setBlockState(itemPosition, bedFootState, 3)) {
@@ -795,7 +808,8 @@ public class ItemStartHouse extends Item
 		IBlockState state = world.getBlockState(farmStart);
 
 		// Keep going down until we get to the surface.
-		while (!state.getBlock().isAir(world, farmStart)) {
+		while (!world.isAirBlock(farmStart)) 
+		{
 			farmStart.down();
 		}
 
@@ -972,7 +986,7 @@ public class ItemStartHouse extends Item
 					IBlockState surroundingState = world.getBlockState(tempPos);
 					Block surroundingBlock = surroundingState.getBlock();
 
-					if (!surroundingBlock.isBlockNormalCube()) {
+					if (!surroundingBlock.isBlockNormalCube(surroundingState)) {
 						// This is not a solid block. Get the drops then replace
 						// it with stone.
 						ItemStartHouse.ConsolidateDrops(surroundingBlock, world, tempPos,
@@ -990,7 +1004,7 @@ public class ItemStartHouse extends Item
 					IBlockState surroundingState = world.getBlockState(tempPos);
 					Block surroundingBlock = surroundingState.getBlock();
 
-					if (!surroundingBlock.isBlockNormalCube()) {
+					if (!surroundingBlock.isBlockNormalCube(surroundingState)) {
 						// This is not a solid block. Get the drops then replace
 						// it with stone.
 						ItemStartHouse.ConsolidateDrops(surroundingBlock, world, tempPos,

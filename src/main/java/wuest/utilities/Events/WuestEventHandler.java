@@ -24,9 +24,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -53,7 +54,7 @@ public class WuestEventHandler
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
-		// Can use the proxy's configuration since this is on the client.
+		// Can use the proxy's configuration.
 		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
 				&& !event.world.isRemote
 				&& !event.isCanceled())
@@ -89,17 +90,17 @@ public class WuestEventHandler
 				// Break the original crop block.
 				event.world.setBlockToAir(event.pos);
 
-				Boolean replanted = false;
+				EnumActionResult replanted = EnumActionResult.FAIL;
 
 				for (ItemStack drop : drops)
 				{
 					Item dropItem = drop.getItem();
 
-					if (!replanted)
+					if (replanted != EnumActionResult.PASS)
 					{
-						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.world, farmlandPosition, event.face, 0, 0, 0);
+						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.world, farmlandPosition, null, event.face, 0, 0, 0);
 
-						if (replanted)
+						if (replanted == EnumActionResult.PASS)
 						{
 							continue;
 						}
@@ -114,7 +115,7 @@ public class WuestEventHandler
 					}
 				}
 
-				if (!replanted)
+				if (replanted != EnumActionResult.PASS)
 				{
 					// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
 					// This should work with other plants that override BlockCrops.GetItem with their own seed.
@@ -124,12 +125,23 @@ public class WuestEventHandler
 					IBlockState tempState = cropState.withProperty(BlockCrops.AGE, 0);
 
 					// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
-					Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
+					ItemStack seed = new ItemStack(blockCrop.getItemDropped(tempState, new Random(), 0));
 
-					if (seed != null && p.inventory.hasItem(seed))
+					if (seed != null && p.inventory.hasItemStack(seed))
 					{
-						seed.onItemUse(new ItemStack(seed), p, event.world, farmlandPosition, event.face, 0, 0, 0);
-						p.inventory.consumeInventoryItem(seed);
+						seed.onItemUse(p, event.world, farmlandPosition, null, event.face, 0, 0, 0);
+						ItemStack stackInSlot = p.inventory.getStackInSlot(p.inventory.getSlotFor(seed));
+						stackInSlot.stackSize = stackInSlot.stackSize - 1;
+						
+						if (stackInSlot.stackSize <= 0)
+						{
+							p.inventory.deleteStack(stackInSlot);
+						}
+						else
+						{
+							p.inventory.setInventorySlotContents(p.inventory.getSlotFor(seed), stackInSlot);
+						}
+
 						p.inventoryContainer.detectAndSendChanges();
 					}
 				}

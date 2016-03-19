@@ -4,8 +4,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import wuest.utilities.WuestUtilities;
 
@@ -29,14 +30,17 @@ public class HomeCommand extends CommandBase
 		return 0;
 	}
 
-	/**
-	 * Returns true if the given command sender is allowed to use this command.
-	 */
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender)
-	{
-		return true;
-	}
+    /**
+     * Check if the given ICommandSender has permission to execute this command
+     *  
+     * @param server The Minecraft server instance
+     * @param sender The command sender who we are checking permission on
+     */
+    @Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
+    {
+        return true;
+    }
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) 
@@ -46,7 +50,7 @@ public class HomeCommand extends CommandBase
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args)
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args)
 			throws CommandException 
 	{
 		/*
@@ -59,7 +63,7 @@ public class HomeCommand extends CommandBase
 
 			if (!WuestUtilities.proxy.proxyConfiguration.enableHomeCommand)
 			{
-				player.addChatComponentMessage(new ChatComponentText("This command has not been enabled on the server."));
+				player.addChatComponentMessage(new TextComponentString("This command has not been enabled on the server."));
 			}
 
 			BlockPos bedLocation = player.getBedLocation();
@@ -75,7 +79,7 @@ public class HomeCommand extends CommandBase
 			else
 			{
 				// Send the player saying that the bed could not be found.
-				player.addChatComponentMessage(new ChatComponentText("Bed Not Found."));
+				player.addChatComponentMessage(new TextComponentString("Bed Not Found."));
 			}
 		}		
 	}
