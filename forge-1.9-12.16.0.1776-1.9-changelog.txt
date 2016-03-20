@@ -1,5 +1,42 @@
 Changelog:
-Build 1767:
+Build 1776:
+	diesieben07: Fix broken patch in EntityPlayer.updateRidden
+
+Build 1.9-12.16.0.1775-1.9:
+	iTitus:
+		Fix the EntityPlayer patch
+		
+		In 1.8.9 the call goes to getDisplayNameString() so that any changes from the PlayerEvent.NameFormat event are being take into account.
+		In this patch the call goes to func_70005_c_() which is the getter for the GameProfile name.
+		I changed it back.
+		
+		Sorry if you do not want to accept it because it is a one-liner.
+	vincent.lee: Fix #2555
+
+Build 1.9-12.16.0.1774-1.9:
+	cordonfreeman: Fix for patch targetting the wrong field to change for failed pathfinding penalty
+
+Build 1.9-12.16.0.1773-1.9:
+	cpw: Fix bucket test
+
+Build 1.9-12.16.0.1772-1.9:
+	bernhard.bonigl:
+		Fix CombinedInvWrapper accessing incorrect slots
+		Closes #2533
+
+Build 1.9-12.16.0.1771-1.9:
+	cpw: Ignore classes directory
+
+Build 1.9-12.16.0.1770-1.9:
+	fry: Fixed sprite not being passed to the quad builder for custom models.
+
+Build 1.9-12.16.0.1769-1.9:
+	fry: Fixed outline shader rendering, closes #2560.
+
+Build 1.9-12.16.0.1768-1.9:
+	fry: Fixed Block.doesSideBlockRendering, closes #2564.
+
+Build 1.9-12.16.0.1767-1.9:
 	fry: Fixed invalid index calculation in BakedQuadRetextured.
 
 Build 1.8.9-11.15.1.1765:
