@@ -21,6 +21,7 @@ import wuest.utilities.Gui.GuiRedstoneClock;
 import wuest.utilities.Gui.WuestConfiguration;
 import wuest.utilities.Items.ItemBedCompass;
 import wuest.utilities.Items.ItemStartHouse;
+import wuest.utilities.Items.ItemSwiftBlade;
 
 public class CommonProxy implements IGuiHandler 
 {
@@ -53,6 +54,7 @@ public class CommonProxy implements IGuiHandler
 		ItemBedCompass.RegisterItem();
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
+		ItemSwiftBlade.RegisterItem();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();

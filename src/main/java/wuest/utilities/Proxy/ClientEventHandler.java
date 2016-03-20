@@ -9,8 +9,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -70,7 +70,7 @@ public class ClientEventHandler extends Gui
 		for (PotionEffect potionEffect : collection) 
 		{
 			xPos += BUFF_ICON_SPACING;
-			Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+			Potion potion = potionEffect.getPotion();
 
 			if (potion.hasStatusIcon())
 			{
@@ -85,7 +85,7 @@ public class ClientEventHandler extends Gui
 						BUFF_ICON_SIZE);
 
 				// Draw the effect duration.
-				this.drawString(mc.fontRendererObj, potion.getDurationString(potionEffect), xPos, yPos + 20, Color.WHITE.getRGB());
+				this.drawString(mc.fontRendererObj, potion.getPotionDurationString(potionEffect, 1), xPos, yPos + 20, Color.WHITE.getRGB());
 				
 				if (potionCount > 3)
 				{

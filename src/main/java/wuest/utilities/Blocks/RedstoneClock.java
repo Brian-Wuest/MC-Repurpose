@@ -10,7 +10,8 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateBase;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,8 +24,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -103,13 +105,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public boolean canProvidePower()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean func_181623_g()
+	public boolean canProvidePower(IBlockState state)
 	{
 		return true;
 	}
@@ -124,16 +120,16 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	 * @return True to make the connection
 	 */
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side)
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		/**
 		 * Can this block provide power. Only wire currently seems to have this change based on its state.
 		 */
-		return this.canProvidePower() && side != null;
+		return this.canProvidePower(state) && side != null;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote) 
 		{
@@ -153,19 +149,19 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public int getStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
+	public int getStrongPower(IBlockState blockState, IBlockAccess worldIn, BlockPos pos,EnumFacing side)
 	{
 		TileEntityRedstoneClock tileEntity = this.getLocalTileEntity((World)worldIn, pos);
 
-		return tileEntity.getRedstoneStrength(state, side);
+		return tileEntity.getRedstoneStrength(blockState, side);
 	}
 
 	@Override
-	public int getWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
+	public int getWeakPower(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side)
 	{
 		TileEntityRedstoneClock tileEntity = this.getLocalTileEntity((World)worldIn, pos);
 
-		return tileEntity.getRedstoneStrength(state, side);
+		return tileEntity.getRedstoneStrength(blockState, side);
 	}
 
 	@Override
@@ -216,9 +212,9 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, new IProperty[] {POWERED});
+		return new BlockStateContainer(this, new IProperty[] {POWERED});
 	}
 
 	@Override

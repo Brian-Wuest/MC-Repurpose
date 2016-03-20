@@ -36,6 +36,7 @@ public class WuestConfiguration
 	private static String enableHomeCommandName = "Enable Home Command";
 	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
 	private static String enableBedCompassName = "Enable Bed Compass Recipe";
+	private static String enableSwiftBladeName = "Enable Swift Blade Recipes";
 
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
@@ -66,6 +67,7 @@ public class WuestConfiguration
 	public boolean addNetherStarRecipe;
 	public boolean addRedstoneClockRecipe;
 	public boolean addBedCompassRecipe;
+	public boolean addSwiftBladeRecipe;
 	
 	// Gui options
 	public boolean enablePotionEffectOverlay;
@@ -125,6 +127,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addNetherStarRecipe = config.getBoolean(WuestConfiguration.addNetherStarRecipeName, WuestConfiguration.RecipeOptions, true, "Determines if the Nether Star recipe are added. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe = config.getBoolean(WuestConfiguration.enableBedCompassName, WuestConfiguration.RecipeOptions, true, "Determines if the Bed Compass item recipe is enabled. Server configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe = config.getBoolean(WuestConfiguration.enableSwiftBladeName, WuestConfiguration.RecipeOptions, true, "Determines if the Swift Blade item recipes are enabled. Server configuration overrides client.");
 		
 		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
 

@@ -3,10 +3,10 @@ package wuest.utilities.Tiles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Blocks.RedstoneClock.PowerConfiguration;
@@ -73,7 +73,7 @@ public class TileEntityRedstoneClock extends TileEntity
 		NBTTagCompound tag = new NBTTagCompound();
 		this.writeToNBT(tag);
 
-		return new S35PacketUpdateTileEntity(this.getPos(), 1, tag);
+		return new SPacketUpdateTileEntity(this.getPos(), 1, tag);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class TileEntityRedstoneClock extends TileEntity
 	 * @param pkt The data packet
 	 */
 	@Override
-	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.S35PacketUpdateTileEntity pkt)
+	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
 	{
 		this.readFromNBT(pkt.getNbtCompound());
 	}
