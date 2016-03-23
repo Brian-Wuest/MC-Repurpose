@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -244,8 +245,7 @@ public class ItemStartHouse extends Item
 		ItemStartHouse.SetCeiling(world, startingPosition.up(4), ceiling, stairs, configuration);
 	}
 
-	private static void BuildInterior(World world, BlockPos startingPosition,
-			EntityPlayer player, HouseConfiguration configuration) 
+	private static void BuildInterior(World world, BlockPos startingPosition, EntityPlayer player, HouseConfiguration configuration) 
 	{
 		// Keep the corner positions since they are important.
 		BlockPos northEastCornerPosition = startingPosition.north(4).east(4)
@@ -273,14 +273,14 @@ public class ItemStartHouse extends Item
 			ItemStartHouse.PlaceBed(world, northWestCornerPosition);
 		}
 
-		if (configuration.addChest) {
-			// Place a double chest in the south east corner.
-			ItemStartHouse.PlaceAndFillChest(world, southEastCornerPosition, configuration);
-		}
-
 		if (configuration.addCraftingTable) {
 			// Place a crafting table in the south west corner.
-			ItemStartHouse.PlaceAndFillCraftingMachines(world, southWestCornerPosition);
+			ItemStartHouse.PlaceAndFillCraftingMachines(player, world, southWestCornerPosition);
+		}
+		
+		if (configuration.addChest) {
+			// Place a double chest in the south east corner.
+			ItemStartHouse.PlaceAndFillChest(player, world, southEastCornerPosition, configuration);
 		}
 	}
 
@@ -562,7 +562,8 @@ public class ItemStartHouse extends Item
 
 	}
 
-	private static void PlaceAndFillChest(World world, BlockPos cornerPosition, HouseConfiguration configuration) {
+	private static void PlaceAndFillChest(EntityPlayer player, World world, BlockPos cornerPosition, HouseConfiguration configuration) 
+	{
 		// Create a double wide chest.
 		BlockPos itemPosition = cornerPosition.north().west();
 		ItemStartHouse.ReplaceBlock(world, itemPosition, Blocks.chest);
@@ -590,12 +591,25 @@ public class ItemStartHouse extends Item
 				{
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(
 							Items.stone_hoe));
+					
+					// Trigger the "Time to Farm!" achievement.
+					player.addStat(AchievementList.buildHoe);
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addPickAxe)
 				{
+					// Trigger the "Time to Mine" achievement and the better pick axe achievement.
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(
 							Items.stone_pickaxe));
+					
+					player.addStat(AchievementList.buildPickaxe);
+					player.addStat(AchievementList.buildBetterPickaxe);
+					
+					if (configuration.addCraftingTable) 
+					{
+						// If the furnace/crafting table was created, trigger the "Hot Topic" achievement.
+						player.addStat(AchievementList.buildFurnace);
+					}
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addShovel)
@@ -606,8 +620,12 @@ public class ItemStartHouse extends Item
 
 				if (WuestUtilities.proxy.proxyConfiguration.addSword)
 				{
+					// Provide my custom swift blade.
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(
-							Items.stone_sword));
+							ItemSwiftBlade.RegisteredStoneSword));
+					
+					// Trigger the "Time to Strike" achievement.
+					player.addStat(AchievementList.buildSword);
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addArmor)
@@ -627,6 +645,9 @@ public class ItemStartHouse extends Item
 				{
 					// Add some bread.
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.bread, 20));
+					
+					// Trigger the "Bake Bread" achievement.
+					player.addStat(AchievementList.makeBread);
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addCrops)
@@ -658,7 +679,7 @@ public class ItemStartHouse extends Item
 
 				if (WuestUtilities.proxy.proxyConfiguration.addSaplings)
 				{
-					// Add oak sapling.
+					// Add oak saplings.
 					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.sapling), 3));
 				}
 
@@ -671,22 +692,28 @@ public class ItemStartHouse extends Item
 		}
 	}
 
-	private static void PlaceAndFillCraftingMachines(World world,
-			BlockPos cornerPosition) {
+	private static void PlaceAndFillCraftingMachines(EntityPlayer player, World world, BlockPos cornerPosition) 
+	{
 		BlockPos itemPosition = cornerPosition.east().north();
 		ItemStartHouse.ReplaceBlock(world, itemPosition, Blocks.crafting_table);
+		
+		// Trigger the workbench achievement.
+		player.addStat(AchievementList.buildWorkBench);
 
 		// Place a furnace next to the crafting table and fill it with 20 coal.
 		itemPosition = itemPosition.east();
 		ItemStartHouse.ReplaceBlock(world, itemPosition, Blocks.furnace.getDefaultState()
 				.withProperty(BlockFurnace.FACING, EnumFacing.NORTH));
 
+		// Trigger the furnace achievement.
+		player.addStat(AchievementList.buildFurnace);
+		
 		TileEntity tileEntity = world.getTileEntity(itemPosition);
 
-		if (tileEntity instanceof TileEntityFurnace) {
+		if (tileEntity instanceof TileEntityFurnace) 
+		{
 			TileEntityFurnace furnaceTile = (TileEntityFurnace) tileEntity;
-			furnaceTile.setInventorySlotContents(1, new ItemStack(Items.coal,
-					20));
+			furnaceTile.setInventorySlotContents(1, new ItemStack(Items.coal, 20));
 		}
 	}
 
