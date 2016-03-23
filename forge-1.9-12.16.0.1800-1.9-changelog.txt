@@ -1,5 +1,97 @@
 Changelog:
-Build 1776:
+Build 1800:
+	LexManos: Fixed custom entities unique ids.
+
+Build 1.9-12.16.0.1799-1.9:
+	LexManos: Update FML Entity Spawn packet for 1.9's location change. Closes #2567
+
+Build 1.9-12.16.0.1798-1.9:
+	vincent.lee: Actually fix dupe drop
+
+Build 1.9-12.16.0.1797-1.9:
+	fry: Added Capability.cast, to allow avoiding unchecked casts in ICapabilityProvider.getCapability
+
+Build 1.9-12.16.0.1796-1.9:
+	LexManos: Fix swap animations for sure this time.
+
+Build 1.9-12.16.0.1795-1.9:
+	LexManos: Allow finite fluids to be drained correctly
+	LexManos: Make OreDictionary.initVanillaEntries() private so that dumb modders will stop calling it.
+
+Build 1.8.9-11.15.1.1794:
+	Choonster.2010: Allow finite fluids to be drained correctly
+
+Build 1.9-12.16.0.1792-1.9:
+	matthewprenger: Pass exceptions thrown in mod event buses back to FML to handle apropriately
+	vincent.lee: Fix double dropping of items. Closes #2549
+	diesieben07: Fix EntityList.func_188429_b not supporting mod-entities, fixes spawn eggs, fixes #2581
+
+Build 1.8.9-11.15.1.1791:
+	elpatricimo:
+		Fix pushing players inside blocks.
+		
+		same changes made to the 1.9 branch
+
+Build 1.9-12.16.0.1790-1.9:
+	vincent.lee: Expose IItemHandler on vanilla entities
+	vincent.lee: Update according to suggestions
+
+Build 1.9-12.16.0.1789-1.9:
+	LexManos: Make RenderLivingBase.add/remvoeLayer, Closes #2573
+	LexManos: Added support for custom dyes with Banners. Closes #2596
+
+Build 1.9-12.16.0.1788-1.9:
+	LexManos: Add ShieldDecoration and Tipped arrows to recipe sorter. Closes #2613
+	LexManos: Exclude jna from termal tansformer.
+	LexManos: Fix pushing players inside blocks.
+
+Build 1.9-12.16.0.1787-1.9:
+	LexManos: Fix Chests not opening correctly with semi-solid blocks on top.
+	LexManos: Fixed Item.shouldCauseReequipAnimation hook.
+
+Build 1.9-12.16.0.1786-1.9:
+	elpatricimo:
+		Allow players sized smaller than 1 block to walk into small spaces
+		
+		Same as #2605 but for 1.9 branch
+
+Build 1.8.9-11.15.1.1785:
+	elpatricimo: Allow players sized smaller than 1 block to walk into small spaces
+
+Build 1.9-12.16.0.1784-1.9:
+	LexManos: Rework DimensionManager for new DimensionType enum, replaces the old provider registry. Also fixed save folder issues with dimensions. Closes #2570
+
+Build 1.8.9-11.15.1.1783:
+	CovertJaguar: Add missing Minecart/Track hook.
+
+Build 1.9-12.16.0.1782-1.9:
+	fry: Removed blockCenterToCorner from TRSRTransformation constructor. Closes #2461.
+	fry: Ignore blocks/items with null registry name during model loading. Fixes NPE during resource reloading in worlds with removed blocks/items.
+	fry: Made VertexBuffer.sortVertexData cleanup pointers after it's done. Closes #2528.
+	fry: Added default left hand transforms for forge transform strings. Closes #2615.
+
+Build 1.9-12.16.0.1781-1.9:
+	fry: Switched animation system to capabilities, added animated item example, fixed state passing in MultiModel.
+	fry: Separated model classes to client and common packages.
+	fry: instance -> INSTANCE
+	fry: Implemented slightly more generic version of UVLock, re-enabled it for json models. Closes #2607.
+
+Build 1.9-12.16.0.1780-1.9:
+	gigaherz: Fix a condition that caused the enchantment table to roll invalid enchantments.
+
+Build 1.9-12.16.0.1779-1.9:
+	blay09:
+		Fix KeyInputEvent only being fired if Keyboard.getEventKeyState() is false.
+		
+		It used to be called for both key-up and key-down states prior to 1.9, so I assume Vanilla's changes to F3 behavior broke the patch.
+
+Build 1.9-12.16.0.1778-1.9:
+	CovertJaguar: Fix #2601 Minecart infinite acceleration
+
+Build 1.8.9-11.15.1.1777:
+	cordonfreeman: Fix for patch targetting the wrong field to change for failed pathfinding penalty
+
+Build 1.9-12.16.0.1776-1.9:
 	diesieben07: Fix broken patch in EntityPlayer.updateRidden
 
 Build 1.9-12.16.0.1775-1.9:

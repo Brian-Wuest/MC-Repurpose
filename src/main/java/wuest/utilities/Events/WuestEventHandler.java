@@ -1,48 +1,34 @@
 package wuest.utilities.Events;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.time.*;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.WuestConfiguration;
 import wuest.utilities.Items.ItemStartHouse;
+import wuest.utilities.Items.ItemSwiftBlade;
 import wuest.utilities.Proxy.BedLocationMessage;
-import wuest.utilities.Proxy.RedstoneClockMessage;
 
 public class WuestEventHandler
 {
@@ -203,27 +189,7 @@ public class WuestEventHandler
 			}
 		}
 	}
-
-	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
-	{
-		NBTTagCompound tag = player.getEntityData();
-
-		// Get/create a tag used to determine if this is a new player.
-		NBTTagCompound newPlayerTag = null;
-
-		if (tag.hasKey("IsPlayerNew"))
-		{
-			newPlayerTag = tag.getCompoundTag("IsPlayerNew");
-		}
-		else
-		{
-			newPlayerTag = new NBTTagCompound();
-			tag.setTag("IsPlayerNew", newPlayerTag);
-		}
-
-		return newPlayerTag;
-	}
-
+	
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
 	{
@@ -233,6 +199,26 @@ public class WuestEventHandler
 		}
 	}
 
+	/**
+	 * This method is used to trigger the buildSword vanilla event when making swift blades.
+	 * @param event The event object used for this method.
+	 */
+	@SubscribeEvent
+	public void onCrafted(ItemCraftedEvent event)
+	{
+		Item craftedItem = event.crafting.getItem();
+		EntityPlayer player = event.player;
+		
+		if (craftedItem == ItemSwiftBlade.RegisteredWoodenSword 
+				|| craftedItem == ItemSwiftBlade.RegisteredStoneSword
+				|| craftedItem == ItemSwiftBlade.RegisteredIronSword
+				|| craftedItem == ItemSwiftBlade.RegisteredGoldSword
+				|| craftedItem == ItemSwiftBlade.RegisteredDiamondSword)
+		{
+			player.addStat(AchievementList.buildSword);
+		}
+	}
+	
 	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
 	{
 		if (WuestEventHandler.playerBedLocation == null)
@@ -271,4 +257,26 @@ public class WuestEventHandler
 			WuestUtilities.network.sendTo(message, player);
 		}
 	}
+
+	private NBTTagCompound getModIsPlayerNewTag(EntityPlayer player)
+	{
+		NBTTagCompound tag = player.getEntityData();
+
+		// Get/create a tag used to determine if this is a new player.
+		NBTTagCompound newPlayerTag = null;
+
+		if (tag.hasKey("IsPlayerNew"))
+		{
+			newPlayerTag = tag.getCompoundTag("IsPlayerNew");
+		}
+		else
+		{
+			newPlayerTag = new NBTTagCompound();
+			tag.setTag("IsPlayerNew", newPlayerTag);
+		}
+
+		return newPlayerTag;
+	}
+
 }
+
