@@ -704,9 +704,6 @@ public class ItemStartHouse extends Item
 		itemPosition = itemPosition.east();
 		ItemStartHouse.ReplaceBlock(world, itemPosition, Blocks.furnace.getDefaultState()
 				.withProperty(BlockFurnace.FACING, EnumFacing.NORTH));
-
-		// Trigger the furnace achievement.
-		player.addStat(AchievementList.buildFurnace);
 		
 		TileEntity tileEntity = world.getTileEntity(itemPosition);
 
