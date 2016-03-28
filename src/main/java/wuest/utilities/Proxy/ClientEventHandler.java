@@ -44,7 +44,7 @@ public class ClientEventHandler extends Gui
 		// that case, the portion of rendering which this event represents will be canceled.
 		// We want to draw *after* the experience bar is drawn, so we make sure isCancelable() returns
 		// false and that the eventType represents the ExperienceBar event.
-		if(event.isCancelable() || event.type != ElementType.EXPERIENCE)
+		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
 		{      
 			return;
 		}
@@ -109,8 +109,8 @@ public class ClientEventHandler extends Gui
 			long timeBetween = java.time.temporal.ChronoUnit.SECONDS.between(ClientEventHandler.bedCompassTime, LocalDateTime.now()); 
 			
 			// Do drawing logic here.
-			int x = event.resolution.getScaledWidth() / 4;
-			int y = event.resolution.getScaledHeight() / 2 - 23;
+			int x = event.getResolution().getScaledWidth() / 4;
+			int y = event.getResolution().getScaledHeight() / 2 - 23;
 			BlockPos playerPosition = player.getPosition();
 			
 			if (ClientEventHandler.bedLocation != null)

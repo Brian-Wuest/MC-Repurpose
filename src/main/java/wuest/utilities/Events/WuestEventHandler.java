@@ -41,11 +41,11 @@ public class WuestEventHandler
 	{
 		// This only happens during the right-click event.
 		// Can use the proxy's configuration.
-		if (event.action == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
-				&& !event.world.isRemote
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
+				&& !event.getWorld().isRemote
 				&& !event.isCanceled())
 		{
-			EntityPlayer p = event.entityPlayer;
+			EntityPlayer p = event.getEntityPlayer();
 
 			ItemStack currentStack = p.inventory.getCurrentItem();
 
@@ -61,20 +61,20 @@ public class WuestEventHandler
 				}
 			}
 
-			IBlockState cropState = event.world.getBlockState(event.pos);
+			IBlockState cropState = event.getWorld().getBlockState(event.getPos());
 			Block crop = cropState.getBlock();
 
 			// Only re-plant when this is a fully grown plant.
 			if (crop instanceof BlockCrops && (Integer)cropState.getValue(BlockCrops.AGE) == 7)
 			{
 				// Get the farmland below the crop.
-				BlockPos farmlandPosition = event.pos.down();
+				BlockPos farmlandPosition = event.getPos().down();
 
 				// Get the drops from this crop and add it to the inventory.
-				List<ItemStack> drops = crop.getDrops(event.world, event.pos, cropState, 1);
+				List<ItemStack> drops = crop.getDrops(event.getWorld(), event.getPos(), cropState, 1);
 
 				// Break the original crop block.
-				event.world.setBlockToAir(event.pos);
+				event.getWorld().setBlockToAir(event.getPos());
 
 				EnumActionResult replanted = EnumActionResult.FAIL;
 
@@ -84,7 +84,7 @@ public class WuestEventHandler
 
 					if (replanted != EnumActionResult.PASS)
 					{
-						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.world, farmlandPosition, null, event.face, 0, 0, 0);
+						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
 
 						if (replanted == EnumActionResult.PASS)
 						{
@@ -115,7 +115,7 @@ public class WuestEventHandler
 
 					if (seed != null && p.inventory.hasItemStack(seed))
 					{
-						seed.onItemUse(p, event.world, farmlandPosition, null, event.face, 0, 0, 0);
+						seed.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
 						ItemStack stackInSlot = p.inventory.getStackInSlot(p.inventory.getSlotFor(seed));
 						stackInSlot.stackSize = stackInSlot.stackSize - 1;
 						
@@ -140,11 +140,11 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
 	{
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) 
+		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer) 
 		{
 			System.out.println("Player joined world, checking to see if the house builder should be provided.");
 
-			EntityPlayer player = (EntityPlayer)event.entity;
+			EntityPlayer player = (EntityPlayer)event.getEntity();
 			NBTTagCompound persistTag = this.getModIsPlayerNewTag(player);
 
 			// Get the opposite of the value, if the bool doesn't exist then we can add the house to the inventory, otherwise the player isn't new and shouldn't get the item.
@@ -177,14 +177,14 @@ public class WuestEventHandler
 	{
 		// Don't add the tag unless the house item was added. This way it can be added if the feature is turned on.
 		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
-		NBTTagCompound originalTag = event.original.getEntityData();
+		NBTTagCompound originalTag = event.getOriginal().getEntityData();
 
 		// Use the server configuration to determine if the house should be added for this player.
 		if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
 		{
 			if (originalTag.hasKey("IsPlayerNew"))
 			{
-				NBTTagCompound newPlayerTag = event.entityPlayer.getEntityData();
+				NBTTagCompound newPlayerTag = event.getOriginal().getEntityData();
 				newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
 			}
 		}
@@ -193,7 +193,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
 	{
-		if(onConfigChangedEvent.modID.equals("wuestUtilities"))
+		if(onConfigChangedEvent.getModID().equals("wuestUtilities"))
 		{
 			WuestConfiguration.syncConfig();
 		}
