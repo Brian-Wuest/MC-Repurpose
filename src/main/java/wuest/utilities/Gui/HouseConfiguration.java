@@ -1,6 +1,7 @@
 package wuest.utilities.Gui;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import wuest.utilities.Gui.WuestConfiguration.CeilingFloorBlockType;
 import wuest.utilities.Gui.WuestConfiguration.WallBlockType;
 
@@ -24,7 +25,10 @@ public class HouseConfiguration
 	public static String wallWoodTypeName = "Wall Wood Type";
 	public static String isCeilingFlatName = "Is Ceiling Flat";
 	public static String addMineShaftName = "Build Mineshaft";
-
+	public static String houseWidthName = "House Width";
+	public static String houseDepthName = "House Depth";
+	public static String houseFacingName = "House Facing";
+	
 	private static String addTorchesTag = "addTorches";
 	private static String addBedTag = "addBed";
 	private static String addCraftingTableTag = "addCraftingTable";
@@ -39,6 +43,9 @@ public class HouseConfiguration
 	private static String hitXTag = "hitX";
 	private static String hitYTag = "hitY";
 	private static String hitZTag = "hitZ";
+	private static String houseWidthTag = "houseWidth";
+	private static String houseDepthTag = "houseDepth";
+	private static String houseFacingTag = "houseFacing";
 
 	public boolean addTorches;
 	public boolean addBed;
@@ -54,6 +61,17 @@ public class HouseConfiguration
 	public int hitX;
 	public int hitY;
 	public int hitZ;
+	public EnumFacing houseFacing; 
+	
+	/**
+	 * When the house is facing north, this would be the east/west direction.
+	 */
+	public int houseWidth;
+	
+	/**
+	 * When the house if facing north, this would be the north/south direction.
+	 */
+	public int houseDepth;
 
 	public NBTTagCompound WriteToNBTTagCompound()
 	{
@@ -76,7 +94,10 @@ public class HouseConfiguration
 		tag.setInteger(HouseConfiguration.hitXTag, this.hitX);
 		tag.setInteger(HouseConfiguration.hitYTag, this.hitY);
 		tag.setInteger(HouseConfiguration.hitZTag, this.hitZ);
-
+		tag.setInteger(HouseConfiguration.houseDepthTag, this.houseDepth);
+		tag.setInteger(HouseConfiguration.houseWidthTag, this.houseWidth);
+		tag.setString(HouseConfiguration.houseFacingTag, this.houseFacing.getName());
+		
 		return tag;
 	}
 
@@ -171,6 +192,21 @@ public class HouseConfiguration
 			if (tag.hasKey(HouseConfiguration.hitZTag))
 			{
 				config.hitZ = tag.getInteger(HouseConfiguration.hitZTag);
+			}
+			
+			if (tag.hasKey(HouseConfiguration.houseDepthTag))
+			{
+				config.houseDepth = tag.getInteger(HouseConfiguration.houseDepthTag);
+			}
+			
+			if (tag.hasKey(HouseConfiguration.houseWidthTag))
+			{
+				config.houseWidth = tag.getInteger(HouseConfiguration.houseWidthTag);
+			}
+			
+			if (tag.hasKey(HouseConfiguration.houseFacingTag))
+			{
+				config.houseFacing = EnumFacing.byName(tag.getString(HouseConfiguration.houseFacingTag));
 			}
 		}
 

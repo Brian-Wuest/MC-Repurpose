@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -26,6 +27,9 @@ public class GuiHouseItem extends GuiScreen
 	protected GuiCheckBox btnAddMineShaft;
 	protected GuiCheckBox btnIsCeilingFlat;
 
+	protected GuiSlider btnHouseWidth;
+	protected GuiSlider btnHouseDepth;
+	
 	protected GuiTextSlider btnFloorBlock;
 	protected GuiTextSlider btnCeilingBlock;
 	protected GuiTextSlider btnWallWoodType;
@@ -33,6 +37,8 @@ public class GuiHouseItem extends GuiScreen
 	protected int hitPosX;
 	protected int hitPosY;
 	protected int hitPosZ;
+	
+	protected GuiButtonExt btnHouseFacing;
 
 	public GuiHouseItem(int x, int y, int z) 
 	{
@@ -71,6 +77,17 @@ public class GuiHouseItem extends GuiScreen
 
 		labely += 40;
 		this.drawString(this.mc.fontRendererObj, "Wall Wood Type", labelx, labely, color);
+		
+		// These labels are in the middle of the screen.
+		labelx = this.width / 2 - 60;
+		labely = 20;
+		this.drawString(this.mc.fontRendererObj, "House Orientation", labelx, labely, color);
+		
+		labely += 40;
+		this.drawString(this.mc.fontRendererObj, "House Depth", labelx, labely, color);
+		
+		labely += 40;
+		this.drawString(this.mc.fontRendererObj, "House Width", labelx, labely, color);
 	}
 
 	@Override
@@ -86,6 +103,24 @@ public class GuiHouseItem extends GuiScreen
 
 		this.btnAddTorches = new GuiCheckBox(1, x, y, HouseConfiguration.addTorchesName, true);
 		this.buttonList.add(this.btnAddTorches);
+		
+		// These buttons are in the middle of the screen.
+		x = this.width / 2 - 60;
+		y += 15;
+		this.btnHouseFacing = new GuiButtonExt(14, x, y, 120, 20, EnumFacing.NORTH.getName());
+		this.buttonList.add(this.btnHouseFacing);
+		
+		y+= 40;
+		this.btnHouseDepth = new GuiSlider(15, x, y, 120, 20, "", "", 8, 20, 8, false, true);
+		this.buttonList.add(this.btnHouseDepth);
+		
+		y+= 40;
+		this.btnHouseWidth = new GuiSlider(16, x, y, 120, 20, "", "", 8, 20, 8, false, true);
+		this.buttonList.add(this.btnHouseWidth);
+		
+		y = 20;
+		
+		x = 20;
 		y += 20;
 
 		this.btnAddBed = new GuiCheckBox(2, x, y, HouseConfiguration.addBedName, true);
@@ -139,6 +174,7 @@ public class GuiHouseItem extends GuiScreen
 		this.btnCancel = new GuiButtonExt(10, this.width - 140, 200, 120, 20, "Cancel");
 		this.buttonList.add(this.btnCancel);
 
+		
 	}
 
 	/**
@@ -168,11 +204,19 @@ public class GuiHouseItem extends GuiScreen
 			houseConfiguration.ceilingBlock = WuestConfiguration.CeilingFloorBlockType.ValueOf(this.btnCeilingBlock.getValueInt());
 			houseConfiguration.floorBlock = WuestConfiguration.CeilingFloorBlockType.ValueOf(this.btnFloorBlock.getValueInt());
 			houseConfiguration.wallWoodType = WuestConfiguration.WallBlockType.ValueOf(this.btnWallWoodType.getValueInt());
-
+			houseConfiguration.houseDepth = this.btnHouseDepth.getValueInt();
+			houseConfiguration.houseWidth = this.btnHouseWidth.getValueInt();
+			houseConfiguration.houseFacing = EnumFacing.byName(this.btnHouseFacing.displayString);
+			
 			WuestUtilities.network.sendToServer(new HouseTagMessage(houseConfiguration.WriteToNBTTagCompound()));
 
 			// Close this screen when this is done.
 			this.mc.displayGuiScreen(null);
+		}
+		else if (button == this.btnHouseFacing)
+		{
+			EnumFacing currentFacing = EnumFacing.byName(this.btnHouseFacing.displayString).rotateY();
+			this.btnHouseFacing.displayString = currentFacing.getName();
 		}
 	}
 
