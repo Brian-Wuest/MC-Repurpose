@@ -19,7 +19,7 @@ import wuest.utilities.WuestUtilities;
 
 /**
  * This class is used to handle client side only events.
- * @author Brian
+ * @author WuestMan
  *
  */
 public class ClientEventHandler extends Gui
