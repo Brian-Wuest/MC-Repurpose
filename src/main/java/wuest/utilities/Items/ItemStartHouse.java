@@ -125,18 +125,9 @@ public class ItemStartHouse extends Item
 						ItemStartHouse.PlaceMineShaft(world, startingPosition);
 					}
 
-					ItemStack houseStack = new ItemStack(ItemStartHouse.RegisteredItem);
-					ItemStack stackInSlot = player.inventory.getStackInSlot(player.inventory.getSlotFor(houseStack));
-					stackInSlot.stackSize = stackInSlot.stackSize - 1;
+					player.inventory.clearMatchingItems(ItemStartHouse.RegisteredItem, -1, 1, null);
 					
-					if (stackInSlot.stackSize <= 0)
-					{
-						player.inventory.deleteStack(stackInSlot);
-					}
-					else
-					{
-						player.inventory.setInventorySlotContents(player.inventory.getSlotFor(houseStack), stackInSlot);
-					}
+					player.inventoryContainer.detectAndSendChanges();
 				}
 			}
 

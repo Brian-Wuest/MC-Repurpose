@@ -116,18 +116,9 @@ public class WuestEventHandler
 					if (seed != null && p.inventory.hasItemStack(seed))
 					{
 						seed.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
-						ItemStack stackInSlot = p.inventory.getStackInSlot(p.inventory.getSlotFor(seed));
-						stackInSlot.stackSize = stackInSlot.stackSize - 1;
 						
-						if (stackInSlot.stackSize <= 0)
-						{
-							p.inventory.deleteStack(stackInSlot);
-						}
-						else
-						{
-							p.inventory.setInventorySlotContents(p.inventory.getSlotFor(seed), stackInSlot);
-						}
-
+						p.inventory.clearMatchingItems(seed.getItem(), -1, 1, null);
+						
 						p.inventoryContainer.detectAndSendChanges();
 					}
 				}
