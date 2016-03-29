@@ -184,7 +184,7 @@ public class WuestEventHandler
 		{
 			if (originalTag.hasKey("IsPlayerNew"))
 			{
-				NBTTagCompound newPlayerTag = event.getOriginal().getEntityData();
+				NBTTagCompound newPlayerTag = event.getEntityPlayer().getEntityData();
 				newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
 			}
 		}
