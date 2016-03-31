@@ -32,8 +32,8 @@ public class BuildingMethods
 	public static void ClearSpace(World world, BlockPos startingPosition, int width, int height, int depth) 
 	{
 		BlockPos northSide = startingPosition.north(depth).east(width);
-		int wallLength = depth * 2;
-		int clearedWidth = width * 2;
+		int wallLength = depth;
+		int clearedWidth = width;
 		northSide = northSide.east();
 		
 		for (int i = 0; i < clearedWidth; i++)
@@ -137,7 +137,7 @@ public class BuildingMethods
 
 	public static ArrayList<ItemStack> SetFloor(World world, BlockPos pos, Block block, int width, int depth, ArrayList<ItemStack> originalStack) 
 	{
-		pos = pos.north((int)Math.round(depth / 2)).east((int)Math.round(width / 2));
+		pos = pos.north((int)Math.floor(depth / 2)).east((int)Math.floor(width / 2));
 		pos = pos.east();
 		
 		for (int i = 0; i < width; i++)

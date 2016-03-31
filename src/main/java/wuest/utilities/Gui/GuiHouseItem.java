@@ -84,10 +84,10 @@ public class GuiHouseItem extends GuiScreen
 		this.drawString(this.mc.fontRendererObj, "House Orientation", labelx, labely, color);
 		
 		labely += 40;
-		this.drawString(this.mc.fontRendererObj, "House Depth", labelx, labely, color);
+		this.drawString(this.mc.fontRendererObj, "House Interior Depth", labelx, labely, color);
 		
 		labely += 40;
-		this.drawString(this.mc.fontRendererObj, "House Width", labelx, labely, color);
+		this.drawString(this.mc.fontRendererObj, "House Interior Width", labelx, labely, color);
 	}
 
 	@Override
@@ -111,11 +111,11 @@ public class GuiHouseItem extends GuiScreen
 		this.buttonList.add(this.btnHouseFacing);
 		
 		y+= 40;
-		this.btnHouseDepth = new GuiSlider(15, x, y, 120, 20, "", "", 8, 20, 8, false, true);
+		this.btnHouseDepth = new GuiSlider(15, x, y, 120, 20, "", "", 5, 16, 8, false, true);
 		this.buttonList.add(this.btnHouseDepth);
 		
 		y+= 40;
-		this.btnHouseWidth = new GuiSlider(16, x, y, 120, 20, "", "", 8, 20, 8, false, true);
+		this.btnHouseWidth = new GuiSlider(16, x, y, 120, 20, "", "", 5, 16, 8, false, true);
 		this.buttonList.add(this.btnHouseWidth);
 		
 		y = 20;

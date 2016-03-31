@@ -9,6 +9,7 @@ import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +37,11 @@ public class ItemStartHouse extends Item
 {
 	public static ItemStartHouse RegisteredItem;
 
+	protected static BlockPos NorthEastCorner;
+	protected static BlockPos SouthEastCorner;
+	protected static BlockPos SouthWestCorner;
+	protected static BlockPos NorthWestCorner;
+
 	private HouseConfiguration currentConfiguration = null;
 
 	public ItemStartHouse()
@@ -53,8 +59,7 @@ public class ItemStartHouse extends Item
 	{
 		ItemStartHouse.RegisteredItem = new ItemStartHouse();
 
-		GameRegistry.registerItem(ItemStartHouse.RegisteredItem,
-				"itemStartHouse");
+		GameRegistry.registerItem(ItemStartHouse.RegisteredItem, "itemStartHouse");
 		WuestUtilities.ModItems.add(ItemStartHouse.RegisteredItem);
 	}
 
@@ -62,18 +67,14 @@ public class ItemStartHouse extends Item
 	 * Does something when the item is right-clicked.
 	 */
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
-			BlockPos hitBlockPos, EnumFacing side, float hitX, float hitY,
-			float hitZ)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos hitBlockPos, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote)
 		{
 			if (side == EnumFacing.UP)
 			{
 				// Open the client side gui to determine the house options.
-				player.openGui(WuestUtilities.instance, GuiHouseItem.GUI_ID,
-						player.worldObj, hitBlockPos.getX(), hitBlockPos.getY(),
-						hitBlockPos.getZ());
+				player.openGui(WuestUtilities.instance, GuiHouseItem.GUI_ID, player.worldObj, hitBlockPos.getX(), hitBlockPos.getY(), hitBlockPos.getZ());
 				return true;
 			}
 		}
@@ -81,14 +82,12 @@ public class ItemStartHouse extends Item
 		return false;
 	}
 
-	public static void BuildHouse(EntityPlayer player, World world,
-			HouseConfiguration configuration)
+	public static void BuildHouse(EntityPlayer player, World world, HouseConfiguration configuration)
 	{
 		// This is always on the server.
 		if (configuration != null)
 		{
-			BlockPos hitBlockPos = new BlockPos(configuration.hitX,
-					configuration.hitY, configuration.hitZ);
+			BlockPos hitBlockPos = new BlockPos(configuration.hitX, configuration.hitY, configuration.hitZ);
 			BlockPos playerPosition = player.getPosition();
 
 			IBlockState hitBlockState = world.getBlockState(hitBlockPos);
@@ -102,40 +101,55 @@ public class ItemStartHouse extends Item
 					// We hit a block, let's start building!!!!!
 					BlockPos startingPosition = hitBlockPos.up();
 
+					// Get the new "North" facing. This is the orientation of
+					// the house and all building will be based on this.
+					EnumFacing northFace = EnumFacing.HORIZONTALS[EnumFacing.byName(configuration.houseFacingName).getHorizontalIndex()];
+
+					// Get the "South" facing of the house to make rotating
+					// easier.
+					EnumFacing southFace = northFace.getOpposite();
+
+					// Set the "North East" corner.
+					ItemStartHouse.NorthEastCorner = startingPosition.offset(northFace, (int) Math.floor(configuration.houseDepth / 2) + 1)
+							.offset(northFace.rotateY(), (int) Math.floor(configuration.houseWidth / 2) + 2);
+
+					// Set the "South East" corner.
+					ItemStartHouse.SouthEastCorner = startingPosition.offset(southFace, (int) Math.floor(configuration.houseDepth / 2) + 1)
+							.offset(northFace.rotateY(), (int) Math.floor(configuration.houseWidth / 2) + 2);
+
+					// Set the "South West" corner.
+					ItemStartHouse.SouthWestCorner = startingPosition.offset(southFace, (int) Math.floor(configuration.houseDepth / 2) + 1)
+							.offset(southFace.rotateY(), (int) Math.floor(configuration.houseWidth / 2) + 2);
+
+					// Set the "North West" corner.
+					ItemStartHouse.NorthWestCorner = startingPosition.offset(northFace, (int) Math.floor(configuration.houseDepth / 2) + 1)
+							.offset(southFace.rotateY(), (int) Math.floor(configuration.houseWidth / 2) + 2);
+
 					// Clear the space before the user is teleported. This
 					// is in-case they right-click on a space that is only 1
 					// block tall.
-					BuildingMethods.ClearSpace(world, startingPosition,
-							configuration.houseWidth + 2, 20,
-							configuration.houseDepth + 2);
+					BuildingMethods.ClearSpace(world, startingPosition, configuration.houseWidth + 5, 20, configuration.houseDepth + 5);
 
 					// Teleport the player to the middle of the house so
 					// they don't die while house is created.
-					player.setPositionAndUpdate(startingPosition.up(2).getX(),
-							startingPosition.up(2).getY(),
-							startingPosition.up(2).getZ());
+					player.setPositionAndUpdate(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
 
 					// Build the basic structure.
-					ItemStartHouse.BuildStructure(world, startingPosition,
-							configuration);
+					ItemStartHouse.BuildStructure(world, startingPosition, configuration);
 
 					// Build the interior.
-					ItemStartHouse.BuildInterior(world, startingPosition,
-							player, configuration);
+					ItemStartHouse.BuildInterior(world, startingPosition, player, configuration);
 
 					// Set up the exterior.
-					ItemStartHouse.BuildExterior(world, startingPosition,
-							player, configuration);
+					ItemStartHouse.BuildExterior(world, startingPosition, player, configuration);
 
-					if (configuration.addMineShaft
-							&& startingPosition.getY() > 15)
+					if (configuration.addMineShaft && startingPosition.getY() > 15)
 					{
 						// Set up the mineshaft.
 						ItemStartHouse.PlaceMineShaft(world, startingPosition);
 					}
 
-					player.inventory.consumeInventoryItem(
-							ItemStartHouse.RegisteredItem);
+					player.inventory.consumeInventoryItem(ItemStartHouse.RegisteredItem);
 				}
 			}
 
@@ -145,16 +159,11 @@ public class ItemStartHouse extends Item
 		}
 	}
 
-	private static void BuildStructure(World world, BlockPos startingPosition,
-			HouseConfiguration configuration)
+	private static void BuildStructure(World world, BlockPos startingPosition, HouseConfiguration configuration)
 	{
 		// Make sure that the area beneath the house is all there. Don't want
 		// the house to be hanging in the air.
-		int floorRadius = configuration.houseDepth > configuration.houseWidth
-				? configuration.houseDepth : configuration.houseWidth;
-		BuildingMethods.SetFloor(world, startingPosition, Blocks.dirt,
-				configuration.houseWidth, configuration.houseDepth,
-				new ArrayList<ItemStack>());
+		BuildingMethods.SetFloor(world, startingPosition, Blocks.dirt, configuration.houseWidth, configuration.houseDepth, new ArrayList<ItemStack>());
 
 		Block floor = null;
 
@@ -180,14 +189,10 @@ public class ItemStartHouse extends Item
 		}
 
 		// Create the floor.
-		BuildingMethods.SetFloor(world, startingPosition, floor,
-				configuration.houseWidth, configuration.houseDepth,
-				new ArrayList<ItemStack>());
+		BuildingMethods.SetFloor(world, startingPosition, floor, configuration.houseWidth, configuration.houseDepth, new ArrayList<ItemStack>());
 
 		// Create the walls.
-		ItemStartHouse.SetWalls(world, startingPosition,
-				((BlockPlanks) Blocks.planks).getStateFromMeta(
-						configuration.wallWoodType.getValue()));
+		ItemStartHouse.SetWalls(world, ((BlockPlanks) Blocks.planks).getStateFromMeta(configuration.wallWoodType.getValue()), configuration);
 
 		Block ceiling = null;
 		Block stairs = null;
@@ -217,23 +222,16 @@ public class ItemStartHouse extends Item
 		}
 
 		// Set the ceiling.
-		BuildingMethods.SetCeiling(world, startingPosition.up(4), ceiling,
-				configuration.houseWidth, configuration.houseDepth, stairs,
-				configuration);
+		BuildingMethods.SetCeiling(world, startingPosition.up(4), ceiling, configuration.houseWidth, configuration.houseDepth, stairs, configuration);
 	}
 
-	private static void BuildInterior(World world, BlockPos startingPosition,
-			EntityPlayer player, HouseConfiguration configuration)
+	private static void BuildInterior(World world, BlockPos startingPosition, EntityPlayer player, HouseConfiguration configuration)
 	{
 		// Keep the corner positions since they are important.
-		BlockPos northEastCornerPosition = startingPosition.north(4).east(4)
-				.up();
-		BlockPos southEastCornerPosition = startingPosition.south(4).east(4)
-				.up();
-		BlockPos northWestCornerPosition = startingPosition.north(4).west(4)
-				.up();
-		BlockPos southWestCornerPosition = startingPosition.south(4).west(4)
-				.up();
+		BlockPos northEastCornerPosition = ItemStartHouse.NorthEastCorner.up();
+		BlockPos southEastCornerPosition = ItemStartHouse.SouthEastCorner.up();
+		BlockPos northWestCornerPosition = ItemStartHouse.NorthWestCorner.up();
+		BlockPos southWestCornerPosition = ItemStartHouse.SouthWestCorner.up();
 
 		// Use a separate position for each item.
 		BlockPos itemPosition = northEastCornerPosition;
@@ -241,12 +239,11 @@ public class ItemStartHouse extends Item
 		if (configuration.addTorches)
 		{
 			// Set the torch locations so it's not dark in the house.
-			ItemStartHouse.PlaceInsideTorches(world, northEastCornerPosition);
+			ItemStartHouse.PlaceInsideTorches(world, configuration);
 		}
 
 		// Create an oak door in the north east corner
-		ItemStartHouse.DecorateDoor(world, northEastCornerPosition, player,
-				configuration);
+		ItemStartHouse.DecorateDoor(world, northEastCornerPosition, player, configuration);
 
 		if (configuration.addBed)
 		{
@@ -257,101 +254,140 @@ public class ItemStartHouse extends Item
 		if (configuration.addCraftingTable)
 		{
 			// Place a crafting table in the south west corner.
-			ItemStartHouse.PlaceAndFillCraftingMachines(player, world,
-					southWestCornerPosition);
+			ItemStartHouse.PlaceAndFillCraftingMachines(player, world, southWestCornerPosition);
 		}
 
 		if (configuration.addChest)
 		{
 			// Place a double chest in the south east corner.
-			ItemStartHouse.PlaceAndFillChest(player, world,
-					southEastCornerPosition, configuration);
+			ItemStartHouse.PlaceAndFillChest(player, world, southEastCornerPosition, configuration);
 		}
 	}
 
-	private static void BuildExterior(World world, BlockPos startingPosition,
-			EntityPlayer player, HouseConfiguration configuration)
+	private static void BuildExterior(World world, BlockPos startingPosition, EntityPlayer player, HouseConfiguration configuration)
 	{
 		// Keep the corner positions since they are important.
 		// These positions are level with 1 block above the floor.
-		BlockPos northEastCornerPosition = startingPosition.north(4).east(4)
-				.up();
-		BlockPos southEastCornerPosition = startingPosition.south(4).east(4)
-				.up();
-		BlockPos northWestCornerPosition = startingPosition.north(4).west(4)
-				.up();
-		BlockPos southWestCornerPosition = startingPosition.south(4).west(4)
-				.up();
+		BlockPos northEastCornerPosition = ItemStartHouse.NorthEastCorner.up();
+		BlockPos southEastCornerPosition = ItemStartHouse.SouthEastCorner.up();
+		BlockPos northWestCornerPosition = ItemStartHouse.NorthWestCorner.up();
+		BlockPos southWestCornerPosition = ItemStartHouse.SouthWestCorner.up();
 
 		if (configuration.addTorches)
 		{
-			ItemStartHouse.PlaceOutsideTorches(world, northEastCornerPosition,
-					configuration);
+			ItemStartHouse.PlaceOutsideTorches(world, northEastCornerPosition, configuration);
 		}
 
 		if (configuration.addFarm)
 		{
-			ItemStartHouse.PlaceSmallFarm(world,
-					northEastCornerPosition.down());
+			ItemStartHouse.PlaceSmallFarm(world, northEastCornerPosition.down());
 		}
 	}
 
-	private static void SetWalls(World world, BlockPos pos, IBlockState block)
+	private static void SetWalls(World world, IBlockState block, HouseConfiguration configuration)
 	{
-		BlockPos initialPos = pos;
-
 		// Get the north east corner.
-		pos = initialPos.north(4).east(4);
+		BlockPos pos = ItemStartHouse.NorthEastCorner;
+		EnumFacing facing = EnumFacing.HORIZONTALS[EnumFacing.byName(configuration.houseFacingName).getHorizontalIndex()];
+
+		facing = facing.rotateY();
 
 		// East Wall.
-		BuildingMethods.CreateWall(world, 4, 8, EnumFacing.SOUTH, pos, block);
+		BuildingMethods.CreateWall(world, 4, configuration.houseDepth + 2, facing, pos, block);
+
+		facing = facing.rotateY();
 
 		// South Wall.
-		pos = initialPos.south(4).east(4);
-		BuildingMethods.CreateWall(world, 4, 8, EnumFacing.WEST, pos, block);
+		pos = ItemStartHouse.SouthEastCorner;
+		BuildingMethods.CreateWall(world, 4, configuration.houseWidth + 2, facing, pos, block);
+
+		facing = facing.rotateY();
 
 		// West Wall.
-		pos = initialPos.south(4).west(4);
-		BuildingMethods.CreateWall(world, 4, 8, EnumFacing.NORTH, pos, block);
+		pos = ItemStartHouse.SouthWestCorner;
+		BuildingMethods.CreateWall(world, 4, configuration.houseDepth + 2, facing, pos, block);
+
+		facing = facing.rotateY();
 
 		// North Wall.
-		pos = initialPos.north(4).west(4);
-		BuildingMethods.CreateWall(world, 4, 8, EnumFacing.EAST, pos, block);
+		pos = ItemStartHouse.NorthWestCorner;
+		BuildingMethods.CreateWall(world, 4, configuration.houseWidth + 2, facing, pos, block);
 	}
 
-	private static void PlaceInsideTorches(World world, BlockPos cornerPosition)
+	private static void PlaceInsideTorches(World world, HouseConfiguration configuration)
 	{
 		// Use a separate position for each item.
-		BlockPos itemPosition = cornerPosition;
-
+		BlockPos itemPosition = ItemStartHouse.NorthEastCorner;
+		int torchWidthOffset = configuration.houseWidth < 7 ? 2 : 4;
+		int torchDepthOffset = configuration.houseDepth < 7 ? 2 : 4;
+		
+		EnumFacing facing = EnumFacing.HORIZONTALS[EnumFacing.byName(configuration.houseFacingName).getHorizontalIndex()];
+		
 		/*
 		 * Torch Facings 1 = East 2 = West 3 = South 4 = North 5 = Up
 		 */
-		// East wall torch.
-		itemPosition = itemPosition.south(4).west().up(1);
-		IBlockState blockState = Blocks.torch.getStateFromMeta(2);
-		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
-
+		
 		// North Wall torch.
-		itemPosition = cornerPosition.west(4).south().up(1);
-		blockState = Blocks.torch.getStateFromMeta(3);
+		itemPosition = ItemStartHouse.NorthEastCorner.offset(facing.rotateYCCW(), torchWidthOffset).offset(facing.getOpposite()).up();
+		IBlockState blockState = Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, facing.getOpposite());
+		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+		
+		int blocksMoved = torchWidthOffset;
+		
+		while (blocksMoved < configuration.houseWidth)
+		{
+			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchWidthOffset);
+			BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+			blocksMoved += torchWidthOffset;
+		}
+		
+		// East wall torch.
+		itemPosition = ItemStartHouse.NorthEastCorner.offset(facing.rotateY(), torchDepthOffset).offset(facing.rotateY().getOpposite()).up();
+		blockState = Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, facing.rotateYCCW());
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
+		blocksMoved = torchDepthOffset;
+		
+		while (blocksMoved < configuration.houseDepth)
+		{
+			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchDepthOffset);
+			BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+			blocksMoved += torchDepthOffset;
+		}
+		
 		// West wall torch.
-		itemPosition = cornerPosition.west(7).south(4).up(1);
-		blockState = Blocks.torch.getStateFromMeta(1);
+		itemPosition = ItemStartHouse.NorthWestCorner.offset(facing.getOpposite(), torchDepthOffset).up();
+		blockState = Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, facing.rotateY());
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
+		blocksMoved = torchDepthOffset;
+		
+		while (blocksMoved < configuration.houseDepth)
+		{
+			itemPosition = itemPosition.offset(facing.getOpposite(), torchDepthOffset);
+			BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+			blocksMoved += torchDepthOffset;
+		}
+		
 		// South wall torch.
-		itemPosition = cornerPosition.south(7).west(4).up(1);
-		blockState = Blocks.torch.getStateFromMeta(4);
+		itemPosition = ItemStartHouse.SouthEastCorner.offset(facing.rotateYCCW(), torchWidthOffset).up();
+		blockState = Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, facing);
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+		
+		blocksMoved = torchDepthOffset;
+		
+		while (blocksMoved < configuration.houseWidth)
+		{
+			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchDepthOffset);
+			BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+			blocksMoved += torchDepthOffset;
+		}
 	}
 
-	private static void DecorateDoor(World world, BlockPos cornerPosition,
-			EntityPlayer player, HouseConfiguration configuration)
+	private static void DecorateDoor(World world, BlockPos cornerPosition, EntityPlayer player, HouseConfiguration configuration)
 	{
-		BlockPos itemPosition = cornerPosition.west();
+		EnumFacing facing = EnumFacing.HORIZONTALS[EnumFacing.byName(configuration.houseFacingName).getHorizontalIndex()];
+		BlockPos itemPosition = cornerPosition.offset(facing.rotateYCCW());
 
 		world.setBlockToAir(itemPosition.up());
 
@@ -403,34 +439,52 @@ public class ItemStartHouse extends Item
 			}
 		}
 
-		ItemDoor.placeDoor(world, itemPosition, EnumFacing.NORTH, door);
+		ItemDoor.placeDoor(world, itemPosition, facing, door);
 
 		// Put a glass pane above the door.
-		BuildingMethods.ReplaceBlock(world, itemPosition.up(2),
-				Blocks.glass_pane);
+		BuildingMethods.ReplaceBlock(world, itemPosition.up(2), Blocks.glass_pane);
 
 		// Create a pressure plate for the door, no need to re-set the item
 		// position here since it needs to be in relation to the door.
 		itemPosition = itemPosition.south();
-		BuildingMethods.ReplaceBlock(world, itemPosition,
-				Blocks.wooden_pressure_plate);
+		BuildingMethods.ReplaceBlock(world, itemPosition, Blocks.wooden_pressure_plate);
 
 		// Place a stairs.
-		itemPosition = itemPosition.north(2).down();
-		BuildingMethods.ReplaceBlock(world, itemPosition,
-				stairs.getBlockState().getBaseState()
-						.withProperty(BlockStairs.FACING, EnumFacing.SOUTH)
-						.withProperty(BlockStairs.HALF,
-								BlockStairs.EnumHalf.BOTTOM)
-				.withProperty(BlockStairs.SHAPE,
-						BlockStairs.EnumShape.STRAIGHT));
+		itemPosition = itemPosition.offset(facing, 2).down();
+		BuildingMethods.ReplaceBlock(world, itemPosition, stairs.getBlockState().getBaseState().withProperty(BlockStairs.FACING, facing.getOpposite())
+				.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT));
 
 		// Place a sign.
-		itemPosition = itemPosition.west();
+		itemPosition = itemPosition.offset(facing.rotateYCCW());
 		BlockSign sign = (BlockSign) Blocks.standing_sign;
-
-		BuildingMethods.ReplaceBlock(world, itemPosition,
-				sign.getStateFromMeta(8));
+		int signMeta = 8;
+		
+		switch (facing)
+		{
+			case EAST:
+			{
+				signMeta = 12;
+				break;
+			}
+			
+			case SOUTH:
+			{
+				signMeta = 0;
+				break;
+			}
+			
+			case WEST:
+			{
+				signMeta = 4;
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+		
+		BuildingMethods.ReplaceBlock(world, itemPosition, sign.getStateFromMeta(signMeta));
 
 		TileEntity tileEntity = world.getTileEntity(itemPosition);
 
@@ -441,13 +495,11 @@ public class ItemStartHouse extends Item
 
 			if (player.getDisplayNameString().length() >= 15)
 			{
-				signTile.signText[1] = new ChatComponentText(
-						player.getDisplayNameString());
+				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString());
 			}
 			else
 			{
-				signTile.signText[1] = new ChatComponentText(
-						player.getDisplayNameString() + "'s");
+				signTile.signText[1] = new ChatComponentText(player.getDisplayNameString() + "'s");
 			}
 
 			signTile.signText[2] = new ChatComponentText("house!");
@@ -458,22 +510,18 @@ public class ItemStartHouse extends Item
 	{
 		BlockPos itemPosition = cornerPosition.east(1).south(2);
 
-		IBlockState bedFootState = Blocks.bed.getDefaultState()
-				.withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false))
-				.withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
-				.withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+		IBlockState bedFootState = Blocks.bed.getDefaultState().withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false))
+				.withProperty(BlockDirectional.FACING, EnumFacing.NORTH).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
 
 		if (world.setBlockState(itemPosition, bedFootState, 3))
 		{
-			IBlockState bedHeadState = bedFootState.withProperty(BlockBed.PART,
-					BlockBed.EnumPartType.HEAD);
+			IBlockState bedHeadState = bedFootState.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
 			world.setBlockState(itemPosition.north(), bedHeadState, 3);
 		}
 
 	}
 
-	private static void PlaceAndFillChest(EntityPlayer player, World world,
-			BlockPos cornerPosition, HouseConfiguration configuration)
+	private static void PlaceAndFillChest(EntityPlayer player, World world, BlockPos cornerPosition, HouseConfiguration configuration)
 	{
 		// Create a double wide chest.
 		BlockPos itemPosition = cornerPosition.north().west();
@@ -496,14 +544,12 @@ public class ItemStartHouse extends Item
 				// Add the tools.
 				if (WuestUtilities.proxy.proxyConfiguration.addAxe)
 				{
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.stone_axe));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.stone_axe));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addHoe)
 				{
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.stone_hoe));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.stone_hoe));
 
 					// Trigger the "Time to Farm!" achievement.
 					player.triggerAchievement(AchievementList.buildHoe);
@@ -513,12 +559,10 @@ public class ItemStartHouse extends Item
 				{
 					// Trigger the "Time to Mine" achievement and the better
 					// pick axe achievement.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.stone_pickaxe));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.stone_pickaxe));
 
 					player.triggerAchievement(AchievementList.buildPickaxe);
-					player.triggerAchievement(
-							AchievementList.buildBetterPickaxe);
+					player.triggerAchievement(AchievementList.buildBetterPickaxe);
 
 					if (configuration.addCraftingTable)
 					{
@@ -530,14 +574,12 @@ public class ItemStartHouse extends Item
 
 				if (WuestUtilities.proxy.proxyConfiguration.addShovel)
 				{
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.stone_shovel));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.stone_shovel));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addSword)
 				{
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.stone_sword));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.stone_sword));
 
 					// Trigger the "Time to Strike" achievement.
 					player.triggerAchievement(AchievementList.buildSword);
@@ -546,102 +588,79 @@ public class ItemStartHouse extends Item
 				if (WuestUtilities.proxy.proxyConfiguration.addArmor)
 				{
 					// Add the armor.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.leather_boots));
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.leather_chestplate));
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.leather_helmet));
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.leather_leggings));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.leather_boots));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.leather_chestplate));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.leather_helmet));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.leather_leggings));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addFood)
 				{
 					// Add some bread.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.bread, 20));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.bread, 20));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addCrops)
 				{
 					// Add potatoes.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.potato, 3));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.potato, 3));
 
 					// Add carrots.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.carrot, 3));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.carrot, 3));
 
 					// Add seeds.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Items.wheat_seeds, 3));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Items.wheat_seeds, 3));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addCobble)
 				{
 					// Add Cobblestone.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(
-									Item.getItemFromBlock(Blocks.cobblestone),
-									64));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.cobblestone), 64));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addDirt)
 				{
 					// Add Dirt.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Item.getItemFromBlock(Blocks.dirt),
-									64));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.dirt), 64));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addSaplings)
 				{
 					// Add oak saplings.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Item.getItemFromBlock(Blocks.sapling),
-									3));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.sapling), 3));
 				}
 
 				if (WuestUtilities.proxy.proxyConfiguration.addTorches)
 				{
 					// Add a set of 20 torches.
-					chestTile.setInventorySlotContents(itemSlot++,
-							new ItemStack(Item.getItemFromBlock(Blocks.torch),
-									20));
+					chestTile.setInventorySlotContents(itemSlot++, new ItemStack(Item.getItemFromBlock(Blocks.torch), 20));
 				}
 			}
 		}
 	}
 
-	private static void PlaceAndFillCraftingMachines(EntityPlayer player,
-			World world, BlockPos cornerPosition)
+	private static void PlaceAndFillCraftingMachines(EntityPlayer player, World world, BlockPos cornerPosition)
 	{
 		BlockPos itemPosition = cornerPosition.east().north();
-		BuildingMethods.ReplaceBlock(world, itemPosition,
-				Blocks.crafting_table);
+		BuildingMethods.ReplaceBlock(world, itemPosition, Blocks.crafting_table);
 
 		// Trigger the workbench achievement.
 		player.triggerAchievement(AchievementList.buildWorkBench);
 
 		// Place a furnace next to the crafting table and fill it with 20 coal.
 		itemPosition = itemPosition.east();
-		BuildingMethods.ReplaceBlock(world, itemPosition,
-				Blocks.furnace.getDefaultState()
-						.withProperty(BlockFurnace.FACING, EnumFacing.NORTH));
+		BuildingMethods.ReplaceBlock(world, itemPosition, Blocks.furnace.getDefaultState().withProperty(BlockFurnace.FACING, EnumFacing.NORTH));
 
 		TileEntity tileEntity = world.getTileEntity(itemPosition);
 
 		if (tileEntity instanceof TileEntityFurnace)
 		{
 			TileEntityFurnace furnaceTile = (TileEntityFurnace) tileEntity;
-			furnaceTile.setInventorySlotContents(1,
-					new ItemStack(Items.coal, 20));
+			furnaceTile.setInventorySlotContents(1, new ItemStack(Items.coal, 20));
 		}
 	}
 
-	private static void PlaceOutsideTorches(World world,
-			BlockPos cornerPosition, HouseConfiguration configuration)
+	private static void PlaceOutsideTorches(World world, BlockPos cornerPosition, HouseConfiguration configuration)
 	{
 		cornerPosition = cornerPosition.north();
 		BlockPos itemPosition = cornerPosition;
@@ -776,12 +795,10 @@ public class ItemStartHouse extends Item
 		BuildingMethods.ReplaceBlock(world, farmStart.up(), Blocks.glass);
 		BuildingMethods.ReplaceBlock(world, farmStart.up(2), Blocks.torch);
 		BuildingMethods.ReplaceBlock(world, farmStart.north(), Blocks.farmland);
-		BuildingMethods.ReplaceBlock(world, farmStart.north().west(),
-				Blocks.farmland);
+		BuildingMethods.ReplaceBlock(world, farmStart.north().west(), Blocks.farmland);
 		BuildingMethods.ReplaceBlock(world, farmStart.west(), Blocks.farmland);
 		BuildingMethods.ReplaceBlock(world, farmStart.south(), Blocks.farmland);
-		BuildingMethods.ReplaceBlock(world, farmStart.south().west(),
-				Blocks.farmland);
+		BuildingMethods.ReplaceBlock(world, farmStart.south().west(), Blocks.farmland);
 
 		farmStart = farmStart.east();
 
@@ -799,12 +816,10 @@ public class ItemStartHouse extends Item
 		BuildingMethods.ReplaceBlock(world, farmStart.up(), Blocks.glass);
 		BuildingMethods.ReplaceBlock(world, farmStart.up(2), Blocks.torch);
 		BuildingMethods.ReplaceBlock(world, farmStart.north(), Blocks.farmland);
-		BuildingMethods.ReplaceBlock(world, farmStart.north().east(),
-				Blocks.farmland);
+		BuildingMethods.ReplaceBlock(world, farmStart.north().east(), Blocks.farmland);
 		BuildingMethods.ReplaceBlock(world, farmStart.east(), Blocks.farmland);
 		BuildingMethods.ReplaceBlock(world, farmStart.south(), Blocks.farmland);
-		BuildingMethods.ReplaceBlock(world, farmStart.south().east(),
-				Blocks.farmland);
+		BuildingMethods.ReplaceBlock(world, farmStart.south().east(), Blocks.farmland);
 	}
 
 	private static void PlaceMineShaft(World world, BlockPos pos)
@@ -825,8 +840,7 @@ public class ItemStartHouse extends Item
 
 		// The entire ladder has been created. Create a platform at this level
 		// and place a chest next to the ladder.
-		tempStacks = BuildingMethods.SetFloor(world, pos, Blocks.stone, 3, 3,
-				tempStacks);
+		tempStacks = BuildingMethods.SetFloor(world, pos, Blocks.stone, 3, 3, tempStacks);
 
 		// Now that the floor has been set, go up 1 block to star creating the
 		// walls.
@@ -837,28 +851,20 @@ public class ItemStartHouse extends Item
 		// Make a wall of air then a wall of stone.
 
 		// South wall.
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3,
-				EnumFacing.EAST, pos.south(2).west(), Blocks.air));
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3,
-				EnumFacing.EAST, pos.south(3).west(), Blocks.stone));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3, EnumFacing.EAST, pos.south(2).west(), Blocks.air));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3, EnumFacing.EAST, pos.south(3).west(), Blocks.stone));
 
 		// East wall.
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4,
-				EnumFacing.NORTH, pos.south(2).east(), Blocks.air));
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4,
-				EnumFacing.NORTH, pos.south(2).east(2), Blocks.stone));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4, EnumFacing.NORTH, pos.south(2).east(), Blocks.air));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4, EnumFacing.NORTH, pos.south(2).east(2), Blocks.stone));
 
 		// North wall.
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3,
-				EnumFacing.WEST, pos.north().east(), Blocks.air));
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3,
-				EnumFacing.WEST, pos.north(2).east(), Blocks.stone));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3, EnumFacing.WEST, pos.north().east(), Blocks.air));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 3, EnumFacing.WEST, pos.north(2).east(), Blocks.stone));
 
 		// West wall.
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4,
-				EnumFacing.SOUTH, pos.north().west(), Blocks.air));
-		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4,
-				EnumFacing.SOUTH, pos.north(1).west(2), Blocks.stone));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4, EnumFacing.SOUTH, pos.north().west(), Blocks.air));
+		tempStacks.addAll(BuildingMethods.CreateWall(world, 3, 4, EnumFacing.SOUTH, pos.north(1).west(2), Blocks.stone));
 
 		// Consolidate the stacks.
 		for (ItemStack tempStack : tempStacks)
@@ -908,8 +914,7 @@ public class ItemStartHouse extends Item
 		}
 	}
 
-	private static ArrayList<ItemStack> CreateLadderShaft(World world,
-			BlockPos pos, ArrayList<ItemStack> originalStacks)
+	private static ArrayList<ItemStack> CreateLadderShaft(World world, BlockPos pos, ArrayList<ItemStack> originalStacks)
 	{
 		int torchCounter = 0;
 
@@ -951,8 +956,7 @@ public class ItemStartHouse extends Item
 				// Every 6 blocks, place a torch on the west wall.
 				// If we are close to the bottom, don't place a torch. Do the
 				// normal processing.
-				if (facing == EnumFacing.WEST && torchCounter == 6
-						&& pos.getY() > 14)
+				if (facing == EnumFacing.WEST && torchCounter == 6 && pos.getY() > 14)
 				{
 					// First make sure the block behind this block is stone,
 					// then place the torch.
@@ -964,12 +968,9 @@ public class ItemStartHouse extends Item
 					{
 						// This is not a solid block. Get the drops then replace
 						// it with stone.
-						BuildingMethods.ConsolidateDrops(surroundingBlock,
-								world, tempPos, surroundingState,
-								originalStacks);
+						BuildingMethods.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
 
-						BuildingMethods.ReplaceBlock(world, tempPos,
-								Blocks.stone);
+						BuildingMethods.ReplaceBlock(world, tempPos, Blocks.stone);
 					}
 
 					IBlockState torchState = Blocks.torch.getStateFromMeta(5);
@@ -987,19 +988,15 @@ public class ItemStartHouse extends Item
 					{
 						// This is not a solid block. Get the drops then replace
 						// it with stone.
-						BuildingMethods.ConsolidateDrops(surroundingBlock,
-								world, tempPos, surroundingState,
-								originalStacks);
+						BuildingMethods.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
 
-						BuildingMethods.ReplaceBlock(world, tempPos,
-								Blocks.stone);
+						BuildingMethods.ReplaceBlock(world, tempPos, Blocks.stone);
 					}
 				}
 			}
 
 			// Get the block drops then replace it with a ladder.
-			BuildingMethods.ConsolidateDrops(block, world, pos, state,
-					originalStacks);
+			BuildingMethods.ConsolidateDrops(block, world, pos, state, originalStacks);
 
 			// Don't place a ladder at this location since it will be destroyed.
 			if (pos.getY() != 9)
