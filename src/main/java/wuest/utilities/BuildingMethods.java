@@ -166,13 +166,13 @@ public class BuildingMethods
 		}
 
 		// Get to the north east corner.
-		pos = pos.north(4).east(4);
+		pos = pos.offset(houseFacing, (int)Math.floor(configuration.houseDepth)).offset(houseFacing.rotateY(), (int)Math.floor(configuration.houseWidth));
 
 		// Get the stairs state without the facing since it will change.
 		IBlockState stateWithoutFacing = stairs.getBlockState().getBaseState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM)
 				.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT);
 
-		int wallLength = 7;
+		int wallLength = configuration.houseWidth + 2;
 
 		while (wallLength > 0)
 		{
@@ -215,7 +215,7 @@ public class BuildingMethods
 				}
 			}
 
-			pos = pos.west().south().up();
+			pos = pos.offset(houseFacing.rotateYCCW()).offset(houseFacing.getOpposite()).up();
 			wallLength = wallLength - 2;
 		}
 
