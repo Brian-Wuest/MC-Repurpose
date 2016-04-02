@@ -111,11 +111,11 @@ public class GuiHouseItem extends GuiScreen
 		this.buttonList.add(this.btnHouseFacing);
 		
 		y+= 40;
-		this.btnHouseDepth = new GuiSlider(15, x, y, 120, 20, "", "", 5, 16, 8, false, true);
+		this.btnHouseDepth = new GuiSlider(15, x, y, 120, 20, "", "", 5, 16, 9, false, true);
 		this.buttonList.add(this.btnHouseDepth);
 		
 		y+= 40;
-		this.btnHouseWidth = new GuiSlider(16, x, y, 120, 20, "", "", 5, 16, 8, false, true);
+		this.btnHouseWidth = new GuiSlider(16, x, y, 120, 20, "", "", 5, 16, 9, false, true);
 		this.buttonList.add(this.btnHouseWidth);
 		
 		y = 20;

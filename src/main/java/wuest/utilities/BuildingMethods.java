@@ -34,18 +34,17 @@ public class BuildingMethods
 	 *            includes starting position).
 	 * @param depth - The radius z-axis of how deep to clear. (North/South)
 	 */
-	public static void ClearSpace(World world, BlockPos startingPosition, int width, int height, int depth)
+	public static void ClearSpace(World world, BlockPos startingPosition, int width, int height, int depth, EnumFacing houseFacing)
 	{
-		BlockPos northSide = startingPosition.north(depth).east(width);
-		int wallLength = depth;
-		int clearedWidth = width;
-		northSide = northSide.east();
+		BlockPos northSide = startingPosition.offset(houseFacing, 5).offset(houseFacing.rotateY(), 5);
+		int clearedWidth = width + 12;
+		int wallLength = depth + 12;
 
 		for (int i = 0; i < clearedWidth; i++)
 		{
-			northSide = northSide.west();
-
-			BuildingMethods.CreateWall(world, height, wallLength, EnumFacing.SOUTH, northSide, Blocks.air);
+			BuildingMethods.CreateWall(world, height, wallLength, houseFacing.getOpposite(), northSide, Blocks.air);
+			
+			northSide = northSide.offset(houseFacing.rotateYCCW());
 		}
 	}
 
@@ -142,15 +141,13 @@ public class BuildingMethods
 		return itemsDropped;
 	}
 
-	public static ArrayList<ItemStack> SetFloor(World world, BlockPos pos, Block block, int width, int depth, ArrayList<ItemStack> originalStack)
+	public static ArrayList<ItemStack> SetFloor(World world, BlockPos pos, Block block, int width, int depth, ArrayList<ItemStack> originalStack, EnumFacing facing)
 	{
-		pos = pos.north((int) Math.floor(depth / 2)).east((int) Math.floor(width / 2));
-
-		for (int i = 0; i <= width; i++)
+		for (int i = 0; i < width; i++)
 		{
-			originalStack.addAll(BuildingMethods.CreateWall(world, 1, depth, EnumFacing.SOUTH, pos, block));
+			originalStack.addAll(BuildingMethods.CreateWall(world, 1, depth, facing, pos, block));
 
-			pos = pos.west();
+			pos = pos.offset(facing.rotateY());
 		}
 
 		return originalStack;
@@ -161,47 +158,44 @@ public class BuildingMethods
 		// If the ceiling is flat, call SetFloor since it's laid out the same.
 		if (configuration.isCeilingFlat)
 		{
-			BuildingMethods.SetFloor(world, pos, block, width, depth, new ArrayList<ItemStack>());
+			BuildingMethods.SetFloor(world, pos, block, width, depth, new ArrayList<ItemStack>(), houseFacing.getOpposite());
 			return;
 		}
-
-		// Get to the north east corner.
-		pos = pos.offset(houseFacing, (int)Math.floor(configuration.houseDepth)).offset(houseFacing.rotateY(), (int)Math.floor(configuration.houseWidth));
 
 		// Get the stairs state without the facing since it will change.
 		IBlockState stateWithoutFacing = stairs.getBlockState().getBaseState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM)
 				.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.STRAIGHT);
 
-		int wallLength = configuration.houseWidth + 2;
+		int wallLength = configuration.houseWidth;
 
 		while (wallLength > 0)
 		{
 			for (int j = 0; j < 4; j++)
 			{
 				// I is the wall side starting on the east side.
-				EnumFacing facing = EnumFacing.WEST;
-				EnumFacing flowDirection = EnumFacing.SOUTH;
+				EnumFacing facing = houseFacing.rotateYCCW();
+				EnumFacing flowDirection = houseFacing.getOpposite();
 
 				switch (j)
 				{
 					case 1:
 					{
-						facing = EnumFacing.NORTH;
-						flowDirection = EnumFacing.WEST;
+						facing = houseFacing;
+						flowDirection = houseFacing.rotateYCCW();
 						break;
 					}
 
 					case 2:
 					{
-						facing = EnumFacing.EAST;
-						flowDirection = EnumFacing.NORTH;
+						facing = houseFacing.rotateY();
+						flowDirection = houseFacing;
 						break;
 					}
 
 					case 3:
 					{
-						facing = EnumFacing.SOUTH;
-						flowDirection = EnumFacing.EAST;
+						facing = houseFacing.getOpposite();
+						flowDirection = houseFacing.rotateY();
 						break;
 					}
 				}
@@ -220,6 +214,14 @@ public class BuildingMethods
 		}
 
 		BuildingMethods.ReplaceBlock(world, pos, block);
+		
+		if (world.isAirBlock(pos.down().offset(houseFacing.rotateYCCW())))
+		{
+			// There are blank blocks around this one, fill them in.
+			BuildingMethods.ReplaceBlock(world, pos.offset(houseFacing.rotateYCCW()), block);
+			BuildingMethods.ReplaceBlock(world, pos.offset(houseFacing.getOpposite()), block);
+			BuildingMethods.ReplaceBlock(world, pos.offset(houseFacing.rotateYCCW()).offset(houseFacing.getOpposite()), block);
+		}
 
 		IBlockState blockState = Blocks.torch.getStateFromMeta(5);
 		BuildingMethods.ReplaceBlock(world, pos.up(), blockState);
