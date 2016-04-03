@@ -49,55 +49,7 @@ public class ClientEventHandler extends Gui
 			return;
 		}
 		
-		if (WuestUtilities.proxy.proxyConfiguration.enablePotionEffectOverlay)
-		{
-			this.ShowPotionEffects();
-		}
-		
 		this.ShowPlayerBed(event);
-	}
-
-	private void ShowPotionEffects()
-	{
-		Minecraft mc = Minecraft.getMinecraft();
-
-		// Starting position for the buff bar - 2 pixels from the top left corner.
-		int xPos = 2;
-		int yPos = 2;
-		Collection<PotionEffect> collection = mc.thePlayer.getActivePotionEffects();
-		int potionCount = 0;
-		
-		for (PotionEffect potionEffect : collection) 
-		{
-			xPos += BUFF_ICON_SPACING;
-			Potion potion = potionEffect.getPotion();
-
-			if (potion.hasStatusIcon())
-			{
-				int iconIndex = potion.getStatusIconIndex();
-
-				mc.renderEngine.bindTexture(new ResourceLocation("minecraft", "textures/gui/container/inventory.png"));
-
-				this.drawTexturedModalRect(
-						xPos, yPos, 
-						BUFF_ICON_BASE_U_OFFSET + iconIndex % BUFF_ICONS_OFFSET * BUFF_ICON_SIZE, BUFF_ICON_BASE_V_OFFSET + iconIndex / BUFF_ICONS_OFFSET * BUFF_ICON_SIZE,
-						BUFF_ICON_SIZE, 
-						BUFF_ICON_SIZE);
-
-				// Draw the effect duration.
-				this.drawString(mc.fontRendererObj, potion.getPotionDurationString(potionEffect, 1), xPos, yPos + 20, Color.WHITE.getRGB());
-				
-				if (potionCount > 3)
-				{
-					// Make a new row for these potions.
-					yPos = yPos + 30;
-					xPos = 2;
-					potionCount = 0;
-				}
-				
-				potionCount++;
-			}       
-		}
 	}
 	
 	private void ShowPlayerBed(RenderGameOverlayEvent event)

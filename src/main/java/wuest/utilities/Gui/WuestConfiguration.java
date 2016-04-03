@@ -50,8 +50,6 @@ public class WuestConfiguration
 	private static String addCobbleName = "Add Cobblestone";
 	private static String addSaplingsName = "Add Saplings";
 	private static String addChestTorchesName = "Add Torches";
-	
-	private static String enablePotionEffectName = "Enable Potion Effect Overlay";
 
 	// Configuration Options.
 	public boolean addHouseItem;
@@ -68,9 +66,6 @@ public class WuestConfiguration
 	public boolean addRedstoneClockRecipe;
 	public boolean addBedCompassRecipe;
 	public boolean addSwiftBladeRecipe;
-	
-	// Gui options
-	public boolean enablePotionEffectOverlay;
 
 	// Chest content options.
 	public boolean addSword;
@@ -145,9 +140,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addTorches = config.getBoolean(WuestConfiguration.addTorchesName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of torches are added the the chest when the house is created.");
 
 		// GUI Options
-		config.setCategoryComment(WuestConfiguration.GuiOptions, "This category is to configure the various GUI options for this mod.");
-		
-		WuestUtilities.proxy.proxyConfiguration.enablePotionEffectOverlay = config.getBoolean(WuestConfiguration.enablePotionEffectName, WuestConfiguration.GuiOptions, true, "Determines if a GUI overlay is created showing the currently active potion effects.");
+		//config.setCategoryComment(WuestConfiguration.GuiOptions, "This category is to configure the various GUI options for this mod.");
 		
 		if (config.hasChanged()) 
 		{
