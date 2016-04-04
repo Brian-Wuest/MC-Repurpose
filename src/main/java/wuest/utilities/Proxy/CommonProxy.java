@@ -1,7 +1,12 @@
 package wuest.utilities.Proxy;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentLootBonus;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -15,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.GeneralRecipes;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Blocks.RedstoneClock;
+import wuest.utilities.Enchantment.EnchantmentLooting;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.GuiRedstoneClock;
@@ -55,6 +61,7 @@ public class CommonProxy implements IGuiHandler
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
 		ItemSwiftBlade.RegisterItem();
+		EnchantmentLooting.RegisterEnchantment();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();

@@ -1,5 +1,6 @@
 package wuest.utilities.Items;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
@@ -27,7 +28,7 @@ import wuest.utilities.WuestUtilities;
  * @author WuestMan
  *
  */
-public class ItemSwiftBlade extends Item
+public class ItemSwiftBlade extends ItemSword
 {
 	public static ItemSwiftBlade RegisteredWoodenSword;
 	public static ItemSwiftBlade RegisteredStoneSword;
@@ -43,6 +44,7 @@ public class ItemSwiftBlade extends Item
 	 */
 	public ItemSwiftBlade(ToolMaterial material) 
 	{
+		super(material);
 		this.material = material;
         this.maxStackSize = 1;
         this.setMaxDamage(material.getMaxUses());
@@ -258,7 +260,7 @@ public class ItemSwiftBlade extends Item
     }
 
     /**
-     * Return whether this item is repairable in an anvil.
+     * Return whether this item is reparable in an anvil.
      */
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
@@ -271,12 +273,12 @@ public class ItemSwiftBlade extends Item
 	@Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
     {
-        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+        Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
 
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
         {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", 0, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", 6, 0));
         }
 
         return multimap;
