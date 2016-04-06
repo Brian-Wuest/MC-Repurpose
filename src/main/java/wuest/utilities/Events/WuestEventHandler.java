@@ -5,21 +5,31 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -33,7 +43,7 @@ import wuest.utilities.Proxy.BedLocationMessage;
 public class WuestEventHandler
 {
 	public static final String GIVEN_HOUSEBUILDER_TAG = "givenHousebuilder";
-	
+
 	private static HashMap<String, BlockPos> playerBedLocation;
 
 	@SubscribeEvent(receiveCanceled = true)
@@ -41,7 +51,7 @@ public class WuestEventHandler
 	{
 		// This only happens during the right-click event.
 		// Can use the proxy's configuration.
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
+		if (event.getHand() == EnumHand.OFF_HAND && WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest
 				&& !event.getWorld().isRemote
 				&& !event.isCanceled())
 		{
@@ -63,9 +73,11 @@ public class WuestEventHandler
 
 			IBlockState cropState = event.getWorld().getBlockState(event.getPos());
 			Block crop = cropState.getBlock();
+			PropertyInteger ageInteger = crop instanceof BlockBeetroot ? BlockBeetroot.BEETROOT_AGE : BlockCrops.AGE;
+			int maxAge = crop instanceof BlockBeetroot ? 3 : 7;
 
 			// Only re-plant when this is a fully grown plant.
-			if (crop instanceof BlockCrops && (Integer)cropState.getValue(BlockCrops.AGE) == 7)
+			if (crop instanceof BlockCrops && (Integer)cropState.getValue(ageInteger) == maxAge)
 			{
 				// Get the farmland below the crop.
 				BlockPos farmlandPosition = event.getPos().down();
@@ -77,48 +89,47 @@ public class WuestEventHandler
 				event.getWorld().setBlockToAir(event.getPos());
 
 				EnumActionResult replanted = EnumActionResult.FAIL;
+				BlockCrops blockCrop = (BlockCrops)crop;
+				IBlockState tempState = cropState.withProperty(ageInteger, 0);
+				Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
 
 				for (ItemStack drop : drops)
 				{
 					Item dropItem = drop.getItem();
 
-					if (replanted != EnumActionResult.PASS)
+					// Make sure this is the same class as the crop's seed.
+					if (dropItem.getClass() == seed.getClass()
+							&& replanted != EnumActionResult.PASS)
 					{
-						replanted = dropItem.onItemUse(new ItemStack(dropItem), p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
+						EnumFacing facing = event.getFace();
+						replanted = drop.onItemUse(p, event.getWorld(), farmlandPosition, event.getHand(), EnumFacing.UP, 0, 0, 0);
 
-						if (replanted == EnumActionResult.PASS)
+						if (replanted == EnumActionResult.SUCCESS 
+								|| replanted == EnumActionResult.PASS)
 						{
+							replanted = EnumActionResult.PASS;
 							continue;
-						}
+						}	
 					}
 
-					boolean addedItem = p.inventory.addItemStackToInventory(drop);
+					p.inventory.addItemStackToInventory(drop);
 					p.inventoryContainer.detectAndSendChanges();
-
-					if (addedItem)
-					{
-						continue;
-					}
 				}
 
 				if (replanted != EnumActionResult.PASS)
 				{
 					// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
 					// This should work with other plants that override BlockCrops.GetItem with their own seed.
-					BlockCrops blockCrop = (BlockCrops)crop;
-
 					// Make sure to re-set the age to 0 to get the seed.
-					IBlockState tempState = cropState.withProperty(BlockCrops.AGE, 0);
-
 					// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
-					ItemStack seed = new ItemStack(blockCrop.getItemDropped(tempState, new Random(), 0));
+					ItemStack seeds = new ItemStack(seed);
 
-					if (seed != null && p.inventory.hasItemStack(seed))
+					if (seeds != null && p.inventory.hasItemStack(seeds))
 					{
-						seed.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
-						
-						p.inventory.clearMatchingItems(seed.getItem(), -1, 1, null);
-						
+						seeds.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
+
+						p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
+
 						p.inventoryContainer.detectAndSendChanges();
 					}
 				}
@@ -151,7 +162,7 @@ public class WuestEventHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
@@ -180,7 +191,7 @@ public class WuestEventHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
 	{
@@ -199,7 +210,7 @@ public class WuestEventHandler
 	{
 		Item craftedItem = event.crafting.getItem();
 		EntityPlayer player = event.player;
-		
+
 		if (craftedItem == ItemSwiftBlade.RegisteredWoodenSword 
 				|| craftedItem == ItemSwiftBlade.RegisteredStoneSword
 				|| craftedItem == ItemSwiftBlade.RegisteredIronSword
@@ -209,14 +220,14 @@ public class WuestEventHandler
 			player.addStat(AchievementList.buildSword);
 		}
 	}
-	
+
 	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
 	{
 		if (WuestEventHandler.playerBedLocation == null)
 		{
 			WuestEventHandler.playerBedLocation = new HashMap<String, BlockPos>();
 		}
-		
+
 		// Send the updated bed information to the client.
 		BedLocationMessage message = new BedLocationMessage();
 		NBTTagCompound tag = new NBTTagCompound();
@@ -229,10 +240,10 @@ public class WuestEventHandler
 			tag.setInteger("bedY", bedPosition.getY());
 			tag.setInteger("bedZ", bedPosition.getZ());
 		}
-		
+
 		message.setMessageTag(tag);
 		BlockPos existingBedPosition = null;
-		
+
 		if (WuestEventHandler.playerBedLocation.containsKey(player.getName()))
 		{
 			existingBedPosition = WuestEventHandler.playerBedLocation.get(player.getName());
@@ -241,7 +252,7 @@ public class WuestEventHandler
 		{
 			WuestEventHandler.playerBedLocation.put(player.getName(), bedPosition);
 		}
-		
+
 		if (existingBedPosition != bedPosition)
 		{
 			// Only send the message to the client if the bed position changes.

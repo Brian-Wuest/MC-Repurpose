@@ -33,6 +33,8 @@ import net.minecraft.world.WorldType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.GuiRedstoneClock;
+import wuest.utilities.Items.ItemBedCompass;
+import wuest.utilities.Proxy.CommonProxy;
 import wuest.utilities.Tiles.TileEntityRedstoneClock;
 
 /* 
@@ -49,19 +51,19 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	/**
 	 * A simple block that emits redstone signals at regular intervals.
 	 */
-	public RedstoneClock() 
+	public RedstoneClock(String name) 
 	{
 		super(Material.wood);
 		this.setCreativeTab(CreativeTabs.tabRedstone);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
-		this.setUnlocalizedName("redstoneClock");
+		//this.setUnlocalizedName(name);
+		CommonProxy.setBlockName(this, "redstoneClock");
 	}
 
 	public static void RegisterBlock()
 	{
-		RedstoneClock.RegisteredBlock = new RedstoneClock();
-		WuestUtilities.ModBlocks.add(RedstoneClock.RegisteredBlock);
-		GameRegistry.registerBlock(RedstoneClock.RegisteredBlock, "redstoneClock");
+		RedstoneClock.RegisteredBlock = CommonProxy.registerBlock(new RedstoneClock("redstoneClock"));//new RedstoneClock("redstoneClock");
+		
 		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
 
 		if (WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe)

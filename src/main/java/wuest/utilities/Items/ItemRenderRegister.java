@@ -33,7 +33,7 @@ public final class ItemRenderRegister
 	public static void regItem(Item item) 
 	{
 		String temp = item.getUnlocalizedName().substring(5);
-		ModelResourceLocation location = new ModelResourceLocation(WuestUtilities.MODID + ":" + temp, "inventory");
+		ModelResourceLocation location = new ModelResourceLocation(temp, "inventory");
 
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, location);
 	}
@@ -45,6 +45,10 @@ public final class ItemRenderRegister
 	public static void regBlock(Block block)
 	{
 		Item itemBlock = Item.getItemFromBlock(block);
-		ItemRenderRegister.regItem(itemBlock);
+		
+		if (itemBlock != null)
+		{
+			ItemRenderRegister.regItem(itemBlock);
+		}
 	}
 }

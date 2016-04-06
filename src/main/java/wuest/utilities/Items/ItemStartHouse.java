@@ -37,6 +37,7 @@ import wuest.utilities.BuildingMethods;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.HouseConfiguration;
+import wuest.utilities.Proxy.CommonProxy;
 
 public class ItemStartHouse extends Item
 {
@@ -49,12 +50,12 @@ public class ItemStartHouse extends Item
 
 	private HouseConfiguration currentConfiguration = null;
 
-	public ItemStartHouse()
+	public ItemStartHouse(String name)
 	{
 		super();
 
 		this.setCreativeTab(CreativeTabs.tabMisc);
-		this.setUnlocalizedName("itemStartHouse");
+		CommonProxy.setItemName(this, name);
 	}
 
 	/**
@@ -62,10 +63,7 @@ public class ItemStartHouse extends Item
 	 */
 	public static void RegisterItem()
 	{
-		ItemStartHouse.RegisteredItem = new ItemStartHouse();
-
-		GameRegistry.registerItem(ItemStartHouse.RegisteredItem, "itemStartHouse");
-		WuestUtilities.ModItems.add(ItemStartHouse.RegisteredItem);
+		ItemStartHouse.RegisteredItem = CommonProxy.registerItem(new ItemStartHouse("itemStartHouse"));
 	}
 
 	/**

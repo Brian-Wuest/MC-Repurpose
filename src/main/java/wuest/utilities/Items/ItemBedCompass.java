@@ -19,6 +19,7 @@ import wuest.utilities.WuestUtilities;
 import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Proxy.ClientEventHandler;
+import wuest.utilities.Proxy.CommonProxy;
 
 public class ItemBedCompass extends Item 
 {
@@ -30,11 +31,11 @@ public class ItemBedCompass extends Item
     /**
      * Initializes a new instance of the ItemBedCompass class.
      */
-    public ItemBedCompass()
+    public ItemBedCompass(String itemName)
     {
     	super();
     	
-    	this.setUnlocalizedName("itemBedCompass");
+    	CommonProxy.setItemName(this, itemName);
     	this.setCreativeTab(CreativeTabs.tabMisc);
     }
 	
@@ -43,11 +44,7 @@ public class ItemBedCompass extends Item
      */
     public static void RegisterItem()
     {
-    	ItemBedCompass.RegisteredItem = new ItemBedCompass();
-
-		GameRegistry.registerItem(ItemBedCompass.RegisteredItem,
-				"itemBedCompass");
-		WuestUtilities.ModItems.add(ItemBedCompass.RegisteredItem);
+    	ItemBedCompass.RegisteredItem = CommonProxy.registerItem(new ItemBedCompass("itemBedCompass"));
 		
 		if (WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe)
 		{

@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Proxy.CommonProxy;
 
 /**
  * This class is used to create a sword which has the same speed as pre-1.9 swords.
@@ -50,8 +51,8 @@ public class ItemSwiftBlade extends ItemSword
         this.setMaxDamage(material.getMaxUses());
         this.setCreativeTab(CreativeTabs.tabCombat);
 		this.attackDamage = 3.0F + material.getDamageVsEntity();
-
-		this.setUnlocalizedName(ItemSwiftBlade.GetUnlocalizedName(material));
+		
+		CommonProxy.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
 	}
 	
 	/**
@@ -113,10 +114,7 @@ public class ItemSwiftBlade extends ItemSword
 				}
 			}
 			
-			GameRegistry.registerItem(itemToRegister,
-					ItemSwiftBlade.GetUnlocalizedName(material));
-			
-			WuestUtilities.ModItems.add(itemToRegister);
+			CommonProxy.registerItem(itemToRegister);
 			
 			if (WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe)
 			{
