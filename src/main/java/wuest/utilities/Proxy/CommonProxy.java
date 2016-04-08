@@ -23,6 +23,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.GeneralRecipes;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Blocks.BlockDirtStairs;
+import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Enchantment.EnchantmentLooting;
 import wuest.utilities.Events.WuestEventHandler;
@@ -68,6 +70,8 @@ public class CommonProxy implements IGuiHandler
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
 		ItemSwiftBlade.RegisterItem();
+		BlockDirtStairs.RegisterBlock();
+		BlockGrassStairs.RegisterBlock();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
@@ -140,6 +144,20 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.register(block);
 		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 		WuestUtilities.ModBlocks.add(block);
+		
+		return block;
+	}
+	
+	public static <T extends Block, I extends ItemBlock> T registerBlock(T block, I itemBlock)
+	{
+		GameRegistry.register(block);
+		WuestUtilities.ModBlocks.add(block);
+		
+		if (itemBlock != null)
+		{
+			GameRegistry.register(itemBlock);
+			WuestUtilities.ModItems.add(itemBlock);
+		}
 		
 		return block;
 	}

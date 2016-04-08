@@ -6,4 +6,6 @@ item.wuestutilities:itemSwiftBladeIron.name=Swift Blade: Iron
 item.wuestutilities:itemSwiftBladeGold.name=Swift Blade: Gold
 item.wuestutilities:itemSwiftBladeDiamond.name=Swift Blade: Diamond
 tile.wuestutilities:redstoneClock.name=Redstone Clock
+tile.wuestutilities:blockDirtStairs.name=Dirt Stairs
+tile.wuestutilities:blockGrassStairs.name=Grass Stairs
 enchantment.bow_looting=Bow Looting
