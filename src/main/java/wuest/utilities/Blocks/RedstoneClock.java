@@ -62,7 +62,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 
 	public static void RegisterBlock()
 	{
-		RedstoneClock.RegisteredBlock = CommonProxy.registerBlock(new RedstoneClock("redstoneClock"));//new RedstoneClock("redstoneClock");
+		RedstoneClock.RegisteredBlock = CommonProxy.registerBlock(new RedstoneClock("redstoneClock"));
 		
 		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
 
