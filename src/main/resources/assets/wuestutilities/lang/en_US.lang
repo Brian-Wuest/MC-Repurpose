@@ -9,4 +9,5 @@ tile.wuestutilities:redstoneClock.name=Redstone Clock
 tile.wuestutilities:blockDirtStairs.name=Dirt Stairs
 tile.wuestutilities:blockGrassStairs.name=Grass Stairs
 tile.wuestutilities:blockHalfDirtSlab.name=Dirt Slab
+tile.wuestutilities:blockHalfGrassSlab.name=Grass Slab
 enchantment.bow_looting=Bow Looting

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Blocks.BlockGrassSlab;
 import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Items.ItemRenderRegister;
@@ -59,6 +60,8 @@ public class ClientProxy extends CommonProxy
 
 		// Register block colors.
 		BlockGrassStairs.RegisterBlockRenderer();
+		
+		BlockGrassSlab.RegisterBlockRenderer();
 	}
 
 	@Override

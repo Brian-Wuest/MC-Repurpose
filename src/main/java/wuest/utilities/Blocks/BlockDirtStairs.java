@@ -30,6 +30,8 @@ public class BlockDirtStairs extends BlockStairs
 		super(Blocks.dirt.getDefaultState());
 		this.setTickRandomly(true);
 		this.useNeighborBrightness = true;
+		this.setHardness(0.5F);
+		this.setHarvestLevel("shovel", 0);
 		CommonProxy.setBlockName(this, "blockDirtStairs");
 	}
 

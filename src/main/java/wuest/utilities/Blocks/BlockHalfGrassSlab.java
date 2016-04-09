@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class BlockHalfDirtSlab extends BlockDirtSlab
+public class BlockHalfGrassSlab extends BlockGrassSlab
 {
 	@Override
 	public boolean isDouble()
@@ -15,7 +15,7 @@ public class BlockHalfDirtSlab extends BlockDirtSlab
 	@Override
     protected ItemStack createStackedBlock(IBlockState state)
     {
-        Item item = Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock);
+        Item item = Item.getItemFromBlock(BlockGrassSlab.RegisteredHalfBlock);
 
         if (item == null)
         {

@@ -25,6 +25,7 @@ import wuest.utilities.GeneralRecipes;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Blocks.BlockDirtSlab;
 import wuest.utilities.Blocks.BlockDirtStairs;
+import wuest.utilities.Blocks.BlockGrassSlab;
 import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Enchantment.EnchantmentLooting;
@@ -74,6 +75,7 @@ public class CommonProxy implements IGuiHandler
 		BlockDirtStairs.RegisterBlock();
 		BlockGrassStairs.RegisterBlock();
 		BlockDirtSlab.RegisterBlock();
+		BlockGrassSlab.RegisterBlock();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();

@@ -45,6 +45,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 		IBlockState iblockstate = this.blockState.getBaseState();
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
+		this.setTickRandomly(true);
 		
 		if (!this.isDouble())
 		{
@@ -89,10 +90,15 @@ public abstract class BlockDirtSlab extends BlockSlab
 		
 		CommonProxy.registerBlock(BlockDirtSlab.RegisteredDoubleSlab, itemDoubleDirtSlab);
 		
-		// Register recipe.
+		// Register recipes.
 		GameRegistry.addRecipe(new ItemStack(BlockDirtSlab.RegisteredHalfBlock, 6),
 				"xxx",
 				'x', Item.getItemFromBlock(Blocks.dirt));
+		
+		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 2),
+				"x",
+				"x",
+				'x', Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock));
 	}
 
 	@Override
@@ -101,6 +107,48 @@ public abstract class BlockDirtSlab extends BlockSlab
 		return super.getUnlocalizedName();
 	}
 
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+	{
+		if (!worldIn.isRemote)
+		{
+			if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					BlockPos blockpos = pos.add(rand.nextInt(3) - 1, rand.nextInt(5) - 3, rand.nextInt(3) - 1);
+
+					if (blockpos.getY() >= 0 && blockpos.getY() < 256 && !worldIn.isBlockLoaded(blockpos))
+					{
+						return;
+					}
+
+					IBlockState iblockstate = worldIn.getBlockState(blockpos.up());
+					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
+
+					if ((iblockstate1.getBlock() == Blocks.grass
+							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
+							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab) 
+							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
+					{
+						IBlockState grassSlabsState = null;
+						
+						if (this.isDouble())
+						{
+							grassSlabsState = BlockGrassSlab.RegisteredDoubleSlab.getStateFromMeta(this.getMetaFromState(state));
+						}
+						else
+						{
+							grassSlabsState = BlockGrassSlab.RegisteredHalfBlock.getStateFromMeta(this.getMetaFromState(state));
+						}
+						 
+						worldIn.setBlockState(pos, grassSlabsState, 3);
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public boolean isDouble()
 	{
