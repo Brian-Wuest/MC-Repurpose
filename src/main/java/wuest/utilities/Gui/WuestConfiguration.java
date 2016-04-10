@@ -14,18 +14,7 @@ public class WuestConfiguration
 	// Config file option names.
 	private static String addHouseItemName = "Add House Item On New Player Join";
 	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
-
-	private static String addTorchesName = "Add Torches";
-	private static String addBedName = "Add Bed";
-	private static String addCraftingTableName = "Add Crafting Table";
-	private static String addChestName = "Add Chest";
-	private static String addChestContentsName = "Add Chest Contents";
-	private static String addFarmName = "Add Farm";
-	private static String floorBlockName = "Floor Stone Type";
-	private static String ceilingBlockName = "Ceiling Stone Type";
-	private static String wallWoodTypeName = "Wall Wood Type";
-	private static String isCeilingFlatName = "Is Ceiling Flat";
-	private static String addMineShaftName = "Build Mineshaft";
+	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -49,12 +38,13 @@ public class WuestConfiguration
 	private static String addDirtName = "Add Dirt";
 	private static String addCobbleName = "Add Cobblestone";
 	private static String addSaplingsName = "Add Saplings";
-	private static String addChestTorchesName = "Add Torches";
+	private static String addTorchesName = "Add Torches";
 
 	// Configuration Options.
 	public boolean addHouseItem;
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
+	public boolean enableGrassSpreadToCustomDirt;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -92,6 +82,7 @@ public class WuestConfiguration
 		this.addArmorRecipes = true;
 		this.addMiscRecipes = true;
 		this.enableHomeCommand = true;
+		this.enableGrassSpreadToCustomDirt = true;
 	}
 
 	public static void syncConfig()
@@ -107,10 +98,8 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest = config.getBoolean(WuestConfiguration.rightClickCropHarvestName, WuestConfiguration.OPTIONS, false, "Determines if right-clicking crops will harvest them. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addHouseItem = config.getBoolean(WuestConfiguration.addHouseItemName, WuestConfiguration.OPTIONS, true, "Determines if the house item is added to player inventory when joining the world for the first time. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
-
-		// Remove the House options.
-		config = WuestConfiguration.RemoveOldHouseOptions(config);
-
+		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
+		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 
 		// Recipe settings.
@@ -147,68 +136,6 @@ public class WuestConfiguration
 			config.save();
 		}
 	}
-
-	private static Configuration RemoveOldHouseOptions(Configuration config)
-	{
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addTorchesName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addTorchesName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addBedName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addBedName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addCraftingTableName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addCraftingTableName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addChestName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addChestName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addChestContentsName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addChestContentsName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addFarmName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addFarmName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.floorBlockName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.floorBlockName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.ceilingBlockName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.ceilingBlockName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.wallWoodTypeName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.wallWoodTypeName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.isCeilingFlatName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.isCeilingFlatName);
-		}
-
-		if (config.getCategory(WuestConfiguration.OPTIONS).containsKey(WuestConfiguration.addMineShaftName))
-		{
-			config.getCategory(WuestConfiguration.OPTIONS).remove(WuestConfiguration.addMineShaftName);
-		}
-
-
-		return config;
-	}
-
 
 	public enum CeilingFloorBlockType
 	{

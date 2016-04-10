@@ -100,7 +100,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 				"xxx",
 				'x', Item.getItemFromBlock(Blocks.grass));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.grass, 2),
+		GameRegistry.addRecipe(new ItemStack(Blocks.grass, 1),
 				"x",
 				"x",
 				'x', Item.getItemFromBlock(BlockGrassSlab.RegisteredHalfBlock));

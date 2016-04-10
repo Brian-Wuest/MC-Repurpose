@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import wuest.utilities.WuestUtilities;
 import wuest.utilities.Proxy.CommonProxy;
 
 /**
@@ -60,7 +61,7 @@ public class BlockDirtStairs extends BlockStairs
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
 	{
-		if (!worldIn.isRemote)
+		if (!worldIn.isRemote && WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt)
 		{
 			if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
 			{
@@ -77,7 +78,10 @@ public class BlockDirtStairs extends BlockStairs
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.grass
-							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock) 
+							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
+							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
+							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
+							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
 						IBlockState grassStairsState = BlockGrassStairs.RegisteredBlock.getStateFromMeta(this.getMetaFromState(state));

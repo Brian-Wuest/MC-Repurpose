@@ -1,5 +1,103 @@
 Changelog:
-Build 1845:
+Build 1863:
+	LexManos: Expose a central place to access all of Vanilla and Forge's registries using the new registry API.
+
+Build 1.9-12.16.0.1862-1.9:
+	LexManos: Fix log spam from invalid key modifiers (#2746)
+
+Build 1.9-12.16.0.1861-1.9:
+	LexManos: make WorldSavedData implement NBTSerializable (#2745)
+
+Build 1.9-12.16.0.1860-1.9:
+	LexManos: Don't use import static with net.minecraft classes. Using the latest MCP snapshots this causes an import conflict. (#2742)
+
+Build 1.9-12.16.0.1859-1.9:
+	LexManos:
+		Add cancelable event for Potions shifting the gui position (#2667)
+		
+		Add cancelable event for Potions shifting the gui position
+
+Build 1.9-12.16.0.1858-1.9:
+	LexManos: Fix ForgeChunkManager world unloading check (#2736)
+
+Build 1.9-12.16.0.1857-1.9:
+	LexManos: Fix being kicked from server when climbing ladders.
+
+Build 1.9-12.16.0.1856-1.9:
+	LexManos: Fix potential desync between Forge's Villager profession and vanilla's int based system.
+
+Build 1.8.9-11.15.1.1855:
+	LexManos:
+		Update ore dictionary (#2721)
+		
+		Updated the Ore Dictionary with more vanilla items:
+		  -Prismarine Shard ( "gemPrismarine" )
+		  -Prismarine Crystals ( "dustPrismarine" )
+		  -Prismarine Block ( "blockPrismarine" )
+		  -Prismarine Brick ( "blockPrismarineBrick" )
+		  -Dark Prismarine ( "blockDarkPrismarine" )
+		  -Nether Wart ( "cropNetherWart" )
+		  -Sugarcane ( "sugarcane" )
+		  -Paper ( "paper" )
+		  -Ender Pearl ( "enderpearl" )
+		  -Bone ( "bone)
+		  -Gunpowder ( "gunpowder)
+		  -String ( "string" )
+		  -Nether Star ( "netherStar" )
+		  -Leather ( "leather" )
+		  -Feather ( "feather" )
+		  -Egg ( "egg" )
+		  -End Stone ( "endstone" )
+		  -Torch ( "torch" )
+		  -Vine ( "vine" )
+		  -Cactus ( "blockCactus" )
+		  -Grass ( "grass")
+		  -Obsidian ( "obsidian" )
+		  -Red Sandstone ( added to "sandstone" )
+		  -Crafting Table ( "workbench" )
+		  -Slime Block ( "blockSlime" )
+		  -Granite ( "stoneGranite" )
+		  -Polished Granite ( "stoneGranitePolished" )
+		  -Diorite ( "stoneDiorite" )
+		  -Polished Diorite ( "stoneDioritePolished" )
+		  -Andesite ( "stoneAndesite" )
+		  -Polished Andesite ( "stoneAndesitePolished" )
+
+Build 1.9-12.16.0.1854-1.9:
+	kashike:
+		Remove @SideOnly(Side.CLIENT) from BossInfo/BossInfoServer methods
+		
+		These methods can also be used by the server (see BossInfoServer, it sends packets to the client but the methods are @SideOnly(Side.CLIENT))
+
+Build 1.9-12.16.0.1853-1.9:
+	fry: Made forge fluids use smooth lighting.
+
+Build 1.9-12.16.0.1852-1.9:
+	LexManos: Fixed NPE in dedicated server languages. And fixed logger for main FML event bus.
+
+Build 1.9-12.16.0.1851-1.9:
+	LexManos: Enhance some error logging related to OBJLoader issues, and RegistryEntries.
+	LexManos:
+		Cleanup OBJLoader parse function and fix issues related to JVM differences.
+		Also fix support for sopme of the spec that was partially respected.
+
+Build 1.9-12.16.0.1850-1.9:
+	mezz: Fix some plain keybinds not working when a modifier is active
+
+Build 1.9-12.16.0.1849-1.9:
+	mezz: Fix #2717 Pick block hotkey not working in inventories
+
+Build 1.9-12.16.0.1848-1.9:
+	kat.swales: Corrected CapabilityItemHandler.readNBT ignoring anything in slot 0 in 1.9
+
+Build 1.8.9-11.15.1.1847:
+	kat.swales: Corrected readNBT ignoring anything in slot 0
+
+Build 1.9-12.16.0.1846-1.9:
+	fry: Fixed zip being closed too early in the server language loading.
+	fry: Fixed forge fluid having a collision box.
+
+Build 1.9-12.16.0.1845-1.9:
 	iTitus: Fix dynbucket item transformation.
 
 Build 1.9-12.16.0.1844-1.9:

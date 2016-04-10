@@ -34,7 +34,7 @@ public final class ItemRenderRegister
 	{
 		String temp = item.getUnlocalizedName().substring(5);
 		ModelResourceLocation location = new ModelResourceLocation(temp, "inventory");
-
+		//System.out.println("Registering Item: " + location.getResourceDomain() + "[" + location.getResourcePath() + "]");
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, location);
 	}
 

@@ -24,6 +24,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import wuest.utilities.WuestUtilities;
 import wuest.utilities.Items.ItemBlockDirtSlab;
 import wuest.utilities.Proxy.CommonProxy;
 
@@ -95,7 +96,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 				"xxx",
 				'x', Item.getItemFromBlock(Blocks.dirt));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 2),
+		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 1),
 				"x",
 				"x",
 				'x', Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock));
@@ -110,7 +111,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
 	{
-		if (!worldIn.isRemote)
+		if (!worldIn.isRemote && WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt)
 		{
 			if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
 			{
@@ -127,8 +128,10 @@ public abstract class BlockDirtSlab extends BlockSlab
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.grass
+							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
+							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab) 
+							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
 						IBlockState grassSlabsState = null;

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.GeneralRecipes;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Blocks.BlockCustomWall;
 import wuest.utilities.Blocks.BlockDirtSlab;
 import wuest.utilities.Blocks.BlockDirtStairs;
 import wuest.utilities.Blocks.BlockGrassSlab;
@@ -76,6 +77,7 @@ public class CommonProxy implements IGuiHandler
 		BlockGrassStairs.RegisterBlock();
 		BlockDirtSlab.RegisterBlock();
 		BlockGrassSlab.RegisterBlock();
+		BlockCustomWall.RegisterBlock();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();

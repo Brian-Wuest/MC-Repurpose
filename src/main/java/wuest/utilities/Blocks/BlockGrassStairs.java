@@ -59,7 +59,7 @@ public class BlockGrassStairs extends BlockStairs
 				"  x",
 				" xx",
 				"xxx",
-				'x', Blocks.dirt);
+				'x', Blocks.grass);
 		
 		GameRegistry.addRecipe(
 				new ItemStack(Blocks.grass, 3),
