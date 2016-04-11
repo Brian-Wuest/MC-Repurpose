@@ -12,4 +12,5 @@ tile.wuestutilities:blockHalfDirtSlab.name=Dirt Slab
 tile.wuestutilities:blockHalfGrassSlab.name=Grass Slab
 tile.wuestutilities:blockDirtWall.name=Dirt Wall
 tile.wuestutilities:blockGrassWall.name=Grass Wall
+tile.wuestutilities:blockEnrichedFarmland.name=Enriched Farmland
 enchantment.bow_looting=Bow Looting

@@ -26,6 +26,7 @@ public class WuestConfiguration
 	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
 	private static String enableBedCompassName = "Enable Bed Compass Recipe";
 	private static String enableSwiftBladeName = "Enable Swift Blade Recipes";
+	private static String enableEnchrichedFarmlandName = "Enable Enriched Farmland Recipes";
 
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
@@ -56,6 +57,7 @@ public class WuestConfiguration
 	public boolean addRedstoneClockRecipe;
 	public boolean addBedCompassRecipe;
 	public boolean addSwiftBladeRecipe;
+	public boolean addEnrichedFarmlandRecipe;
 
 	// Chest content options.
 	public boolean addSword;
@@ -112,6 +114,10 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe = config.getBoolean(WuestConfiguration.enableBedCompassName, WuestConfiguration.RecipeOptions, true, "Determines if the Bed Compass item recipe is enabled. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe = config.getBoolean(WuestConfiguration.enableSwiftBladeName, WuestConfiguration.RecipeOptions, true, "Determines if the Swift Blade item recipes are enabled. Server configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.addEnrichedFarmlandRecipe = config.getBoolean(WuestConfiguration.enableEnchrichedFarmlandName, WuestConfiguration.RecipeOptions, true, "Determines if the Enriched Farmland recipe is enabled. Server Configuration overrides client.");
+		
+		// This entire category requires a minecraft restart.
+		config.setCategoryRequiresMcRestart(WuestConfiguration.RecipeOptions, true);
 		
 		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
 

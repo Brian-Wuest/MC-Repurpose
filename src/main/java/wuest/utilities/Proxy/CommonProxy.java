@@ -26,6 +26,7 @@ import wuest.utilities.WuestUtilities;
 import wuest.utilities.Blocks.BlockCustomWall;
 import wuest.utilities.Blocks.BlockDirtSlab;
 import wuest.utilities.Blocks.BlockDirtStairs;
+import wuest.utilities.Blocks.BlockEnrichedFarmland;
 import wuest.utilities.Blocks.BlockGrassSlab;
 import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Blocks.RedstoneClock;
@@ -78,6 +79,7 @@ public class CommonProxy implements IGuiHandler
 		BlockDirtSlab.RegisterBlock();
 		BlockGrassSlab.RegisterBlock();
 		BlockCustomWall.RegisterBlock();
+		BlockEnrichedFarmland.RegisterBlock();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
