@@ -15,6 +15,7 @@ public class WuestConfiguration
 	private static String addHouseItemName = "Add House Item On New Player Join";
 	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
 	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
+	private static String enableHouseGenerationRestrictionName = "Enable House Generation Restrictions";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -46,6 +47,7 @@ public class WuestConfiguration
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
+	public boolean enableHouseGenerationRestrictions;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -101,6 +103,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addHouseItem = config.getBoolean(WuestConfiguration.addHouseItemName, WuestConfiguration.OPTIONS, true, "Determines if the house item is added to player inventory when joining the world for the first time. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.enableHouseGenerationRestrictions = config.getBoolean(WuestConfiguration.enableHouseGenerationRestrictionName, WuestConfiguration.OPTIONS, false, "When true this option causes the Crafting Table, Furnace and Chest to not be added when creating a house, regardless of options chosen. Server Configuration overrides client.");
 		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 
