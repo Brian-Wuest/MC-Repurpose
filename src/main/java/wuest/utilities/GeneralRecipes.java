@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -45,6 +46,8 @@ public class GeneralRecipes
 		{
 			GeneralRecipes.LoadNetherStarRecipe();
 		}
+		
+		GeneralRecipes.AddSeedsToGrassDrop();
 	}
 
 	private static void LoadMetalRecipes()
@@ -308,5 +311,12 @@ public class GeneralRecipes
 				'x', new ItemStack(Item.getItemFromBlock(Blocks.quartz_block)), 
 				'y', new ItemStack(Items.skull, 1, 1), 
 				'z',  new ItemStack(Item.getItemFromBlock(Blocks.diamond_block)));
+	}
+
+	private static void AddSeedsToGrassDrop()
+	{
+		MinecraftForge.addGrassSeed(new ItemStack(Items.beetroot_seeds), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.potato), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.carrot), 5);
 	}
 }

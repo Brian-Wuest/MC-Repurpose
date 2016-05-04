@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,8 +15,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Blocks.RedstoneClock;
-import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Proxy.ClientEventHandler;
 import wuest.utilities.Proxy.CommonProxy;
 
