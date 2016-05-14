@@ -28,6 +28,7 @@ public class WuestConfiguration
 	private static String enableBedCompassName = "Enable Bed Compass Recipe";
 	private static String enableSwiftBladeName = "Enable Swift Blade Recipes";
 	private static String enableEnchrichedFarmlandName = "Enable Enriched Farmland Recipes";
+	private static String enableMiniRedstoneBlockName = "Enable Mini Redstone Block Recipe";
 
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
@@ -60,7 +61,8 @@ public class WuestConfiguration
 	public boolean addBedCompassRecipe;
 	public boolean addSwiftBladeRecipe;
 	public boolean addEnrichedFarmlandRecipe;
-
+	public boolean addMiniRedstoneBlockRecipe;
+	
 	// Chest content options.
 	public boolean addSword;
 	public boolean addAxe;
@@ -118,6 +120,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe = config.getBoolean(WuestConfiguration.enableBedCompassName, WuestConfiguration.RecipeOptions, true, "Determines if the Bed Compass item recipe is enabled. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe = config.getBoolean(WuestConfiguration.enableSwiftBladeName, WuestConfiguration.RecipeOptions, true, "Determines if the Swift Blade item recipes are enabled. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.addEnrichedFarmlandRecipe = config.getBoolean(WuestConfiguration.enableEnchrichedFarmlandName, WuestConfiguration.RecipeOptions, true, "Determines if the Enriched Farmland recipe is enabled. Server Configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.addMiniRedstoneBlockRecipe = config.getBoolean(WuestConfiguration.enableMiniRedstoneBlockName, WuestConfiguration.RecipeOptions, true, "Determines if the Mini Redstone Block recipe is enabled. Server Configuration overrides client.");
 		
 		// This entire category requires a minecraft restart.
 		config.setCategoryRequiresMcRestart(WuestConfiguration.RecipeOptions, true);

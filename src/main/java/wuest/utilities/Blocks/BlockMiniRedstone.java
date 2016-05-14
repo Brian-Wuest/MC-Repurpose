@@ -54,6 +54,11 @@ public class BlockMiniRedstone extends BlockCompressedPowered
 		BlockMiniRedstone.RegisteredBlock = new BlockMiniRedstone();
 
 		CommonProxy.registerBlock(BlockMiniRedstone.RegisteredBlock);
+		
+		GameRegistry.addShapedRecipe(new ItemStack(BlockMiniRedstone.RegisteredBlock), 
+				"xx",
+				"xx",
+				'x', Items.redstone);
 	}
 	
 	@Override
