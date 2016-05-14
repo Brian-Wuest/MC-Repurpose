@@ -1,4 +1,4 @@
-package wuest.utilities.Gui;
+package wuest.utilities.Config;
 
 import net.minecraftforge.common.config.Configuration;
 import wuest.utilities.WuestUtilities;

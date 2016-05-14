@@ -1,4 +1,4 @@
-package wuest.utilities.Proxy;
+package wuest.utilities.Proxy.Messages.Handlers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import wuest.utilities.Blocks.RedstoneClock;
-import wuest.utilities.Blocks.RedstoneClock.PowerConfiguration;
+import wuest.utilities.Config.*;
+import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
 import wuest.utilities.Tiles.TileEntityRedstoneClock;
 
 public class RedstoneClockHandler implements
@@ -29,7 +30,7 @@ IMessageHandler<RedstoneClockMessage, IMessage>
 			public void run() 
 			{
 				// This is server side. Build the house.
-				PowerConfiguration configuration = PowerConfiguration.ReadFromNBTTagCompound(message.getMessageTag());
+				RedstoneClockPowerConfiguration configuration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(message.getMessageTag());
 
 				World world = ctx.getServerHandler().playerEntity.worldObj;
 				IBlockState state = world.getBlockState(configuration.getPos());

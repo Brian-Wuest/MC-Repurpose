@@ -35,8 +35,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import wuest.utilities.BuildingMethods;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Config.HouseConfiguration;
 import wuest.utilities.Gui.GuiHouseItem;
-import wuest.utilities.Gui.HouseConfiguration;
 import wuest.utilities.Proxy.CommonProxy;
 
 public class ItemStartHouse extends Item

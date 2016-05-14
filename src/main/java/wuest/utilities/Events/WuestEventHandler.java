@@ -35,10 +35,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Gui.WuestConfiguration;
+import wuest.utilities.Config.WuestConfiguration;
 import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Items.ItemSwiftBlade;
-import wuest.utilities.Proxy.BedLocationMessage;
+import wuest.utilities.Proxy.Messages.BedLocationMessage;
 
 public class WuestEventHandler
 {

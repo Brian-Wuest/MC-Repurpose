@@ -16,8 +16,8 @@ import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.client.config.HoverChecker;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Blocks.RedstoneClock.PowerConfiguration;
-import wuest.utilities.Proxy.RedstoneClockMessage;
+import wuest.utilities.Config.*;
+import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
 import wuest.utilities.Tiles.TileEntityRedstoneClock;
 
 public class GuiRedstoneClock extends GuiScreen
@@ -25,7 +25,7 @@ public class GuiRedstoneClock extends GuiScreen
 	public static final int GUI_ID = 5;
 	public BlockPos pos;
 	private static final ResourceLocation backgroundTextures = new ResourceLocation("wuestutilities", "textures/gui/defaultBackground.png");
-	public PowerConfiguration powerConfiguration;
+	public RedstoneClockPowerConfiguration powerConfiguration;
 	protected GuiButtonExt btnCancel;
 	protected GuiButtonExt btnDone;
 	protected GuiCheckBox btnNorth;

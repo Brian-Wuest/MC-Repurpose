@@ -1,12 +1,13 @@
-package wuest.utilities.Proxy;
+package wuest.utilities.Proxy.Messages.Handlers;
 
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import wuest.utilities.Gui.HouseConfiguration;
+import wuest.utilities.Config.HouseConfiguration;
 import wuest.utilities.Items.ItemStartHouse;
+import wuest.utilities.Proxy.Messages.HouseTagMessage;
 
 public class HouseHandler implements
 IMessageHandler<HouseTagMessage, IMessage>

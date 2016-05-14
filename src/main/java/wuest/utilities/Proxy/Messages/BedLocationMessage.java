@@ -1,4 +1,4 @@
-package wuest.utilities.Proxy;
+package wuest.utilities.Proxy.Messages;
 
 import net.minecraft.nbt.NBTTagCompound;
 

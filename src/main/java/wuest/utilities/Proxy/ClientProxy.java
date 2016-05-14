@@ -28,6 +28,7 @@ import wuest.utilities.Blocks.BlockGrassSlab;
 import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Items.ItemRenderRegister;
+import wuest.utilities.Proxy.Messages.Handlers.ClientEventHandler;
 
 public class ClientProxy extends CommonProxy 
 { 

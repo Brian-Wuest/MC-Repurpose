@@ -1,9 +1,9 @@
-package wuest.utilities.Gui;
+package wuest.utilities.Config;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import wuest.utilities.Gui.WuestConfiguration.CeilingFloorBlockType;
-import wuest.utilities.Gui.WuestConfiguration.WallBlockType;
+import wuest.utilities.Config.WuestConfiguration.CeilingFloorBlockType;
+import wuest.utilities.Config.WuestConfiguration.WallBlockType;
 
 /**
  * This class is used to determine the configuration for a particular house.

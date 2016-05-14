@@ -9,15 +9,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import wuest.utilities.Blocks.RedstoneClock;
-import wuest.utilities.Blocks.RedstoneClock.PowerConfiguration;
+import wuest.utilities.Config.*;
 
 public class TileEntityRedstoneClock extends TileEntity 
 {
-	protected RedstoneClock.PowerConfiguration powerConfiguration;
+	protected RedstoneClockPowerConfiguration powerConfiguration;
 
 	public TileEntityRedstoneClock()
 	{
-		this.powerConfiguration = new RedstoneClock.PowerConfiguration();
+		this.powerConfiguration = new RedstoneClockPowerConfiguration();
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class TileEntityRedstoneClock extends TileEntity
 	{
 		super.readFromNBT(compound);
 
-		this.powerConfiguration = PowerConfiguration.ReadFromNBTTagCompound(compound);
+		this.powerConfiguration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(compound);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class TileEntityRedstoneClock extends TileEntity
 	 * Gets the power configuration for this tile.
 	 * @return The power configuration for this tile.
 	 */
-	public RedstoneClock.PowerConfiguration getPowerConfiguration()
+	public RedstoneClockPowerConfiguration getPowerConfiguration()
 	{
 		return this.powerConfiguration;
 	}
@@ -121,7 +121,7 @@ public class TileEntityRedstoneClock extends TileEntity
 	 * Sets the power configuration for this tile.
 	 * @param value The value of the power configuration to set.
 	 */
-	public void setPowerConfiguration(RedstoneClock.PowerConfiguration value)
+	public void setPowerConfiguration(RedstoneClockPowerConfiguration value)
 	{
 		this.powerConfiguration = value;
 

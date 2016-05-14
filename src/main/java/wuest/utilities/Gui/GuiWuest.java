@@ -10,6 +10,8 @@ import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Config.HouseConfiguration;
+import wuest.utilities.Config.WuestConfiguration;
 
 public class GuiWuest extends GuiConfig
 {

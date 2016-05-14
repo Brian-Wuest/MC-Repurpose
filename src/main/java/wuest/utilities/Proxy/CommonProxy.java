@@ -31,14 +31,20 @@ import wuest.utilities.Blocks.BlockGrassSlab;
 import wuest.utilities.Blocks.BlockGrassStairs;
 import wuest.utilities.Blocks.BlockMiniRedstone;
 import wuest.utilities.Blocks.RedstoneClock;
+import wuest.utilities.Config.WuestConfiguration;
 import wuest.utilities.Enchantment.EnchantmentLooting;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.GuiRedstoneClock;
-import wuest.utilities.Gui.WuestConfiguration;
 import wuest.utilities.Items.ItemBedCompass;
 import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Items.ItemSwiftBlade;
+import wuest.utilities.Proxy.Messages.BedLocationMessage;
+import wuest.utilities.Proxy.Messages.HouseTagMessage;
+import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
+import wuest.utilities.Proxy.Messages.Handlers.BedLocationHandler;
+import wuest.utilities.Proxy.Messages.Handlers.HouseHandler;
+import wuest.utilities.Proxy.Messages.Handlers.RedstoneClockHandler;
 
 public class CommonProxy implements IGuiHandler
 {

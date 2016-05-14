@@ -10,7 +10,9 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Proxy.HouseTagMessage;
+import wuest.utilities.Config.HouseConfiguration;
+import wuest.utilities.Config.WuestConfiguration;
+import wuest.utilities.Proxy.Messages.HouseTagMessage;
 
 public class GuiHouseItem extends GuiScreen
 {

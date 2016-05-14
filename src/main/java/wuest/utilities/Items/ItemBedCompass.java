@@ -15,8 +15,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Proxy.ClientEventHandler;
 import wuest.utilities.Proxy.CommonProxy;
+import wuest.utilities.Proxy.Messages.Handlers.ClientEventHandler;
 
 public class ItemBedCompass extends Item 
 {

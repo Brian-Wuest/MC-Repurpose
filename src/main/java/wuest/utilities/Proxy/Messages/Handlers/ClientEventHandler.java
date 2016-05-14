@@ -1,4 +1,4 @@
-package wuest.utilities.Proxy;
+package wuest.utilities.Proxy.Messages.Handlers;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
