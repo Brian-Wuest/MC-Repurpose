@@ -14,4 +14,5 @@ tile.wuestutilities:blockDirtWall.name=Dirt Wall
 tile.wuestutilities:blockGrassWall.name=Grass Wall
 tile.wuestutilities:blockEnrichedFarmland.name=Enriched Farmland
 tile.wuestutilities:blockMiniRedstone.name=Mini Block of Redstone
+tile.wuestutilities:blockRedstoneScanner.name=Redstone Scanner
 enchantment.bow_looting=Bow Looting

@@ -27,7 +27,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.GuiRedstoneClock;
+import wuest.utilities.Gui.GuiRedstoneScanner;
 import wuest.utilities.Proxy.CommonProxy;
+import wuest.utilities.Tiles.TileEntityRedstoneClock;
 import wuest.utilities.Tiles.TileEntityRedstoneScanner;
 
 /**
@@ -37,7 +39,6 @@ import wuest.utilities.Tiles.TileEntityRedstoneScanner;
  */
 public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 {
-	public static final PropertyBool POWERED = PropertyBool.create("powered");
 	public static BlockRedstoneScanner RegisteredBlock;
 	
 	/**
@@ -47,7 +48,9 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	{
 		BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
 		
-		CommonProxy.registerBlock(BlockMiniRedstone.RegisteredBlock);
+		CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
+		
+		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 		
 		/*
 		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
@@ -145,12 +148,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, new IProperty[] {POWERED});
-	}
-	
-	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
 		return new TileEntityRedstoneScanner();
@@ -178,24 +175,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 
 			return tileEntity;
 		}
-	}
-
-	/**
-	 * Convert the BlockState into the correct metadata value
-	 */
-	@Override
-	public int getMetaFromState(IBlockState state)
-	{
-		return ((Boolean)state.getValue(POWERED)).booleanValue() ? 1 : 0;
-	}
-	
-	/**
-	 * Convert the given metadata into a BlockState for this Block
-	 */
-	@Override
-	public IBlockState getStateFromMeta(int meta)
-	{
-		return this.getDefaultState().withProperty(POWERED, Boolean.valueOf(meta == 1));
 	}
 	
 	@Override
@@ -241,7 +220,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		if (world.isRemote) 
 		{
 			// TODO: Update to new GUI.
-			player.openGui(WuestUtilities.instance, GuiRedstoneClock.GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
+			player.openGui(WuestUtilities.instance, GuiRedstoneScanner.GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 
 		return true;

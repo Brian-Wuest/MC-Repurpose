@@ -37,6 +37,7 @@ import wuest.utilities.Enchantment.EnchantmentLooting;
 import wuest.utilities.Events.WuestEventHandler;
 import wuest.utilities.Gui.GuiHouseItem;
 import wuest.utilities.Gui.GuiRedstoneClock;
+import wuest.utilities.Gui.GuiRedstoneScanner;
 import wuest.utilities.Items.ItemBedCompass;
 import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Items.ItemSwiftBlade;
@@ -137,6 +138,10 @@ public class CommonProxy implements IGuiHandler
 		else if (ID == GuiRedstoneClock.GUI_ID)
 		{
 			return new GuiRedstoneClock(x, y, z);
+		}
+		else if (ID == GuiRedstoneScanner.GUI_ID)
+		{
+			return new GuiRedstoneScanner(x, y, z);
 		}
 
 		return null;

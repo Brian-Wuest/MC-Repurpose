@@ -17,11 +17,15 @@ public class RedstoneScannerConfig
 	private ArrayList<FacingConfig> facingConfigs;
 	private int tickDelay;
 	private BlockPos pos;
+	private boolean animalsDetected;
+	private boolean nonPlayersDetected;
+	private boolean monstersDetected;
+	private boolean playersDetected;
 	
 	/**
 	 * Initializes a new instance of the RedstoneScannerConfig class.
 	 */
-	public RedstoneScannerConfig()
+ 	public RedstoneScannerConfig()
 	{
 		this.Initialize();
 	}
@@ -83,6 +87,78 @@ public class RedstoneScannerConfig
 	public void setBlockPos(int x, int y, int z)
 	{
 		this.pos = new BlockPos(x, y, z);
+	}
+	
+	/**
+	 * Determines if animals are detected as part of the scan.
+	 * @return A value indicating whether animals are a detected during a scan.
+	 */
+	public boolean getAnimalsDetected()
+	{
+		return this.animalsDetected;
+	}
+	
+	/**
+	 * Determines if animals are detected as a part of the scan.
+	 * @param value The new value of the boolean.
+	 */
+	public void setAnimalsDetected(boolean value)
+	{
+		this.animalsDetected = value;
+	}
+	
+	/**
+	 * Determines if non-players are detected as part of the scan.
+	 * @return A value indicating whether non-players are detected.
+	 */
+	public boolean getNonPlayersDetected()
+	{
+		return this.nonPlayersDetected;
+	}
+	
+	/**
+	 * Determines if non-players are detected as part of the scan.
+	 * @param value The new value of the boolean.
+	 */
+	public void setNonPlayersDetected(boolean value)
+	{
+		this.nonPlayersDetected = value;
+	}
+	
+	/**
+	 * Determines if monsters are detected as part of the scan.
+	 * @return A value indicating whether monsters are detected.
+	 */
+	public boolean getMonstersDetected()
+	{
+		return this.monstersDetected;
+	}
+	
+	/**
+	 * Determines if monsters are detected as part of the scan.
+	 * @param value The new value of the boolean.
+	 */
+	public void setMonstersDetected(boolean value)
+	{
+		this.monstersDetected = value;
+	}
+	
+	/**
+	 * Determines if players are detected as part of the scan.
+	 * @return A value indicating whether players are detected.
+	 */
+	public boolean getPlayersDetected()
+	{
+		return this.playersDetected;
+	}
+	
+	/**
+	 * Determines if players are detected as part of the scan.
+	 * @param value The new value of the boolean.
+	 */
+	public void setPlayersDetected(boolean value)
+	{
+		this.playersDetected = value;
 	}
 	
 	/**
@@ -177,12 +253,15 @@ public class RedstoneScannerConfig
  	 */
 	public void WriteToNBTCompound(NBTTagCompound compound)
 	{
-		// TODO Auto-generated method stub
 		NBTTagCompound configCompound = new NBTTagCompound();
 		configCompound.setInteger("tickDelay", this.tickDelay);
-		configCompound.setInteger("x", this.pos.getX());
-		configCompound.setInteger("y", this.pos.getY());
-		configCompound.setInteger("z", this.pos.getZ());
+		
+		if (this.pos != null)
+		{
+			configCompound.setInteger("x", this.pos.getX());
+			configCompound.setInteger("y", this.pos.getY());
+			configCompound.setInteger("z", this.pos.getZ());
+		}
 		
 		for (FacingConfig config : this.facingConfigs)
 		{

@@ -2,7 +2,11 @@ package wuest.utilities.Tiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import wuest.utilities.Config.RedstoneScannerConfig;
 
 /**
@@ -14,6 +18,14 @@ public class TileEntityRedstoneScanner extends TileEntity
 {
 	protected RedstoneScannerConfig config;
 	protected boolean foundEntity = false;
+	
+	/**
+	 * Initializes a new instance of the TileEntityRedstoneScanner class.
+	 */
+	public TileEntityRedstoneScanner()
+	{
+		this.config = new RedstoneScannerConfig();
+	}
 	
 	/**
 	 * This method is used to determine if an entity was found within the scanning range.
@@ -34,6 +46,24 @@ public class TileEntityRedstoneScanner extends TileEntity
 		return this.config.getTickDelay();
 	}
 
+	/**
+	 * Gets the configuration.
+	 * @return The restone scanner configuration.
+	 */
+	public RedstoneScannerConfig getConfig()
+	{
+		return this.config;
+	}
+	
+	/**
+	 * Sets the configuration to the passed in value.
+	 * @param value The new redstone configuration.
+	 */
+	public void setConfig(RedstoneScannerConfig value)
+	{
+		this.config = value;
+	}
+	
 	/**
 	 * This is the initial method used to start the scan.
 	 * The scan distance and sides are based on the configuration.
@@ -64,6 +94,57 @@ public class TileEntityRedstoneScanner extends TileEntity
 		this.writeToNBT(this.getTileData());
 	}
 
+	/**
+	 * Allows for a specialized description packet to be created. This is often used to sync tile entity data from the
+	 * server to the client easily. For example this is used by signs to synchronise the text to be displayed.
+	 */
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		// Don't send the packet until the position has been set.
+		if (this.pos.getX() == 0 && this.pos.getY() == 0 && this.pos.getZ() == 0)
+		{
+			return super.getDescriptionPacket();
+		}
+
+		NBTTagCompound tag = new NBTTagCompound();
+		this.writeToNBT(tag);
+
+		return new SPacketUpdateTileEntity(this.getPos(), 1, tag);
+	}
+
+	/**
+	 * Called when you receive a TileEntityData packet for the location this
+	 * TileEntity is currently in. On the client, the NetworkManager will always
+	 * be the remote server. On the server, it will be whomever is responsible for
+	 * sending the packet.
+	 *
+	 * @param net The NetworkManager the packet originated from
+	 * @param pkt The data packet
+	 */
+	@Override
+	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
+	{
+		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	/**
+	 * Called from Chunk.setBlockIDWithMetadata and Chunk.fillChunk, determines if this tile entity should be re-created when the ID, or Metadata changes.
+	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
+	 *
+	 * @param world Current world
+	 * @param pos Tile's world position
+	 * @param oldState The old ID of the block
+	 * @param newState The new ID of the block (May be the same)
+	 * @return true forcing the invalidation of the existing TE, false not to invalidate the existing TE
+	 */
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+	{
+		// This tile needs to persist so the data can be saved.
+		return (oldState.getBlock() != newSate.getBlock());
+	}
+	
 	@Override
 	public boolean receiveClientEvent(int id, int type)
 	{
