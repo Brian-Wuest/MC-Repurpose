@@ -38,11 +38,11 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	 */
 	public static void RegisterBlock()
 	{
-		BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
+		//BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
 		
-		CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
+		//CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
 		
-		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
+		//GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 		
 		/*
 		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
