@@ -2,26 +2,21 @@ package wuest.utilities.Gui;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
-import net.minecraft.client.gui.GuiListWorldSelectionEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
-import net.minecraftforge.fml.client.config.HoverChecker;
+import wuest.utilities.WuestUtilities;
 import wuest.utilities.Config.RedstoneScannerConfig;
-import wuest.utilities.Tiles.TileEntityRedstoneClock;
+import wuest.utilities.Proxy.Messages.RedstoneScannerMessage;
 import wuest.utilities.Tiles.TileEntityRedstoneScanner;
 
 /**
@@ -38,14 +33,6 @@ public class GuiRedstoneScanner extends GuiScreen
 	protected TileEntityRedstoneScanner scannerTile;
 	protected GuiButtonExt btnCancel;
 	protected GuiButtonExt btnDone;
-	/*	protected GuiSlider btnTickDelay;
-	protected HoverChecker tickDelayChecker;
-	protected GuiCheckBox btnNorthCheckBox;
-	protected GuiCheckBox btnSouthCheckBox;
-	protected GuiCheckBox btnEastCheckBox;
-	protected GuiCheckBox btnWestCheckBox;
-	protected GuiCheckBox btnUpCheckBox;
-	protected GuiCheckBox btnDownCheckBox;*/
 	protected GuiSlider btnNorthSlider;
 	protected GuiSlider btnSouthSlider;
 	protected GuiSlider btnEastSlider;
@@ -141,14 +128,32 @@ public class GuiRedstoneScanner extends GuiScreen
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
-		// TODO: Finish Implementation.
 		if (button == this.btnCancel)
 		{
 			this.mc.displayGuiScreen(null);
 		}
 		else if (button == this.btnDone)
 		{
+			// Update the configuration.
+			this.Config.SetFacingConfig(EnumFacing.NORTH, this.btnNorthSlider.getValueInt());
+			this.Config.SetFacingConfig(EnumFacing.SOUTH, this.btnSouthSlider.getValueInt());
+			this.Config.SetFacingConfig(EnumFacing.EAST, this.btnEastSlider.getValueInt());
+			this.Config.SetFacingConfig(EnumFacing.WEST, this.btnWestSlider.getValueInt());
+			this.Config.SetFacingConfig(EnumFacing.UP, this.btnUpSlider.getValueInt());
+			this.Config.SetFacingConfig(EnumFacing.DOWN, this.btnDownSlider.getValueInt());
+			this.Config.setAnimalsDetected(this.btnAnimals.isChecked());
+			this.Config.setNonPlayersDetected(this.btnNonPlayers.isChecked());
+			this.Config.setMonstersDetected(this.btnMonsters.isChecked());
+			this.Config.setPlayersDetected(this.btnPlayers.isChecked());
 			
+			WuestUtilities.network.sendToServer(new RedstoneScannerMessage(this.Config.GetNBTTagCompound()));
+			
+			// After sending the info to the server, make sure the client is updated.
+			this.scannerTile.setConfig(this.Config);
+			Block block = this.mc.theWorld.getBlockState(this.scannerTile.getPos()).getBlock();
+			this.mc.theWorld.scheduleUpdate(this.scannerTile.getPos(), block, 2);
+			
+			this.mc.displayGuiScreen(null);
 		}
 	}
 	
@@ -157,11 +162,10 @@ public class GuiRedstoneScanner extends GuiScreen
 	 */
 	protected void Initialize()
 	{
-		// TODO: Finish Implementation.
 		// Get the power configuration settings.
 		TileEntity entity = this.mc.theWorld.getTileEntity(this.pos);
 
-		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class)
+		if (entity != null && entity.getClass() == TileEntityRedstoneScanner.class)
 		{
 			this.Config = ((TileEntityRedstoneScanner)entity).getConfig();
 			this.scannerTile = (TileEntityRedstoneScanner)entity;
@@ -185,54 +189,65 @@ public class GuiRedstoneScanner extends GuiScreen
 		// These buttons are in the middle of the screen.
 		x = this.width / 2 - 60;
 		
-		this.btnNorthSlider = new GuiSlider(4, grayBoxX, grayBoxY, 50, 20, "North: ", "", 0, 5, 1, false, true);
-		this.buttonList.add(this.btnNorthSlider);
+		this.btnNorthSlider = new GuiSlider(4, grayBoxX, grayBoxY, 50, 20, "North: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.NORTH.getName2()).getScanLength(), false, true);
 		
+		this.buttonList.add(this.btnNorthSlider);
 		
 		y += 25;
 		grayBoxY +=25;
 		
-		this.btnSouthSlider = new GuiSlider(12, grayBoxX, grayBoxY, 50, 20, "South: ", "", 0, 5, 1, false, true);
+		this.btnSouthSlider = new GuiSlider(12, grayBoxX, grayBoxY, 50, 20, "South: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.SOUTH.getName2()).getScanLength(), false, true);
+		
 		this.buttonList.add(this.btnSouthSlider);
 		
 		grayBoxY += 45;
-		this.btnAnimals = new GuiCheckBox(15, grayBoxX, grayBoxY, "", false);
+		this.btnAnimals = new GuiCheckBox(15, grayBoxX, grayBoxY, "", this.Config.getAnimalsDetected());
 		this.buttonList.add(this.btnAnimals);
 		
 		grayBoxY += 15;
-		this.btnNonPlayers = new GuiCheckBox(16, grayBoxX, grayBoxY, "", false);
+		this.btnNonPlayers = new GuiCheckBox(16, grayBoxX, grayBoxY, "", this.Config.getNonPlayersDetected());
 		this.buttonList.add(this.btnNonPlayers);
 
 		// Middle Column:
 		grayBoxX += 90;
 		grayBoxY = (this.height / 2) - 68;
 		
-		this.btnEastSlider = new GuiSlider(10, grayBoxX, grayBoxY, 50, 20, "East: ", "", 0, 5, 1, false, true);
+		this.btnEastSlider = new GuiSlider(10, grayBoxX, grayBoxY, 50, 20, "East: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.EAST.getName2()).getScanLength(), false, true);
+		
 		this.buttonList.add(this.btnEastSlider);
 		
 		y += 25;
 		grayBoxY += 25;
 		
-		this.btnWestSlider = new GuiSlider(11, grayBoxX, grayBoxY, 50, 20, "West: ", "", 0, 5, 1, false, true);
+		this.btnWestSlider = new GuiSlider(11, grayBoxX, grayBoxY, 50, 20, "West: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.WEST.getName2()).getScanLength(), false, true);
+		
 		this.buttonList.add(this.btnWestSlider);
 		
 		grayBoxY += 45;
-		this.btnMonsters = new GuiCheckBox(17, grayBoxX, grayBoxY, "", false);
+		this.btnMonsters = new GuiCheckBox(17, grayBoxX, grayBoxY, "", this.Config.getMonstersDetected());
 		this.buttonList.add(this.btnMonsters);
 		
 		grayBoxY += 15;
-		this.btnPlayers = new GuiCheckBox(18, grayBoxX, grayBoxY, "", true);
+		this.btnPlayers = new GuiCheckBox(18, grayBoxX, grayBoxY, "", this.Config.getPlayersDetected());
 		this.buttonList.add(this.btnPlayers);
 		
 		// Right Column: 
 		grayBoxX += 90;
 		grayBoxY = (this.height / 2) - 68;
 		
-		this.btnUpSlider = new GuiSlider(13, grayBoxX, grayBoxY, 50, 20, "Up: ", "", 0, 5, 1, false, true);
+		this.btnUpSlider = new GuiSlider(13, grayBoxX, grayBoxY, 50, 20, "Up: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.UP.getName2()).getScanLength(), false, true);
+		
 		this.buttonList.add(this.btnUpSlider);
 		
 		grayBoxY += 25;
-		this.btnDownSlider = new GuiSlider(14, grayBoxX, grayBoxY, 50, 20, "Down: ", "", 0, 5, 1, false, true);
+		this.btnDownSlider = new GuiSlider(14, grayBoxX, grayBoxY, 50, 20, "Down: ", "", 0, 5, 
+				this.Config.getFacingConfig(EnumFacing.DOWN.getName2()).getScanLength(), false, true);
+		
 		this.buttonList.add(this.btnDownSlider);
 		
 		grayBoxX = (this.width / 2) - 128;
@@ -241,7 +256,6 @@ public class GuiRedstoneScanner extends GuiScreen
 		this.btnDone = new GuiButtonExt(1, grayBoxX + 10, grayBoxY + 136, 90, 20, "Done");
 		this.buttonList.add(this.btnDone);
 
-		//this.btnCancel = new GuiButtonExt(2, grayBoxX + 147, grayBoxY + 136, 90, 20, "Cancel");
 		this.btnCancel = new GuiButtonExt(2, grayBoxX + 147, grayBoxY + 136, 90, 20, "Cancel");
 		this.buttonList.add(this.btnCancel);
 	}

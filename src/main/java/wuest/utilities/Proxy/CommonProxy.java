@@ -44,9 +44,11 @@ import wuest.utilities.Items.ItemSwiftBlade;
 import wuest.utilities.Proxy.Messages.BedLocationMessage;
 import wuest.utilities.Proxy.Messages.HouseTagMessage;
 import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
+import wuest.utilities.Proxy.Messages.RedstoneScannerMessage;
 import wuest.utilities.Proxy.Messages.Handlers.BedLocationHandler;
 import wuest.utilities.Proxy.Messages.Handlers.HouseHandler;
 import wuest.utilities.Proxy.Messages.Handlers.RedstoneClockHandler;
+import wuest.utilities.Proxy.Messages.Handlers.RedstoneScannerHandler;
 
 public class CommonProxy implements IGuiHandler
 {
@@ -73,6 +75,7 @@ public class CommonProxy implements IGuiHandler
 		WuestUtilities.network.registerMessage(HouseHandler.class, HouseTagMessage.class, 1, Side.SERVER);
 		WuestUtilities.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
 		WuestUtilities.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
+		WuestUtilities.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
 	}
 
 	public void init(FMLInitializationEvent event)
