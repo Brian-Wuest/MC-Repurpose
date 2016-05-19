@@ -3,6 +3,7 @@ package wuest.utilities.Blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockSlab;
@@ -40,9 +41,9 @@ public abstract class BlockDirtSlab extends BlockSlab
 	
 	public BlockDirtSlab()
 	{
-		super(Material.ground);
+		super(Material.GROUND);
 
-		this.setStepSound(SoundType.GROUND);
+		this.setSoundType(SoundType.GROUND);
 		IBlockState iblockstate = this.blockState.getBaseState();
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
@@ -52,7 +53,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
 			CommonProxy.setBlockName(this, "blockHalfDirtSlab");
-			this.setCreativeTab(CreativeTabs.tabBlock);
+			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
@@ -94,9 +95,9 @@ public abstract class BlockDirtSlab extends BlockSlab
 		// Register recipes.
 		GameRegistry.addRecipe(new ItemStack(BlockDirtSlab.RegisteredHalfBlock, 6),
 				"xxx",
-				'x', Item.getItemFromBlock(Blocks.dirt));
+				'x', Item.getItemFromBlock(Blocks.DIRT));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 1),
+		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1),
 				"x",
 				"x",
 				'x', Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock));
@@ -127,7 +128,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 					IBlockState iblockstate = worldIn.getBlockState(blockpos.up());
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
-					if ((iblockstate1.getBlock() == Blocks.grass
+					if ((iblockstate1.getBlock() == Blocks.GRASS
 							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
 							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
@@ -221,7 +222,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 	@Override
 	public MapColor getMapColor(IBlockState state)
 	{
-		return Blocks.dirt.getMapColor(Blocks.dirt.getDefaultState());
+		return ((BlockDirt)Blocks.DIRT).getMapColor(Blocks.DIRT.getDefaultState());
 	}
 
 	/**

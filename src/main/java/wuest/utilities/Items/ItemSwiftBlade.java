@@ -49,7 +49,7 @@ public class ItemSwiftBlade extends ItemSword
 		this.material = material;
         this.maxStackSize = 1;
         this.setMaxDamage(material.getMaxUses());
-        this.setCreativeTab(CreativeTabs.tabCombat);
+        this.setCreativeTab(CreativeTabs.COMBAT);
 		this.attackDamage = 3.0F + material.getDamageVsEntity();
 		
 		CommonProxy.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
@@ -73,7 +73,7 @@ public class ItemSwiftBlade extends ItemSword
 					material = ToolMaterial.WOOD;
 					ItemSwiftBlade.RegisteredWoodenSword = new ItemSwiftBlade(material);
 					itemToRegister = ItemSwiftBlade.RegisteredWoodenSword;
-					bladeItem = Blocks.planks;
+					bladeItem = Blocks.PLANKS;
 					break;
 				}
 				
@@ -82,7 +82,7 @@ public class ItemSwiftBlade extends ItemSword
 					material = ToolMaterial.STONE;
 					ItemSwiftBlade.RegisteredStoneSword = new ItemSwiftBlade(material);
 					itemToRegister = ItemSwiftBlade.RegisteredStoneSword;
-					bladeItem = Item.getItemFromBlock(Blocks.cobblestone);
+					bladeItem = Item.getItemFromBlock(Blocks.COBBLESTONE);
 					break;
 				}
 				
@@ -91,7 +91,7 @@ public class ItemSwiftBlade extends ItemSword
 					material = ToolMaterial.IRON;
 					ItemSwiftBlade.RegisteredIronSword = new ItemSwiftBlade(material);
 					itemToRegister = ItemSwiftBlade.RegisteredIronSword;
-					bladeItem = Items.iron_ingot;
+					bladeItem = Items.IRON_INGOT;
 					break;
 				}
 				
@@ -100,7 +100,7 @@ public class ItemSwiftBlade extends ItemSword
 					material = ToolMaterial.GOLD;
 					ItemSwiftBlade.RegisteredGoldSword = new ItemSwiftBlade(material);
 					itemToRegister = ItemSwiftBlade.RegisteredGoldSword;
-					bladeItem = Items.gold_ingot;
+					bladeItem = Items.GOLD_INGOT;
 					break;
 				}
 				
@@ -109,7 +109,7 @@ public class ItemSwiftBlade extends ItemSword
 					material = ToolMaterial.DIAMOND;
 					ItemSwiftBlade.RegisteredDiamondSword = new ItemSwiftBlade(material);
 					itemToRegister = ItemSwiftBlade.RegisteredDiamondSword;
-					bladeItem = Items.diamond;
+					bladeItem = Items.DIAMOND;
 					break;
 				}
 			}
@@ -125,7 +125,7 @@ public class ItemSwiftBlade extends ItemSword
 						" x ",
 						"y  ",
 						'x', bladeItem,
-						'y', Items.stick);
+						'y', Items.STICK);
 
 				GameRegistry.addShapedRecipe(
 						new ItemStack(itemToRegister),
@@ -133,7 +133,7 @@ public class ItemSwiftBlade extends ItemSword
 						" x ",
 						"  y",
 						'x', bladeItem,
-						'y', Items.stick);
+						'y', Items.STICK);
 			}
 		}
 	}
@@ -193,14 +193,14 @@ public class ItemSwiftBlade extends ItemSword
     {
         Block block = state.getBlock();
 
-        if (block == Blocks.web)
+        if (block == Blocks.WEB)
         {
             return 15.0F;
         }
         else
         {
             Material material = state.getMaterial();
-            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
+            return material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD ? 1.0F : 1.5F;
         }
     }
 
@@ -235,7 +235,7 @@ public class ItemSwiftBlade extends ItemSword
 	@Override
 	public boolean canHarvestBlock(IBlockState blockIn)
     {
-        return blockIn.getBlock() == Blocks.web;
+        return blockIn.getBlock() == Blocks.WEB;
     }
 
     /**

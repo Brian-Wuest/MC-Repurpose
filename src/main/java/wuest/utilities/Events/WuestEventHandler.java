@@ -62,7 +62,7 @@ public class WuestEventHandler
 			if (currentStack != null)
 			{
 				Item currentItem = currentStack.getItem();
-				ItemStack boneMealStack = new ItemStack(Items.dye, 1, 15);
+				ItemStack boneMealStack = new ItemStack(Items.DYE, 1, 15);
 				Item boneMeal = boneMealStack.getItem();
 
 				if (currentItem != null && currentItem == boneMeal)
@@ -217,7 +217,7 @@ public class WuestEventHandler
 				|| craftedItem == ItemSwiftBlade.RegisteredGoldSword
 				|| craftedItem == ItemSwiftBlade.RegisteredDiamondSword)
 		{
-			player.addStat(AchievementList.buildSword);
+			player.addStat(AchievementList.BUILD_SWORD);
 		}
 	}
 

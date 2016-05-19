@@ -3,6 +3,7 @@ package wuest.utilities.Blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -45,9 +46,9 @@ public abstract class BlockGrassSlab extends BlockSlab
 	
 	public BlockGrassSlab()
 	{
-		super(Material.ground);
+		super(Material.GROUND);
 
-		this.setStepSound(SoundType.GROUND);
+		this.setSoundType(SoundType.GROUND);
 		IBlockState iblockstate = this.blockState.getBaseState();
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
@@ -56,7 +57,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
 			CommonProxy.setBlockName(this, "blockHalfGrassSlab");
-			this.setCreativeTab(CreativeTabs.tabBlock);
+			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
@@ -98,9 +99,9 @@ public abstract class BlockGrassSlab extends BlockSlab
 		// Register recipes.
 		GameRegistry.addRecipe(new ItemStack(BlockGrassSlab.RegisteredHalfBlock, 6),
 				"xxx",
-				'x', Item.getItemFromBlock(Blocks.grass));
+				'x', Item.getItemFromBlock(Blocks.GRASS));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.grass, 1),
+		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1),
 				"x",
 				"x",
 				'x', Item.getItemFromBlock(BlockGrassSlab.RegisteredHalfBlock));
@@ -249,7 +250,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 	@Override
 	public MapColor getMapColor(IBlockState state)
 	{
-		return Blocks.grass.getMapColor(Blocks.grass.getDefaultState());
+		return ((BlockGrass)Blocks.GRASS).getMapColor(Blocks.GRASS.getDefaultState());
 	}
 
 	/**

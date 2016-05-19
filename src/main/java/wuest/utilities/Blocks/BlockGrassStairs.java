@@ -37,7 +37,7 @@ public class BlockGrassStairs extends BlockStairs
 	
 	public BlockGrassStairs()
 	{
-		super(Blocks.grass.getDefaultState());
+		super(Blocks.GRASS.getDefaultState());
 		
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
@@ -59,10 +59,10 @@ public class BlockGrassStairs extends BlockStairs
 				"  x",
 				" xx",
 				"xxx",
-				'x', Blocks.grass);
+				'x', Blocks.GRASS);
 		
 		GameRegistry.addRecipe(
-				new ItemStack(Blocks.grass, 3),
+				new ItemStack(Blocks.GRASS, 3),
 				"x",
 				"x",
 				'x', BlockGrassStairs.RegisteredBlock);

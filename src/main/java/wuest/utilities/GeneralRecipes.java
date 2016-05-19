@@ -73,12 +73,12 @@ public class GeneralRecipes
 
 	private static void LoadBucketRecipes(ItemStack stack)
 	{
-		GameRegistry.addRecipe(new ItemStack(Items.bucket),
+		GameRegistry.addRecipe(new ItemStack(Items.BUCKET),
 				"x x",
 				" x ",
 				'x', stack);
 
-		GameRegistry.addRecipe(new ItemStack(Items.bucket),
+		GameRegistry.addRecipe(new ItemStack(Items.BUCKET),
 				"   ",
 				"x x",
 				" x ",
@@ -87,7 +87,7 @@ public class GeneralRecipes
 
 	private static void LoadShearsRecipes(ItemStack stack)
 	{
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.shears), stack, stack);
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.SHEARS), stack, stack);
 	}
 
 	private static void LoadWoodRecipes()
@@ -95,35 +95,35 @@ public class GeneralRecipes
 		for (int i = 0; i < 6; i++)
 		{
 			// wood slabs into sticks.
-			GameRegistry.addRecipe(new ItemStack(Items.stick, 4), 
+			GameRegistry.addRecipe(new ItemStack(Items.STICK, 4), 
 					"xx",
 					"xx", 
 					'x', 
-					new ItemStack(Blocks.wooden_slab, 1, i));
+					new ItemStack(Blocks.WOODEN_SLAB, 1, i));
 
 			// Wooden slabs into planks.
-			GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i),
+			GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 1, i),
 					"x",
 					"x",
 					'x',
-					new ItemStack(Blocks.wooden_slab, 1, i));
+					new ItemStack(Blocks.WOODEN_SLAB, 1, i));
 		}
 
 		// Stairs to planks
 		HashMap<Block, ItemStack> stairs = new HashMap<Block, ItemStack>();
-		stairs.put(Blocks.oak_stairs, new ItemStack(Blocks.planks, 3, 0));
-		stairs.put(Blocks.stone_stairs, new ItemStack(Blocks.cobblestone, 3));
-		stairs.put(Blocks.brick_stairs, new ItemStack(Blocks.brick_block, 3));
-		stairs.put(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick, 3));
-		stairs.put(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick, 3));
-		stairs.put(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone, 3));
-		stairs.put(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone, 3));
-		stairs.put(Blocks.spruce_stairs, new ItemStack(Blocks.planks, 3,1));
-		stairs.put(Blocks.birch_stairs, new ItemStack(Blocks.planks, 3, 2));
-		stairs.put(Blocks.jungle_stairs, new ItemStack(Blocks.planks, 3, 3));
-		stairs.put(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block, 3));
-		stairs.put(Blocks.acacia_stairs, new ItemStack(Blocks.planks, 3, 4));
-		stairs.put(Blocks.dark_oak_stairs, new ItemStack(Blocks.planks, 3, 5));
+		stairs.put(Blocks.OAK_STAIRS, new ItemStack(Blocks.PLANKS, 3, 0));
+		stairs.put(Blocks.STONE_STAIRS, new ItemStack(Blocks.COBBLESTONE, 3));
+		stairs.put(Blocks.BRICK_STAIRS, new ItemStack(Blocks.BRICK_BLOCK, 3));
+		stairs.put(Blocks.STONE_BRICK_STAIRS, new ItemStack(Blocks.STONEBRICK, 3));
+		stairs.put(Blocks.NETHER_BRICK_STAIRS, new ItemStack(Blocks.NETHER_BRICK, 3));
+		stairs.put(Blocks.SANDSTONE_STAIRS, new ItemStack(Blocks.SANDSTONE, 3));
+		stairs.put(Blocks.RED_SANDSTONE_STAIRS, new ItemStack(Blocks.RED_SANDSTONE, 3));
+		stairs.put(Blocks.SPRUCE_STAIRS, new ItemStack(Blocks.PLANKS, 3,1));
+		stairs.put(Blocks.BIRCH_STAIRS, new ItemStack(Blocks.PLANKS, 3, 2));
+		stairs.put(Blocks.JUNGLE_STAIRS, new ItemStack(Blocks.PLANKS, 3, 3));
+		stairs.put(Blocks.QUARTZ_STAIRS, new ItemStack(Blocks.QUARTZ_BLOCK, 3));
+		stairs.put(Blocks.ACACIA_STAIRS, new ItemStack(Blocks.PLANKS, 3, 4));
+		stairs.put(Blocks.DARK_OAK_STAIRS, new ItemStack(Blocks.PLANKS, 3, 5));
 
 		for(Map.Entry<Block, ItemStack> set : stairs.entrySet())
 		{
@@ -141,7 +141,7 @@ public class GeneralRecipes
 		for (int i = 0; i < 8; i++)
 		{
 			ItemStack currentBlock = null;
-			ItemStack currentSlab = new ItemStack(Blocks.stone_slab, 1, i);
+			ItemStack currentSlab = new ItemStack(Blocks.STONE_SLAB, 1, i);
 
 			// 2 is stone wood and is no longer craftable.
 			if (i == 2)
@@ -153,43 +153,43 @@ public class GeneralRecipes
 			{
 			case (0):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.stone));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.STONE));
 				break;
 			}
 
 			case (1):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.sandstone));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.SANDSTONE));
 				break;
 			}
 
 			case (3):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.cobblestone));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE));
 				break;
 			}
 
 			case (4):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.brick_block));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.BRICK_BLOCK));
 				break;
 			}
 
 			case (5):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.stonebrick));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.STONEBRICK));
 				break;
 			}
 
 			case (6):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.nether_brick));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.NETHER_BRICK));
 				break;
 			}
 
 			case (7):
 			{
-				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.quartz_block));
+				currentBlock = new ItemStack(Item.getItemFromBlock(Blocks.QUARTZ_BLOCK));
 				break;
 			}
 			}
@@ -197,7 +197,7 @@ public class GeneralRecipes
 			GeneralRecipes.AddSlabRecipe(currentBlock, currentSlab, i);
 		}
 
-		GeneralRecipes.AddSlabRecipe(new ItemStack(Item.getItemFromBlock(Blocks.red_sandstone)), new ItemStack(Item.getItemFromBlock(Blocks.stone_slab2)), 1);
+		GeneralRecipes.AddSlabRecipe(new ItemStack(Item.getItemFromBlock(Blocks.RED_SANDSTONE)), new ItemStack(Item.getItemFromBlock(Blocks.STONE_SLAB2)), 1);
 	}
 
 	private static void AddSlabRecipe(ItemStack currentBlock, ItemStack currentSlab, int i)
@@ -222,101 +222,101 @@ public class GeneralRecipes
 	private static void LoadArmorRecipes()
 	{
 		// Start with leather armor back to leather.
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.leather, 5), new ItemStack(Items.leather_helmet, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.leather, 8), new ItemStack(Items.leather_chestplate, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.leather, 7), new ItemStack(Items.leather_leggings, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.leather, 4), new ItemStack(Items.leather_boots, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 5), new ItemStack(Items.LEATHER_HELMET, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 8), new ItemStack(Items.LEATHER_CHESTPLATE, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 7), new ItemStack(Items.LEATHER_LEGGINGS, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 4), new ItemStack(Items.LEATHER_BOOTS, 1, 0));
 
 		// Smelt iron armor to ingots.
-		GameRegistry.addSmelting(Items.iron_helmet, new ItemStack(Items.iron_ingot, 5), 1f);
-		GameRegistry.addSmelting(Items.iron_chestplate, new ItemStack(Items.iron_ingot, 8), 1f);
-		GameRegistry.addSmelting(Items.iron_leggings, new ItemStack(Items.iron_ingot, 7), 1f);
-		GameRegistry.addSmelting(Items.iron_boots, new ItemStack(Items.iron_ingot, 4), 1f);
+		GameRegistry.addSmelting(Items.IRON_HELMET, new ItemStack(Items.IRON_INGOT, 5), 1f);
+		GameRegistry.addSmelting(Items.IRON_CHESTPLATE, new ItemStack(Items.IRON_INGOT, 8), 1f);
+		GameRegistry.addSmelting(Items.IRON_LEGGINGS, new ItemStack(Items.IRON_INGOT, 7), 1f);
+		GameRegistry.addSmelting(Items.IRON_BOOTS, new ItemStack(Items.IRON_INGOT, 4), 1f);
 
 		// Smelt gold armor to ingots.
-		GameRegistry.addSmelting(Items.golden_helmet, new ItemStack(Items.gold_ingot, 5), 1f);
-		GameRegistry.addSmelting(Items.golden_chestplate, new ItemStack(Items.gold_ingot, 8), 1f);
-		GameRegistry.addSmelting(Items.golden_leggings, new ItemStack(Items.gold_ingot, 7), 1f);
-		GameRegistry.addSmelting(Items.golden_boots, new ItemStack(Items.gold_ingot, 4), 1f);
+		GameRegistry.addSmelting(Items.GOLDEN_HELMET, new ItemStack(Items.GOLD_INGOT, 5), 1f);
+		GameRegistry.addSmelting(Items.GOLDEN_CHESTPLATE, new ItemStack(Items.GOLD_INGOT, 8), 1f);
+		GameRegistry.addSmelting(Items.GOLDEN_LEGGINGS, new ItemStack(Items.GOLD_INGOT, 7), 1f);
+		GameRegistry.addSmelting(Items.GOLDEN_BOOTS, new ItemStack(Items.GOLD_INGOT, 4), 1f);
 
 		// Smelt diamond armor to diamonds.
-		GameRegistry.addSmelting(Items.diamond_helmet, new ItemStack(Items.diamond, 5), 1f);
-		GameRegistry.addSmelting(Items.diamond_chestplate, new ItemStack(Items.diamond, 8), 1f);
-		GameRegistry.addSmelting(Items.diamond_leggings, new ItemStack(Items.diamond, 7), 1f);
-		GameRegistry.addSmelting(Items.diamond_boots, new ItemStack(Items.diamond, 4), 1f);
+		GameRegistry.addSmelting(Items.DIAMOND_HELMET, new ItemStack(Items.DIAMOND, 5), 1f);
+		GameRegistry.addSmelting(Items.DIAMOND_CHESTPLATE, new ItemStack(Items.DIAMOND, 8), 1f);
+		GameRegistry.addSmelting(Items.DIAMOND_LEGGINGS, new ItemStack(Items.DIAMOND, 7), 1f);
+		GameRegistry.addSmelting(Items.DIAMOND_BOOTS, new ItemStack(Items.DIAMOND, 4), 1f);
 
 		// Chainmail recipes.
-		GameRegistry.addRecipe(new ItemStack(Items.chainmail_helmet, 1), 
+		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_HELMET, 1), 
 				"xxx",
 				"y y",
 				"   ",
-				'x', Items.iron_ingot, 
-				'y', Items.leather);
+				'x', Items.IRON_INGOT, 
+				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.chainmail_chestplate, 1), 
+		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1), 
 				"y y",
 				"yxy",
 				"xxx",
-				'x', Items.iron_ingot, 
-				'y', Items.leather);
+				'x', Items.IRON_INGOT, 
+				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.chainmail_leggings, 1), 
+		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_LEGGINGS, 1), 
 				"xxx",
 				"y y",
 				"y y",
-				'x', Items.iron_ingot, 
-				'y', Items.leather);
+				'x', Items.IRON_INGOT, 
+				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.chainmail_boots, 1), 
+		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_BOOTS, 1), 
 				"   ",
 				"y y",
 				"x x",
-				'x', Items.iron_ingot, 
-				'y', Items.leather);
+				'x', Items.IRON_INGOT, 
+				'y', Items.LEATHER);
 	}
 
 	private static void LoadMiscRecipes()
 	{
 		// Rotten Flesh to leather.
-		GameRegistry.addSmelting(Items.rotten_flesh, new ItemStack(Items.leather), 1f);
+		GameRegistry.addSmelting(Items.ROTTEN_FLESH, new ItemStack(Items.LEATHER), 1f);
 
 		// 4 Feathers and 1 string to 1 wool.
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(Blocks.wool), 1), 
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(Blocks.WOOL), 1), 
 				" x ",
 				"xyx",
 				" x ",
 				'x', 
-				Items.feather, 'y', Items.string);
+				Items.FEATHER, 'y', Items.STRING);
 
 		// Make a recipe for Clay: Sand + Water Bucket = Clay.
-		GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(Blocks.clay), 2), 
-				new ItemStack(Items.water_bucket),
-				new ItemStack(Item.getItemFromBlock(Blocks.sand)),
-				new ItemStack(Item.getItemFromBlock(Blocks.gravel)));
+		GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CLAY), 2), 
+				new ItemStack(Items.WATER_BUCKET),
+				new ItemStack(Item.getItemFromBlock(Blocks.SAND)),
+				new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)));
 
 		// Make a recipe for glowstone: redstone + gun powder + yellow dye.
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.glowstone_dust, 2), 
-				new ItemStack(Items.redstone),
-				new ItemStack(Items.gunpowder),
-				new ItemStack(Items.dye, 1, 11));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.GLOWSTONE_DUST, 2), 
+				new ItemStack(Items.REDSTONE),
+				new ItemStack(Items.GUNPOWDER),
+				new ItemStack(Items.DYE, 1, 11));
 	}
 
 	private static void LoadNetherStarRecipe()
 	{
 		// 4 Quartz Blocks + 4 wither skulls + 1 Diamond Block = Nether Star
-		GameRegistry.addRecipe(new ItemStack(Items.nether_star, 1), 
+		GameRegistry.addRecipe(new ItemStack(Items.NETHER_STAR, 1), 
 				"yxy",
 				"xzx",
 				"yxy",
-				'x', new ItemStack(Item.getItemFromBlock(Blocks.quartz_block)), 
-				'y', new ItemStack(Items.skull, 1, 1), 
-				'z',  new ItemStack(Item.getItemFromBlock(Blocks.diamond_block)));
+				'x', new ItemStack(Item.getItemFromBlock(Blocks.QUARTZ_BLOCK)), 
+				'y', new ItemStack(Items.SKULL, 1, 1), 
+				'z',  new ItemStack(Item.getItemFromBlock(Blocks.DIAMOND_BLOCK)));
 	}
 
 	private static void AddSeedsToGrassDrop()
 	{
-		MinecraftForge.addGrassSeed(new ItemStack(Items.beetroot_seeds), 5);
-		MinecraftForge.addGrassSeed(new ItemStack(Items.potato), 5);
-		MinecraftForge.addGrassSeed(new ItemStack(Items.carrot), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.BEETROOT_SEEDS), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.POTATO), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.CARROT), 5);
 	}
 }

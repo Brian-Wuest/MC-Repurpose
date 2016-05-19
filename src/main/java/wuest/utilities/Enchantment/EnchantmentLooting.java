@@ -78,6 +78,6 @@ public class EnchantmentLooting extends EnchantmentLootBonus
 		EnchantmentLootBonus lootBase = EnchantmentLooting.GetBase(Enchantment.Rarity.RARE, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] {EntityEquipmentSlot.MAINHAND});
 		lootBase.setName("bow_looting");
 		
-		Enchantment.enchantmentRegistry.register(85, new ResourceLocation("wuestUtilities:bow_looting"), lootBase);
+		Enchantment.REGISTRY.register(85, new ResourceLocation("wuestUtilities:bow_looting"), lootBase);
 	}
 }

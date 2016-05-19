@@ -49,8 +49,8 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	 */
 	public RedstoneClock(String name) 
 	{
-		super(Material.wood);
-		this.setCreativeTab(CreativeTabs.tabRedstone);
+		super(Material.WOOD);
+		this.setCreativeTab(CreativeTabs.REDSTONE);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
 		//this.setUnlocalizedName(name);
 		CommonProxy.setBlockName(this, "redstoneClock");
@@ -69,9 +69,9 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 					"xzx",
 					"xyz",
 					"xxx",
-					'x', Item.getItemFromBlock(Blocks.stone),
-					'y', Items.repeater,
-					'z', Item.getItemFromBlock(Blocks.redstone_torch));
+					'x', Item.getItemFromBlock(Blocks.STONE),
+					'y', Items.REPEATER,
+					'z', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
 		}
 	}
 
@@ -184,9 +184,9 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) 
+	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) 
 	{
-		super.onBlockEventReceived(worldIn, pos, state, eventID, eventParam);
+		super.eventReceived(state, worldIn, pos, eventID, eventParam);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
 	}

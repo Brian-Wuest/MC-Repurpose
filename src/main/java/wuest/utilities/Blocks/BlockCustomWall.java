@@ -70,8 +70,8 @@ public class BlockCustomWall extends Block
 
 		this.setHardness(modelBlock.getBlockHardness(null, null, null));
 		this.setResistance(modelBlock.getExplosionResistance(null) * 5.0F / 3.0F);
-		this.setStepSound(modelBlock.getStepSound());
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setSoundType(modelBlock.getSoundType());
+		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		this.setHarvestLevel("shovel", 0);
 		this.BlockVariant = variant;
 		
@@ -85,28 +85,28 @@ public class BlockCustomWall extends Block
 
 	public static void RegisterBlock()
 	{
-		BlockCustomWall.RegisteredDirtBlock = new BlockCustomWall(Blocks.dirt, BlockCustomWall.EnumType.DIRT);
+		BlockCustomWall.RegisteredDirtBlock = new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT);
 		CommonProxy.registerBlock(BlockCustomWall.RegisteredDirtBlock);
 		
-		BlockCustomWall.RegisteredGrassBlock = new BlockCustomWall(Blocks.grass, BlockCustomWall.EnumType.GRASS);
+		BlockCustomWall.RegisteredGrassBlock = new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS);
 		CommonProxy.registerBlock(BlockCustomWall.RegisteredGrassBlock);
 		
 		// Register Recipes
 		GameRegistry.addRecipe(new ItemStack(BlockCustomWall.RegisteredDirtBlock, 6),
 				"xxx",
 				"xxx",
-				'x', Item.getItemFromBlock(Blocks.dirt));
+				'x', Item.getItemFromBlock(Blocks.DIRT));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 1),
+		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1),
 				"x",
 				'x', Item.getItemFromBlock(BlockCustomWall.RegisteredDirtBlock));
 		
 		GameRegistry.addRecipe(new ItemStack(BlockCustomWall.RegisteredGrassBlock, 6),
 				"xxx",
 				"xxx",
-				'x', Item.getItemFromBlock(Blocks.grass));
+				'x', Item.getItemFromBlock(Blocks.GRASS));
 		
-		GameRegistry.addRecipe(new ItemStack(Blocks.grass, 1),
+		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1),
 				"x",
 				'x', Item.getItemFromBlock(BlockCustomWall.RegisteredGrassBlock));
 		
@@ -201,7 +201,7 @@ public class BlockCustomWall extends Block
 					IBlockState iblockstate = worldIn.getBlockState(blockpos.up());
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
-					if ((iblockstate1.getBlock() == Blocks.grass
+					if ((iblockstate1.getBlock() == Blocks.GRASS
 							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
 							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
@@ -329,13 +329,13 @@ public class BlockCustomWall extends Block
 		Block block = iblockstate.getBlock();
 		Material material = block.getMaterial(iblockstate);
 		
-		if (block == Blocks.barrier)
+		if (block == Blocks.BARRIER)
 		{
 			return false;
 		}
 		
 		// Make sure all custom walls can be connected.
-		return (!(block instanceof BlockCustomWall) && !(block instanceof BlockFenceGate) ? (material.isOpaque() && iblockstate.isFullCube() ? material != Material.gourd : false) : true);
+		return (!(block instanceof BlockCustomWall) && !(block instanceof BlockFenceGate) ? (material.isOpaque() && iblockstate.isFullCube() ? material != Material.GOURD : false) : true);
 	}
 
 	/**
@@ -389,8 +389,8 @@ public class BlockCustomWall extends Block
 
 	public static enum EnumType implements IStringSerializable
 	{
-		DIRT(0, "blockdirtwall", "blockDirtWall", Material.ground),
-		GRASS(1, "blockgrasswall", "blockGrassWall", Material.ground);
+		DIRT(0, "blockdirtwall", "blockDirtWall", Material.GROUND),
+		GRASS(1, "blockgrasswall", "blockGrassWall", Material.GROUND);
 
 		private static final BlockCustomWall.EnumType[] META_LOOKUP = new BlockCustomWall.EnumType[values().length];
 		private final int meta;

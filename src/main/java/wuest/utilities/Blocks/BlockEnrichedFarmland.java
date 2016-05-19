@@ -31,9 +31,9 @@ public class BlockEnrichedFarmland extends BlockFarmland
 		// Make sure that this block is always wet.
 		this.setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, Integer.valueOf(7)));
 		this.setTickRandomly(false);
-		this.setStepSound(SoundType.GROUND);
+		this.setSoundType(SoundType.GROUND);
 		this.setHarvestLevel("shovel", 0);
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		CommonProxy.setBlockName(this, "blockEnrichedFarmland");
 	}
 
@@ -49,10 +49,10 @@ public class BlockEnrichedFarmland extends BlockFarmland
 					"xxx",
 					"aby",
 					"xxx",
-					'x', Item.getItemFromBlock(Blocks.dirt),
-					'a', Items.wheat,
-					'b', Items.water_bucket,
-					'y', Items.bone);
+					'x', Item.getItemFromBlock(Blocks.DIRT),
+					'a', Items.WHEAT,
+					'b', Items.WATER_BUCKET,
+					'y', Items.BONE);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 	 * Called when a neighboring block changes.
 	 */
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock)
 	{
 	}
 

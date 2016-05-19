@@ -21,11 +21,13 @@ public class TileEntityRedstoneClock extends TileEntity
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) 
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
 	{		
 		super.writeToNBT(compound);
 
 		this.powerConfiguration.WriteToNBTCompound(compound);
+		
+		return compound;
 	}
 
 	/**
@@ -62,12 +64,12 @@ public class TileEntityRedstoneClock extends TileEntity
 	 * server to the client easily. For example this is used by signs to synchronise the text to be displayed.
 	 */
 	@Override
-	public Packet getDescriptionPacket()
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		// Don't send the packet until the position has been set.
 		if (this.pos.getX() == 0 && this.pos.getY() == 0 && this.pos.getZ() == 0)
 		{
-			return super.getDescriptionPacket();
+			return super.getUpdatePacket();
 		}
 
 		NBTTagCompound tag = new NBTTagCompound();

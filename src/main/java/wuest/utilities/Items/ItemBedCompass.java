@@ -33,7 +33,7 @@ public class ItemBedCompass extends Item
     	super();
     	
     	CommonProxy.setItemName(this, itemName);
-    	this.setCreativeTab(CreativeTabs.tabMisc);
+    	this.setCreativeTab(CreativeTabs.MISC);
     }
 	
     /**
@@ -47,7 +47,7 @@ public class ItemBedCompass extends Item
 		{
 			// Register recipe.
 			GameRegistry.addShapelessRecipe(new ItemStack(ItemBedCompass.RegisteredItem), 
-					Items.bed, Items.compass);
+					Items.BED, Items.COMPASS);
 		}
     }
     

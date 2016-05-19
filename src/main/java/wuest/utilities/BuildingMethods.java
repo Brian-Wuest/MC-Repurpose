@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -42,7 +43,7 @@ public class BuildingMethods
 
 		for (int i = 0; i < clearedWidth; i++)
 		{
-			BuildingMethods.CreateWall(world, height, wallLength, houseFacing.getOpposite(), northSide, Blocks.air);
+			BuildingMethods.CreateWall(world, height, wallLength, houseFacing.getOpposite(), northSide, Blocks.AIR);
 			
 			northSide = northSide.offset(houseFacing.rotateYCCW());
 		}
@@ -223,7 +224,7 @@ public class BuildingMethods
 			BuildingMethods.ReplaceBlock(world, pos.offset(houseFacing.rotateYCCW()).offset(houseFacing.getOpposite()), block);
 		}
 
-		IBlockState blockState = Blocks.torch.getStateFromMeta(5);
+		IBlockState blockState = ((BlockTorch)Blocks.TORCH).getStateFromMeta(5);
 		BuildingMethods.ReplaceBlock(world, pos.up(), blockState);
 	}
 

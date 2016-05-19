@@ -28,7 +28,7 @@ public class BlockDirtStairs extends BlockStairs
 	 */
 	public BlockDirtStairs()
 	{
-		super(Blocks.dirt.getDefaultState());
+		super(Blocks.DIRT.getDefaultState());
 		this.setTickRandomly(true);
 		this.useNeighborBrightness = true;
 		this.setHardness(0.5F);
@@ -49,10 +49,10 @@ public class BlockDirtStairs extends BlockStairs
 				"  x",
 				" xx",
 				"xxx",
-				'x', Blocks.dirt);
+				'x', Blocks.DIRT);
 
 		GameRegistry.addRecipe(
-				new ItemStack(Blocks.dirt, 3),
+				new ItemStack(Blocks.DIRT, 3),
 				"x",
 				"x",
 				'x', BlockDirtStairs.RegisteredBlock);
@@ -77,7 +77,7 @@ public class BlockDirtStairs extends BlockStairs
 					IBlockState iblockstate = worldIn.getBlockState(blockpos.up());
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
-					if ((iblockstate1.getBlock() == Blocks.grass
+					if ((iblockstate1.getBlock() == Blocks.GRASS
 							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
 							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock

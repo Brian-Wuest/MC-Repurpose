@@ -40,13 +40,13 @@ public class BlockMiniRedstone extends BlockCompressedPowered
 	 */
 	public BlockMiniRedstone()
 	{
-		super(Material.iron, MapColor.tntColor);
-		this.setCreativeTab(CreativeTabs.tabRedstone);
+		super(Material.IRON, MapColor.TNT);
+		this.setCreativeTab(CreativeTabs.REDSTONE);
 		CommonProxy.setBlockName(this, "blockMiniRedstone");
 		this.setHarvestLevel(null, 0);
 		this.setHardness(.5f);
 		this.setResistance(10.0f);
-		this.setStepSound(SoundType.METAL);
+		this.setSoundType(SoundType.METAL);
 	}
 	
 	public static void RegisterBlock()
@@ -58,7 +58,7 @@ public class BlockMiniRedstone extends BlockCompressedPowered
 		GameRegistry.addShapedRecipe(new ItemStack(BlockMiniRedstone.RegisteredBlock), 
 				"xx",
 				"xx",
-				'x', Items.redstone);
+				'x', Items.REDSTONE);
 	}
 	
 	@Override
