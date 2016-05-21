@@ -47,6 +47,15 @@ IMessageHandler<RedstoneScannerMessage, IMessage>
 					{
 						((TileEntityRedstoneScanner)tileEntity).setConfig(configuration);
 					}
+					else
+					{
+						TileEntityRedstoneScanner scanner = new TileEntityRedstoneScanner();
+						scanner.setConfig(configuration);
+						scanner.setPos(configuration.getBlockPos());
+						
+						// Make sure that the tile exists at this position on the server.
+						world.setTileEntity(configuration.getBlockPos(), scanner);
+					}
 
 					// Make sure the block updates.
 					world.scheduleUpdate(configuration.getBlockPos(), block, 2);

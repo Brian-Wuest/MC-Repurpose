@@ -26,25 +26,6 @@ public class TileEntityRedstoneScanner extends TileEntity
 	{
 		this.config = new RedstoneScannerConfig();
 	}
-	
-	/**
-	 * This method is used to determine if an entity was found within the scanning range.
-	 * @param state - The current blocks state.
-	 * @return The redstone strength the block associated with this tile entity should provide.
-	 */
-	public int getRedstoneStrength()
-	{
-		return this.foundEntity ? 15 : 0;
-	}
-
-	/**
-	 * Determines the tick delay from the block configuration.
-	 * @return The tick delay from the configuration.
-	 */
-	public int getTickDelay()
-	{
-		return this.config.getTickDelay();
-	}
 
 	/**
 	 * Gets the configuration.
@@ -54,46 +35,24 @@ public class TileEntityRedstoneScanner extends TileEntity
 	{
 		return this.config;
 	}
-	
+
 	/**
-	 * Sets the configuration to the passed in value.
-	 * @param value The new redstone configuration.
+	 * This method is used to determine if an entity was found within the scanning range.
+	 * @param state - The current blocks state.
+	 * @return The redstone strength the block associated with this tile entity should provide.
 	 */
-	public void setConfig(RedstoneScannerConfig value)
+	public int getRedstoneStrength()
 	{
-		this.config = value;
+		return this.foundEntity ? 15 : 0;
 	}
 	
 	/**
-	 * This is the initial method used to start the scan.
-	 * The scan distance and sides are based on the configuration.
-	 * @param state The curent state of the block.
-	 * @return An un-modified state if there was nothing to change. Otherwise this method will provide a powered or unpowered state.
+	 * Determines the tick delay from the block configuration.
+	 * @return The tick delay from the configuration.
 	 */
-	public IBlockState setRedstoneStrength(IBlockState state)
+	public int getTickDelay()
 	{
-		// TODO Auto-generated method stub
-		return state;
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
-	{		
-		super.writeToNBT(compound);
-
-		this.config.WriteToNBTCompound(compound);
-		
-		return compound;
-	}
-
-	/**
-	 * Called when the chunk this TileEntity is on is Unloaded.
-	 */
-	@Override
-	public void onChunkUnload()
-	{
-		// Make sure to write the tile to the tag.
-		this.writeToNBT(this.getTileData());
+		return this.config.getTickDelay();
 	}
 
 	/**
@@ -116,6 +75,22 @@ public class TileEntityRedstoneScanner extends TileEntity
 	}
 
 	/**
+	 * Called when the chunk this TileEntity is on is Unloaded.
+	 */
+	@Override
+	public void onChunkUnload()
+	{
+		// Make sure to write the tile to the tag.
+		this.writeToNBT(this.getTileData());
+	}
+	
+	@Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+
+	/**
 	 * Called when you receive a TileEntityData packet for the location this
 	 * TileEntity is currently in. On the client, the NetworkManager will always
 	 * be the remote server. On the server, it will be whomever is responsible for
@@ -128,6 +103,48 @@ public class TileEntityRedstoneScanner extends TileEntity
 	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
 	{
 		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) 
+	{
+		//System.out.println("Reading Scanner config.");
+		super.readFromNBT(compound);
+
+		if (compound.hasKey("configCompound"))
+		{
+			this.config = RedstoneScannerConfig.ReadFromNBTTagCompound(compound);
+		}
+	}
+
+	@Override
+	public boolean receiveClientEvent(int id, int type)
+	{
+		return true;
+	}
+	
+	/**
+	 * Sets the configuration to the passed in value.
+	 * @param value The new redstone configuration.
+	 */
+	public void setConfig(RedstoneScannerConfig value)
+	{
+		this.config = value;
+		
+		// Make sure to mark this as dirty so it's saved.
+		this.markDirty();
+	}
+
+	/**
+	 * This is the initial method used to start the scan.
+	 * The scan distance and sides are based on the configuration.
+	 * @param state The curent state of the block.
+	 * @return An un-modified state if there was nothing to change. Otherwise this method will provide a powered or unpowered state.
+	 */
+	public IBlockState setRedstoneStrength(IBlockState state)
+	{
+		// TODO Auto-generated method stub
+		return state;
 	}
 
 	/**
@@ -148,21 +165,18 @@ public class TileEntityRedstoneScanner extends TileEntity
 	}
 	
 	@Override
-	public boolean receiveClientEvent(int id, int type)
-	{
-		return true;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound) 
-	{
-		super.readFromNBT(compound);
-
-		this.config = RedstoneScannerConfig.ReadFromNBTTagCompound(compound);
-	}
-
-	@Override
 	public void updateContainingBlockInfo()
 	{
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
+	{
+		//System.out.println("Writing scanner config.");
+		super.writeToNBT(compound);
+
+		this.config.WriteToNBTCompound(compound);
+		
+		return compound;
 	}
 }

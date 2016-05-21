@@ -38,11 +38,11 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	 */
 	public static void RegisterBlock()
 	{
-		//BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
+		BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
 		
-		//CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
+		CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
 		
-		//GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
+		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 		
 		/*
 		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
@@ -58,6 +58,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	}
 	
 	protected int tickRate = 20;
+	protected TileEntityRedstoneScanner localScanner;
 	
 	/**
 	 * Initializes a new instance of the BlockMiniRedstone.
@@ -142,6 +143,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
+		//System.out.println("Creating new tile entity.");
 		return new TileEntityRedstoneScanner();
 	}
 	
@@ -230,6 +232,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		if (worldIn.getTileEntity(pos) == null)
 		{
 			TileEntityRedstoneScanner scanner = new TileEntityRedstoneScanner();
+			this.localScanner = scanner;
 			worldIn.setTileEntity(pos, scanner);
 		}
 	}
@@ -280,7 +283,9 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	{
 		TileEntityRedstoneScanner tileEntity = this.getLocalTileEntity(worldIn, pos);
 		state = tileEntity.setRedstoneStrength(state);
-		worldIn.setBlockState(pos, state, 2);
+		worldIn.setBlockState(pos, state, 3);
+		tileEntity.markDirty();
+		this.localScanner = tileEntity;
 		this.updateNeighbors(worldIn, pos);
 		worldIn.markBlockRangeForRenderUpdate(pos, pos);
 		worldIn.scheduleUpdate(pos, this, tileEntity.getTickDelay());

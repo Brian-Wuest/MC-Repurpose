@@ -224,6 +224,7 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
+		System.out.println("Creating new clock tile entity.");
 		return new TileEntityRedstoneClock();
 	}
 
@@ -295,8 +296,3 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		worldIn.scheduleUpdate(pos, this, tickDelay);
 	}
 }
-
-
-
-
-

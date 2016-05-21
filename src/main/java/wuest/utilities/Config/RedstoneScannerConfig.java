@@ -58,6 +58,24 @@ public class RedstoneScannerConfig
 
 		return null;
 	}
+	
+	/**
+	 * Gets a facing based off of a facing enum value.
+	 * @param facing The EnumFacing value to get the Facing config for.
+	 * @return Null if the facing wasn't found or the facing found.
+	 */
+	public FacingConfig getFacingConfig(EnumFacing facing)
+	{
+		for (FacingConfig config : this.facingConfigs)
+		{
+			if (config.getFacing() == facing)
+			{
+				return config;
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * @return The tick delay for this class.
@@ -317,9 +335,9 @@ public class RedstoneScannerConfig
 
 		if (this.pos != null)
 		{
-			configCompound.setInteger("x", this.pos.getX());
-			configCompound.setInteger("y", this.pos.getY());
-			configCompound.setInteger("z", this.pos.getZ());
+			compound.setInteger("x", this.pos.getX());
+			compound.setInteger("y", this.pos.getY());
+			compound.setInteger("z", this.pos.getZ());
 		}
 		
 		configCompound.setBoolean("detectAnimals", this.animalsDetected);
@@ -380,9 +398,9 @@ public class RedstoneScannerConfig
 				config.playersDetected = configCompound.getBoolean("detectPlayers");
 			}
 			
-			if (configCompound.hasKey("x") && configCompound.hasKey("y") && configCompound.hasKey("z"))
+			if (compound.hasKey("x") && compound.hasKey("y") && compound.hasKey("z"))
 			{
-				config.pos = new BlockPos(configCompound.getInteger("x"), configCompound.getInteger("y"), configCompound.getInteger("z"));
+				config.pos = new BlockPos(compound.getInteger("x"), compound.getInteger("y"), compound.getInteger("z"));
 			}
 
 			for (EnumFacing facing : EnumFacing.VALUES)
@@ -407,7 +425,7 @@ public class RedstoneScannerConfig
 						facingConfig.scanLength = tag.getInteger("scanLength");
 					}
 					
-					config.SetFacingConfig(facingConfig.facing, facingConfig.scanLength);
+					config.SetFacingConfig(facingConfig.facing, facingConfig.active, facingConfig.scanLength);
 				}
 			}
 		}
@@ -504,7 +522,7 @@ public class RedstoneScannerConfig
 				value = 0;
 				this.active = false;
 			}
-			else if (this.scanLength == 0)
+			else if (this.scanLength == 0 && value >= 1)
 			{
 				this.active = true;
 			}

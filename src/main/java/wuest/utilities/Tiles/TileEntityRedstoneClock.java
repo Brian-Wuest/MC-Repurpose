@@ -20,43 +20,26 @@ public class TileEntityRedstoneClock extends TileEntity
 		this.powerConfiguration = new RedstoneClockPowerConfiguration();
 	}
 
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
-	{		
-		super.writeToNBT(compound);
-
-		this.powerConfiguration.WriteToNBTCompound(compound);
-		
-		return compound;
-	}
-
 	/**
-	 * Called when the chunk this TileEntity is on is Unloaded.
+	 * Gets the power configuration for this tile.
+	 * @return The power configuration for this tile.
 	 */
-	@Override
-	public void onChunkUnload()
+	public RedstoneClockPowerConfiguration getPowerConfiguration()
 	{
-		// Make sure to write the tile to the tag.
-		this.writeToNBT(this.getTileData());
+		return this.powerConfiguration;
 	}
 
-	@Override
-	public boolean receiveClientEvent(int id, int type)
+	public int getRedstoneStrength(IBlockState state, EnumFacing side)
 	{
-		return true;
-	}
+		boolean powered = ((Boolean)state.getValue(RedstoneClock.POWERED)).booleanValue();
 
-	@Override
-	public void readFromNBT(NBTTagCompound compound) 
-	{
-		super.readFromNBT(compound);
+		// If the block is set to powered and this side is powered or the side doesn't matter.
+		if (powered && (side == null || this.getPowerConfiguration().getSidePower(side.getOpposite())))
+		{
+			return 15;
+		}
 
-		this.powerConfiguration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(compound);
-	}
-
-	@Override
-	public void updateContainingBlockInfo()
-	{
+		return 0;
 	}
 
 	/**
@@ -79,6 +62,16 @@ public class TileEntityRedstoneClock extends TileEntity
 	}
 
 	/**
+	 * Called when the chunk this TileEntity is on is Unloaded.
+	 */
+	@Override
+	public void onChunkUnload()
+	{
+		// Make sure to write the tile to the tag.
+		this.writeToNBT(this.getTileData());
+	}
+
+	/**
 	 * Called when you receive a TileEntityData packet for the location this
 	 * TileEntity is currently in. On the client, the NetworkManager will always
 	 * be the remote server. On the server, it will be whomever is responsible for
@@ -93,13 +86,41 @@ public class TileEntityRedstoneClock extends TileEntity
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
-	/**
-	 * Gets the power configuration for this tile.
-	 * @return The power configuration for this tile.
-	 */
-	public RedstoneClockPowerConfiguration getPowerConfiguration()
+	@Override
+	public void readFromNBT(NBTTagCompound compound) 
 	{
-		return this.powerConfiguration;
+		//System.out.println("Reading Clock Data.");
+		super.readFromNBT(compound);
+
+		this.powerConfiguration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(compound);
+	}
+
+	@Override
+	public boolean receiveClientEvent(int id, int type)
+	{
+		return true;
+	}
+
+	/**
+	 * Sets the power configuration for this tile.
+	 * @param value The value of the power configuration to set.
+	 */
+	public void setPowerConfiguration(RedstoneClockPowerConfiguration value)
+	{
+		this.powerConfiguration = value;
+
+		// Make sure to mark this as dirty so it's saved.
+		this.markDirty();
+	}
+
+	public IBlockState setRedstoneStrength(IBlockState state, int strength, EnumFacing side)
+	{
+		if (side != null)
+		{
+			this.getPowerConfiguration().setSidePower(side, strength > 0);
+		}
+
+		return state.withProperty(RedstoneClock.POWERED, Boolean.valueOf(strength > 0));
 	}
 
 	/**
@@ -119,38 +140,25 @@ public class TileEntityRedstoneClock extends TileEntity
 		return (oldState.getBlock() != newSate.getBlock());
 	}
 
-	/**
-	 * Sets the power configuration for this tile.
-	 * @param value The value of the power configuration to set.
-	 */
-	public void setPowerConfiguration(RedstoneClockPowerConfiguration value)
+	@Override
+	public void updateContainingBlockInfo()
 	{
-		this.powerConfiguration = value;
-
-		// Make sure to mark this as dirty so it's saved.
-		this.markDirty();
 	}
+	
+	@Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return this.writeToNBT(new NBTTagCompound());
+    }
 
-	public int getRedstoneStrength(IBlockState state, EnumFacing side)
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
 	{
-		boolean powered = ((Boolean)state.getValue(RedstoneClock.POWERED)).booleanValue();
+		//System.out.println("Writing Clock Data.");
+		super.writeToNBT(compound);
 
-		// If the block is set to powered and this side is powered or the side doesn't matter.
-		if (powered && (side == null || this.getPowerConfiguration().getSidePower(side.getOpposite())))
-		{
-			return 15;
-		}
-
-		return 0;
-	}
-
-	public IBlockState setRedstoneStrength(IBlockState state, int strength, EnumFacing side)
-	{
-		if (side != null)
-		{
-			this.getPowerConfiguration().setSidePower(side, strength > 0);
-		}
-
-		return state.withProperty(RedstoneClock.POWERED, Boolean.valueOf(strength > 0));
+		this.powerConfiguration.WriteToNBTCompound(compound);
+		
+		return compound;
 	}
 }
