@@ -50,8 +50,8 @@ public class GuiRedstoneScanner extends GuiScreen
 	protected HoverChecker downChecker;
 	protected GuiCheckBox btnUp;
 	protected HoverChecker upChecker;
-
 	
+	protected HoverChecker animalChecker;
 	protected GuiCheckBox btnAnimals;
 	protected GuiCheckBox btnMonsters;
 	protected GuiCheckBox btnPlayers;
@@ -141,6 +141,10 @@ public class GuiRedstoneScanner extends GuiScreen
 		else if (this.southChecker.checkHover(x, y))
 		{
 			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'South' side.", 300), x, y);
+		}
+		else if (this.animalChecker.checkHover(x, y))
+		{
+			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("This includes things such as: pigs, cows, iron golems, etc...", 300), x, y);
 		}
 		
 		// This is for the middle.
@@ -249,6 +253,7 @@ public class GuiRedstoneScanner extends GuiScreen
 
 		this.btnAnimals = new GuiCheckBox(15, grayBoxX + 5, grayBoxY + 100, "Animals", this.Config.getAnimalsDetected()).setStringColor(color).setWithShadow(false);
 		this.buttonList.add(this.btnAnimals);
+		this.animalChecker = new HoverChecker(this.btnAnimals, 800);
 		
 		this.btnNonPlayers = new GuiCheckBox(16, grayBoxX + 5, grayBoxY + 115, "Non-Players", this.Config.getNonPlayersDetected()).setStringColor(color).setWithShadow(false);
 		this.buttonList.add(this.btnNonPlayers);

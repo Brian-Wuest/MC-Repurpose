@@ -11,6 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -44,21 +47,17 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		
 		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 		
-		/*
 		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
 				"xyx",
 				"zaz",
 				"xyx",
-				'x', Items.repeater,
-				'y', Item.getItemFromBlock(Blocks.redstone_block),
-				'z', Item.getItemFromBlock(Blocks.light_weighted_pressure_plate),
-				'a', Item.getItemFromBlock(Blocks.redstone_torch));
-		
-		*/
+				'x', Items.REPEATER,
+				'y', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK),
+				'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
+				'a', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
 	}
 	
 	protected int tickRate = 20;
-	protected TileEntityRedstoneScanner localScanner;
 	
 	/**
 	 * Initializes a new instance of the BlockMiniRedstone.
@@ -232,7 +231,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		if (worldIn.getTileEntity(pos) == null)
 		{
 			TileEntityRedstoneScanner scanner = new TileEntityRedstoneScanner();
-			this.localScanner = scanner;
 			worldIn.setTileEntity(pos, scanner);
 		}
 	}
@@ -285,7 +283,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		state = tileEntity.setRedstoneStrength(state);
 		worldIn.setBlockState(pos, state, 3);
 		tileEntity.markDirty();
-		this.localScanner = tileEntity;
 		this.updateNeighbors(worldIn, pos);
 		worldIn.markBlockRangeForRenderUpdate(pos, pos);
 		worldIn.scheduleUpdate(pos, this, tileEntity.getTickDelay());

@@ -1,7 +1,6 @@
 package wuest.utilities.Config;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -152,6 +151,30 @@ public class RedstoneScannerConfig
 		this.animalsDetected = value;
 	}
 
+	/**
+	 * Determines if the facing is active.
+	 * @param facing The facing to check.
+	 * @return True if the facing is active otherwise false.
+	 */
+	public boolean IsFacingActive(EnumFacing facing)
+	{
+		FacingConfig config = this.getFacingConfig(facing);
+		
+		return config.active;
+	}
+	
+	/**
+	 * Gets the scan length for a particular facing.
+	 * @param facing The facing to get the scanning range for.
+	 * @return The scanning range for this facing.
+	 */
+	public int GetFacingScanLength(EnumFacing facing)
+	{
+		FacingConfig config = this.getFacingConfig(facing);
+		
+		return config.scanLength;
+	}
+	
 	/**
 	 * Determines if non-players are detected as part of the scan.
 	 * 
