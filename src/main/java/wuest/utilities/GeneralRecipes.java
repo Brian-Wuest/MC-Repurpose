@@ -299,6 +299,14 @@ public class GeneralRecipes
 				new ItemStack(Items.REDSTONE),
 				new ItemStack(Items.GUNPOWDER),
 				new ItemStack(Items.DYE, 1, 11));
+		
+		// Make a recipe for slimeballs: Clay Ball + Lime Dye + Water Bucket
+		GameRegistry.addRecipe(new ItemStack(Items.SLIME_BALL, 2),
+				" x",
+				"yz",
+				'x', Items.WATER_BUCKET,
+				'y', new ItemStack(Items.DYE, 1, 10),
+				'z', Items.CLAY_BALL);
 	}
 
 	private static void LoadNetherStarRecipe()

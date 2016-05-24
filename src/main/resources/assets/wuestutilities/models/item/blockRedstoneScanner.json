@@ -1,5 +1,5 @@
 {
-	"parent": "wuestutilities:block/redstoneClock",
+	"parent": "wuestutilities:block/blockRedstoneScanner",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

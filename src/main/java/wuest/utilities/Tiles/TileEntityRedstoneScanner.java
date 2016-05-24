@@ -152,7 +152,6 @@ public class TileEntityRedstoneScanner extends TileEntity
 	public IBlockState setRedstoneStrength(IBlockState state)
 	{
 		this.ScanForEntities();
-		return state;
 	}
 
 	/**

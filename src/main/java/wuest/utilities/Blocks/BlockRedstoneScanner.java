@@ -1,14 +1,21 @@
 package wuest.utilities.Blocks;
 
+import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,12 +23,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Gui.GuiRedstoneScanner;
 import wuest.utilities.Proxy.CommonProxy;
@@ -34,6 +46,7 @@ import wuest.utilities.Tiles.TileEntityRedstoneScanner;
  */
 public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 {
+	public static final PropertyBool POWERED = PropertyBool.create("powered");
 	public static BlockRedstoneScanner RegisteredBlock;
 	
 	/**
@@ -48,14 +61,20 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 		
 		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
-				"xyx",
-				"zaz",
-				"xyx",
+				"x x",
+				"zyz",
+				"x x",
 				'x', Items.REPEATER,
 				'y', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK),
-				'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
-				'a', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
+				'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE));
 	}
+
+	protected static final AxisAlignedBB BOUNDING_AABB = new AxisAlignedBB(0.0625, 0.00001D, 0.0625D, 0.9375, 0.625D, 0.9375D);
+	protected static final AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.125D, 0.0625D, 0.125D, 0.875, 0.1875, 0.875D);
+	protected static final AxisAlignedBB STICK1_AABB = new AxisAlignedBB(0.1875D, 0.0D, 0.1875D, 0.3125D, 0.625D, 0.3125D);
+	protected static final AxisAlignedBB STICK2_AABB = new AxisAlignedBB(0.6875D, 0.0D, 0.6875D, 0.8125D, 0.625D, 0.8125D);
+	protected static final AxisAlignedBB STICK3_AABB = new AxisAlignedBB(0.1875D, 0.0D, 0.6875D, 0.3125D, 0.625D, 0.8125D);
+	protected static final AxisAlignedBB STICK4_AABB = new AxisAlignedBB(0.6875D, 0.0D, 0.1875D, 0.8125D, 0.625D, 0.3125D);
 	
 	protected int tickRate = 20;
 	
@@ -71,6 +90,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		this.setHardness(.5f);
 		this.setResistance(10.0f);
 		this.setSoundType(SoundType.METAL);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
 	}
 	
 	@Override
@@ -138,6 +158,53 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	{
 		return true;
 	}
+	
+	@Override
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
+	
+    /**
+     * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
+     */
+    @Override
+	public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.MODEL;
+    }
+    
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    {
+        this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK1_AABB);
+        this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK2_AABB);
+        this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK3_AABB);
+        this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK4_AABB);
+        this.addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
+    }
+    
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return BOUNDING_AABB;
+    }
+	
+    /**
+     * Used to determine ambient occlusion and culling when rebuilding chunks for render
+     */
+    @Override
+	public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
+
+	@Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.CUTOUT;
+    }
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
@@ -260,6 +327,30 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	public int tickRate(World worldIn)
 	{
 		return this.tickRate;
+	}
+	
+	/**
+	 * Convert the given metadata into a BlockState for this Block
+	 */
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return this.getDefaultState().withProperty(POWERED, Boolean.valueOf(meta == 1));
+	}
+
+	/**
+	 * Convert the BlockState into the correct metadata value
+	 */
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return ((Boolean)state.getValue(POWERED)).booleanValue() ? 1 : 0;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, new IProperty[] {POWERED});
 	}
 	
 	@Override

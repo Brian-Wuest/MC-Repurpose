@@ -2,11 +2,11 @@
 	"parent": "block/cube",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "blocks/repeater_on",
+		"particle": "blocks/repeater_off",
         "base": "blocks/gold_block",
 		"slab": "blocks/stone_slab_top",
-        "repeater": "blocks/repeater_on",
-        "torch": "blocks/redstone_torch_on",
+        "repeater": "blocks/repeater_off",
+        "torch": "blocks/redstone_torch_off",
         "redstone": "blocks/redstone_block"
 	},
     "elements": [

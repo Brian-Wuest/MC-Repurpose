@@ -321,7 +321,7 @@ public class RedstoneScannerConfig
 		this.tickDelay = 5;
 		this.animalsDetected = false;
 		this.nonPlayersDetected = false;
-		this.playersDetected = true;
+		this.playersDetected = false;
 		this.monstersDetected = false;
 
 		for (EnumFacing facing : EnumFacing.VALUES)
@@ -329,6 +329,7 @@ public class RedstoneScannerConfig
 			FacingConfig config = new FacingConfig();
 			config.setFacing(facing);
 			config.setScanLength(1);
+			config.setActive(true);
 
 			this.facingConfigs.add(config);
 		}
