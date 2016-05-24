@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import wuest.utilities.Blocks.BlockRedstoneScanner;
 import wuest.utilities.Config.RedstoneScannerConfig;
 
 /**
@@ -152,6 +153,7 @@ public class TileEntityRedstoneScanner extends TileEntity
 	public IBlockState setRedstoneStrength(IBlockState state)
 	{
 		this.ScanForEntities();
+		return state.withProperty(BlockRedstoneScanner.POWERED, Boolean.valueOf(this.foundEntity));
 	}
 
 	/**
