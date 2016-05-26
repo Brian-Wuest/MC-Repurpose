@@ -30,7 +30,20 @@ IMessageHandler<RedstoneClockMessage, IMessage>
 			public void run() 
 			{
 				// This is server side. Build the house.
-				RedstoneClockPowerConfiguration configuration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(message.getMessageTag());
+				RedstoneClockPowerConfiguration configuration = null;
+				
+				try
+				{
+					configuration = RedstoneClockPowerConfiguration.class.newInstance().ReadFromNBTTagCompound(message.getMessageTag());
+				}
+				catch (InstantiationException e)
+				{
+					e.printStackTrace();
+				}
+				catch (IllegalAccessException e)
+				{
+					e.printStackTrace();
+				}
 
 				World world = ctx.getServerHandler().playerEntity.worldObj;
 				IBlockState state = world.getBlockState(configuration.getPos());
@@ -42,7 +55,7 @@ IMessageHandler<RedstoneClockMessage, IMessage>
 
 					if (tileEntity != null && tileEntity.getClass() == TileEntityRedstoneClock.class)
 					{
-						((TileEntityRedstoneClock)tileEntity).setPowerConfiguration(configuration);
+						((TileEntityRedstoneClock)tileEntity).setConfig(configuration);
 					}
 
 					// Make sure the block updates.

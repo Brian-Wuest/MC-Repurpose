@@ -33,7 +33,20 @@ IMessageHandler<RedstoneScannerMessage, IMessage>
 			public void run() 
 			{
 				// This is server side. Build the house.
-				RedstoneScannerConfig configuration = RedstoneScannerConfig.ReadFromNBTTagCompound(message.getMessageTag());
+				RedstoneScannerConfig configuration = null;
+				
+				try
+				{
+					configuration = RedstoneScannerConfig.class.newInstance().ReadFromNBTTagCompound(message.getMessageTag());
+				}
+				catch (InstantiationException e)
+				{
+					e.printStackTrace();
+				}
+				catch (IllegalAccessException e)
+				{
+					e.printStackTrace();
+				}
 
 				World world = ctx.getServerHandler().playerEntity.worldObj;
 				IBlockState state = world.getBlockState(configuration.getBlockPos());

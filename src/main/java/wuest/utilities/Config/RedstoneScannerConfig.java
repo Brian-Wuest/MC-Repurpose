@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import wuest.utilities.Base.BaseConfig;
 
 /**
  * This is the class responsible for holding the configuration options for the
  * redstone scanner.
  * 
  * @author WuestMan
- *
  */
-public class RedstoneScannerConfig
+public class RedstoneScannerConfig extends BaseConfig 
 {
 	private ArrayList<FacingConfig> facingConfigs;
 	private int tickDelay;
@@ -336,22 +336,11 @@ public class RedstoneScannerConfig
 	}
 
 	/**
-	 * Gets an NBTTagCompound which has this classes information in it.
-	 * 
-	 * @return A {@link NBTTagCompound} with this classes values.
-	 */
-	public NBTTagCompound GetNBTTagCompound()
-	{
-		NBTTagCompound compound = new NBTTagCompound();
-		this.WriteToNBTCompound(compound);
-		return compound;
-	}
-
-	/**
 	 * Writes the values of this class to an NBTTagCompound.
 	 * 
 	 * @param compound The compound to write the tag values too.
 	 */
+	@Override
 	public void WriteToNBTCompound(NBTTagCompound compound)
 	{
 		NBTTagCompound configCompound = new NBTTagCompound();
@@ -389,7 +378,7 @@ public class RedstoneScannerConfig
 	 * @return A new instance of the RedstoneScannerConfig build with all of the
 	 *         values loaded from the tag (if any).
 	 */
-	public static RedstoneScannerConfig ReadFromNBTTagCompound(NBTTagCompound compound)
+	public RedstoneScannerConfig ReadFromNBTTagCompound(NBTTagCompound compound)
 	{
 		RedstoneScannerConfig config = new RedstoneScannerConfig();
 

@@ -7,8 +7,9 @@ import java.util.Map.Entry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import wuest.utilities.Base.BaseConfig;
 
-public class RedstoneClockPowerConfiguration
+public class RedstoneClockPowerConfiguration extends BaseConfig
 {
 	private HashMap<EnumFacing, Boolean> facingPower = new HashMap<EnumFacing, Boolean>();
 	private int poweredTick = 20;
@@ -129,9 +130,11 @@ public class RedstoneClockPowerConfiguration
 		this.facingPower.put(facing, value);
 	}
 
+	@Override
 	public void WriteToNBTCompound(NBTTagCompound compound)
 	{
 		NBTTagCompound powerCompound = new NBTTagCompound();
+		
 		// Add the power configuration tag.
 		powerCompound.setInteger("poweredTick", this.poweredTick);
 		powerCompound.setInteger("unPoweredTick", this.unPoweredTick);
@@ -151,18 +154,7 @@ public class RedstoneClockPowerConfiguration
 		compound.setTag("powerCompound", powerCompound);
 	}
 
-	/**
-	 * Gets an NBTTagCompound which has this classes information in it.
-	 * @return A {@link NBTTagCompound} with this classes values.
-	 */
-	public NBTTagCompound GetNBTTagCompound()
-	{
-		NBTTagCompound compound = new NBTTagCompound();
-		this.WriteToNBTCompound(compound);
-		return compound;
-	}
-
-	public static RedstoneClockPowerConfiguration ReadFromNBTTagCompound(NBTTagCompound compound)
+	public RedstoneClockPowerConfiguration ReadFromNBTTagCompound(NBTTagCompound compound)
 	{
 		RedstoneClockPowerConfiguration configuration = new RedstoneClockPowerConfiguration();
 

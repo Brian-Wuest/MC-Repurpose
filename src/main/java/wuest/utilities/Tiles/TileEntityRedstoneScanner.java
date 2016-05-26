@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import wuest.utilities.Base.TileEntityBase;
 import wuest.utilities.Blocks.BlockRedstoneScanner;
 import wuest.utilities.Config.RedstoneScannerConfig;
 
@@ -23,9 +24,8 @@ import wuest.utilities.Config.RedstoneScannerConfig;
  * This class is the TileEntity responsible for a lot of the work done with the Redstone Scanner.
  * @author WuestMan
  */
-public class TileEntityRedstoneScanner extends TileEntity
+public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerConfig>
 {
-	protected RedstoneScannerConfig config;
 	protected boolean foundEntity = false;
 	
 	/**
@@ -34,15 +34,6 @@ public class TileEntityRedstoneScanner extends TileEntity
 	public TileEntityRedstoneScanner()
 	{
 		this.config = new RedstoneScannerConfig();
-	}
-
-	/**
-	 * Gets the configuration.
-	 * @return The redstone scanner configuration.
-	 */
-	public RedstoneScannerConfig getConfig()
-	{
-		return this.config;
 	}
 
 	/**
@@ -65,86 +56,6 @@ public class TileEntityRedstoneScanner extends TileEntity
 	}
 
 	/**
-	 * Allows for a specialized description packet to be created. This is often used to sync tile entity data from the
-	 * server to the client easily. For example this is used by signs to synchronise the text to be displayed.
-	 */
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
-	{
-		// Don't send the packet until the position has been set.
-		if (this.pos.getX() == 0 && this.pos.getY() == 0 && this.pos.getZ() == 0)
-		{
-			return super.getUpdatePacket();
-		}
-
-		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
-
-		return new SPacketUpdateTileEntity(this.getPos(), 1, tag);
-	}
-
-	/**
-	 * Called when the chunk this TileEntity is on is Unloaded.
-	 */
-	@Override
-	public void onChunkUnload()
-	{
-		// Make sure to write the tile to the tag.
-		this.writeToNBT(this.getTileData());
-	}
-	
-	@Override
-    public NBTTagCompound getUpdateTag()
-    {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-	/**
-	 * Called when you receive a TileEntityData packet for the location this
-	 * TileEntity is currently in. On the client, the NetworkManager will always
-	 * be the remote server. On the server, it will be whomever is responsible for
-	 * sending the packet.
-	 *
-	 * @param net The NetworkManager the packet originated from
-	 * @param pkt The data packet
-	 */
-	@Override
-	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
-	{
-		this.readFromNBT(pkt.getNbtCompound());
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound) 
-	{
-		//System.out.println("Reading Scanner config.");
-		super.readFromNBT(compound);
-
-		if (compound.hasKey("configCompound"))
-		{
-			this.config = RedstoneScannerConfig.ReadFromNBTTagCompound(compound);
-		}
-	}
-
-	@Override
-	public boolean receiveClientEvent(int id, int type)
-	{
-		return true;
-	}
-	
-	/**
-	 * Sets the configuration to the passed in value.
-	 * @param value The new redstone configuration.
-	 */
-	public void setConfig(RedstoneScannerConfig value)
-	{
-		this.config = value;
-		
-		// Make sure to mark this as dirty so it's saved.
-		this.markDirty();
-	}
-
-	/**
 	 * This is the initial method used to start the scan.
 	 * The scan distance and sides are based on the configuration.
 	 * @param state The curent state of the block.
@@ -157,44 +68,10 @@ public class TileEntityRedstoneScanner extends TileEntity
 	}
 
 	/**
-	 * Called from Chunk.setBlockIDWithMetadata and Chunk.fillChunk, determines if this tile entity should be re-created when the ID, or Metadata changes.
-	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
-	 *
-	 * @param world Current world
-	 * @param pos Tile's world position
-	 * @param oldState The old ID of the block
-	 * @param newState The new ID of the block (May be the same)
-	 * @return true forcing the invalidation of the existing TE, false not to invalidate the existing TE
-	 */
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-	{
-		// This tile needs to persist so the data can be saved.
-		return (oldState.getBlock() != newSate.getBlock());
-	}
-	
-	@Override
-	public void updateContainingBlockInfo()
-	{
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
-	{
-		//System.out.println("Writing scanner config.");
-		super.writeToNBT(compound);
-
-		this.config.WriteToNBTCompound(compound);
-		
-		return compound;
-	}
-
-	/**
 	 * Processes the scanning, sets the class level bool for determining if an entity was found and if the block associated with this tile should provide power.
 	 */
 	protected void ScanForEntities()
 	{
-		// TODO: Finish scan processing.
 		int verticalRange = (this.config.IsFacingActive(EnumFacing.UP) ? this.config.GetFacingScanLength(EnumFacing.UP) : 0) 
 				+ (this.config.IsFacingActive(EnumFacing.DOWN) ? this.config.GetFacingScanLength(EnumFacing.DOWN) : 0);
 		

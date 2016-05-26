@@ -8,33 +8,36 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import wuest.utilities.Base.TileEntityBase;
 import wuest.utilities.Blocks.RedstoneClock;
 import wuest.utilities.Config.*;
 
-public class TileEntityRedstoneClock extends TileEntity 
+/**
+ * This is the tile entity which controls the redstone strength and holds the configuration data for the redstone clock.
+ * @author WuestMan
+ */
+public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration>
 {
-	protected RedstoneClockPowerConfiguration powerConfiguration;
-
+	/**
+	 * Initializes a new instance of the TileEntityRedstoneClock class.
+	 */
 	public TileEntityRedstoneClock()
 	{
-		this.powerConfiguration = new RedstoneClockPowerConfiguration();
+		this.config = new RedstoneClockPowerConfiguration();
 	}
 
 	/**
-	 * Gets the power configuration for this tile.
-	 * @return The power configuration for this tile.
+	 * Gets the redstone strength for this state and side.
+	 * @param state The current state of the block.
+	 * @param side The facing to get the power from.
+	 * @return 15 if the side and block are powered, otherwise 0;
 	 */
-	public RedstoneClockPowerConfiguration getPowerConfiguration()
-	{
-		return this.powerConfiguration;
-	}
-
 	public int getRedstoneStrength(IBlockState state, EnumFacing side)
 	{
 		boolean powered = ((Boolean)state.getValue(RedstoneClock.POWERED)).booleanValue();
 
 		// If the block is set to powered and this side is powered or the side doesn't matter.
-		if (powered && (side == null || this.getPowerConfiguration().getSidePower(side.getOpposite())))
+		if (powered && (side == null || this.getConfig().getSidePower(side.getOpposite())))
 		{
 			return 15;
 		}
@@ -43,122 +46,19 @@ public class TileEntityRedstoneClock extends TileEntity
 	}
 
 	/**
-	 * Allows for a specialized description packet to be created. This is often used to sync tile entity data from the
-	 * server to the client easily. For example this is used by signs to synchronise the text to be displayed.
+	 * Sets the redstone strength for a particular side and returns a powered or unpowered state.
+	 * @param state The state to return as powered or unpowered.
+	 * @param strength The new strength of the side.
+	 * @param side The side to update.
+	 * @return An updated state.
 	 */
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
-	{
-		// Don't send the packet until the position has been set.
-		if (this.pos.getX() == 0 && this.pos.getY() == 0 && this.pos.getZ() == 0)
-		{
-			return super.getUpdatePacket();
-		}
-
-		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
-
-		return new SPacketUpdateTileEntity(this.getPos(), 1, tag);
-	}
-
-	/**
-	 * Called when the chunk this TileEntity is on is Unloaded.
-	 */
-	@Override
-	public void onChunkUnload()
-	{
-		// Make sure to write the tile to the tag.
-		this.writeToNBT(this.getTileData());
-	}
-
-	/**
-	 * Called when you receive a TileEntityData packet for the location this
-	 * TileEntity is currently in. On the client, the NetworkManager will always
-	 * be the remote server. On the server, it will be whomever is responsible for
-	 * sending the packet.
-	 *
-	 * @param net The NetworkManager the packet originated from
-	 * @param pkt The data packet
-	 */
-	@Override
-	public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
-	{
-		this.readFromNBT(pkt.getNbtCompound());
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound) 
-	{
-		//System.out.println("Reading Clock Data.");
-		super.readFromNBT(compound);
-
-		this.powerConfiguration = RedstoneClockPowerConfiguration.ReadFromNBTTagCompound(compound);
-	}
-
-	@Override
-	public boolean receiveClientEvent(int id, int type)
-	{
-		return true;
-	}
-
-	/**
-	 * Sets the power configuration for this tile.
-	 * @param value The value of the power configuration to set.
-	 */
-	public void setPowerConfiguration(RedstoneClockPowerConfiguration value)
-	{
-		this.powerConfiguration = value;
-
-		// Make sure to mark this as dirty so it's saved.
-		this.markDirty();
-	}
-
 	public IBlockState setRedstoneStrength(IBlockState state, int strength, EnumFacing side)
 	{
 		if (side != null)
 		{
-			this.getPowerConfiguration().setSidePower(side, strength > 0);
+			this.config.setSidePower(side, strength > 0);
 		}
 
 		return state.withProperty(RedstoneClock.POWERED, Boolean.valueOf(strength > 0));
-	}
-
-	/**
-	 * Called from Chunk.setBlockIDWithMetadata and Chunk.fillChunk, determines if this tile entity should be re-created when the ID, or Metadata changes.
-	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
-	 *
-	 * @param world Current world
-	 * @param pos Tile's world position
-	 * @param oldState The old ID of the block
-	 * @param newState The new ID of the block (May be the same)
-	 * @return true forcing the invalidation of the existing TE, false not to invalidate the existing TE
-	 */
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-	{
-		// This tile needs to persist so the data can be saved.
-		return (oldState.getBlock() != newSate.getBlock());
-	}
-
-	@Override
-	public void updateContainingBlockInfo()
-	{
-	}
-	
-	@Override
-    public NBTTagCompound getUpdateTag()
-    {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) 
-	{
-		//System.out.println("Writing Clock Data.");
-		super.writeToNBT(compound);
-
-		this.powerConfiguration.WriteToNBTCompound(compound);
-		
-		return compound;
 	}
 }

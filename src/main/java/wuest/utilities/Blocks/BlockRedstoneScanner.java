@@ -35,6 +35,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Base.TileBlockBase;
+import wuest.utilities.Config.RedstoneScannerConfig;
 import wuest.utilities.Gui.GuiRedstoneScanner;
 import wuest.utilities.Proxy.CommonProxy;
 import wuest.utilities.Tiles.TileEntityRedstoneScanner;
@@ -44,7 +46,7 @@ import wuest.utilities.Tiles.TileEntityRedstoneScanner;
  * @author WuestMan
  *
  */
-public class BlockRedstoneScanner extends Block implements ITileEntityProvider
+public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanner>
 {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 	public static BlockRedstoneScanner RegisteredBlock;
@@ -92,52 +94,7 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		this.setSoundType(SoundType.METAL);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
 	}
-	
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		TileEntityRedstoneScanner tileEntity = this.getLocalTileEntity(worldIn, pos);
 
-		if (tileEntity.getRedstoneStrength() > 0)
-		{
-			this.updateNeighbors(worldIn, pos);
-		}
-
-		super.breakBlock(worldIn, pos, state);
-		worldIn.removeTileEntity(pos);
-	}
-	
-	/**
-	 * Determine if this block can make a redstone connection on the side provided,
-	 * Useful to control which sides are inputs and outputs for redstone wires.
-	 *
-	 * @param world The current world
-	 * @param pos Block position in world
-	 * @param side The side that is trying to make the connection, CAN BE NULL
-	 * @return True to make the connection
-	 */
-	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
-	{
-		/**
-		 * Can this block provide power. Only wire currently seems to have this change based on its state.
-		 */
-		return this.canProvidePower(state) && side != null;
-	}
-	
-	/**
-     * Determines if the player can harvest this block, obtaining it's drops when the block is destroyed.
-     *
-     * @param player The player damaging the block, may be null
-     * @param meta The block's current metadata
-     * @return True to spawn the drops
-     */
-    @Override
-	public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
-    {
-        return true;
-    }
-    
 	/**
 	 * Determines if a torch can be placed on the top surface of this block.
 	 * Useful for creating your own block that torches can be on, such as fences.
@@ -151,12 +108,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos)
 	{
 		return false;
-	}
-	
-	@Override
-	public boolean canProvidePower(IBlockState state)
-	{
-		return true;
 	}
 	
 	@Override
@@ -207,37 +158,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
     }
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) 
-	{
-		//System.out.println("Creating new tile entity.");
-		return new TileEntityRedstoneScanner();
-	}
-	
-	/**
-	 * Gets the redstone scanner entity at the current position.
-	 * @param worldIn The world to the entity for.
-	 * @param pos The position in the world to get the entity for.
-	 * @return Null if the tile was not found or if one was found and is not a redstone scanner entity. Otherwise the TileEntityRedstoneScanner instance.
-	 */
-	public TileEntityRedstoneScanner getLocalTileEntity(World worldIn, BlockPos pos)
-	{
-		TileEntity entity = worldIn.getTileEntity(pos);
-
-		if (entity != null && entity.getClass() == TileEntityRedstoneScanner.class)
-		{
-			return (TileEntityRedstoneScanner) entity;
-		}
-		else
-		{
-			TileEntityRedstoneScanner tileEntity = new TileEntityRedstoneScanner();
-			worldIn.setTileEntity(pos, tileEntity);
-			tileEntity.setPos(pos);
-
-			return tileEntity;
-		}
-	}
-	
-	@Override
 	public int getStrongPower(IBlockState blockState, IBlockAccess worldIn, BlockPos pos,EnumFacing side)
 	{
 		TileEntityRedstoneScanner tileEntity = this.getLocalTileEntity((World)worldIn, pos);
@@ -254,27 +174,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public boolean hasTileEntity(IBlockState state)
-	{
-		return true;
-	}
-	
-	public void notifyNeighborsOfStateChange(World worldIn, BlockPos pos, Block blockType)
-	{
-		if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class)).isCanceled())
-		{
-			return;
-		}
-
-		worldIn.notifyBlockOfStateChange(pos.west(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.east(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.down(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.up(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.north(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.south(), blockType);
-	}
-
-	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote) 
@@ -283,41 +182,6 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		}
 
 		return true;
-	}
-
-	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-	{
-		for (EnumFacing enumfacing : EnumFacing.values())
-		{
-			worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this);
-		}
-
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-
-		if (worldIn.getTileEntity(pos) == null)
-		{
-			TileEntityRedstoneScanner scanner = new TileEntityRedstoneScanner();
-			worldIn.setTileEntity(pos, scanner);
-		}
-	}
-	
-	@Override
-	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) 
-	{
-		super.eventReceived(state, worldIn, pos, eventID, eventParam);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
-	}
-	
-	/**
-	 * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
-	 * IBlockstate
-	 */
-	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
-		return this.getDefaultState();
 	}
 	
 	/**
@@ -352,11 +216,33 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 	{
 		return new BlockStateContainer(this, new IProperty[] {POWERED});
 	}
-	
+
+	/**
+	 * Processes custom update state.
+	 * @param worldIn The world this state is being updated in.
+	 * @param pos The block position.
+	 * @param state The block state.
+	 * @param tileEntity The tile entity associated with this class.
+	 * @return The number of ticks to delay until the next update.
+	 */
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+	public int customUpdateState(World worldIn, BlockPos pos, IBlockState state, TileEntityRedstoneScanner tileEntity)
 	{
-		this.updateState(worldIn, pos, state);
+		state = tileEntity.setRedstoneStrength(state);
+		worldIn.setBlockState(pos, state, 3);
+		
+		this.updateNeighbors(worldIn, pos);
+		
+		return tileEntity.getTickDelay();
+	}
+
+	@Override
+	public void customBreakBlock(TileEntityRedstoneScanner tileEntity, World worldIn, BlockPos pos, IBlockState state)
+	{
+		if (tileEntity.getRedstoneStrength() > 0)
+		{
+			this.updateNeighbors(worldIn, pos);
+		}
 	}
 	
 	/**
@@ -367,16 +253,20 @@ public class BlockRedstoneScanner extends Block implements ITileEntityProvider
 		this.notifyNeighborsOfStateChange(worldIn, pos, this);
 		this.notifyNeighborsOfStateChange(worldIn, pos.down(), this);
 	}
-
-	public void updateState(World worldIn, BlockPos pos, IBlockState state)
+	
+	public void notifyNeighborsOfStateChange(World worldIn, BlockPos pos, Block blockType)
 	{
-		TileEntityRedstoneScanner tileEntity = this.getLocalTileEntity(worldIn, pos);
-		state = tileEntity.setRedstoneStrength(state);
-		worldIn.setBlockState(pos, state, 3);
-		tileEntity.markDirty();
-		this.updateNeighbors(worldIn, pos);
-		worldIn.markBlockRangeForRenderUpdate(pos, pos);
-		worldIn.scheduleUpdate(pos, this, tileEntity.getTickDelay());
+		if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class)).isCanceled())
+		{
+			return;
+		}
+
+		worldIn.notifyBlockOfStateChange(pos.west(), blockType);
+		worldIn.notifyBlockOfStateChange(pos.east(), blockType);
+		worldIn.notifyBlockOfStateChange(pos.down(), blockType);
+		worldIn.notifyBlockOfStateChange(pos.up(), blockType);
+		worldIn.notifyBlockOfStateChange(pos.north(), blockType);
+		worldIn.notifyBlockOfStateChange(pos.south(), blockType);
 	}
 
 }

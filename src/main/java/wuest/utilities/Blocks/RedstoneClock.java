@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -32,12 +33,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import wuest.utilities.WuestUtilities;
+import wuest.utilities.Base.TileBlockBase;
 import wuest.utilities.Gui.GuiRedstoneClock;
 import wuest.utilities.Items.ItemBedCompass;
 import wuest.utilities.Proxy.CommonProxy;
 import wuest.utilities.Tiles.TileEntityRedstoneClock;
 
-public class RedstoneClock extends Block implements ITileEntityProvider
+public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 	public static RedstoneClock RegisteredBlock;
@@ -49,10 +51,9 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 	 */
 	public RedstoneClock(String name) 
 	{
-		super(Material.WOOD);
+		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
-		//this.setUnlocalizedName(name);
 		CommonProxy.setBlockName(this, "redstoneClock");
 	}
 
@@ -73,57 +74,6 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 					'y', Items.REPEATER,
 					'z', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
 		}
-	}
-
-	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-	{
-		for (EnumFacing enumfacing : EnumFacing.values())
-		{
-			worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this);
-		}
-
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-
-		if (worldIn.getTileEntity(pos) == null)
-		{
-			TileEntityRedstoneClock clock = new TileEntityRedstoneClock();
-			worldIn.setTileEntity(pos, clock);
-		}
-	}
-
-	/**
-	 * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
-	 * IBlockstate
-	 */
-	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
-		return this.getDefaultState();
-	}
-
-	@Override
-	public boolean canProvidePower(IBlockState state)
-	{
-		return true;
-	}
-
-	/**
-	 * Determine if this block can make a redstone connection on the side provided,
-	 * Useful to control which sides are inputs and outputs for redstone wires.
-	 *
-	 * @param world The current world
-	 * @param pos Block position in world
-	 * @param side The side that is trying to make the connection, CAN BE NULL
-	 * @return True to make the connection
-	 */
-	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
-	{
-		/**
-		 * Can this block provide power. Only wire currently seems to have this change based on its state.
-		 */
-		return this.canProvidePower(state) && side != null;
 	}
 
 	@Override
@@ -161,34 +111,14 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 
 		return tileEntity.getRedstoneStrength(blockState, side);
 	}
-
+	
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+	public void customBreakBlock(TileEntityRedstoneClock tileEntity, World worldIn, BlockPos pos, IBlockState state)
 	{
-		int i = this.getLocalTileEntity(worldIn, pos).getRedstoneStrength(state, null);
-		this.updateState(worldIn, pos, state, i);
-	}
-
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		TileEntityRedstoneClock tileEntity = this.getLocalTileEntity(worldIn, pos);
-
 		if (tileEntity.getRedstoneStrength(state, null) > 0)
 		{
 			this.updateNeighbors(worldIn, pos);
 		}
-
-		super.breakBlock(worldIn, pos, state);
-		worldIn.removeTileEntity(pos);
-	}
-
-	@Override
-	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) 
-	{
-		super.eventReceived(state, worldIn, pos, eventID, eventParam);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
 	}
 
 	/**
@@ -215,43 +145,6 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		return new BlockStateContainer(this, new IProperty[] {POWERED});
 	}
 
-	@Override
-	public boolean hasTileEntity(IBlockState state)
-	{
-		return true;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) 
-	{
-		System.out.println("Creating new clock tile entity.");
-		return new TileEntityRedstoneClock();
-	}
-
-	/**
-	 * Gets the redstone clock entity at the current position.
-	 * @param worldIn The world to the entity for.
-	 * @param pos The position in the world to get the entity for.
-	 * @return Null if the tile was not found or if one was found and is not a redstone clock entity. Otherwise the TileEntityRedstoneClock instance.
-	 */
-	public TileEntityRedstoneClock getLocalTileEntity(World worldIn, BlockPos pos)
-	{
-		TileEntity entity = worldIn.getTileEntity(pos);
-
-		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class)
-		{
-			return (TileEntityRedstoneClock) entity;
-		}
-		else
-		{
-			TileEntityRedstoneClock tileEntity = new TileEntityRedstoneClock();
-			worldIn.setTileEntity(pos, tileEntity);
-			tileEntity.setPos(pos);
-
-			return tileEntity;
-		}
-	}
-
 	/**
 	 * Notify block and block below of changes
 	 */
@@ -276,23 +169,26 @@ public class RedstoneClock extends Block implements ITileEntityProvider
 		worldIn.notifyBlockOfStateChange(pos.south(), blockType);
 	}
 
-	public void updateState(World worldIn, BlockPos pos, IBlockState state, int oldRedstoneStrength)
+	/**
+	 * Processes custom update state.
+	 * @param worldIn The world this state is being updated in.
+	 * @param pos The block position.
+	 * @param state The block state.
+	 * @param tileEntity The tile entity associated with this class.
+	 * @return The number of ticks to delay until the next update.
+	 */
+	@Override
+	public int customUpdateState(World worldIn, BlockPos pos, IBlockState state, TileEntityRedstoneClock tileEntity)
 	{
-		int i = 0;
-
-		if (oldRedstoneStrength == 0)
-		{
-			i = 15;
-		}
-
-		TileEntityRedstoneClock tileEntity = this.getLocalTileEntity(worldIn, pos);
+		// Get the old redstone strength.
+		int i = tileEntity.getRedstoneStrength(state, null) == 0 ? 15 : 0;
+		
+		// Set the new redstone strength and provide an updated state.
 		state = tileEntity.setRedstoneStrength(state, i, null);
-		worldIn.setBlockState(pos, state, 2);
+		worldIn.setBlockState(pos, state, 3);
+		
 		this.updateNeighbors(worldIn, pos);
-		worldIn.markBlockRangeForRenderUpdate(pos, pos);
-
-		int tickDelay = i == 0 ? tileEntity.getPowerConfiguration().getUnPoweredTick() : tileEntity.getPowerConfiguration().getPoweredTick();
-
-		worldIn.scheduleUpdate(pos, this, tickDelay);
+		
+		return i == 0 ? tileEntity.getConfig().getUnPoweredTick() : tileEntity.getConfig().getPoweredTick();
 	}
 }
