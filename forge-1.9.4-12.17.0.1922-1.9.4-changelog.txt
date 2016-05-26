@@ -1,5 +1,119 @@
 Changelog:
-Build 1887:
+Build 1922:
+	tterrag1098: Add hook for TE data sync on client (#2893)
+
+Build 1.9.4-12.17.0.1921-1.9.4:
+	the.f1repl4ce: Switch new constructor to use floats (#2904)
+
+Build 1.9.4-12.17.0.1920-1.9.4:
+	atomicblom: Add Unit Test to detect mismatches between EnumHelper and Enum ctor
+	LexManos: Fix paramters for addArmorMaterial, addOption and addGameType.
+	LexManos: Make unit test for EnumHelper more robust and less spammy. Now detects missing accessors as well.
+
+Build 1.9.4-12.17.0.1918-1.9.4:
+	LexManos: Add alternative ItemAxe Constructor
+
+Build 1.9.4-12.17.0.1917-1.9.4:
+	LexManos: Fix villagers having farmer skin on vanilla servers. Closes #2894
+
+Build 1.9.4-12.17.0.1916-1.9.4:
+	LexManos: Fire playerDestroyItem event's in some cases where we were not.
+
+Build 1.9.4-12.17.0.1915-1.9.4:
+	LexManos: Fix Container.compouteStackSize not respecting stack version of maxStackSize. Closes #2756
+
+Build 1.9.4-12.17.0.1914-1.9.4:
+	LexManos: Set max enchantment ID to Short.MAX_VALUE. Closes #2799
+
+Build 1.9.4-12.17.0.1913-1.9.4:
+	LexManos: Tipped arrows are now not affected by infinite enchantment but are still effected by creative mode.
+
+Build 1.9.4-12.17.0.1912-1.9.4:
+	tterrag1098: Fix screenshot link paths on Windows (#2886)
+	LexManos: Take capabilities into account when comparing ItemStack NBT's. Closes #2726
+
+Build 1.9.4-12.17.0.1910-1.9.4:
+	cpw: Tweak build file slightly - allow passing buildNumber using gradle parameters (-PbuildNumber=...) and provide a "resetBuildNumber" function to reset the buildNumber to zero in the ForgeVersion file. Means builds can be reproducible in-IDE.
+
+Build 1.9.4-12.17.0.1909-1.9.4:
+	LexManos: Update example mod for new mappings.
+
+Build 1.9-12.16.1.1907:
+	bonii-xx:
+		Fix Bucket rendering and add sound (#2865)
+		
+		* Adjust generated quads from texture to take texture size into account #2858
+		
+		*  Fix universal bucket not passing through when rightclicking on a non-block
+		Add proper sound events when picking up modded fluids #2821
+		
+		* Have FluidUtil execute properly on both sides and sync as expected. Add default sounds to interacting with tanks
+		
+		* Save sound for filling/emptying in the fluid
+
+Build 1.9-12.16.1.1906:
+	LexManos: Lets just simply this. Fixes last commit.
+
+Build 1.9-12.16.1.1905:
+	LexManos: Add modder facing API for Villager Career level trades. Ref: #2854
+
+Build 1.9-12.16.1.1904:
+	cpw: Fix up release jsons to clean up extraneous netty references
+	fry: Extended Animation State Machine format to allow multiple transitions from one state.
+
+Build 1.8.9-11.15.1.1902-1.8.9:
+	cpw: Fix up release jsons to clean up extraneous netty references
+
+Build 1.9-12.16.1.1901:
+	cpw: Fix up release jsons to clean up extraneous netty references
+
+Build 1.9-12.16.1.1900:
+	LexManos: Make LootPool constructor public again. Closes #2847
+
+Build 1.9-12.16.1.1899:
+	LexManos: Fix type in LootEntry json name. And rename LootTable.finalize to freeze to avoid overriding Object function. Closes #2846 and #2847
+
+Build 1.9-12.16.1.1898:
+	fry: Fixed joint animation application correctly.
+
+Build 1.9-12.16.1.1897:
+	shadowfacts:
+		Add ScreenshotEvent (#2828)
+		
+		Add ScreenshotEvent
+
+Build 1.9-12.16.1.1896:
+	LexManos:
+		New LootTable interaction system and event.
+		Modders can now modify and reference internal elements of a loot table by name.
+		Editing can ONLY be done in the event and any external editing will cause a exception to be thrown.
+		See this gist for more information: https://gist.github.com/LexManos/77c983d67b9ad27010428478b66d50fd
+
+Build 1.9-12.16.1.1895:
+	fry: Fixed joint hierarchy not being used fully in the animation system.
+
+Build 1.9-12.16.1.1894:
+	LexManos: Fixed issue in ChunkIO that would potentially cause NPEs on chunks. Closes #2837
+
+Build 1.9-12.16.1.1893:
+	LexManos: Fixed map extension recipie.
+
+Build 1.9-12.16.1.1892:
+	mezz: Fix the rand given to PopulateChunkEvent (#2834)
+
+Build 1.9-12.16.1.1891:
+	LexManos: Fix areas where dimension types are used as dimension IDs.
+
+Build 1.9-12.16.1.1889:
+	LexManos: Add NPE protection to in-hand item rendering.
+
+Build 1.9-12.16.1.1888:
+	mattmess1221:
+		Fix url regex (#2815)
+		
+		Fixed url detection in chat messages. Stops false positives such as `um.....no`
+
+Build 1.9-12.16.1.1887:
 	LexManos: Slightly better practice because wait can be randomly interupted.
 	LexManos: Bump version for new RB.
 
@@ -223,7 +337,7 @@ Build 1.9-12.16.0.1886:
 	LexManos: Fix bows not animating properly when picking up ammo while using. Closes #2672
 	LexManos: Make NoteBlockEvent raw constructor protected to allow subclasses. Closes #2153
 	LexManos: Fix landing particles not showing up. Cloes #2661
-	me: Forward ItemBlock#addInformation to Block#addInformation
+	shadowfacts: Forward ItemBlock#addInformation to Block#addInformation
 	tterrag1098: Add state param to canRenderInLayer
 	hea3venmc: Fix remapped blocks being overriden with dummy air blocks. Closes #2491
 	cpw:
@@ -764,7 +878,7 @@ Build 1.9-12.16.0.1817-1.9:
 		Also prevent a mutable blockpos leak in World#setTileEntity
 	gigaherz: Add wrapper methods for IStorage#readNBT/writeNBT.
 	LexManos: Fix landing particles not showing up. Cloes #2661
-	me: Forward ItemBlock#addInformation to Block#addInformation
+	shadowfacts: Forward ItemBlock#addInformation to Block#addInformation
 	tterrag1098: Add state param to canRenderInLayer
 
 Build 1.9-12.16.0.1816-1.9:
