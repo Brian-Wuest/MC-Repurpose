@@ -86,6 +86,11 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
 		//System.out.println("Creating new tile entity.");
+		return this.createNewTileEntity();
+	}
+	
+	public T createNewTileEntity()
+	{
 		try
 		{
 			return this.getTypeParameterClass().newInstance();
@@ -131,21 +136,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 
 		if (worldIn.getTileEntity(pos) == null)
 		{
-			T tile = null;
-			try
-			{
-				tile = this.getTypeParameterClass().newInstance();
-			}
-			catch (InstantiationException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			T tile = this.createNewTileEntity();
 			
 			worldIn.setTileEntity(pos, tile);
 		}
@@ -201,20 +192,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 		}
 		else
 		{
-			T tileEntity = null;
-			
-			try
-			{
-				tileEntity = this.getTypeParameterClass().newInstance();
-			}
-			catch (InstantiationException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e)
-			{
-				e.printStackTrace();
-			}
+			T tileEntity = this.createNewTileEntity();
 			
 			worldIn.setTileEntity(pos, tileEntity);
 			tileEntity.setPos(pos);

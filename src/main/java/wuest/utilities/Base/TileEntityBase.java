@@ -141,9 +141,14 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 		//System.out.println("Reading Tag Data.");
 		super.readFromNBT(compound);
 
+		this.config = this.createConfigInstance().ReadFromNBTTagCompound(compound);
+	}
+	
+	public T createConfigInstance()
+	{
 		try
 		{
-			this.config = this.getTypeParameterClass().newInstance().ReadFromNBTTagCompound(compound);
+			return this.getTypeParameterClass().newInstance();
 		}
 		catch (InstantiationException e)
 		{
@@ -153,6 +158,8 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 		{
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 }
