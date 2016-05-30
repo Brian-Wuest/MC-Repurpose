@@ -1,5 +1,67 @@
 Changelog:
-Build 1922:
+Build 1.9.4-12.17.0.1935-1.9.4:
+	fry: Initial support for model visibility system. Implemented it for OBJ, B3D and normal vanilla models; fixed NPE accessing parent state in B3DModel. Fixes #2801.
+
+Build 1.9-12.16.1.1934:
+	mezz:
+		Improve JavaDoc links, fix some broken JavaDocs (#2833)
+		
+		Improve JavaDoc links, fix broken JavaDocs
+
+Build 1.9.4-12.17.0.1933-1.9.4:
+	fry: Reordered transformations during LayerHeldItem rendering, fixes #2827.
+
+Build 1.9.4-12.17.0.1932-1.9.4:
+	LexManos: Fixed new ICrashReportDetail loader working with packaged mods by delaying it until the ModContainer's construct event. Closes #2924
+
+Build 1.9.4-12.17.0.1931-1.9.4:
+	LexManos: Fixed village wells not having their biomes set. Closes #2499
+	LexManos:
+		Fixed issue with @ObjectHolder and the new registry system. Closes #2640
+		Only run static initalizers for classes we need to get the names from values.
+
+Build 1.9.4-12.17.0.1930-1.9.4:
+	LexManos: Fix tooltip for survival tab in the creative menu not drawing on any but the first page. Closes #2908 and #2504
+	LexManos: Make sure tool-classes for vanilla tools are initialized early. Closes #2909 and #2525
+	LexManos: Fixed FluidUtil.tryEmptyFluidContainerItem not checking if the tank can accept fluids first. Closes #2527
+	LexManos: Fixed potential issue with Chunk.getLightOpacity being called before the chunk is added to the world map. Closes #2529
+	LexManos: Fixed TileEntityBeacon not using position-aware getLightOpacity. Closes #2530 and #2910
+
+Build 1.9.4-12.17.0.1929-1.9.4:
+	LexManos: Fix Thorns enchantment bypassing ISpecialArmor.damageArmor function. Closes #2463
+
+Build 1.9.4-12.17.0.1928-1.9.4:
+	LexManos: Fixed NBTTagString.toString not properly escaping \'s. Closes #2393
+	LexManos:
+		Reinitalize statistics information on Mapping changes.
+		Fixes mismatched stats to item/block ids. And auto registers stats for modded items.
+		Closes #2454
+
+Build 1.9.4-12.17.0.1927-1.9.4:
+	LexManos: Fire LivingSpawnEvents for MobSpawners. Closes #2079
+	LexManos: Fix javadocs for BiomeColor events. Closes #2093
+	LexManos: Fixed EntityRegistry.addSpawn adding duplicate spawn entries. Closes #2112
+	LexManos: Fix setTileEntity causing the world to remove the new and old tile entities. Closes #2164
+	LexManos: Add ServerHangWatchdog to TerminalTransformer whitelist. Closes #2203
+
+Build 1.9.4-12.17.0.1926-1.9.4:
+	LexManos: Set Enchantment table's harvest level. Closes #1349
+	LexManos: More uniformly apply Configuration.caseSensitiveCustomCategories. Closes #1353
+	LexManos: Close player's inventory to prevent potential dupe issues on some modded items. Closes #1431
+	LexManos: Move getArmorModel hook up two lines so that the attributes and animation information is set. Closes #1939
+	LexManos: Fire PopulateChunkEvent Pre and Post in ChunkProviderFlat. Closes #2050
+
+Build 1.9.4-12.17.0.1925-1.9.4:
+	LexManos: Fix installer downloading vanilla jar when not needed. And filter some more known libraries.
+	LexManos: Capture interfaces when scanning classes and preload implementations of ICrashReportDetail.
+
+Build 1.9.4-12.17.0.1924-1.9.4:
+	cpw: Strip Optional from the class signature as well, since that's loaded by the TypeToken registry code and might cause a crash.
+
+Build 1.9-12.16.1.1923:
+	shadowfacts: Pass the correct position into isSideSolid in BlockRailBase#canPlaceBlockAt (#2919)
+
+Build 1.9.4-12.17.0.1922-1.9.4:
 	tterrag1098: Add hook for TE data sync on client (#2893)
 
 Build 1.9.4-12.17.0.1921-1.9.4:
