@@ -33,6 +33,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 		this.setTickRandomly(false);
 		this.setSoundType(SoundType.GROUND);
 		this.setHarvestLevel("shovel", 0);
+		this.setHardness(0.6F);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		CommonProxy.setBlockName(this, "blockEnrichedFarmland");
 	}
