@@ -9,16 +9,13 @@ import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
@@ -26,8 +23,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -36,8 +33,11 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Config.WuestConfiguration;
+import wuest.utilities.Items.ItemFluffyFabric;
+import wuest.utilities.Items.ItemSnorkel;
 import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Items.ItemSwiftBlade;
+import wuest.utilities.Items.ItemWhetStone;
 import wuest.utilities.Proxy.Messages.BedLocationMessage;
 
 public class WuestEventHandler
@@ -221,6 +221,46 @@ public class WuestEventHandler
 		}
 	}
 
+	@SubscribeEvent
+	public void AnvilUpdate(AnvilUpdateEvent event)
+	{
+		ItemStack rightItem = event.getRight();
+		ItemStack leftItem = event.getLeft();
+		
+		event.setOutput(null);
+		
+		if (rightItem.getItem() instanceof ItemBook)
+		{
+			ItemStack enchantedBook = null;
+			
+			// These items create enchanted books.
+			if (leftItem.getItem() instanceof ItemFluffyFabric)
+			{
+				// Set the output to an enchanted book with the Silk Touch enchantment.
+				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.SILK_TOUCH, 1));
+				event.setCost(3);
+			}
+			else if (leftItem.getItem() instanceof ItemWhetStone)
+			{
+				// Set the output to an enchanted book with the Sharpness 1 enchantment.
+				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.SHARPNESS, 1));
+				event.setCost(1);
+				
+			}
+			else if (leftItem.getItem() instanceof ItemSnorkel)
+			{
+				// Set the output to an enchanted book with water breathing 1 enchantment.
+				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.RESPIRATION, 1));
+				event.setCost(2);
+			}
+			
+			if (enchantedBook != null)
+			{
+				event.setOutput(enchantedBook);
+			}
+		}
+	}
+	
 	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
 	{
 		if (WuestEventHandler.playerBedLocation == null)

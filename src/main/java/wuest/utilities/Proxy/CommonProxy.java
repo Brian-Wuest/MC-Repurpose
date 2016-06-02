@@ -1,15 +1,10 @@
 package wuest.utilities.Proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLootBonus;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -23,32 +18,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import wuest.utilities.GeneralRecipes;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Blocks.BlockCustomWall;
-import wuest.utilities.Blocks.BlockDirtSlab;
-import wuest.utilities.Blocks.BlockDirtStairs;
-import wuest.utilities.Blocks.BlockEnrichedFarmland;
-import wuest.utilities.Blocks.BlockGrassSlab;
-import wuest.utilities.Blocks.BlockGrassStairs;
-import wuest.utilities.Blocks.BlockMiniRedstone;
-import wuest.utilities.Blocks.BlockRedstoneScanner;
-import wuest.utilities.Blocks.RedstoneClock;
+import wuest.utilities.Blocks.*;
 import wuest.utilities.Config.WuestConfiguration;
-import wuest.utilities.Enchantment.EnchantmentLooting;
 import wuest.utilities.Events.WuestEventHandler;
-import wuest.utilities.Gui.GuiHouseItem;
-import wuest.utilities.Gui.GuiRedstoneClock;
-import wuest.utilities.Gui.GuiRedstoneScanner;
-import wuest.utilities.Items.ItemBedCompass;
-import wuest.utilities.Items.ItemStartHouse;
-import wuest.utilities.Items.ItemSwiftBlade;
-import wuest.utilities.Proxy.Messages.BedLocationMessage;
-import wuest.utilities.Proxy.Messages.HouseTagMessage;
-import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
-import wuest.utilities.Proxy.Messages.RedstoneScannerMessage;
-import wuest.utilities.Proxy.Messages.Handlers.BedLocationHandler;
-import wuest.utilities.Proxy.Messages.Handlers.HouseHandler;
-import wuest.utilities.Proxy.Messages.Handlers.RedstoneClockHandler;
-import wuest.utilities.Proxy.Messages.Handlers.RedstoneScannerHandler;
+import wuest.utilities.Gui.*;
+import wuest.utilities.Items.*;
+import wuest.utilities.Proxy.Messages.*;
+import wuest.utilities.Proxy.Messages.Handlers.*;
 
 public class CommonProxy implements IGuiHandler
 {
@@ -94,6 +70,9 @@ public class CommonProxy implements IGuiHandler
 		BlockEnrichedFarmland.RegisterBlock();
 		BlockMiniRedstone.RegisterBlock();
 		BlockRedstoneScanner.RegisterBlock();
+		ItemFluffyFabric.RegisterItem();
+		ItemWhetStone.RegisterItem();
+		ItemSnorkel.RegisterItem();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
