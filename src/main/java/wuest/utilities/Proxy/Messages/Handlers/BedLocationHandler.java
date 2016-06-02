@@ -18,7 +18,7 @@ public class BedLocationHandler implements
 IMessageHandler<BedLocationMessage, IMessage>
 {
 	@Override
-	public BedLocationMessage onMessage(final BedLocationMessage message,
+	public IMessage onMessage(final BedLocationMessage message,
 			final MessageContext ctx) 
 	{
 		// Or Minecraft.getMinecraft() on the client.

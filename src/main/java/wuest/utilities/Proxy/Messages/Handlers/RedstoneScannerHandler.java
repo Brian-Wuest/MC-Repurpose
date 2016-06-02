@@ -10,11 +10,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import wuest.utilities.Blocks.BlockRedstoneScanner;
-import wuest.utilities.Blocks.RedstoneClock;
-import wuest.utilities.Config.*;
-import wuest.utilities.Proxy.Messages.RedstoneClockMessage;
+import wuest.utilities.Config.RedstoneScannerConfig;
 import wuest.utilities.Proxy.Messages.RedstoneScannerMessage;
-import wuest.utilities.Tiles.TileEntityRedstoneClock;
 import wuest.utilities.Tiles.TileEntityRedstoneScanner;
 
 public class RedstoneScannerHandler implements
