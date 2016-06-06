@@ -133,7 +133,7 @@ public class ItemStartHouse extends Item
 
 					// Teleport the player to the middle of the house so
 					// they don't die while house is created.
-					player.setPositionAndUpdate(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
+					player.attemptTeleport(startingPosition.up(2).getX(), startingPosition.up(2).getY(), startingPosition.up(2).getZ());
 
 					// Build the basic structure.
 					ItemStartHouse.BuildStructure(world, startingPosition, configuration, northFace);
