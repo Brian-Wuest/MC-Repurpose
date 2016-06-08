@@ -1,10 +1,12 @@
 package wuest.utilities.Events;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -71,10 +73,38 @@ public class HomeCommand extends CommandBase
 			if (bedLocation != null)
 			{
 				World world = player.worldObj;
-				bedLocation = bedLocation.east().south();
-
-				// Teleport the player back to their bed.
-				player.setPositionAndUpdate(bedLocation.getX(), bedLocation.getY(), bedLocation.getZ());
+				boolean teleportResult = false;
+				
+				for (EnumFacing facing : EnumFacing.HORIZONTALS)
+				{
+					BlockPos tempPos = bedLocation.offset(facing);
+					boolean teleportAvailable = false;
+					
+					if (world.isAirBlock(tempPos) && world.isAirBlock(tempPos.offset(facing)) && world.isAirBlock(tempPos.offset(facing.rotateY())) && world.isAirBlock(tempPos.offset(facing.rotateY(), 2)))
+					{
+						teleportAvailable = true;
+						tempPos = tempPos.offset(facing).offset(facing.rotateY(), 2);
+					}
+					else if (world.isAirBlock(tempPos) && world.isAirBlock(tempPos.offset(facing)) && world.isAirBlock(tempPos.offset(facing.rotateYCCW())) && world.isAirBlock(tempPos.offset(facing.rotateYCCW(), 2)))
+					{
+						teleportAvailable = true;
+						tempPos = tempPos.offset(facing).offset(facing.rotateYCCW(), 2);
+					}
+					
+					if (teleportAvailable)
+					{
+						// Teleport the player back to their bed.
+						tempPos = tempPos.up();
+						teleportResult = player.attemptTeleport(tempPos.getX(), tempPos.getY(), tempPos.getZ());
+						
+						break;
+					}
+				}
+				
+				if (!teleportResult)
+				{
+					player.addChatComponentMessage(new TextComponentString("Unable to teleport to bed. Please be sure that there are at least 2 blocks of free space around your bed to teleport to."));
+				}
 			}
 			else
 			{
