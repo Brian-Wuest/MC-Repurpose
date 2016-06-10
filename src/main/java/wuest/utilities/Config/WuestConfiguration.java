@@ -1,6 +1,7 @@
 package wuest.utilities.Config;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import wuest.utilities.WuestUtilities;
 
 public class WuestConfiguration 
@@ -16,6 +17,7 @@ public class WuestConfiguration
 	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
 	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
 	private static String enableHouseGenerationRestrictionName = "Enable House Generation Restrictions";
+	private static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -49,6 +51,7 @@ public class WuestConfiguration
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableHouseGenerationRestrictions;
+	public boolean enableExtraGrassDrops;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -89,6 +92,7 @@ public class WuestConfiguration
 		this.addMiscRecipes = true;
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
+		this.enableExtraGrassDrops = true;
 	}
 
 	public static void syncConfig()
@@ -106,6 +110,11 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableHouseGenerationRestrictions = config.getBoolean(WuestConfiguration.enableHouseGenerationRestrictionName, WuestConfiguration.OPTIONS, false, "When true this option causes the Crafting Table, Furnace and Chest to not be added when creating a house, regardless of options chosen. Server Configuration overrides client.");
+
+		// This one is special since it requires a minecraft restart.
+		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: potatoes, carrots and beetroot seeds. Server configuration overrides client.");
+		prop.setRequiresMcRestart(true);
+		WuestUtilities.proxy.proxyConfiguration.enableExtraGrassDrops = prop.getBoolean();
 		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 

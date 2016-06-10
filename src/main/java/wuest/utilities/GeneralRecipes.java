@@ -47,7 +47,10 @@ public class GeneralRecipes
 			GeneralRecipes.LoadNetherStarRecipe();
 		}
 		
-		GeneralRecipes.AddSeedsToGrassDrop();
+		if (WuestUtilities.proxy.proxyConfiguration.enableExtraGrassDrops)
+		{
+			GeneralRecipes.AddSeedsToGrassDrop();
+		}
 	}
 
 	private static void LoadMetalRecipes()
