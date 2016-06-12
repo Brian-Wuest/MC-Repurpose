@@ -9,6 +9,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
@@ -342,7 +343,7 @@ public class ItemStartHouse extends Item
 		{
 			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchWidthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition) && !world.isAirBlock(itemPosition.offset(facing)))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -361,7 +362,7 @@ public class ItemStartHouse extends Item
 		{
 			itemPosition = itemPosition.offset(facing.getOpposite(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition)&& !world.isAirBlock(itemPosition.offset(facing.rotateY())))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -380,7 +381,7 @@ public class ItemStartHouse extends Item
 		{
 			itemPosition = itemPosition.offset(facing.getOpposite(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition)&& !world.isAirBlock(itemPosition.offset(facing.rotateYCCW())))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -399,7 +400,7 @@ public class ItemStartHouse extends Item
 		{
 			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition)&& !world.isAirBlock(itemPosition.offset(facing.getOpposite())))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -690,17 +691,17 @@ public class ItemStartHouse extends Item
 		int torchWidthOffset = configuration.houseWidth < 9 ? 3 : 4;
 		int torchDepthOffset = configuration.houseDepth < 9 ? 3 : 4;
 
-		// North Wall torches.
+		// North Wall torches going west.
 		IBlockState blockState = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, facing);
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
 		int blocksMoved = torchWidthOffset;
-
-		while (blocksMoved < houseWidth)
+		
+		while (blocksMoved <= houseWidth)
 		{
 			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchWidthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition) && world.isSideSolid(itemPosition.offset(facing.getOpposite()), facing))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -708,18 +709,18 @@ public class ItemStartHouse extends Item
 			blocksMoved += torchWidthOffset;
 		}
 
-		// East wall torches.
+		// East wall torches going south.
 		itemPosition = ItemStartHouse.NorthEastCorner.offset(facing.rotateY());
 		blockState = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, facing.rotateY());
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
 		blocksMoved = torchDepthOffset;
 
-		while (blocksMoved < houseDepth)
+		while (blocksMoved <= houseDepth)
 		{
 			itemPosition = itemPosition.offset(facing.getOpposite(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition) && world.isSideSolid(itemPosition.offset(facing.rotateYCCW()), facing.rotateY()))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -727,18 +728,18 @@ public class ItemStartHouse extends Item
 			blocksMoved += torchDepthOffset;
 		}
 
-		// West wall torches.
+		// West wall torches going south.
 		itemPosition = ItemStartHouse.NorthWestCorner.offset(facing.rotateYCCW());
 		blockState = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, facing.rotateYCCW());
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
 		blocksMoved = torchDepthOffset;
 
-		while (blocksMoved < houseDepth)
+		while (blocksMoved <= houseDepth)
 		{
 			itemPosition = itemPosition.offset(facing.getOpposite(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition) && world.isSideSolid(itemPosition.offset(facing.rotateY()), facing.rotateYCCW()))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -746,18 +747,18 @@ public class ItemStartHouse extends Item
 			blocksMoved += torchDepthOffset;
 		}
 
-		// South wall torches.
+		// South wall torches going west.
 		itemPosition = ItemStartHouse.SouthEastCorner.offset(facing.getOpposite());
 		blockState = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, facing.getOpposite());
 		BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 
 		blocksMoved = torchDepthOffset;
 
-		while (blocksMoved < houseWidth)
+		while (blocksMoved <= houseWidth)
 		{
 			itemPosition = itemPosition.offset(facing.rotateYCCW(), torchDepthOffset);
 
-			if (world.isAirBlock(itemPosition))
+			if (world.isAirBlock(itemPosition) && world.isSideSolid(itemPosition.offset(facing), facing.getOpposite()))
 			{
 				BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
 			}
@@ -778,8 +779,12 @@ public class ItemStartHouse extends Item
 
 				for (int j = 0; j <= houseWidth; j += torchWidthOffset)
 				{
-					BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
-
+					// When placing the torch, make sure that the torch will be on a solid block otherwise it will just fall.
+					if (world.isAirBlock(itemPosition) && !world.isAirBlock(itemPosition.down()))
+					{
+						BuildingMethods.ReplaceBlock(world, itemPosition, blockState);
+					}
+					
 					itemPosition = itemPosition.offset(facing.rotateYCCW(), torchWidthOffset);
 				}
 			}
@@ -831,7 +836,6 @@ public class ItemStartHouse extends Item
 	{
 		// The initial position is where the character was teleported too, go
 		// back X blocks and start building the mine shaft.
-
 		if ((houseDepth & 1) != 0)
 		{
 			houseDepth = (int) Math.floor(houseDepth / 2);
@@ -855,8 +859,19 @@ public class ItemStartHouse extends Item
 
 		// The entire ladder has been created. Create a platform at this level
 		// and place a chest next to the ladder.
-		tempStacks = BuildingMethods.SetFloor(world, pos, Blocks.STONE, 3, 3, tempStacks, facing.getOpposite());
+		tempStacks = BuildingMethods.SetFloor(world, pos.offset(facing).offset(facing.rotateY()), Blocks.STONE, 3, 4, tempStacks, facing.getOpposite());
 
+		// Remove the ladder stack since they shouldn't be getting that.
+		for (int i = 0; i < tempStacks.size(); i++)
+		{
+			ItemStack stack = tempStacks.get(i);
+			
+			if (stack.getItem() == Item.getItemFromBlock(Blocks.LADDER))
+			{
+				tempStacks.remove(i);
+			}
+		}
+		
 		// Now that the floor has been set, go up 1 block to star creating the
 		// walls.
 		pos = pos.up();
@@ -946,6 +961,9 @@ public class ItemStartHouse extends Item
 		IBlockState ladderState = Blocks.LADDER.getDefaultState().withProperty(BlockLadder.FACING, houseFacing);
 		IBlockState torchState = Blocks.TORCH.getStateFromMeta(5);
 
+		// Replace the main floor block with air since we don't want it placed in the chest at the end.
+		BuildingMethods.ReplaceBlock(world, pos, Blocks.AIR);
+		
 		while (pos.getY() > 8)
 		{
 			IBlockState state = world.getBlockState(pos);
@@ -986,19 +1004,42 @@ public class ItemStartHouse extends Item
 				// normal processing.
 				if (facing == westWall && torchCounter == 6 && pos.getY() > 14)
 				{
-					// First make sure the block behind this block is stone,
-					// then place the torch.
-					BlockPos tempPos = pos.offset(facing, 2);
-					IBlockState surroundingState = world.getBlockState(tempPos);
-					Block surroundingBlock = surroundingState.getBlock();
-
-					if (!surroundingBlock.isBlockNormalCube(surroundingState))
+					// First make sure the blocks around this block are stone, then place the torch.
+					for (int j = 0; j <= 2; j++)
 					{
-						// This is not a solid block. Get the drops then replace
-						// it with stone.
-						BuildingMethods.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
+						BlockPos tempPos = null;
+						IBlockState surroundingState = null;
+						Block surroundingBlock = null;
+						
+						if (j == 0)
+						{
+							tempPos = pos.offset(facing, 2);
+							surroundingState = world.getBlockState(tempPos);
+							surroundingBlock = surroundingState.getBlock();
+						}
+						else if (j == 1)
+						{
+							tempPos = pos.offset(facing).offset(facing.rotateY());
+							surroundingState = world.getBlockState(tempPos);
+							surroundingBlock = surroundingState.getBlock();
+						}
+						else
+						{
+							tempPos = pos.offset(facing).offset(facing.rotateYCCW());
+							surroundingState = world.getBlockState(tempPos);
+							surroundingBlock = surroundingState.getBlock();
+						}
+						
+						// Make sure that this is a normal solid block and not a liquid or partial block.
+						if (!surroundingBlock.isBlockNormalCube(surroundingState)
+								|| surroundingBlock instanceof BlockLiquid)
+						{
+							// This is not a solid block. Get the drops then replace
+							// it with stone.
+							BuildingMethods.ConsolidateDrops(surroundingBlock, world, tempPos, surroundingState, originalStacks);
 
-						BuildingMethods.ReplaceBlock(world, tempPos, Blocks.STONE);
+							BuildingMethods.ReplaceBlock(world, tempPos, Blocks.STONE);
+						}
 					}
 
 					BuildingMethods.ReplaceBlock(world, pos.offset(houseFacing.rotateYCCW()), torchState);
@@ -1011,7 +1052,8 @@ public class ItemStartHouse extends Item
 					IBlockState surroundingState = world.getBlockState(tempPos);
 					Block surroundingBlock = surroundingState.getBlock();
 
-					if (!surroundingBlock.isBlockNormalCube(surroundingState))
+					if (!surroundingBlock.isBlockNormalCube(surroundingState)
+							|| surroundingBlock instanceof BlockLiquid)
 					{
 						// This is not a solid block. Get the drops then replace
 						// it with stone.
@@ -1026,7 +1068,7 @@ public class ItemStartHouse extends Item
 			BuildingMethods.ConsolidateDrops(block, world, pos, state, originalStacks);
 
 			// Don't place a ladder at this location since it will be destroyed.
-			if (pos.getY() != 9)
+			if (pos.getY() >= 10)
 			{
 				BuildingMethods.ReplaceBlock(world, pos, ladderState);
 			}
