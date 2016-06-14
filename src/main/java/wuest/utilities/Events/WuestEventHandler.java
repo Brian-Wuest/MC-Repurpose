@@ -227,8 +227,6 @@ public class WuestEventHandler
 		ItemStack rightItem = event.getRight();
 		ItemStack leftItem = event.getLeft();
 		
-		event.setOutput(null);
-		
 		if (rightItem.getItem() instanceof ItemBook)
 		{
 			ItemStack enchantedBook = null;
