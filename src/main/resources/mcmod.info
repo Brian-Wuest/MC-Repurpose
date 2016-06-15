@@ -1,9 +1,9 @@
-d[
+[
 {
   "modid": "wuestUtilities",
   "name": "Wuest Utilities",
   "description": "This mod adds many recipes to make vanilla easier to work with. It also adds a starting house.",
-  "version": "1.9.4.7",
+  "version": "1.9.4.8",
   "mcversion": "1.9.4",
   "url": "",
   "updateUrl": "",

@@ -1,12 +1,16 @@
 package wuest.utilities.Events;
 
+import java.util.Random;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -65,7 +69,7 @@ public class HomeCommand extends CommandBase
 
 			if (!WuestUtilities.proxy.proxyConfiguration.enableHomeCommand)
 			{
-				player.addChatComponentMessage(new TextComponentString("This command has not been enabled on the server."));
+				return;
 			}
 
 			BlockPos bedLocation = player.getBedLocation();
@@ -73,37 +77,17 @@ public class HomeCommand extends CommandBase
 			if (bedLocation != null)
 			{
 				World world = player.worldObj;
-				boolean teleportResult = false;
 				
-				for (EnumFacing facing : EnumFacing.HORIZONTALS)
+				BlockPos blockpos1 = EntityPlayer.getBedSpawnLocation(server.worldServerForDimension(player.dimension), bedLocation, true);
+				
+				if (blockpos1 != null)
 				{
-					BlockPos tempPos = bedLocation.offset(facing);
-					boolean teleportAvailable = false;
-					
-					if (world.isAirBlock(tempPos) && world.isAirBlock(tempPos.offset(facing)) && world.isAirBlock(tempPos.offset(facing.rotateY())) && world.isAirBlock(tempPos.offset(facing.rotateY(), 2)))
-					{
-						teleportAvailable = true;
-						tempPos = tempPos.offset(facing).offset(facing.rotateY(), 2);
-					}
-					else if (world.isAirBlock(tempPos) && world.isAirBlock(tempPos.offset(facing)) && world.isAirBlock(tempPos.offset(facing.rotateYCCW())) && world.isAirBlock(tempPos.offset(facing.rotateYCCW(), 2)))
-					{
-						teleportAvailable = true;
-						tempPos = tempPos.offset(facing).offset(facing.rotateYCCW(), 2);
-					}
-					
-					if (teleportAvailable)
-					{
-						// Teleport the player back to their bed.
-						tempPos = tempPos.up();
-						teleportResult = player.attemptTeleport(tempPos.getX(), tempPos.getY(), tempPos.getZ());
-						
-						break;
-					}
+					this.attemptTeleport(player, true, (double)((float)blockpos1.getX() + 0.5F), (double)((float)blockpos1.getY() + 0.1F), (double)((float)blockpos1.getZ() + 0.5F));
 				}
-				
-				if (!teleportResult)
+				else
 				{
-					player.addChatComponentMessage(new TextComponentString("Unable to teleport to bed. Please be sure that there are at least 2 blocks of free space around your bed to teleport to."));
+					// Send the player saying that the bed could not be found.
+					player.addChatComponentMessage(new TextComponentString("Bed Not Found."));	
 				}
 			}
 			else
@@ -113,4 +97,61 @@ public class HomeCommand extends CommandBase
 			}
 		}		
 	}
+	
+    /**
+     * Teleports the entity to the specified location.
+     */
+    public boolean attemptTeleport(EntityPlayer player, boolean ignoreCollisions, double x, double y, double z)
+    {
+        double d0 = player.posX;
+        double d1 = player.posY;
+        double d2 = player.posZ;
+        player.posX = x;
+        player.posY = y;
+        player.posZ = z;
+        boolean flag = false;
+        BlockPos blockpos = new BlockPos(player);
+        World world = player.worldObj;
+        Random random = player.getRNG();
+
+        if (world.isBlockLoaded(blockpos))
+        {
+            boolean flag1 = false;
+
+            while (!flag1 && blockpos.getY() > 0)
+            {
+                BlockPos blockpos1 = blockpos.down();
+                IBlockState iblockstate = world.getBlockState(blockpos1);
+
+                if (iblockstate.getMaterial().blocksMovement())
+                {
+                    flag1 = true;
+                }
+                else
+                {
+                    --player.posY;
+                    blockpos = blockpos1;
+                }
+            }
+
+            if (flag1)
+            {
+                player.setPositionAndUpdate(player.posX, player.posY, player.posZ);
+
+                if (ignoreCollisions || world.getCollisionBoxes(player, player.getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(player.getEntityBoundingBox()))
+                {
+                    flag = true;
+                }
+            }
+        }
+
+        if (!flag)
+        {
+            player.setPositionAndUpdate(d0, d1, d2);
+            return false;
+        }
+        
+        return true;
+    }
+
 }
