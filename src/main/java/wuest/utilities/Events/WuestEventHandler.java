@@ -269,6 +269,9 @@ public class WuestEventHandler
 	{
 		Block block = event.getState().getBlock();
 		
+		// For coal ore, add a random chance that a diamond shard can drop.
+		if (block == Blocks.COAL_ORE && !event.isCanceled() && !event.isSilkTouching())
+		{ 
 			double randomChance = event.getWorld().rand.nextDouble();
 			BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
 			bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
