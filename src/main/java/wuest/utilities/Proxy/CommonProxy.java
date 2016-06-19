@@ -73,6 +73,7 @@ public class CommonProxy implements IGuiHandler
 		ItemFluffyFabric.RegisterItem();
 		ItemWhetStone.RegisterItem();
 		ItemSnorkel.RegisterItem();
+		ItemDiamondShard.RegisterItem();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();

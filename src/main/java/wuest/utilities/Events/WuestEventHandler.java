@@ -1,5 +1,7 @@
 package wuest.utilities.Events;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -27,12 +30,14 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import wuest.utilities.WuestUtilities;
 import wuest.utilities.Config.WuestConfiguration;
+import wuest.utilities.Items.ItemDiamondShard;
 import wuest.utilities.Items.ItemFluffyFabric;
 import wuest.utilities.Items.ItemSnorkel;
 import wuest.utilities.Items.ItemStartHouse;
@@ -259,6 +264,51 @@ public class WuestEventHandler
 		}
 	}
 	
+	@SubscribeEvent
+	public void onDrops(HarvestDropsEvent event) 
+	{
+		Block block = event.getState().getBlock();
+		
+			double randomChance = event.getWorld().rand.nextDouble();
+			BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
+			bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
+			randomChance = bigDecimal.doubleValue();
+			int fortuneLevel = event.getFortuneLevel();
+			double maxPercentage = 0.01;
+			
+			switch (fortuneLevel)
+			{
+				case 1:
+				{
+					maxPercentage = 0.015;
+					break;
+				}
+				
+				case 2:
+				{
+					maxPercentage = 0.02;
+					break;
+				}
+				
+				case 3:
+				{
+					maxPercentage = 0.025;
+					break;
+				}
+				
+				default:
+				{
+					maxPercentage = 0.01;
+				}
+			}
+			
+			if (randomChance <= maxPercentage)
+			{
+				event.getDrops().add(new ItemStack(ItemDiamondShard.RegisteredItem));
+			}
+		}
+	}
+	
 	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
 	{
 		if (WuestEventHandler.playerBedLocation == null)
@@ -319,4 +369,3 @@ public class WuestEventHandler
 	}
 
 }
-
