@@ -40,7 +40,6 @@ import wuest.utilities.Config.WuestConfiguration;
 import wuest.utilities.Items.ItemDiamondShard;
 import wuest.utilities.Items.ItemFluffyFabric;
 import wuest.utilities.Items.ItemSnorkel;
-import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Items.ItemSwiftBlade;
 import wuest.utilities.Items.ItemWhetStone;
 import wuest.utilities.Proxy.Messages.BedLocationMessage;
@@ -145,30 +144,6 @@ public class WuestEventHandler
 	}
 
 	@SubscribeEvent
-	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
-	{
-		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer) 
-		{
-			System.out.println("Player joined world, checking to see if the house builder should be provided.");
-
-			EntityPlayer player = (EntityPlayer)event.getEntity();
-			NBTTagCompound persistTag = this.getModIsPlayerNewTag(player);
-
-			// Get the opposite of the value, if the bool doesn't exist then we can add the house to the inventory, otherwise the player isn't new and shouldn't get the item.
-			boolean shouldGiveHousebuilder = !persistTag.getBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG);
-
-			if (shouldGiveHousebuilder && WuestUtilities.proxy.proxyConfiguration.addHouseItem)
-			{
-				ItemStack stack = new ItemStack(ItemStartHouse.RegisteredItem);
-				player.inventory.addItemStackToInventory(stack);
-
-				// Make sure to set the tag for this player so they don't get the item again.
-				persistTag.setBoolean(WuestEventHandler.GIVEN_HOUSEBUILDER_TAG, true);
-			}
-		}
-	}
-
-	@SubscribeEvent
 	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if (event.side.isServer())
@@ -176,24 +151,6 @@ public class WuestEventHandler
 			// Send the player's actual bed location to the client for the bed compass object.
 			// This is needed as the client doesn't properly store the bed location.
 			this.sendPlayerBedLocation(event);
-		}
-	}
-
-	@SubscribeEvent
-	public void onClone(PlayerEvent.Clone event) 
-	{
-		// Don't add the tag unless the house item was added. This way it can be added if the feature is turned on.
-		// When the player is cloned, make sure to copy the tag. If this is not done the item can be given to the player again if they die before the log out and log back in.
-		NBTTagCompound originalTag = event.getOriginal().getEntityData();
-
-		// Use the server configuration to determine if the house should be added for this player.
-		if (WuestUtilities.proxy.proxyConfiguration.addHouseItem)
-		{
-			if (originalTag.hasKey("IsPlayerNew"))
-			{
-				NBTTagCompound newPlayerTag = event.getEntityPlayer().getEntityData();
-				newPlayerTag.setTag("IsPlayerNew", originalTag.getTag("IsPlayerNew"));
-			}
 		}
 	}
 

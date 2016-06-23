@@ -9,8 +9,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import wuest.utilities.WuestUtilities;
-import wuest.utilities.Config.HouseConfiguration;
-import wuest.utilities.Items.ItemStartHouse;
 import wuest.utilities.Proxy.ClientProxy;
 import wuest.utilities.Proxy.Messages.BedLocationMessage;
 

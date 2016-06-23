@@ -48,7 +48,6 @@ public class CommonProxy implements IGuiHandler
 		WuestConfiguration.syncConfig();
 
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
-		WuestUtilities.network.registerMessage(HouseHandler.class, HouseTagMessage.class, 1, Side.SERVER);
 		WuestUtilities.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
 		WuestUtilities.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
 		WuestUtilities.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
@@ -57,7 +56,6 @@ public class CommonProxy implements IGuiHandler
 	public void init(FMLInitializationEvent event)
 	{
 		// Register items here.
-		ItemStartHouse.RegisterItem();
 		ItemBedCompass.RegisterItem();
 		RedstoneClock.RegisterBlock();
 		GeneralRecipes.LoadRecipies();
@@ -114,11 +112,7 @@ public class CommonProxy implements IGuiHandler
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		if (ID == GuiHouseItem.GUI_ID)
-		{
-			return new GuiHouseItem(x, y, z);
-		}
-		else if (ID == GuiRedstoneClock.GUI_ID)
+		if (ID == GuiRedstoneClock.GUI_ID)
 		{
 			return new GuiRedstoneClock(x, y, z);
 		}
