@@ -1,5 +1,119 @@
 Changelog:
-Build 1984:
+Build 2011:
+	LexManos: Bump version for a RB
+
+Build 1.10.2-12.18.0.2010:
+	bernhard.bonigl:
+		Add an event that allows to modify the looting level based on damage
+		source
+
+Build 1.10.2-12.18.0.2009:
+	williewillus: Add throwable impact event (#3071)
+
+Build 1.10.2-12.18.0.2007-1.10.0:
+	LexManos:
+		Fix hopper extract behavior being broken on edge cases due to
+		IItemHandler capability. Closes #3062
+
+Build 1.10.2-12.18.0.2006-1.10.0:
+	LexManos:
+		Fixed FPS graph and new debug lines not being rendered in Debug screen.
+		Closes #3054
+
+Build 1.10.2-12.18.0.2005-1.10.0:
+	diesieben07:
+		Restore (buggy?) behavior of vanilla BlockPistonMoving and ignore drop
+		chance (#3052)
+
+Build 1.10.2-12.18.0.2004-1.10.0:
+	LexManos:
+		Fix villages generating to high when using a cusom sea level. Closes
+		#3050
+
+Build 1.10.2-12.18.0.2003-1.10.0:
+	LexManos:
+		Forge will now load extra mods from mods/mod_list.json and
+		mods/mc_version/mod_list.json. As defined by the same json spec as
+		--modListFile. And now if repositoryRoot is prefixed with absolute: the
+		path will NOT be relative to the MC directory.
+	LexManos:
+		Update build.gradle to have single line for specifying minecraft
+		version, and will update ForgeVersion.java as needed.
+
+Build 1.10.2-12.18.0.2002-1.10.0:
+	LexManos:
+		Fixed MC version number... I could of SWORN we removed this in favor of
+		a automated system...
+
+Build 1.10.2-12.18.0.2001-1.10.0:
+	LexManos: 1.10.2 Update
+
+Build 1.10-12.18.0.2000-1.10.0:
+	diesieben07:
+		Fix mob-spawners crashing for non-living entities and simply the patch
+		in the process (#3042)
+
+Build 1.10-12.18.0.1999-1.10.0:
+	mezz:
+		Fix legacy handling for ItemBucket subclasses and non-universal buckets
+		(#3038)
+	mezz:
+		Fix milk bucket is fillable with water or lava when milk is unregistered
+		(#3039)
+
+Build 1.10-12.18.0.1998-1.10.0:
+	mezz: Remove duplicated universal buckets from the creative list (#3035)
+	mezz: Fix FluidContainerRegistry handling potions as water bottles (#3037)
+
+Build 1.10-12.18.0.1997-1.10.0:
+	cpw:
+		Big warning for recipe types found without being registered, it turns
+		out this is pretty severe, modders need to fix it.
+
+Build 1.10-12.18.0.1996-1.10.0:
+	mezz:
+		Fix comparison stability of the Recipe Sorter with unknown recipes #2962
+		(#3030)
+
+Build 1.10-12.18.0.1995-1.10.0:
+	LexManos: Fixed Husks rendering as standard zombies. Closes #3028
+
+Build 1.10-12.18.0.1994-1.10.0:
+	LexManos: Fixed chests being replaced when trees grew.
+
+Build 1.10-12.18.0.1993-1.10.0:
+	luacs1998: Simple implementation of a Open/Close container event (#3017)
+
+Build 1.10-12.18.0.1991-1.10.0:
+	LexManos:
+		Fixed shifted patch in GameSettings causing settings to not load
+		properly. Closes #3025 #3022
+	LexManos: Fixed incorrect variable being sent to doSpecialSpawn. Closes #2986
+	LexManos: Fix incorrect logic in ChunkCache.isSideSolid. Closes #3026
+	LexManos: Provide 'cleaner' version of TextureMap.setTextureEntry. Closes #1385
+
+Build 1.9.4-12.17.0.1990:
+	LexManos: Fixed incorrect variable being sent to doSpecialSpawn. Closes #2986
+	LexManos: Fix incorrect logic in ChunkCache.isSideSolid. Closes #3026
+
+Build 1.10-12.18.0.1989-1.10.0:
+	cpw: Fix doors popping off solid sides.
+
+Build 1.10-12.18.0.1988-1.10.0:
+	cpw: Fix that the Missing blocks/items/registries prompt often got stuck.
+
+Build 1.9.4-12.17.0.1987:
+	LexManos:
+		Set ModelLoader.WHITE's texture size iniatlly instead of defaulting to
+		zero and being set later.
+
+Build 1.10-12.18.0.1986-1.10.0:
+	cpw: Fix Realms button text to be shorter again. Closes #3019
+
+Build 1.10-12.18.0.1985-1.10.0:
+	cpw: Fix item pickup dupe bugs. Closes #3015
+
+Build 1.10-12.18.0.1984-1.10.0:
 	blay09:
 		[1.10] Fix keys with KeyModifier failing to load (#3018)
 		Fix key options with KeyModifier failing to load due to

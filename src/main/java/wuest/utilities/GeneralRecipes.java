@@ -5,10 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -310,6 +315,33 @@ public class GeneralRecipes
 				'x', Items.WATER_BUCKET,
 				'y', new ItemStack(Items.DYE, 1, 10),
 				'z', Items.CLAY_BALL);
+		
+		// Make a recipe for Village Eggs.
+		ItemStack eggReturnStack = new ItemStack(Items.SPAWN_EGG, 1);
+		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get("Villager");
+		ItemStack potionOfWeakness = new ItemStack(Items.POTIONITEM);
+		
+		potionOfWeakness = PotionUtils.addPotionToItemStack(potionOfWeakness, PotionTypes.WEAKNESS);
+		
+		NBTTagCompound nbttagcompound = eggReturnStack.hasTagCompound() ? eggReturnStack.getTagCompound() : new NBTTagCompound();
+        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+        nbttagcompound1.setString("id", eggInfo.spawnedID);
+        nbttagcompound.setTag("EntityTag", nbttagcompound1);
+        eggReturnStack.setTagCompound(nbttagcompound);
+        
+        GameRegistry.addRecipe(eggReturnStack,
+        		"abc",
+        		"def",
+        		"ghi",
+        		'a', Items.STRING,
+        		'b', new ItemStack(Items.SKULL, 1, 2),
+        		'c', potionOfWeakness,
+        		'd', Items.ROTTEN_FLESH,
+        		'e', Items.LEATHER_CHESTPLATE,
+        		'f', Items.GOLDEN_APPLE,
+        		'g', Items.BONE,
+        		'h', Items.LEATHER_LEGGINGS,
+        		'i', Items.EMERALD);
 	}
 
 	private static void LoadNetherStarRecipe()
