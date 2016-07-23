@@ -39,7 +39,7 @@
     "textures": {
     	"particle": "blocks/dirt",
         "bottom": "blocks/dirt",
-        "top": "wuestutilities:blocks/grass_top",
+        "top": "blocks/grass_top",
         "side": "blocks/grass_side",
         "overlay": "blocks/grass_side_overlay"
     },

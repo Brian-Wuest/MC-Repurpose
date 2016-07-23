@@ -20,11 +20,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import wuest.utilities.Events.HomeCommand;
 import wuest.utilities.Proxy.CommonProxy;
 
-@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.10]", guiFactory = "wuest.utilities.Gui.ConfigGuiFactory")
+@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.10],[1.10.2]", guiFactory = "wuest.utilities.Gui.ConfigGuiFactory")
 public class WuestUtilities 
 {
 	public static final String MODID = "wuestUtilities";
-	public static final String VERSION = "1.10";
+	public static final String VERSION = "1.10.2.2";
 
 	@Instance(value = WuestUtilities.MODID)
 	public static WuestUtilities instance;
