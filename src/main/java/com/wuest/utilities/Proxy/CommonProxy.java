@@ -1,6 +1,7 @@
 package com.wuest.utilities.Proxy;
 
 import com.wuest.utilities.GeneralRecipes;
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Blocks.*;
 import com.wuest.utilities.Config.WuestConfiguration;
@@ -49,23 +50,21 @@ public class CommonProxy implements IGuiHandler
 		WuestConfiguration.syncConfig();
 
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
-		WuestUtilities.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
-		WuestUtilities.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
-		WuestUtilities.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
+		
+		ModRegistry.RegisterMessages();
 	}
 
 	public void init(FMLInitializationEvent event)
 	{
+		ModRegistry.RegisterModComponents();
+		
+		ModRegistry.RegisterRecipes();
+		
 		// Register items here.
-		ItemBedCompass.RegisterItem();
-		RedstoneClock.RegisterBlock();
-		GeneralRecipes.LoadRecipies();
-		ItemSwiftBlade.RegisterItem();
 		BlockDirtStairs.RegisterBlock();
 		BlockGrassStairs.RegisterBlock();
 		BlockDirtSlab.RegisterBlock();
 		BlockGrassSlab.RegisterBlock();
-		BlockCustomWall.RegisterBlock();
 		BlockEnrichedFarmland.RegisterBlock();
 		BlockMiniRedstone.RegisterBlock();
 		BlockRedstoneScanner.RegisterBlock();

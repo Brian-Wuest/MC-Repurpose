@@ -2,6 +2,7 @@ package com.wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Proxy.CommonProxy;
 
@@ -21,8 +22,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class BlockDirtStairs extends BlockStairs
 {
-	public static BlockDirtStairs RegisteredBlock;
-
 	/**
 	 * Initializes a new instance of the BlockDirtStairs class.
 	 * @param modelState
@@ -35,28 +34,6 @@ public class BlockDirtStairs extends BlockStairs
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
 		CommonProxy.setBlockName(this, "blockDirtStairs");
-	}
-
-	/**
-	 * Registers this block in the game registry and sets the static field.
-	 */
-	public static void RegisterBlock()
-	{
-		BlockDirtStairs.RegisteredBlock = CommonProxy.registerBlock(new BlockDirtStairs());
-
-		// Register the block and add the recipe for it.
-		GameRegistry.addRecipe(
-				new ItemStack(BlockDirtStairs.RegisteredBlock, 4),
-				"  x",
-				" xx",
-				"xxx",
-				'x', Blocks.DIRT);
-
-		GameRegistry.addRecipe(
-				new ItemStack(Blocks.DIRT, 3),
-				"x",
-				"x",
-				'x', BlockDirtStairs.RegisteredBlock);
 	}
 
 	@Override
@@ -80,7 +57,7 @@ public class BlockDirtStairs extends BlockStairs
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS
 							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
-							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)

@@ -21,11 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBedCompass extends Item 
 {
-	/**
-	 * The instance of the registered item in the game.
-	 */
-    public static ItemBedCompass RegisteredItem;
-    
     /**
      * Initializes a new instance of the ItemBedCompass class.
      */
@@ -37,21 +32,6 @@ public class ItemBedCompass extends Item
     	this.setCreativeTab(CreativeTabs.MISC);
     }
 	
-    /**
-     * Registers this item in the game.
-     */
-    public static void RegisterItem()
-    {
-    	ItemBedCompass.RegisteredItem = CommonProxy.registerItem(new ItemBedCompass("itemBedCompass"));
-		
-		if (WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe)
-		{
-			// Register recipe.
-			GameRegistry.addShapelessRecipe(new ItemStack(ItemBedCompass.RegisteredItem), 
-					Items.BED, Items.COMPASS);
-		}
-    }
-    
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */

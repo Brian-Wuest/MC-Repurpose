@@ -54,89 +54,6 @@ public class ItemSwiftBlade extends ItemSword
 		
 		CommonProxy.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
 	}
-	
-	/**
-	 * Registers this item and it's recipes.
-	 */
-	public static void RegisterItem()
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			ItemSwiftBlade itemToRegister = null;
-			ToolMaterial material = null;
-			Object bladeItem = null;
-			
-			switch (i)
-			{
-				case 0:
-				{
-					material = ToolMaterial.WOOD;
-					ItemSwiftBlade.RegisteredWoodenSword = new ItemSwiftBlade(material);
-					itemToRegister = ItemSwiftBlade.RegisteredWoodenSword;
-					bladeItem = Blocks.PLANKS;
-					break;
-				}
-				
-				case 1:
-				{
-					material = ToolMaterial.STONE;
-					ItemSwiftBlade.RegisteredStoneSword = new ItemSwiftBlade(material);
-					itemToRegister = ItemSwiftBlade.RegisteredStoneSword;
-					bladeItem = Item.getItemFromBlock(Blocks.COBBLESTONE);
-					break;
-				}
-				
-				case 2:
-				{
-					material = ToolMaterial.IRON;
-					ItemSwiftBlade.RegisteredIronSword = new ItemSwiftBlade(material);
-					itemToRegister = ItemSwiftBlade.RegisteredIronSword;
-					bladeItem = Items.IRON_INGOT;
-					break;
-				}
-				
-				case 3:
-				{
-					material = ToolMaterial.GOLD;
-					ItemSwiftBlade.RegisteredGoldSword = new ItemSwiftBlade(material);
-					itemToRegister = ItemSwiftBlade.RegisteredGoldSword;
-					bladeItem = Items.GOLD_INGOT;
-					break;
-				}
-				
-				case 4:
-				{
-					material = ToolMaterial.DIAMOND;
-					ItemSwiftBlade.RegisteredDiamondSword = new ItemSwiftBlade(material);
-					itemToRegister = ItemSwiftBlade.RegisteredDiamondSword;
-					bladeItem = Items.DIAMOND;
-					break;
-				}
-			}
-			
-			CommonProxy.registerItem(itemToRegister);
-			
-			if (WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe)
-			{
-				// Register recipe.
-				GameRegistry.addShapedRecipe(
-						new ItemStack(itemToRegister),
-						"  x",
-						" x ",
-						"y  ",
-						'x', bladeItem,
-						'y', Items.STICK);
-
-				GameRegistry.addShapedRecipe(
-						new ItemStack(itemToRegister),
-						"x  ",
-						" x ",
-						"  y",
-						'x', bladeItem,
-						'y', Items.STICK);
-			}
-		}
-	}
 
 	/*
 	 * Gets the unlocalized name for the specified material.
@@ -186,6 +103,11 @@ public class ItemSwiftBlade extends ItemSword
     public String getToolMaterialName()
     {
         return this.material.toString();
+    }
+    
+    public ToolMaterial getToolMaterial()
+    {
+    	return this.material;
     }
 
 	@Override

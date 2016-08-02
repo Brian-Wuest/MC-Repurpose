@@ -3,6 +3,7 @@ package com.wuest.utilities.Blocks;
 import java.util.List;
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Proxy.CommonProxy;
 
@@ -52,9 +53,6 @@ public class BlockCustomWall extends Block
 	protected static final AxisAlignedBB[] axis1 = new AxisAlignedBB[] {new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.3125D, 0.0D, 0.0D, 0.6875D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.3125D, 1.0D, 0.875D, 0.6875D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
 	protected static final AxisAlignedBB[] axis2 = new AxisAlignedBB[] {axis1[0].setMaxY(1.5D), axis1[1].setMaxY(1.5D), axis1[2].setMaxY(1.5D), axis1[3].setMaxY(1.5D), axis1[4].setMaxY(1.5D), axis1[5].setMaxY(1.5D), axis1[6].setMaxY(1.5D), axis1[7].setMaxY(1.5D), axis1[8].setMaxY(1.5D), axis1[9].setMaxY(1.5D), axis1[10].setMaxY(1.5D), axis1[11].setMaxY(1.5D), axis1[12].setMaxY(1.5D), axis1[13].setMaxY(1.5D), axis1[14].setMaxY(1.5D), axis1[15].setMaxY(1.5D)};
 
-	public static BlockCustomWall RegisteredDirtBlock;
-	public static BlockCustomWall RegisteredGrassBlock;
-
 	public BlockCustomWall.EnumType BlockVariant;
 
 	public BlockCustomWall(Block modelBlock, BlockCustomWall.EnumType variant)
@@ -84,35 +82,6 @@ public class BlockCustomWall extends Block
 		CommonProxy.setBlockName(this, variant.getUnlocalizedName());
 	}
 
-	public static void RegisterBlock()
-	{
-		BlockCustomWall.RegisteredDirtBlock = new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT);
-		CommonProxy.registerBlock(BlockCustomWall.RegisteredDirtBlock);
-		
-		BlockCustomWall.RegisteredGrassBlock = new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS);
-		CommonProxy.registerBlock(BlockCustomWall.RegisteredGrassBlock);
-		
-		// Register Recipes
-		GameRegistry.addRecipe(new ItemStack(BlockCustomWall.RegisteredDirtBlock, 6),
-				"xxx",
-				"xxx",
-				'x', Item.getItemFromBlock(Blocks.DIRT));
-		
-		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1),
-				"x",
-				'x', Item.getItemFromBlock(BlockCustomWall.RegisteredDirtBlock));
-		
-		GameRegistry.addRecipe(new ItemStack(BlockCustomWall.RegisteredGrassBlock, 6),
-				"xxx",
-				"xxx",
-				'x', Item.getItemFromBlock(Blocks.GRASS));
-		
-		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1),
-				"x",
-				'x', Item.getItemFromBlock(BlockCustomWall.RegisteredGrassBlock));
-		
-	}
-
 	@SideOnly(Side.CLIENT)
 	public static void RegisterBlockRenderer()
 	{
@@ -123,7 +92,7 @@ public class BlockCustomWall extends Block
 			{
 				return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 			}
-		}, new Block[] {BlockCustomWall.RegisteredGrassBlock});
+		}, new Block[] {ModRegistry.GrassWall()});
 
 		// Register the item renderer.
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
@@ -153,7 +122,7 @@ public class BlockCustomWall extends Block
 
 				return -1;
 			}
-		}, new Block[] { BlockCustomWall.RegisteredGrassBlock });
+		}, new Block[] { ModRegistry.GrassWall() });
 	}
 
 	public static int getBlockIndex(IBlockState blockState)
@@ -204,12 +173,12 @@ public class BlockCustomWall extends Block
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS
 							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
-							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
 							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
-						IBlockState grassStairsState = BlockCustomWall.RegisteredGrassBlock.getDefaultState();
+						IBlockState grassStairsState = ModRegistry.GrassWall().getDefaultState();
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}
@@ -223,7 +192,7 @@ public class BlockCustomWall extends Block
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
-		return Item.getItemFromBlock(BlockCustomWall.RegisteredDirtBlock);
+		return Item.getItemFromBlock(ModRegistry.DirtWall());
 	}
 
 	@Override

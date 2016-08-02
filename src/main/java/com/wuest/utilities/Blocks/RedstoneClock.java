@@ -44,8 +44,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
-	public static RedstoneClock RegisteredBlock;
-
 	protected int tickRate = 20;
 
 	/**
@@ -57,25 +55,6 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
 		CommonProxy.setBlockName(this, "redstoneClock");
-	}
-
-	public static void RegisterBlock()
-	{
-		RedstoneClock.RegisteredBlock = CommonProxy.registerBlock(new RedstoneClock("redstoneClock"));
-		
-		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
-
-		if (WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe)
-		{
-			// Register recipe.
-			GameRegistry.addRecipe(new ItemStack(RedstoneClock.RegisteredBlock),
-					"xzx",
-					"xyz",
-					"xxx",
-					'x', Item.getItemFromBlock(Blocks.STONE),
-					'y', Items.REPEATER,
-					'z', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
-		}
 	}
 
 	@Override
