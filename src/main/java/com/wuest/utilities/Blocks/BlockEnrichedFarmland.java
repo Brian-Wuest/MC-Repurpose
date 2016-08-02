@@ -2,6 +2,7 @@ package com.wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Proxy.CommonProxy;
 
@@ -23,8 +24,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockEnrichedFarmland extends BlockFarmland
 {
-	public static BlockEnrichedFarmland RegisteredBlock;
-
 	public BlockEnrichedFarmland()
 	{
 		super();
@@ -36,26 +35,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 		this.setHarvestLevel("shovel", 0);
 		this.setHardness(0.6F);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
-		CommonProxy.setBlockName(this, "blockEnrichedFarmland");
-	}
-
-	public static void RegisterBlock()
-	{
-		BlockEnrichedFarmland.RegisteredBlock = new BlockEnrichedFarmland();
-
-		CommonProxy.registerBlock(BlockEnrichedFarmland.RegisteredBlock);
-
-		if (WuestUtilities.proxy.proxyConfiguration.addEnrichedFarmlandRecipe)
-		{
-			GameRegistry.addRecipe(new ItemStack(BlockEnrichedFarmland.RegisteredBlock, 3),
-					"xxx",
-					"aby",
-					"xxx",
-					'x', Item.getItemFromBlock(Blocks.DIRT),
-					'a', Items.WHEAT,
-					'b', Items.WATER_BUCKET,
-					'y', Items.BONE);
-		}
+		ModRegistry.setBlockName(this, "blockEnrichedFarmland");
 	}
 
 	/**
@@ -128,7 +108,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return new ItemStack(BlockEnrichedFarmland.RegisteredBlock);
+		return new ItemStack(ModRegistry.EnrichedFarmland());
 	}
 
 }

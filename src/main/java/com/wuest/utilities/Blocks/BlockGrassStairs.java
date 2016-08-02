@@ -2,6 +2,7 @@ package com.wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.Proxy.CommonProxy;
 
 import net.minecraft.block.Block;
@@ -34,8 +35,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockGrassStairs extends BlockStairs
 {
-	public static BlockGrassStairs RegisteredBlock;
-	
 	public BlockGrassStairs()
 	{
 		super(Blocks.GRASS.getDefaultState());
@@ -43,30 +42,7 @@ public class BlockGrassStairs extends BlockStairs
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
 		this.useNeighborBrightness = true;
-		CommonProxy.setBlockName(this, "blockGrassStairs");
-	}
-    
-	/**
-	 * Registers this block in the game registry and sets the static field.
-	 */
-	public static void RegisterBlock()
-	{
-		BlockGrassStairs.RegisteredBlock = new BlockGrassStairs();
-		CommonProxy.registerBlock(BlockGrassStairs.RegisteredBlock);
-		
-		// Register the block and add the recipe for it.
-		GameRegistry.addRecipe(
-				new ItemStack(BlockGrassStairs.RegisteredBlock, 4),
-				"  x",
-				" xx",
-				"xxx",
-				'x', Blocks.GRASS);
-		
-		GameRegistry.addRecipe(
-				new ItemStack(Blocks.GRASS, 3),
-				"x",
-				"x",
-				'x', BlockGrassStairs.RegisteredBlock);
+		ModRegistry.setBlockName(this, "blockGrassStairs");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -79,7 +55,7 @@ public class BlockGrassStairs extends BlockStairs
 			{
 				return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 			}
-		}, new Block[] {BlockGrassStairs.RegisteredBlock});
+		}, new Block[] {ModRegistry.GrassStairs()});
 
 		// Register the item renderer.
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
@@ -104,7 +80,7 @@ public class BlockGrassStairs extends BlockStairs
 				
 				return -1;
 			}
-		}, new Block[] { BlockGrassStairs.RegisteredBlock });
+		}, new Block[] { ModRegistry.GrassStairs() });
 	}
 	
     /**
@@ -113,7 +89,7 @@ public class BlockGrassStairs extends BlockStairs
     @Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return Item.getItemFromBlock(BlockDirtStairs.RegisteredBlock);
+        return Item.getItemFromBlock(ModRegistry.DirtStairs());
     }
 	
 	@Override

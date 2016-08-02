@@ -2,6 +2,7 @@ package com.wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Items.ItemBlockDirtSlab;
 import com.wuest.utilities.Proxy.CommonProxy;
@@ -37,9 +38,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 	 * Needed for interactions with ItemSlab.
 	 */
 	private static final PropertyBool VARIANT_PROPERTY = PropertyBool.create("variant");
-	public static BlockHalfDirtSlab RegisteredHalfBlock; 
-	public static BlockDoubleDirtSlab RegisteredDoubleSlab;
-	
+
 	public BlockDirtSlab()
 	{
 		super(Material.GROUND);
@@ -53,55 +52,18 @@ public abstract class BlockDirtSlab extends BlockSlab
 		if (!this.isDouble())
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-			CommonProxy.setBlockName(this, "blockHalfDirtSlab");
+			ModRegistry.setBlockName(this, "blockHalfDirtSlab");
 			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
-			CommonProxy.setBlockName(this, "blockDirtSlab");
+			ModRegistry.setBlockName(this, "blockDirtSlab");
 		}
 		
 		iblockstate = iblockstate.withProperty(VARIANT_PROPERTY, false);
 
 		this.setDefaultState(iblockstate);
 		this.useNeighborBrightness = !this.isDouble();
-	}
-
-	public static void RegisterBlock()
-	{
-		BlockDirtSlab.RegisteredHalfBlock = new BlockHalfDirtSlab();
-		BlockDirtSlab.RegisteredDoubleSlab = new BlockDoubleDirtSlab();
-		
-		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(
-				BlockDirtSlab.RegisteredHalfBlock, 
-				BlockDirtSlab.RegisteredHalfBlock, 
-				BlockDirtSlab.RegisteredDoubleSlab, 
-				true);
-		
-		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("blockHalfDirtSlab");
-		
-		ItemBlockDirtSlab itemDoubleDirtSlab = new ItemBlockDirtSlab(
-				BlockDirtSlab.RegisteredDoubleSlab, 
-				BlockDirtSlab.RegisteredHalfBlock, 
-				BlockDirtSlab.RegisteredDoubleSlab, 
-				true);
-		
-		itemDoubleDirtSlab = (ItemBlockDirtSlab) itemDoubleDirtSlab.setRegistryName("blockDirtSlab");
-		itemDoubleDirtSlab.setCreativeTab(null);
-		
-		CommonProxy.registerBlock(BlockDirtSlab.RegisteredHalfBlock, itemHalfDirtSlab);
-		
-		CommonProxy.registerBlock(BlockDirtSlab.RegisteredDoubleSlab, itemDoubleDirtSlab);
-		
-		// Register recipes.
-		GameRegistry.addRecipe(new ItemStack(BlockDirtSlab.RegisteredHalfBlock, 6),
-				"xxx",
-				'x', Item.getItemFromBlock(Blocks.DIRT));
-		
-		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1),
-				"x",
-				"x",
-				'x', Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock));
 	}
 
 	@Override
@@ -130,21 +92,21 @@ public abstract class BlockDirtSlab extends BlockSlab
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS
-							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
-							|| iblockstate1.getBlock() == BlockCustomWall.RegisteredGrassBlock
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab()
+							|| iblockstate1.getBlock() == ModRegistry.DoubleGrassSlab())
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
 						IBlockState grassSlabsState = null;
 						
 						if (this.isDouble())
 						{
-							grassSlabsState = BlockGrassSlab.RegisteredDoubleSlab.getStateFromMeta(this.getMetaFromState(state));
+							grassSlabsState = ModRegistry.DoubleGrassSlab().getStateFromMeta(this.getMetaFromState(state));
 						}
 						else
 						{
-							grassSlabsState = BlockGrassSlab.RegisteredHalfBlock.getStateFromMeta(this.getMetaFromState(state));
+							grassSlabsState = ModRegistry.GrassSlab().getStateFromMeta(this.getMetaFromState(state));
 						}
 						 
 						worldIn.setBlockState(pos, grassSlabsState, 3);
@@ -232,7 +194,7 @@ public abstract class BlockDirtSlab extends BlockSlab
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
-		return Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock);
+		return Item.getItemFromBlock(ModRegistry.DirtSlab());
 	}
 
 	/**

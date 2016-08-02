@@ -2,15 +2,12 @@ package com.wuest.utilities.Items;
 
 import java.util.List;
 
-import com.wuest.utilities.Proxy.CommonProxy;
+import com.wuest.utilities.ModRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,28 +17,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemDiamondShard extends Item
 {
-	public static ItemDiamondShard RegisteredItem;
-	
 	public ItemDiamondShard(String name)
 	{
 		super();
 		
 		this.setCreativeTab(CreativeTabs.MATERIALS);
-		CommonProxy.setItemName(this, name);
-	}
-	
-	/**
-	 * Registers this item with the game registry.
-	 */
-	public static void RegisterItem()
-	{
-		ItemDiamondShard.RegisteredItem = CommonProxy.registerItem(new ItemDiamondShard("itemDiamondShard"));
-		
-		GameRegistry.addShapedRecipe(
-				new ItemStack(Items.DIAMOND),
-				"xx",
-				"xx",
-				'x', ItemDiamondShard.RegisteredItem);
+		ModRegistry.setItemName(this, name);
 	}
 	
     /**

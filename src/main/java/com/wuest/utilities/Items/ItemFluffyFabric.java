@@ -2,15 +2,12 @@ package com.wuest.utilities.Items;
 
 import java.util.List;
 
-import com.wuest.utilities.Proxy.CommonProxy;
+import com.wuest.utilities.ModRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemFluffyFabric extends Item
 {
-	public static ItemFluffyFabric RegisteredItem;
-	
 	/**
 	 * Initializes a new instance of the ItemFluffyFabric class.
 	 */
@@ -30,23 +25,7 @@ public class ItemFluffyFabric extends Item
 		super();
 		
 		this.setCreativeTab(CreativeTabs.MISC);
-		CommonProxy.setItemName(this, name);
-	}
-	
-	/**
-	 * Registers this item with the game registry.
-	 */
-	public static void RegisterItem()
-	{
-		ItemFluffyFabric.RegisteredItem = CommonProxy.registerItem(new ItemFluffyFabric("itemFluffyFabric"));
-		
-		GameRegistry.addShapedRecipe(
-				new ItemStack(ItemFluffyFabric.RegisteredItem),
-				"xyx",
-				"yyy",
-				"xyx",
-				'x', Items.STRING,
-				'y', Item.getItemFromBlock(Blocks.WOOL));
+		ModRegistry.setItemName(this, name);
 	}
 	
     /**

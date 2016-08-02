@@ -2,8 +2,7 @@ package com.wuest.utilities.Items;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.wuest.utilities.WuestUtilities;
-import com.wuest.utilities.Proxy.CommonProxy;
+import com.wuest.utilities.ModRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -13,14 +12,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,12 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemSwiftBlade extends ItemSword
 {
-	public static ItemSwiftBlade RegisteredWoodenSword;
-	public static ItemSwiftBlade RegisteredStoneSword;
-	public static ItemSwiftBlade RegisteredIronSword;
-	public static ItemSwiftBlade RegisteredGoldSword;
-	public static ItemSwiftBlade RegisteredDiamondSword;
-	
 	protected final float attackDamage;
 	protected final Item.ToolMaterial material;
 
@@ -52,7 +43,7 @@ public class ItemSwiftBlade extends ItemSword
         this.setCreativeTab(CreativeTabs.COMBAT);
 		this.attackDamage = 3.0F + material.getDamageVsEntity();
 		
-		CommonProxy.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
+		ModRegistry.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
 	}
 
 	/*

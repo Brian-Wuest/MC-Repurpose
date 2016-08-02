@@ -79,7 +79,7 @@ public class BlockCustomWall extends Block
 			this.setTickRandomly(true);
 		}
 		
-		CommonProxy.setBlockName(this, variant.getUnlocalizedName());
+		ModRegistry.setBlockName(this, variant.getUnlocalizedName());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -172,10 +172,10 @@ public class BlockCustomWall extends Block
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS
-							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
 							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab()
+							|| iblockstate1.getBlock() == ModRegistry.DoubleGrassSlab())
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
 						IBlockState grassStairsState = ModRegistry.GrassWall().getDefaultState();

@@ -33,7 +33,7 @@ public class BlockDirtStairs extends BlockStairs
 		this.useNeighborBrightness = true;
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
-		CommonProxy.setBlockName(this, "blockDirtStairs");
+		ModRegistry.setBlockName(this, "blockDirtStairs");
 	}
 
 	@Override
@@ -56,13 +56,13 @@ public class BlockDirtStairs extends BlockStairs
 					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS
-							|| iblockstate1.getBlock() == BlockGrassStairs.RegisteredBlock
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
 							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredHalfBlock
-							|| iblockstate1.getBlock() == BlockGrassSlab.RegisteredDoubleSlab)
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab()
+							|| iblockstate1.getBlock() == ModRegistry.DoubleGrassSlab())
 							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
 					{
-						IBlockState grassStairsState = BlockGrassStairs.RegisteredBlock.getStateFromMeta(this.getMetaFromState(state));
+						IBlockState grassStairsState = ModRegistry.GrassStairs().getStateFromMeta(this.getMetaFromState(state));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}

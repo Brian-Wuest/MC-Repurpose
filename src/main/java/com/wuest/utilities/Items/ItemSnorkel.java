@@ -2,15 +2,12 @@ package com.wuest.utilities.Items;
 
 import java.util.List;
 
-import com.wuest.utilities.Proxy.CommonProxy;
+import com.wuest.utilities.ModRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemSnorkel extends Item
 {
-	public static ItemSnorkel RegisteredItem;
-	
 	/**
 	 * Initializes a new instance of the ItemFluffyFabric class.
 	 */
@@ -30,26 +25,9 @@ public class ItemSnorkel extends Item
 		super();
 		
 		this.setCreativeTab(CreativeTabs.MISC);
-		CommonProxy.setItemName(this, name);
+		ModRegistry.setItemName(this, name);
 	}
-	
-	/**
-	 * Registers this item with the game registry.
-	 */
-	public static void RegisterItem()
-	{
-		ItemSnorkel.RegisteredItem = CommonProxy.registerItem(new ItemSnorkel("itemSnorkel"));
-		
-		GameRegistry.addShapedRecipe(
-				new ItemStack(ItemSnorkel.RegisteredItem),
-				"  x",
-				"zzx",
-				"yyx",
-				'x', Items.REEDS,
-				'y', Item.getItemFromBlock(Blocks.GLASS_PANE),
-				'z', Items.STRING);
-	}
-	
+
     /**
      * Allow or forbid the specific book/item combination as an anvil enchant
      *

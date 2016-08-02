@@ -59,19 +59,6 @@ public class CommonProxy implements IGuiHandler
 		ModRegistry.RegisterModComponents();
 		
 		ModRegistry.RegisterRecipes();
-		
-		// Register items here.
-		BlockDirtStairs.RegisterBlock();
-		BlockGrassStairs.RegisterBlock();
-		BlockDirtSlab.RegisterBlock();
-		BlockGrassSlab.RegisterBlock();
-		BlockEnrichedFarmland.RegisterBlock();
-		BlockMiniRedstone.RegisterBlock();
-		BlockRedstoneScanner.RegisterBlock();
-		ItemFluffyFabric.RegisterItem();
-		ItemWhetStone.RegisterItem();
-		ItemSnorkel.RegisterItem();
-		ItemDiamondShard.RegisterItem();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
@@ -122,61 +109,5 @@ public class CommonProxy implements IGuiHandler
 		}
 
 		return null;
-	}
-
-	/**
-	 * Register an Item
-	 *
-	 * @param item The Item instance
-	 * @param <T> The Item type
-	 * @return The Item instance
-	 */
-	public static <T extends Item> T registerItem(T item)
-	{
-		GameRegistry.register(item);
-		WuestUtilities.ModItems.add(item);
-
-		return item;
-	}
-	
-	public static <T extends Block> T registerBlock(T block)
-	{
-		GameRegistry.register(block);
-		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-		WuestUtilities.ModBlocks.add(block);
-		
-		return block;
-	}
-	
-	public static <T extends Block, I extends ItemBlock> T registerBlock(T block, I itemBlock)
-	{
-		GameRegistry.register(block);
-		WuestUtilities.ModBlocks.add(block);
-		
-		if (itemBlock != null)
-		{
-			GameRegistry.register(itemBlock);
-			WuestUtilities.ModItems.add(itemBlock);
-		}
-		
-		return block;
-	}
-	
-	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the unlocalised name to the full registry name.
-	 *
-	 * @param item     The item
-	 * @param itemName The item's name
-	 */
-	public static void setItemName(Item item, String itemName) 
-	{
-		item.setRegistryName(itemName);
-		item.setUnlocalizedName(item.getRegistryName().toString());
-	}
-	
-	public static void setBlockName(Block block, String blockName) 
-	{
-		block.setRegistryName(blockName);
-		block.setUnlocalizedName(block.getRegistryName().toString());
 	}
 }

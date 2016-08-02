@@ -2,6 +2,7 @@ package com.wuest.utilities.Blocks;
 
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.Items.ItemBlockGrassSlab;
 import com.wuest.utilities.Proxy.CommonProxy;
 
@@ -42,9 +43,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 	 * Needed for interactions with ItemSlab.
 	 */
 	private static final PropertyBool VARIANT_PROPERTY = PropertyBool.create("variant");
-	public static BlockHalfGrassSlab RegisteredHalfBlock; 
-	public static BlockDoubleGrassSlab RegisteredDoubleSlab;
-	
+
 	public BlockGrassSlab()
 	{
 		super(Material.GROUND);
@@ -57,55 +56,18 @@ public abstract class BlockGrassSlab extends BlockSlab
 		if (!this.isDouble())
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-			CommonProxy.setBlockName(this, "blockHalfGrassSlab");
+			ModRegistry.setBlockName(this, "blockHalfGrassSlab");
 			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
-			CommonProxy.setBlockName(this, "blockGrassSlab");
+			ModRegistry.setBlockName(this, "blockGrassSlab");
 		}
 		
 		iblockstate = iblockstate.withProperty(VARIANT_PROPERTY, false);
 
 		this.setDefaultState(iblockstate);
 		this.useNeighborBrightness = !this.isDouble();
-	}
-
-	public static void RegisterBlock()
-	{
-		BlockGrassSlab.RegisteredHalfBlock = new BlockHalfGrassSlab();
-		BlockGrassSlab.RegisteredDoubleSlab = new BlockDoubleGrassSlab();
-		
-		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(
-				BlockGrassSlab.RegisteredHalfBlock, 
-				BlockGrassSlab.RegisteredHalfBlock, 
-				BlockGrassSlab.RegisteredDoubleSlab, 
-				true);
-		
-		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("blockHalfGrassSlab");
-		
-		ItemBlockGrassSlab itemDoubleGrassSlab = new ItemBlockGrassSlab(
-				BlockGrassSlab.RegisteredDoubleSlab, 
-				BlockGrassSlab.RegisteredHalfBlock, 
-				BlockGrassSlab.RegisteredDoubleSlab, 
-				true);
-		
-		itemDoubleGrassSlab = (ItemBlockGrassSlab) itemDoubleGrassSlab.setRegistryName("blockGrassSlab");
-		itemDoubleGrassSlab.setCreativeTab(null);
-		
-		CommonProxy.registerBlock(BlockGrassSlab.RegisteredHalfBlock, itemHalfGrassSlab);
-		
-		CommonProxy.registerBlock(BlockGrassSlab.RegisteredDoubleSlab, itemDoubleGrassSlab);
-		
-		// Register recipes.
-		GameRegistry.addRecipe(new ItemStack(BlockGrassSlab.RegisteredHalfBlock, 6),
-				"xxx",
-				'x', Item.getItemFromBlock(Blocks.GRASS));
-		
-		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1),
-				"x",
-				"x",
-				'x', Item.getItemFromBlock(BlockGrassSlab.RegisteredHalfBlock));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -118,7 +80,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 			{
 				return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 			}
-		}, new Block[] {BlockGrassSlab.RegisteredHalfBlock});
+		}, new Block[] {ModRegistry.GrassSlab()});
 		
 		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor()
 		{
@@ -126,7 +88,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 			{
 				return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 			}
-		}, new Block[] {BlockGrassSlab.RegisteredDoubleSlab});
+		}, new Block[] {ModRegistry.DoubleGrassSlab()});
 
 		// Register the item renderer.
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
@@ -151,7 +113,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 				
 				return -1;
 			}
-		}, new Block[] { BlockGrassSlab.RegisteredHalfBlock });
+		}, new Block[] { ModRegistry.GrassSlab() });
 	}
 	
 	@Override
@@ -260,7 +222,7 @@ public abstract class BlockGrassSlab extends BlockSlab
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
-		return Item.getItemFromBlock(BlockDirtSlab.RegisteredHalfBlock);
+		return Item.getItemFromBlock(ModRegistry.GrassSlab());
 	}
 
 	/**

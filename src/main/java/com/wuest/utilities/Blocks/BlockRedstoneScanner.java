@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Base.TileBlockBase;
 import com.wuest.utilities.Config.RedstoneScannerConfig;
@@ -50,27 +51,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanner>
 {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
-	public static BlockRedstoneScanner RegisteredBlock;
-	
-	/**
-	 * Registers this block in the game registry and adds the block recipe.
-	 */
-	public static void RegisterBlock()
-	{
-		BlockRedstoneScanner.RegisteredBlock = new BlockRedstoneScanner();
-		
-		CommonProxy.registerBlock(BlockRedstoneScanner.RegisteredBlock);
-		
-		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
-		
-		GameRegistry.addShapedRecipe(new ItemStack(BlockRedstoneScanner.RegisteredBlock), 
-				"x x",
-				"zyz",
-				"x x",
-				'x', Items.REPEATER,
-				'y', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK),
-				'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE));
-	}
 
 	protected static final AxisAlignedBB BOUNDING_AABB = new AxisAlignedBB(0.0625, 0.00001D, 0.0625D, 0.9375, 0.625D, 0.9375D);
 	protected static final AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.125D, 0.0625D, 0.125D, 0.875, 0.1875, 0.875D);
@@ -88,7 +68,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	{
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
-		CommonProxy.setBlockName(this, "blockRedstoneScanner");
+		ModRegistry.setBlockName(this, "blockRedstoneScanner");
 		this.setHarvestLevel(null, 0);
 		this.setHardness(.5f);
 		this.setResistance(10.0f);

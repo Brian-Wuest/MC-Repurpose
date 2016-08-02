@@ -2,15 +2,12 @@ package com.wuest.utilities.Items;
 
 import java.util.List;
 
-import com.wuest.utilities.Proxy.CommonProxy;
+import com.wuest.utilities.ModRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemWhetStone extends Item
 {
-	public static ItemWhetStone RegisteredItem;
-
 	/**
 	 * Initializes a new instance of the ItemWhetStone class.
 	 * @param name the item name.
@@ -31,23 +26,7 @@ public class ItemWhetStone extends Item
 		super();
 		
 		this.setCreativeTab(CreativeTabs.MISC);
-		CommonProxy.setItemName(this, name);
-	}
-
-	/**
-	 * Registers this item with the game registry.
-	 */
-	public static void RegisterItem()
-	{
-		ItemWhetStone.RegisteredItem = CommonProxy.registerItem(new ItemWhetStone("itemWhetStone"));
-		
-		GameRegistry.addShapedRecipe(
-				new ItemStack(ItemWhetStone.RegisteredItem),
-				"xxx",
-				"xyx",
-				"xxx",
-				'x', Items.FLINT,
-				'y', Item.getItemFromBlock(Blocks.CLAY));
+		ModRegistry.setItemName(this, name);
 	}
 	
     /**

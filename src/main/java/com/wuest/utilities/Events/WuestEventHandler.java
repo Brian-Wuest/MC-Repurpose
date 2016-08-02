@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Items.ItemDiamondShard;
@@ -29,6 +30,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumActionResult;
@@ -172,11 +174,11 @@ public class WuestEventHandler
 		Item craftedItem = event.crafting.getItem();
 		EntityPlayer player = event.player;
 
-		if (craftedItem == ItemSwiftBlade.RegisteredWoodenSword 
-				|| craftedItem == ItemSwiftBlade.RegisteredStoneSword
-				|| craftedItem == ItemSwiftBlade.RegisteredIronSword
-				|| craftedItem == ItemSwiftBlade.RegisteredGoldSword
-				|| craftedItem == ItemSwiftBlade.RegisteredDiamondSword)
+		if (craftedItem == ModRegistry.SwiftBlade(ToolMaterial.WOOD) 
+				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.STONE)
+				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.IRON)
+				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.GOLD)
+				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.DIAMOND))
 		{
 			player.addStat(AchievementList.BUILD_SWORD);
 		}
@@ -263,7 +265,7 @@ public class WuestEventHandler
 			
 			if (randomChance <= maxPercentage)
 			{
-				event.getDrops().add(new ItemStack(ItemDiamondShard.RegisteredItem));
+				event.getDrops().add(new ItemStack(ModRegistry.DiamondShard()));
 			}
 		}
 	}

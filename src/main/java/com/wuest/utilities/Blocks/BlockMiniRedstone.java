@@ -1,5 +1,6 @@
 package com.wuest.utilities.Blocks;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Proxy.CommonProxy;
 
@@ -27,7 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMiniRedstone extends BlockCompressedPowered
 {
-	public static BlockMiniRedstone RegisteredBlock;
 	protected static final AxisAlignedBB bounds = new AxisAlignedBB(
 			0.25D, 
 			0.0D, 
@@ -43,25 +43,13 @@ public class BlockMiniRedstone extends BlockCompressedPowered
 	{
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
-		CommonProxy.setBlockName(this, "blockMiniRedstone");
+		ModRegistry.setBlockName(this, "blockMiniRedstone");
 		this.setHarvestLevel(null, 0);
 		this.setHardness(.5f);
 		this.setResistance(10.0f);
 		this.setSoundType(SoundType.METAL);
 	}
-	
-	public static void RegisterBlock()
-	{
-		BlockMiniRedstone.RegisteredBlock = new BlockMiniRedstone();
-
-		CommonProxy.registerBlock(BlockMiniRedstone.RegisteredBlock);
 		
-		GameRegistry.addShapedRecipe(new ItemStack(BlockMiniRedstone.RegisteredBlock), 
-				"xx",
-				"xx",
-				'x', Items.REDSTONE);
-	}
-	
 	@Override
     public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {

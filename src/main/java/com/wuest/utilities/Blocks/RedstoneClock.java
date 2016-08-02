@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Base.TileBlockBase;
 import com.wuest.utilities.Gui.GuiRedstoneClock;
@@ -54,7 +55,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
-		CommonProxy.setBlockName(this, "redstoneClock");
+		ModRegistry.setBlockName(this, "redstoneClock");
 	}
 
 	@Override
