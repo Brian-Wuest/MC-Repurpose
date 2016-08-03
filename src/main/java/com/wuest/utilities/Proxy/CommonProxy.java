@@ -2,6 +2,7 @@ package com.wuest.utilities.Proxy;
 
 import com.wuest.utilities.GeneralRecipes;
 import com.wuest.utilities.ModRegistry;
+import com.wuest.utilities.UpdateChecker;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Blocks.*;
 import com.wuest.utilities.Config.WuestConfiguration;
@@ -50,6 +51,9 @@ public class CommonProxy implements IGuiHandler
 		WuestConfiguration.syncConfig();
 
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
+		
+		// Pull the repository information.
+		UpdateChecker.checkVersion();
 		
 		ModRegistry.RegisterMessages();
 	}

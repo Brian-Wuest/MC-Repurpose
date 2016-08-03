@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.wuest.utilities.ModRegistry;
+import com.wuest.utilities.UpdateChecker;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Items.ItemDiamondShard;
@@ -37,6 +38,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -51,6 +53,19 @@ public class WuestEventHandler
 {
 	private static HashMap<String, BlockPos> playerBedLocation;
 
+	@SubscribeEvent
+	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
+	{
+		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer)
+		{
+			// Show a message to this player if their version is old.
+			if (UpdateChecker.showMessage)
+			{
+				((EntityPlayer)event.getEntity()).addChatMessage(new TextComponentString(UpdateChecker.messageToShow));
+			}
+		}
+	}
+	
 	@SubscribeEvent(receiveCanceled = true)
 	public void PlayerRightClicked(PlayerInteractEvent event)
 	{
