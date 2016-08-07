@@ -35,9 +35,6 @@ public class WuestUtilities
 	public static CommonProxy proxy;
 
 	public static SimpleNetworkWrapper network;
-
-	public static ArrayList<Item> ModItems = new ArrayList<Item>();
-	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
 	public static Configuration config;
 
 	@EventHandler

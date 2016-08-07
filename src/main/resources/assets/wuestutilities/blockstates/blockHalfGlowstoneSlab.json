@@ -1,0 +1,9 @@
+{
+    "variants": 
+    {
+        "half=bottom,variant=false": { "model": "wuestUtilities:blockGlowstoneSlab_half" },
+        "half=bottom,variant=true": { "model": "wuestUtilities:blockGlowstoneSlab_half" },
+        "half=top,variant=false": { "model": "wuestUtilities:blockGlowstoneSlab_upper" },
+        "half=top,variant=true": { "model": "wuestUtilities:blockGlowstoneSlab_upper" }
+    }
+}

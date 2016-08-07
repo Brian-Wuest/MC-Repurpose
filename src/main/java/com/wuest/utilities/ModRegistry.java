@@ -137,6 +137,11 @@ public class ModRegistry
 	{
 		return ModRegistry.GetItem(ItemWhetStone.class);
 	}
+
+	public static BlockHalfGlowstoneSlab GlowstoneSlab()
+	{
+		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
+	}
 	
 	/**
 	 * Gets the item from the ModItems collections.
@@ -258,6 +263,30 @@ public class ModRegistry
 		
 		// Whetstone
 		ModRegistry.registerItem(new ItemWhetStone("itemWhetStone"));
+		
+		// Glowstone Slabs.
+		BlockHalfGlowstoneSlab registeredHalfGlowstoneBlock = new BlockHalfGlowstoneSlab();
+		BlockDoubleGlowstoneSlab registeredDoubleGlowstoneSlab = new BlockDoubleGlowstoneSlab();
+		
+		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(
+				registeredHalfGlowstoneBlock, 
+				registeredHalfGlowstoneBlock, 
+				registeredDoubleGlowstoneSlab, 
+				true);
+		
+		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("blockHalfGlowstoneSlab");
+		
+		ItemBlockGlowstoneSlab itemDoubleGlowstoneSlab = new ItemBlockGlowstoneSlab(
+				registeredDoubleGlowstoneSlab, 
+				registeredHalfGlowstoneBlock, 
+				registeredDoubleGlowstoneSlab, 
+				true);
+		
+		itemDoubleGlowstoneSlab = (ItemBlockGlowstoneSlab) itemDoubleGlowstoneSlab.setRegistryName("blockGlowstoneSlab");
+		itemDoubleGlowstoneSlab.setCreativeTab(null);
+		
+		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
+		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, itemDoubleGlowstoneSlab);
 	}
 	
 	/**
@@ -414,6 +443,16 @@ public class ModRegistry
 				"xxx",
 				'x', Items.FLINT,
 				'y', Item.getItemFromBlock(Blocks.CLAY));
+		
+		// Glowstone Slab
+		GameRegistry.addRecipe(new ItemStack(ModRegistry.GlowstoneSlab(), 6),
+				"xxx",
+				'x', Item.getItemFromBlock(Blocks.GLOWSTONE));
+		
+		GameRegistry.addRecipe(new ItemStack(Blocks.GLOWSTONE, 1),
+				"x",
+				"x",
+				'x', Item.getItemFromBlock(ModRegistry.GlowstoneSlab()));
 	}
 	
 	/**

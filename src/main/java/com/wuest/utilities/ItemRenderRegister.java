@@ -13,13 +13,13 @@ public final class ItemRenderRegister
 	public static void registerItemRenderer()
 	{
 		// Blocks.
-		for(Block currentBlock : WuestUtilities.ModBlocks)
+		for(Block currentBlock : ModRegistry.ModBlocks)
 		{
 			ItemRenderRegister.regBlock(currentBlock);
 		}
 
 		// Items.
-		for (Item currentItem : WuestUtilities.ModItems)
+		for (Item currentItem : ModRegistry.ModItems)
 		{
 			ItemRenderRegister.regItem(currentItem);
 		}
