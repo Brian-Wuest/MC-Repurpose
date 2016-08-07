@@ -1,9 +1,9 @@
 {
     "variants": 
     {
-        "half=bottom,variant=false": { "model": "wuestUtilities:blockGrassSlab_half" },
-        "half=bottom,variant=true": { "model": "wuestUtilities:blockGrassSlab_half" },
-        "half=top,variant=false": { "model": "wuestUtilities:blockGrassSlab_upper" },
-        "half=top,variant=true": { "model": "wuestUtilities:blockGrassSlab_upper" }
+        "half=bottom,variant=false": { "model": "wuestutilities:blockGrassSlab_half" },
+        "half=bottom,variant=true": { "model": "wuestutilities:blockGrassSlab_half" },
+        "half=top,variant=false": { "model": "wuestutilities:blockGrassSlab_upper" },
+        "half=top,variant=true": { "model": "wuestutilities:blockGrassSlab_upper" }
     }
 }

@@ -1,16 +1,16 @@
 {
     "variants": {
         "variant=false": [
-            { "model": "wuestUtilities:blockGrassSlab" },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 90 },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 180 },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 270 }
+            { "model": "wuestutilities:blockGrassSlab" },
+            { "model": "wuestutilities:blockGrassSlab", "y": 90 },
+            { "model": "wuestutilities:blockGrassSlab", "y": 180 },
+            { "model": "wuestutilities:blockGrassSlab", "y": 270 }
         ],
         "variant=true": [
-            { "model": "wuestUtilities:blockGrassSlab" },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 90 },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 180 },
-            { "model": "wuestUtilities:blockGrassSlab", "y": 270 }
+            { "model": "wuestutilities:blockGrassSlab" },
+            { "model": "wuestutilities:blockGrassSlab", "y": 90 },
+            { "model": "wuestutilities:blockGrassSlab", "y": 180 },
+            { "model": "wuestutilities:blockGrassSlab", "y": 270 }
         ]
     }
 }

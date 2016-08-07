@@ -1,6 +1,6 @@
 {
 	"variants": 
 	{
-		"normal": { "model": "wuestUtilities:blockMiniRedstone" }
+		"normal": { "model": "wuestutilities:blockMiniRedstone" }
 	}
 }

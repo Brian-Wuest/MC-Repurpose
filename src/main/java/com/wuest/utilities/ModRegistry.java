@@ -209,17 +209,8 @@ public class ModRegistry
 		
 		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("blockHalfDirtSlab");
 		
-		ItemBlockDirtSlab itemDoubleDirtSlab = new ItemBlockDirtSlab(
-				registeredDoubleDirtSlab, 
-				registeredHalfDirtBlock, 
-				registeredDoubleDirtSlab, 
-				true);
-		
-		itemDoubleDirtSlab = (ItemBlockDirtSlab) itemDoubleDirtSlab.setRegistryName("blockDirtSlab");
-		itemDoubleDirtSlab.setCreativeTab(null);
-		
 		ModRegistry.registerBlock(registeredHalfDirtBlock, itemHalfDirtSlab);
-		ModRegistry.registerBlock(registeredDoubleDirtSlab, itemDoubleDirtSlab);
+		ModRegistry.registerBlock(registeredDoubleDirtSlab, false);
 		
 		// Grass Slab
 		BlockHalfGrassSlab registeredHalfGrassBlock = new BlockHalfGrassSlab();
@@ -233,18 +224,8 @@ public class ModRegistry
 		
 		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("blockHalfGrassSlab");
 		
-		ItemBlockGrassSlab itemDoubleGrassSlab = new ItemBlockGrassSlab(
-				registeredDoubleGrassSlab, 
-				registeredHalfGrassBlock, 
-				registeredDoubleGrassSlab, 
-				true);
-		
-		itemDoubleGrassSlab = (ItemBlockGrassSlab) itemDoubleGrassSlab.setRegistryName("blockGrassSlab");
-		itemDoubleGrassSlab.setCreativeTab(null);
-		
 		ModRegistry.registerBlock(registeredHalfGrassBlock, itemHalfGrassSlab);
-		
-		ModRegistry.registerBlock(registeredDoubleGrassSlab, itemDoubleGrassSlab);
+		ModRegistry.registerBlock(registeredDoubleGrassSlab, false);
 		
 		ModRegistry.registerBlock(new BlockEnrichedFarmland());
 		ModRegistry.registerBlock(new BlockMiniRedstone());
@@ -276,17 +257,8 @@ public class ModRegistry
 		
 		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("blockHalfGlowstoneSlab");
 		
-		ItemBlockGlowstoneSlab itemDoubleGlowstoneSlab = new ItemBlockGlowstoneSlab(
-				registeredDoubleGlowstoneSlab, 
-				registeredHalfGlowstoneBlock, 
-				registeredDoubleGlowstoneSlab, 
-				true);
-		
-		itemDoubleGlowstoneSlab = (ItemBlockGlowstoneSlab) itemDoubleGlowstoneSlab.setRegistryName("blockGlowstoneSlab");
-		itemDoubleGlowstoneSlab.setCreativeTab(null);
-		
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
-		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, itemDoubleGlowstoneSlab);
+		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
 	}
 	
 	/**
@@ -482,10 +454,19 @@ public class ModRegistry
 	
 	public static <T extends Block> T registerBlock(T block)
 	{
+		return ModRegistry.registerBlock(block, true);
+	}
+	
+	public static <T extends Block> T registerBlock(T block, boolean includeItemBlock)
+	{
 		GameRegistry.register(block);
-		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-		ModRegistry.ModBlocks.add(block);
 		
+		if (includeItemBlock)
+		{
+			GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		}
+		
+		ModRegistry.ModBlocks.add(block);
 		return block;
 	}
 	

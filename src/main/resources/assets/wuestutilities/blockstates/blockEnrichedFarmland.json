@@ -1,12 +1,12 @@
 {
     "variants": {
-        "moisture=0": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=1": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=2": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=3": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=4": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=5": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=6": { "model": "wuestUtilities:blockEnrichedFarmland" },
-        "moisture=7": { "model": "wuestUtilities:blockEnrichedFarmland" }
+        "moisture=0": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=1": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=2": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=3": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=4": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=5": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=6": { "model": "wuestutilities:blockEnrichedFarmland" },
+        "moisture=7": { "model": "wuestutilities:blockEnrichedFarmland" }
     }
 }
