@@ -37,8 +37,12 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -52,6 +56,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class WuestEventHandler
 {
 	private static HashMap<String, BlockPos> playerBedLocation;
+	
+	private HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
 
 	@SubscribeEvent
 	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
@@ -168,6 +174,17 @@ public class WuestEventHandler
 			// This is needed as the client doesn't properly store the bed location.
 			this.sendPlayerBedLocation(event);
 		}
+		
+		//this.generatePlayerParticles(event);
+		
+		//this.setPlayerLight(event);
+	}
+	
+	@SubscribeEvent
+	public void TextureStitch(TextureStitchEvent.Pre preEvent)
+	{
+		// This is how I could register a sprite texture for use in particles and other things.
+		// preEvent.getMap().registerSprite(new ResourceLocation(WuestUtilities.MODID, ""));
 	}
 
 	@SubscribeEvent
@@ -322,5 +339,86 @@ public class WuestEventHandler
 			// Only send the message to the client if the bed position changes.
 			WuestUtilities.network.sendTo(message, player);
 		}
+	}
+	
+	private void setPlayerLight(TickEvent.PlayerTickEvent event)
+	{
+		World world = event.player.worldObj;
+		EntityPlayer player = event.player;
+		BlockPos pos = new BlockPos(player.posX, player.posY + 1, player.posZ);
+		BlockPos prevPos = new BlockPos(player.prevPosX, player.prevPosY + 1, player.prevPosZ);
+		
+		
+		if (!event.player.isDead)
+		{
+			world.setLightFor(EnumSkyBlock.BLOCK, pos, 15);
+			//System.out.println("Light Level: " + ((Integer)world.getLightFor(EnumSkyBlock.BLOCK, pos)).toString());
+			
+			world.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), 12, 12, 12);
+			
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+
+			if (pos.getX() != prevPos.getX() && pos.getY() != prevPos.getY() && pos.getZ() != prevPos.getZ())
+			{
+				for (BlockPos otherPos : BlockPos.getAllInBox(prevPos, pos))
+				{
+					// Don't update for the current position.
+					if (pos.getX() != otherPos.getX() && pos.getY() != otherPos.getY() && pos.getZ() != otherPos.getZ())
+					{
+						world.checkLightFor(EnumSkyBlock.BLOCK, otherPos);
+					}
+				}
+			}
+				
+			for (int i = 1; i < 2; i++)
+			{
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.up(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.up(i)), 3);
+				
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.down(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.down(i)), 3);
+				
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.east(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.east(i)), 3);
+				
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.south(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.south(i)), 3);
+				
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.north(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.north(i)), 3);
+				
+				world.checkLightFor(EnumSkyBlock.BLOCK, pos.west(i));
+				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.south(i)), 3);
+			}
+			
+		}
+		else
+		{
+			world.setLightFor(EnumSkyBlock.BLOCK, pos, 0);
+		}
+	}
+
+	private void generatePlayerParticles(TickEvent.PlayerTickEvent event)
+	{
+		EntityPlayer player = event.player;
+		
+		if (this.playerExistedTicks.containsKey(player.getName()))
+		{
+			int ticks = this.playerExistedTicks.get(player.getName());
+			
+			if (ticks % 20 == 0)
+			{
+			    WuestUtilities.proxy.generateParticles(player);
+			    ticks = 0;
+			}
+			
+			ticks++;
+			this.playerExistedTicks.put(player.getName(), ticks);
+		}
+		else
+		{
+			this.playerExistedTicks.put(player.getName(), 0);
+		}
+		
 	}
 }

@@ -7,11 +7,13 @@ import com.wuest.utilities.Blocks.BlockGrassSlab;
 import com.wuest.utilities.Blocks.BlockGrassStairs;
 import com.wuest.utilities.Events.ClientEventHandler;
 import com.wuest.utilities.Events.WuestEventHandler;
+import com.wuest.utilities.particle.MysteriousParticle;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,8 +33,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class ClientProxy extends CommonProxy 
-{ 
+public class ClientProxy extends CommonProxy
+{
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
 
 	@Override
@@ -46,7 +48,8 @@ public class ClientProxy extends CommonProxy
 	{
 		super.init(event);
 
-		// After all items have been registered and all recipes loaded, register any necessary renderer.
+		// After all items have been registered and all recipes loaded, register
+		// any necessary renderer.
 		WuestUtilities.proxy.registerRenderers();
 		this.RegisterEventListeners();
 	}
@@ -57,20 +60,20 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
-	public void registerRenderers() 
+	public void registerRenderers()
 	{
 		ItemRenderRegister.registerItemRenderer();
 
 		// Register block colors.
 		BlockGrassStairs.RegisterBlockRenderer();
-		
+
 		BlockGrassSlab.RegisterBlockRenderer();
-		
+
 		BlockCustomWall.RegisterBlockRenderer();
 	}
 
 	@Override
-	public EntityPlayer getPlayerEntity(MessageContext ctx) 
+	public EntityPlayer getPlayerEntity(MessageContext ctx)
 	{
 		// Note that if you simply return 'Minecraft.getMinecraft().thePlayer',
 		// your packets will not work as expected because you will be getting a
@@ -83,9 +86,23 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
-	public IThreadListener getThreadFromContext(MessageContext ctx) 
+	public IThreadListener getThreadFromContext(MessageContext ctx)
 	{
 		return (ctx.side.isClient() ? Minecraft.getMinecraft() : super.getThreadFromContext(ctx));
+	}
+
+	@Override
+	public void generateParticles(EntityPlayer player)
+	{
+		double motionX = player.worldObj.rand.nextGaussian() * 0.02D;
+		double motionY = player.worldObj.rand.nextGaussian() * 0.02D;
+		double motionZ = player.worldObj.rand.nextGaussian() * 0.02D;
+		Particle particleMysterious = new MysteriousParticle(player.worldObj,
+				player.posX + player.worldObj.rand.nextFloat() * player.width * 2.0F - player.width,
+				player.posY + 0.5D + player.worldObj.rand.nextFloat() * player.height,
+				player.posZ + player.worldObj.rand.nextFloat() * player.width * 2.0F - player.width, motionX, motionY, motionZ);
+		
+		Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);
 	}
 
 	private void RegisterEventListeners()
