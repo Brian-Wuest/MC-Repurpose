@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * This class is used to handle client side only events.
- * @author Brian
+ * @author WuestMan
  *
  */
 public class ClientEventHandler extends Gui
