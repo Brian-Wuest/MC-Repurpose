@@ -342,6 +342,10 @@ public class GeneralRecipes
         		'g', Items.BONE,
         		'h', Items.LEATHER_LEGGINGS,
         		'i', Items.EMERALD);
+        
+        // Make mushroom and rabbit stew bowls stack.
+        Items.MUSHROOM_STEW.setMaxStackSize(16);
+        Items.RABBIT_STEW.setMaxStackSize(16);
 	}
 
 	private static void LoadNetherStarRecipe()
