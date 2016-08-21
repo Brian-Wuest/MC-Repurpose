@@ -52,8 +52,11 @@ public class CommonProxy implements IGuiHandler
 
 		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
 		
-		// Pull the repository information.
-		UpdateChecker.checkVersion();
+		if (this.proxyConfiguration.enableVersionCheckMessage)
+		{
+			// Pull the repository information.
+			UpdateChecker.checkVersion();
+		}
 		
 		ModRegistry.RegisterMessages();
 	}
@@ -117,5 +120,10 @@ public class CommonProxy implements IGuiHandler
 
 	public void generateParticles(EntityPlayer players)
 	{
+	}
+	
+	public WuestConfiguration getServerConfiguration()
+	{
+		return CommonProxy.proxyConfiguration;
 	}
 }

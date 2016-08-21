@@ -15,7 +15,9 @@ import com.wuest.utilities.Items.ItemFluffyFabric;
 import com.wuest.utilities.Items.ItemSnorkel;
 import com.wuest.utilities.Items.ItemSwiftBlade;
 import com.wuest.utilities.Items.ItemWhetStone;
+import com.wuest.utilities.Proxy.ClientProxy;
 import com.wuest.utilities.Proxy.Messages.BedLocationMessage;
+import com.wuest.utilities.Proxy.Messages.ConfigSyncMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
@@ -51,7 +53,10 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class WuestEventHandler
 {
@@ -60,16 +65,22 @@ public class WuestEventHandler
 	private HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
 
 	@SubscribeEvent
-	public void PlayerJoinedWorld(EntityJoinWorldEvent event)
+	public void onPlayerLoginEvent(PlayerLoggedInEvent event)
 	{
-		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer)
+		if(!event.player.worldObj.isRemote)
 		{
-			// Show a message to this player if their version is old.
-			if (UpdateChecker.showMessage)
-			{
-				((EntityPlayer)event.getEntity()).addChatMessage(new TextComponentString(UpdateChecker.messageToShow));
-			}
+			NBTTagCompound tag = WuestUtilities.proxy.proxyConfiguration.ToNBTTagCompound();
+			WuestUtilities.network.sendTo(new ConfigSyncMessage(tag), (EntityPlayerMP)event.player);
+			System.out.println("Sent config to '" + event.player.getDisplayNameString() + ".'");		
 		}
+	}
+	
+	@SubscribeEvent
+	public void OnClientDisconnectEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
+	{
+		// When the player logs out, make sure to re-set the server configuration. 
+		// This is so a new configuration can be successfully loaded when they switch servers or worlds (on single player.
+		((ClientProxy)WuestUtilities.proxy).serverConfiguration = null;
 	}
 	
 	@SubscribeEvent(receiveCanceled = true)
@@ -180,12 +191,12 @@ public class WuestEventHandler
 		//this.setPlayerLight(event);
 	}
 	
-	@SubscribeEvent
+/*	@SubscribeEvent
 	public void TextureStitch(TextureStitchEvent.Pre preEvent)
 	{
 		// This is how I could register a sprite texture for use in particles and other things.
 		// preEvent.getMap().registerSprite(new ResourceLocation(WuestUtilities.MODID, ""));
-	}
+	}*/
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)

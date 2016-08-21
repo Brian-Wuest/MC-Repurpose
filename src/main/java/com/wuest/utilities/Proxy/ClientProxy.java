@@ -5,6 +5,7 @@ import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Blocks.BlockCustomWall;
 import com.wuest.utilities.Blocks.BlockGrassSlab;
 import com.wuest.utilities.Blocks.BlockGrassStairs;
+import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Events.ClientEventHandler;
 import com.wuest.utilities.Events.WuestEventHandler;
 import com.wuest.utilities.particle.MysteriousParticle;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
 {
+	public WuestConfiguration serverConfiguration = null;
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
 
 	@Override
@@ -103,6 +105,20 @@ public class ClientProxy extends CommonProxy
 				player.posZ + player.worldObj.rand.nextFloat() * player.width * 2.0F - player.width, motionX, motionY, motionZ);
 		
 		Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);
+	}
+	
+	@Override
+	public WuestConfiguration getServerConfiguration()
+	{
+		if (this.serverConfiguration == null)
+		{
+			// Get the server configuration.
+			return CommonProxy.proxyConfiguration;
+		}
+		else
+		{
+			return this.serverConfiguration;
+		}
 	}
 
 	private void RegisterEventListeners()

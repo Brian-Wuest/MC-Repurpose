@@ -1,7 +1,9 @@
 package com.wuest.utilities.Config;
 
+import com.wuest.utilities.UpdateChecker;
 import com.wuest.utilities.WuestUtilities;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -17,6 +19,7 @@ public class WuestConfiguration
 	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
 	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
 	private static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
+	private static String enableVersionCheckMessageName = "Enable Version Checking";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -43,12 +46,16 @@ public class WuestConfiguration
 	private static String addCobbleName = "Add Cobblestone";
 	private static String addSaplingsName = "Add Saplings";
 	private static String addTorchesName = "Add Torches";
+	
+	private static String versionMessageName = "Version Message";
+	private static String showMessageName = "Show Message";
 
 	// Configuration Options.
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableExtraGrassDrops;
+	public boolean enableVersionCheckMessage;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -63,20 +70,9 @@ public class WuestConfiguration
 	public boolean addEnrichedFarmlandRecipe;
 	public boolean addMiniRedstoneBlockRecipe;
 	
-	// Chest content options.
-	public boolean addSword;
-	public boolean addAxe;
-	public boolean addHoe;
-	public boolean addShovel;
-	public boolean addPickAxe;
-
-	public boolean addArmor;
-	public boolean addFood;
-	public boolean addCrops;
-	public boolean addDirt;
-	public boolean addCobble;
-	public boolean addSaplings;
-	public boolean addTorches;
+	// Version Check Message Info
+	public String versionMessage = "";
+	public boolean showMessage = false;
 
 	public WuestConfiguration()
 	{
@@ -89,6 +85,7 @@ public class WuestConfiguration
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
 		this.enableExtraGrassDrops = true;
+		this.enableVersionCheckMessage = true;
 	}
 
 	public static void syncConfig()
@@ -104,6 +101,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.rightClickCropHarvest = config.getBoolean(WuestConfiguration.rightClickCropHarvestName, WuestConfiguration.OPTIONS, false, "Determines if right-clicking crops will harvest them. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.enableVersionCheckMessage = config.getBoolean(WuestConfiguration.enableVersionCheckMessageName, WuestConfiguration.OPTIONS, true, "Determines if version checking is enabled when application starts. Also determines if the chat message about old versions is shown when joining a world. Server configuration overrides client.");
 
 		// This one is special since it requires a minecraft restart.
 		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: potatoes, carrots and beetroot seeds. Server configuration overrides client.");
@@ -128,21 +126,6 @@ public class WuestConfiguration
 		// This entire category requires a minecraft restart.
 		config.setCategoryRequiresMcRestart(WuestConfiguration.RecipeOptions, true);
 		
-		config.setCategoryComment(WuestConfiguration.ChestContentOptions, "This category is to determine the contents of the chest created by the house item. When playing on a server, the server configuration is used.");
-
-		WuestUtilities.proxy.proxyConfiguration.addSword = config.getBoolean(WuestConfiguration.addSwordName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Sword is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addAxe = config.getBoolean(WuestConfiguration.addAxeName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Axe is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addShovel = config.getBoolean(WuestConfiguration.addShovelName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Shovel is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addHoe = config.getBoolean(WuestConfiguration.addHoeName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Hoe is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addPickAxe = config.getBoolean(WuestConfiguration.addPickAxeName, WuestConfiguration.ChestContentOptions, true, "Determines if a Stone Pickaxe is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addArmor = config.getBoolean(WuestConfiguration.addArmorName, WuestConfiguration.ChestContentOptions, true, "Determines if Leather Armor is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addFood = config.getBoolean(WuestConfiguration.addFoodName, WuestConfiguration.ChestContentOptions, true, "Determines if Bread is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addCrops = config.getBoolean(WuestConfiguration.addCropsName, WuestConfiguration.ChestContentOptions, true, "Determines if seeds, potatoes and carros are added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addDirt = config.getBoolean(WuestConfiguration.addDirtName, WuestConfiguration.ChestContentOptions, true, "Determines if a stack of dirt is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addCobble = config.getBoolean(WuestConfiguration.addCobbleName, WuestConfiguration.ChestContentOptions, true, "Determines if a stack of cobble is added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addSaplings = config.getBoolean(WuestConfiguration.addSaplingsName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of oak saplings are added the the chest when the house is created.");
-		WuestUtilities.proxy.proxyConfiguration.addTorches = config.getBoolean(WuestConfiguration.addTorchesName, WuestConfiguration.ChestContentOptions, true, "Determines if a set of torches are added the the chest when the house is created.");
-
 		// GUI Options
 		//config.setCategoryComment(WuestConfiguration.GuiOptions, "This category is to configure the various GUI options for this mod.");
 		
@@ -150,5 +133,62 @@ public class WuestConfiguration
 		{
 			config.save();
 		}
+	}
+
+	public NBTTagCompound ToNBTTagCompound()
+	{
+		NBTTagCompound tag = new NBTTagCompound();
+		
+		tag.setBoolean(WuestConfiguration.rightClickCropHarvestName, this.rightClickCropHarvest);
+		tag.setBoolean(WuestConfiguration.enableHomeCommandName, this.enableHomeCommand);
+		tag.setBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
+		tag.setBoolean(WuestConfiguration.enableVersionCheckMessageName, this.enableVersionCheckMessage);
+		tag.setBoolean(WuestConfiguration.enableExtraGrassDropsName, this.enableExtraGrassDrops);
+		tag.setBoolean(WuestConfiguration.addMetalRecipesName, this.addMetalRecipes);
+		tag.setBoolean(WuestConfiguration.addWoodRecipesName, this.addWoodRecipes);
+		tag.setBoolean(WuestConfiguration.addStoneRecipesName, this.addStoneRecipes);
+		tag.setBoolean(WuestConfiguration.addArmorRecipesName, this.addArmorRecipes);
+		tag.setBoolean(WuestConfiguration.addMiscRecipesName, this.addMiscRecipes);
+		tag.setBoolean(WuestConfiguration.addNetherStarRecipeName, this.addNetherStarRecipe);
+		tag.setBoolean(WuestConfiguration.enableRedstoneClockName, this.addRedstoneClockRecipe);
+		tag.setBoolean(WuestConfiguration.enableBedCompassName, this.addBedCompassRecipe);
+		tag.setBoolean(WuestConfiguration.enableSwiftBladeName, this.addSwiftBladeRecipe);
+		tag.setBoolean(WuestConfiguration.enableEnchrichedFarmlandName, this.addEnrichedFarmlandRecipe);
+		tag.setBoolean(WuestConfiguration.enableMiniRedstoneBlockName, this.addMiniRedstoneBlockRecipe);
+		
+		tag.setString(WuestConfiguration.versionMessageName, UpdateChecker.messageToShow);
+		tag.setBoolean(WuestConfiguration.showMessageName, UpdateChecker.showMessage);
+		
+		return tag;
+	}
+	
+	public static WuestConfiguration getFromNBTTagCompound(NBTTagCompound tag)
+	{
+		WuestConfiguration config = new WuestConfiguration();
+		
+		config.rightClickCropHarvest = tag.getBoolean(WuestConfiguration.rightClickCropHarvestName);
+		
+		config.enableHomeCommand = tag.getBoolean(WuestConfiguration.enableHomeCommandName);
+		config.enableGrassSpreadToCustomDirt = tag.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName);
+		config.enableVersionCheckMessage = tag.getBoolean(WuestConfiguration.enableVersionCheckMessageName);
+		config.enableExtraGrassDrops = tag.getBoolean(WuestConfiguration.enableExtraGrassDropsName);
+		config.addMetalRecipes = tag.getBoolean(WuestConfiguration.addMetalRecipesName);
+		
+		config.addWoodRecipes = tag.getBoolean(WuestConfiguration.addWoodRecipesName);
+		config.addStoneRecipes = tag.getBoolean(WuestConfiguration.addStoneRecipesName);
+		config.addArmorRecipes = tag.getBoolean(WuestConfiguration.addArmorRecipesName);
+		config.addMiscRecipes = tag.getBoolean(WuestConfiguration.addMiscRecipesName);
+		config.addNetherStarRecipe = tag.getBoolean(WuestConfiguration.addNetherStarRecipeName);
+		
+		config.addRedstoneClockRecipe = tag.getBoolean(WuestConfiguration.enableRedstoneClockName);
+		config.addBedCompassRecipe = tag.getBoolean(WuestConfiguration.enableBedCompassName);
+		config.addSwiftBladeRecipe = tag.getBoolean(WuestConfiguration.enableSwiftBladeName);
+		config.addEnrichedFarmlandRecipe = tag.getBoolean(WuestConfiguration.enableEnchrichedFarmlandName);
+		config.addMiniRedstoneBlockRecipe = tag.getBoolean(WuestConfiguration.enableMiniRedstoneBlockName);
+		
+		config.versionMessage = tag.getString(WuestConfiguration.versionMessageName);
+		config.showMessage = tag.getBoolean(WuestConfiguration.showMessageName);
+		
+		return config;
 	}
 }
