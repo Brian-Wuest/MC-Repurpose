@@ -59,6 +59,9 @@ public class CommonProxy implements IGuiHandler
 		}
 		
 		ModRegistry.RegisterMessages();
+		
+		// Register the capabilities.
+		ModRegistry.RegisterCapabilities();
 	}
 
 	public void init(FMLInitializationEvent event)

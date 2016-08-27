@@ -9,6 +9,9 @@ import java.util.Random;
 import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.UpdateChecker;
 import com.wuest.utilities.WuestUtilities;
+import com.wuest.utilities.Capabilities.DimensionHome;
+import com.wuest.utilities.Capabilities.DimensionHomeProvider;
+import com.wuest.utilities.Capabilities.IDimensionHome;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Items.ItemDiamondShard;
 import com.wuest.utilities.Items.ItemFluffyFabric;
@@ -46,6 +49,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -53,6 +57,7 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -81,6 +86,43 @@ public class WuestEventHandler
 		// When the player logs out, make sure to re-set the server configuration. 
 		// This is so a new configuration can be successfully loaded when they switch servers or worlds (on single player.
 		((ClientProxy)WuestUtilities.proxy).serverConfiguration = null;
+	}
+	
+	@SubscribeEvent
+	public void AttachEntityCapabilities(AttachCapabilitiesEvent.Entity event)
+	{
+		// Only attach for players.
+		if (event.getEntity() instanceof EntityPlayer)
+		{
+			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "DimensionHome"), new DimensionHomeProvider(event.getEntity(), new DimensionHome()));
+		}
+	}
+	
+	@SubscribeEvent
+	public void PlayerChangedDimension(PlayerChangedDimensionEvent event)
+	{
+		IDimensionHome dimensionHome = event.player.getCapability(ModRegistry.DimensionHomes, null);
+		
+		if (dimensionHome != null)
+		{
+			dimensionHome.setHomePosition(event.toDim, event.player.getPosition());
+		}
+	}
+	
+	@SubscribeEvent
+	public void PlayerCloned(PlayerEvent.Clone event)
+	{
+		if (event.isWasDeath())
+		{
+			// While not necessary for Vanilla, a mod could change where a player spawns when they die, so copy over the capabilities.
+			EntityPlayer original = event.getOriginal();
+			EntityPlayer newPlayer = event.getEntityPlayer();
+			
+			IDimensionHome originalDimensionHome = original.getCapability(ModRegistry.DimensionHomes, null);
+			IDimensionHome newDimensionHome = newPlayer.getCapability(ModRegistry.DimensionHomes, null);
+			
+			newDimensionHome.setDimensionHomes(originalDimensionHome.getDimensionHomes());
+		}
 	}
 	
 	@SubscribeEvent(receiveCanceled = true)
