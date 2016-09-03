@@ -2,6 +2,7 @@ package com.wuest.utilities.Base;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -11,11 +12,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 
 /**
  * The base block for any block associated with a tile entity.
@@ -88,6 +91,35 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 		//System.out.println("Creating new tile entity.");
 		return this.createNewTileEntity();
 	}
+	
+    /**
+     * Spawns this Block's drops into the World as EntityItems.
+     */
+    @Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
+    {
+    	// Do not drop items while restoring blockstates, prevents item dupe.
+        if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) 
+        {
+            List<ItemStack> items = this.getDrops(worldIn, pos, state, fortune);
+            chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, chance, false, harvesters.get());
+
+            T tileEntity = this.getLocalTileEntity(worldIn, pos);
+            
+            for (ItemStack item : items)
+            {
+                if (worldIn.rand.nextFloat() <= chance)
+                {
+                	if (tileEntity != null)
+                	{
+                		item = tileEntity.transferCapabilities(item);
+                	}
+                	
+                    this.spawnAsEntity(worldIn, pos, item);
+                }
+            }
+        }
+    }
 	
 	public T createNewTileEntity()
 	{

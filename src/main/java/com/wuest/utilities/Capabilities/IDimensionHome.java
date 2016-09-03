@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
  * @author WuestMan
  *
  */
-public interface IDimensionHome
+public interface IDimensionHome extends ITransferable<IDimensionHome>
 {
 	/**
 	 * Gets the hashMap of dimensions and their spawn points.

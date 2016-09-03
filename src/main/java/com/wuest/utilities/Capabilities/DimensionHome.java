@@ -49,4 +49,10 @@ public class DimensionHome implements IDimensionHome
 		this.dimensionHomes = dimensionHomeMap;
 		return this;
 	}
+
+	@Override
+	public void Transfer(IDimensionHome transferable)
+	{
+		this.setDimensionHomes(transferable.getDimensionHomes());
+	}
 }

@@ -2,13 +2,19 @@ package com.wuest.utilities.Base;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import com.wuest.utilities.Capabilities.ITransferable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 
 /**
  * This is the base tile entity used by the mod.
@@ -19,6 +25,7 @@ import net.minecraft.world.World;
 public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 {
 	protected T config;
+	protected ArrayList<Capability> allowedCapabilities = new ArrayList<Capability>();
 	
 	/**
 	 * @return Gets the configuration class used by this tile entity.
@@ -36,6 +43,48 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 	{
 		this.config = value;
 		this.markDirty();
+	}
+	
+	/**
+	 * Gets the list of allowed capabilities.
+	 * @return The list of allowed capabilities if any.
+	 */
+	public ArrayList<Capability> getAllowedCapabilities()
+	{
+		return this.allowedCapabilities;
+	}
+	
+	/**
+	 * Sets the allowed capabilities for this TileEntity.
+	 * @param allowedCapabilities The list of allowed capabilities.
+	 */
+	public void setAllowedCapabilities(ArrayList<Capability> allowedCapabilities)
+	{
+		this.allowedCapabilities = allowedCapabilities;
+	}
+	
+	/**
+	 * Transfers capabilities available for transferring to the supplied itemstack.
+	 * @return
+	 */
+	public ItemStack transferCapabilities(ItemStack stack)
+	{
+		// Transfer each transferable capability to the itemstack.
+		for(Capability allowedCapability : this.getAllowedCapabilities())
+		{
+			// Get the interfaces for this capability.
+			Object stackCapability = stack.getCapability(allowedCapability, EnumFacing.NORTH);
+			Object tileEntityCapability = this.getCapability(allowedCapability, EnumFacing.NORTH);
+			
+			if (stackCapability != null && tileEntityCapability != null
+					&& stackCapability instanceof ITransferable && tileEntityCapability instanceof ITransferable)
+			{
+				// transfer the capability data, it's up to the capability to transfer the data.
+				((ITransferable)stackCapability).Transfer((ITransferable)tileEntityCapability);
+			}
+		}
+		
+		return stack;
 	}
 	
     @SuppressWarnings ("unchecked")

@@ -5,6 +5,7 @@ import com.wuest.utilities.Capabilities.*;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -14,7 +15,7 @@ import net.minecraftforge.common.util.INBTSerializable;
  * This class MUST implement INBTSerializable in order for the capability to be saved when the world is saved.
  * @author WuestMan
  */
-public class DimensionHomeProvider implements ICapabilityProvider, INBTSerializable
+public class DimensionHomeProvider implements ICapabilitySerializable<NBTTagCompound>
 {
 	private Entity entity;
 	private IDimensionHome dimensionHome;
@@ -44,13 +45,13 @@ public class DimensionHomeProvider implements ICapabilityProvider, INBTSerializa
 	}
 
 	@Override
-	public NBTBase serializeNBT()
+	public NBTTagCompound serializeNBT()
 	{
-		return ModRegistry.DimensionHomes.getStorage().writeNBT(ModRegistry.DimensionHomes, this.dimensionHome, null);
+		return (NBTTagCompound)ModRegistry.DimensionHomes.getStorage().writeNBT(ModRegistry.DimensionHomes, this.dimensionHome, null);
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt)
+	public void deserializeNBT(NBTTagCompound nbt)
 	{
 		ModRegistry.DimensionHomes.getStorage().readNBT(ModRegistry.DimensionHomes, this.dimensionHome, null, nbt);
 	}

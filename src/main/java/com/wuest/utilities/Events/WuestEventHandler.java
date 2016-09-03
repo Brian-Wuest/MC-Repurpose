@@ -121,7 +121,8 @@ public class WuestEventHandler
 			IDimensionHome originalDimensionHome = original.getCapability(ModRegistry.DimensionHomes, null);
 			IDimensionHome newDimensionHome = newPlayer.getCapability(ModRegistry.DimensionHomes, null);
 			
-			newDimensionHome.setDimensionHomes(originalDimensionHome.getDimensionHomes());
+			// Transfer the dimensional information to the new player.
+			newDimensionHome.Transfer(originalDimensionHome);
 		}
 	}
 	
