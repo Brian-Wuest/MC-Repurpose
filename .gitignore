@@ -19,6 +19,7 @@ build
 eclipse
 run
 
+.project
 CREDITS-fml.txt
 MinecraftForge-Credits.txt
 ForgeREADME.txt
