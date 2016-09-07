@@ -22,8 +22,13 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ModRegistry
 {
 	/**
-	 * This capability is used to save the locations where a player spawns when
-	 * tranfering dimensions.
+	 * This capability is used to store the block model resource location for the redstone infusion feature.
+	 */
+	@CapabilityInject(IBlockModelCapability.class)
+	public static Capability<IBlockModelCapability> BlockModel = null;
+
+	/**
+	 * This capability is used to save the locations where a player spawns when transferring dimensions.
 	 */
 	@CapabilityInject(IDimensionHome.class)
 	public static Capability<IDimensionHome> DimensionHomes = null;

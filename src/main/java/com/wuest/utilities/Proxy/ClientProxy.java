@@ -8,6 +8,8 @@ import com.wuest.utilities.Blocks.BlockGrassStairs;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Events.ClientEventHandler;
 import com.wuest.utilities.Events.WuestEventHandler;
+import com.wuest.utilities.Render.InfusedRedstoneRenderer;
+import com.wuest.utilities.Tiles.TileEntityInfusedRedstone;
 import com.wuest.utilities.particle.MysteriousParticle;
 
 import net.minecraft.block.Block;
@@ -28,6 +30,7 @@ import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -72,6 +75,9 @@ public class ClientProxy extends CommonProxy
 		BlockGrassSlab.RegisterBlockRenderer();
 
 		BlockCustomWall.RegisterBlockRenderer();
+		
+		// Bind the tile entity special renderer.
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfusedRedstone.class, new InfusedRedstoneRenderer());
 	}
 
 	@Override

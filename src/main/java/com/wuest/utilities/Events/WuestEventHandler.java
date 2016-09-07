@@ -9,6 +9,10 @@ import java.util.Random;
 import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.UpdateChecker;
 import com.wuest.utilities.WuestUtilities;
+import com.wuest.utilities.Base.ItemBlockCapability;
+import com.wuest.utilities.Base.TileEntityBase;
+import com.wuest.utilities.Capabilities.BlockModelCapability;
+import com.wuest.utilities.Capabilities.BlockModelProvider;
 import com.wuest.utilities.Capabilities.DimensionHome;
 import com.wuest.utilities.Capabilities.DimensionHomeProvider;
 import com.wuest.utilities.Capabilities.IDimensionHome;
@@ -95,6 +99,26 @@ public class WuestEventHandler
 		if (event.getEntity() instanceof EntityPlayer)
 		{
 			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "DimensionHome"), new DimensionHomeProvider(event.getEntity(), new DimensionHome()));
+		}
+	}
+	
+	@SubscribeEvent
+	public void AttachItemStackCapabilities(AttachCapabilitiesEvent.Item event)
+	{
+		if (event.getItem() instanceof ItemBlockCapability
+				&& ((ItemBlockCapability)event.getItem()).allowedCapabilities.contains(ModRegistry.BlockModel))
+		{
+			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
+		}
+	}
+	
+	@SubscribeEvent
+	public void AttachTileEntityCapabilities(AttachCapabilitiesEvent.TileEntity event)
+	{
+		if (event.getTileEntity() instanceof TileEntityBase
+				&& ((TileEntityBase)event.getTileEntity()).getAllowedCapabilities().contains(event.getTileEntity()))
+		{
+			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
 		}
 	}
 	

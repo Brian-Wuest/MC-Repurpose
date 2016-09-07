@@ -61,6 +61,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 	public void setAllowedCapabilities(ArrayList<Capability> allowedCapabilities)
 	{
 		this.allowedCapabilities = allowedCapabilities;
+		this.markDirty();
 	}
 	
 	/**

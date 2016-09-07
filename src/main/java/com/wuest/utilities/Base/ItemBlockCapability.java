@@ -22,7 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
  */
 public class ItemBlockCapability extends ItemBlock
 {
-	protected ArrayList<Capability> allowedCapabilities = new ArrayList<Capability>();
+	public ArrayList<Capability> allowedCapabilities = new ArrayList<Capability>();
 	
 	/**
 	 * Initializes a new instance of the ItemBlockCapability class.
