@@ -1,5 +1,6 @@
 package com.wuest.utilities.Capabilities;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -20,6 +21,12 @@ public class BlockModelCapability implements IBlockModelCapability
 	@Override
 	public ResourceLocation getBlockResourceLocation()
 	{
+		if (this.blockResourceLocation == null)
+		{
+			// Return the dirt texture if there isn't one assigned.
+			return new ResourceLocation("minecraft", "textures/blocks/dirt.png");
+		}
+		
 		return this.blockResourceLocation;
 	}
 

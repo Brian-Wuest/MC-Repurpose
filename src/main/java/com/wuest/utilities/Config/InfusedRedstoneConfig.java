@@ -48,12 +48,14 @@ public class InfusedRedstoneConfig extends BaseConfig
 	{
 		NBTTagCompound infusedCompound = new NBTTagCompound();
 		
-		infusedCompound.setInteger("posX", this.pos.getX());
-		infusedCompound.setInteger("posY", this.pos.getY());
-		infusedCompound.setInteger("posZ", this.pos.getZ());
-		
-		compound.setTag("infusedCompound", infusedCompound);
-		
+		if (this.pos != null)
+		{
+			infusedCompound.setInteger("posX", this.pos.getX());
+			infusedCompound.setInteger("posY", this.pos.getY());
+			infusedCompound.setInteger("posZ", this.pos.getZ());
+			
+			compound.setTag("infusedCompound", infusedCompound);
+		}
 	}
 
 	@Override
@@ -65,7 +67,10 @@ public class InfusedRedstoneConfig extends BaseConfig
 		{
 			NBTTagCompound infusedCompound = compound.getCompoundTag("infusedCompound");
 			
-			config.pos = new BlockPos(infusedCompound.getInteger("posX"), infusedCompound.getInteger("posY"), infusedCompound.getInteger("posZ"));
+			if (infusedCompound.hasKey("posX"))
+			{
+				config.pos = new BlockPos(infusedCompound.getInteger("posX"), infusedCompound.getInteger("posY"), infusedCompound.getInteger("posZ"));
+			}
 		}
 		
 		return config;

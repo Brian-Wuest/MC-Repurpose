@@ -24,6 +24,7 @@ public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerCo
 	 */
 	public TileEntityRedstoneClock()
 	{
+		super();
 		this.config = new RedstoneClockPowerConfiguration();
 	}
 

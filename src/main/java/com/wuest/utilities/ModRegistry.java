@@ -3,6 +3,7 @@ package com.wuest.utilities;
 import java.util.ArrayList;
 
 import com.wuest.utilities.Capabilities.*;
+import com.wuest.utilities.Capabilities.Storage.BlockModelStorage;
 import com.wuest.utilities.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.utilities.Blocks.*;
 import com.wuest.utilities.Items.*;
@@ -12,6 +13,7 @@ import com.wuest.utilities.Proxy.Messages.Handlers.*;
 import com.wuest.utilities.Tiles.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.*;
 import net.minecraft.item.*;
 import net.minecraft.item.Item.ToolMaterial;
@@ -154,6 +156,16 @@ public class ModRegistry
 	{
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
 	}
+	
+	public static BlockInfusedRedstone InfusedRedstoneBlock()
+	{
+		return ModRegistry.GetBlock(BlockInfusedRedstone.class);
+	}
+	
+	public static ItemBlockInfusedRedstone InfusedRedstoneItem()
+	{
+		return ModRegistry.GetItem(ItemBlockInfusedRedstone.class);
+	}
 
 	/**
 	 * Gets the item from the ModItems collections.
@@ -263,6 +275,12 @@ public class ModRegistry
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
+		
+		// Infused redstone registration.
+/*		BlockInfusedRedstone blockInfusedRedstone = new BlockInfusedRedstone(Material.GROUND, "blockInfusedRedstone");
+		ItemBlockInfusedRedstone itemInfusedRedstone = new ItemBlockInfusedRedstone(blockInfusedRedstone, "blockInfusedRedstone");
+		ModRegistry.registerBlock(blockInfusedRedstone, itemInfusedRedstone);
+		GameRegistry.registerTileEntity(TileEntityInfusedRedstone.class, "InfusedRedstone");*/
 	}
 
 	/**
@@ -367,6 +385,7 @@ public class ModRegistry
 	{
 		// Register the dimension home capability.
 		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(), DimensionHome.class);
+		CapabilityManager.INSTANCE.register(IBlockModelCapability.class, new BlockModelStorage(), BlockModelCapability.class);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.wuest.utilities.Events;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -52,6 +53,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -106,7 +108,7 @@ public class WuestEventHandler
 	public void AttachItemStackCapabilities(AttachCapabilitiesEvent.Item event)
 	{
 		if (event.getItem() instanceof ItemBlockCapability
-				&& ((ItemBlockCapability)event.getItem()).allowedCapabilities.contains(ModRegistry.BlockModel))
+				&& ((ItemBlockCapability)event.getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
 		{
 			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
 		}
@@ -115,10 +117,14 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void AttachTileEntityCapabilities(AttachCapabilitiesEvent.TileEntity event)
 	{
-		if (event.getTileEntity() instanceof TileEntityBase
-				&& ((TileEntityBase)event.getTileEntity()).getAllowedCapabilities().contains(event.getTileEntity()))
+		if (event.getTileEntity() instanceof TileEntityBase)
 		{
-			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
+			ArrayList<Capability> allowedCapabilities = ((TileEntityBase)event.getTileEntity()).getAllowedCapabilities();
+			
+			if (allowedCapabilities.contains(ModRegistry.BlockModel))
+			{
+				event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
+			}
 		}
 	}
 	

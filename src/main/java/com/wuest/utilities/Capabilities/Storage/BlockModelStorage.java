@@ -24,8 +24,13 @@ public class BlockModelStorage implements Capability.IStorage<IBlockModelCapabil
 	{
 		NBTTagCompound tag = new NBTTagCompound();
 		ResourceLocation resourceLocation = instance.getBlockResourceLocation();
-		tag.setString("resourcePath", resourceLocation.getResourcePath());
-		tag.setString("resourceDomain", resourceLocation.getResourceDomain());
+		
+		if (resourceLocation != null)
+		{
+			tag.setString("resourcePath", resourceLocation.getResourcePath());
+			tag.setString("resourceDomain", resourceLocation.getResourceDomain());
+		}
+		
 		return tag;
 	}
 

@@ -50,7 +50,7 @@ public class CommonProxy implements IGuiHandler
 		WuestUtilities.config.load();
 		WuestConfiguration.syncConfig();
 
-		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
+		WuestUtilities.network = NetworkRegistry.INSTANCE.newSimpleChannel("WuestUtilitiesChannel");
 		
 		if (this.proxyConfiguration.enableVersionCheckMessage)
 		{

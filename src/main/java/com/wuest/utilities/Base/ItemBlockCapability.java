@@ -22,7 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
  */
 public class ItemBlockCapability extends ItemBlock
 {
-	public ArrayList<Capability> allowedCapabilities = new ArrayList<Capability>();
+	protected ArrayList<Capability> allowedCapabilities;
 	
 	/**
 	 * Initializes a new instance of the ItemBlockCapability class.
@@ -33,7 +33,24 @@ public class ItemBlockCapability extends ItemBlock
 		super(block);
 		this.allowedCapabilities = allowedCapabilities;
 	}
+	
+	public ArrayList<Capability> getAllowedCapabilities()
+	{
+		if (this.allowedCapabilities == null)
+		{
+			this.allowedCapabilities = new ArrayList<Capability>();
+			this.addAllowedCapabilities();
+		}
+		
+		return this.allowedCapabilities;
+	}
 
+	public ItemBlockCapability setAllowedCapabilities(ArrayList<Capability> value)
+	{
+		this.allowedCapabilities = value;
+		
+		return this;
+	}
 	
     /**
      * Called to actually place the block, after the location is determined
@@ -87,5 +104,12 @@ public class ItemBlockCapability extends ItemBlock
     			}
     		}
     	}
+    }
+
+	/**
+	 * Adds the allowed capabilities during item initialization.
+	 */
+    protected void addAllowedCapabilities()
+    {    	
     }
 }

@@ -15,6 +15,12 @@ public class TileEntityInfusedRedstone extends TileEntityBase<InfusedRedstoneCon
 	 */
 	public TileEntityInfusedRedstone()
 	{
-		this.allowedCapabilities.add(ModRegistry.BlockModel);
+		super();
+	}
+	
+	@Override
+	protected void addAllowedCapabilities()
+	{
+		this.getAllowedCapabilities().add(ModRegistry.BlockModel);
 	}
 }

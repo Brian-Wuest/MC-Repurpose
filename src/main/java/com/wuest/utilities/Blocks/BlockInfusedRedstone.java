@@ -1,5 +1,6 @@
 package com.wuest.utilities.Blocks;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.Base.TileBlockBase;
 import com.wuest.utilities.Tiles.TileEntityInfusedRedstone;
 
@@ -16,10 +17,11 @@ import net.minecraft.world.World;
 public class BlockInfusedRedstone extends TileBlockBase<TileEntityInfusedRedstone>
 {
 
-	public BlockInfusedRedstone(Material materialIn)
+	public BlockInfusedRedstone(Material materialIn, String name)
 	{
 		super(materialIn);
-		// TODO Auto-generated constructor stub
+		
+		ModRegistry.setBlockName(this, name);
 	}
 
 	@Override
@@ -35,5 +37,14 @@ public class BlockInfusedRedstone extends TileBlockBase<TileEntityInfusedRedston
 		// TODO Auto-generated method stub
 		
 	}
+	
+    /**
+     * Used to determine ambient occlusion and culling when rebuilding chunks for render
+     */
+    @Override
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
 
 }

@@ -19,11 +19,22 @@ public class ItemBlockInfusedRedstone extends ItemBlockCapability
 	 * Initializes a new instance of the ItemBlockInfusedRedstone class.
 	 * @param block The parent block for this item.
 	 */
-	public ItemBlockInfusedRedstone(Block block)
+	public ItemBlockInfusedRedstone(Block block, String name)
 	{
 		super(block, new ArrayList<Capability>());
 		
 		this.allowedCapabilities.add(ModRegistry.BlockModel);
+		
+		ModRegistry.setItemName(this, name);
 	}
+	
+	/**
+	 * Adds the allowed capabilities during item initialization.
+	 */
+    @Override
+	protected void addAllowedCapabilities()
+    {
+    	this.getAllowedCapabilities().add(ModRegistry.BlockModel);
+    }
 
 }

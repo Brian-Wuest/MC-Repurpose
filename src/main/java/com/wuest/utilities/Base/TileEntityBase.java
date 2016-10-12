@@ -25,7 +25,11 @@ import net.minecraftforge.common.capabilities.Capability;
 public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 {
 	protected T config;
-	protected ArrayList<Capability> allowedCapabilities = new ArrayList<Capability>();
+	protected ArrayList<Capability> allowedCapabilities;
+	
+	protected TileEntityBase()
+	{
+	}
 	
 	/**
 	 * @return Gets the configuration class used by this tile entity.
@@ -51,6 +55,13 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 	 */
 	public ArrayList<Capability> getAllowedCapabilities()
 	{
+		if (this.allowedCapabilities == null)
+		{
+			this.allowedCapabilities = new ArrayList<Capability>();
+			
+			this.addAllowedCapabilities();
+		}
+		
 		return this.allowedCapabilities;
 	}
 	
@@ -180,7 +191,10 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 		//System.out.println("Writing Clock Data.");
 		super.writeToNBT(compound);
 
-		this.config.WriteToNBTCompound(compound);
+		if (this.config != null)
+		{
+			this.config.WriteToNBTCompound(compound);
+		}
 		
 		return compound;
 	}
@@ -212,4 +226,11 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 		return null;
 	}
 
+	/**
+	 * Adds the allowed capabilities during tile entity initialization.
+	 */
+	protected void addAllowedCapabilities()
+	{
+	}
+	
 }

@@ -34,6 +34,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	 */
 	public TileEntityRedstoneScanner()
 	{
+		super();
 		this.config = new RedstoneScannerConfig();
 	}
 
