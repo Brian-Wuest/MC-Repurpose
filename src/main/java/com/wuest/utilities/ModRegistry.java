@@ -157,16 +157,6 @@ public class ModRegistry
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
 	}
 	
-	public static BlockInfusedRedstone InfusedRedstoneBlock()
-	{
-		return ModRegistry.GetBlock(BlockInfusedRedstone.class);
-	}
-	
-	public static ItemBlockInfusedRedstone InfusedRedstoneItem()
-	{
-		return ModRegistry.GetItem(ItemBlockInfusedRedstone.class);
-	}
-
 	/**
 	 * Gets the item from the ModItems collections.
 	 * 
@@ -275,12 +265,6 @@ public class ModRegistry
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
-		
-		// Infused redstone registration.
-/*		BlockInfusedRedstone blockInfusedRedstone = new BlockInfusedRedstone(Material.GROUND, "blockInfusedRedstone");
-		ItemBlockInfusedRedstone itemInfusedRedstone = new ItemBlockInfusedRedstone(blockInfusedRedstone, "blockInfusedRedstone");
-		ModRegistry.registerBlock(blockInfusedRedstone, itemInfusedRedstone);
-		GameRegistry.registerTileEntity(TileEntityInfusedRedstone.class, "InfusedRedstone");*/
 	}
 
 	/**

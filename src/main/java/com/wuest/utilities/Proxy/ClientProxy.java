@@ -8,8 +8,6 @@ import com.wuest.utilities.Blocks.BlockGrassStairs;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Events.ClientEventHandler;
 import com.wuest.utilities.Events.WuestEventHandler;
-import com.wuest.utilities.Render.InfusedRedstoneRenderer;
-import com.wuest.utilities.Tiles.TileEntityInfusedRedstone;
 import com.wuest.utilities.particle.MysteriousParticle;
 
 import net.minecraft.block.Block;
@@ -75,9 +73,6 @@ public class ClientProxy extends CommonProxy
 		BlockGrassSlab.RegisterBlockRenderer();
 
 		BlockCustomWall.RegisterBlockRenderer();
-		
-		// Bind the tile entity special renderer.
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfusedRedstone.class, new InfusedRedstoneRenderer());
 	}
 
 	@Override

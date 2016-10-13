@@ -1,8 +1,0 @@
-{
-	"parent": "block/block",
-	"ambientocclusion": false,
-	"textures": {
-		"all": "blocks/redstone_block",
-		"particle": "blocks/redstone_block"
-	}
-}
