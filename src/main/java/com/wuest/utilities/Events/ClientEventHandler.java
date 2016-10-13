@@ -8,11 +8,17 @@ import com.wuest.utilities.WuestUtilities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiControls;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -51,6 +57,15 @@ public class ClientEventHandler extends Gui
 		}
 		
 		this.ShowPlayerBed(event);
+	}
+	
+	@SubscribeEvent
+	public void GuiClosed(GuiOpenEvent event)
+	{
+		if (Minecraft.getMinecraft().currentScreen instanceof GuiControls && event.getGui() instanceof GuiOptions)
+		{
+			// The GUI Controls screen was closed, make sure to send the current auto-jump property to the server configuration so the player's auto-step can be enabled if it was enabled on the server.
+		}
 	}
 	
 	private void ShowPlayerBed(RenderGameOverlayEvent event)
@@ -151,4 +166,5 @@ public class ClientEventHandler extends Gui
 		}
 	}
 
+	
 }
