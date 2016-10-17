@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.wuest.utilities.Capabilities.*;
 import com.wuest.utilities.Capabilities.Storage.BlockModelStorage;
 import com.wuest.utilities.Capabilities.Storage.DimensionHomeStorage;
+import com.wuest.utilities.Enchantment.EnchantmentStepAssist;
 import com.wuest.utilities.Blocks.*;
 import com.wuest.utilities.Items.*;
 import com.wuest.utilities.Proxy.CommonProxy;
@@ -14,7 +15,10 @@ import com.wuest.utilities.Tiles.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.init.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.capabilities.*;
@@ -38,6 +42,8 @@ public class ModRegistry
 	public static ArrayList<Item> ModItems = new ArrayList<Item>();
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
 
+	private static EnchantmentStepAssist stepAssist;
+	
 	public static BlockCustomWall DirtWall()
 	{
 		for (Block entry : ModRegistry.ModBlocks)
@@ -157,6 +163,11 @@ public class ModRegistry
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
 	}
 	
+	public static EnchantmentStepAssist StepAssist()
+	{
+		return ModRegistry.stepAssist;
+	}
+	
 	/**
 	 * Gets the item from the ModItems collections.
 	 * 
@@ -267,6 +278,12 @@ public class ModRegistry
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
 	}
 
+	public static void RegisterEnchantments()
+	{
+		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[] {EntityEquipmentSlot.FEET});
+		GameRegistry.register(ModRegistry.stepAssist);
+	}
+	
 	/**
 	 * This is where the mod recipes are registered.
 	 */

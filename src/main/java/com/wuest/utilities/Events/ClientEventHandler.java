@@ -59,15 +59,6 @@ public class ClientEventHandler extends Gui
 		this.ShowPlayerBed(event);
 	}
 	
-	@SubscribeEvent
-	public void GuiClosed(GuiOpenEvent event)
-	{
-		if (Minecraft.getMinecraft().currentScreen instanceof GuiControls && event.getGui() instanceof GuiOptions)
-		{
-			// The GUI Controls screen was closed, make sure to send the current auto-jump property to the server configuration so the player's auto-step can be enabled if it was enabled on the server.
-		}
-	}
-	
 	private void ShowPlayerBed(RenderGameOverlayEvent event)
 	{
 		if (ClientEventHandler.bedCompassTime != null)

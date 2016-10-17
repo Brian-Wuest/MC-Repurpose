@@ -68,6 +68,8 @@ public class CommonProxy implements IGuiHandler
 	{
 		ModRegistry.RegisterModComponents();
 		
+		ModRegistry.RegisterEnchantments();
+		
 		ModRegistry.RegisterRecipes();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);

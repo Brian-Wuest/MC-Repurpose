@@ -20,6 +20,7 @@ public class WuestConfiguration
 	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
 	private static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
 	private static String enableVersionCheckMessageName = "Enable Version Checking";
+	private static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -56,6 +57,7 @@ public class WuestConfiguration
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableExtraGrassDrops;
 	public boolean enableVersionCheckMessage;
+	public boolean enableStepAssistEnchantment;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -102,11 +104,15 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableVersionCheckMessage = config.getBoolean(WuestConfiguration.enableVersionCheckMessageName, WuestConfiguration.OPTIONS, true, "Determines if version checking is enabled when application starts. Also determines if the chat message about old versions is shown when joining a world. Server configuration overrides client.");
-
+		
 		// This one is special since it requires a minecraft restart.
 		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: potatoes, carrots and beetroot seeds. Server configuration overrides client.");
 		prop.setRequiresMcRestart(true);
 		WuestUtilities.proxy.proxyConfiguration.enableExtraGrassDrops = prop.getBoolean();
+		
+		prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableStepAssistEnchantmentName, true, "Determines if the Step Assist family of enchantments is enabled. \r\nRequires World Restart. Server Configuration overrides client.");
+		prop.setRequiresWorldRestart(true);
+		WuestUtilities.proxy.proxyConfiguration.enableStepAssistEnchantment = prop.getBoolean();
 		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 
@@ -144,6 +150,7 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
 		tag.setBoolean(WuestConfiguration.enableVersionCheckMessageName, this.enableVersionCheckMessage);
 		tag.setBoolean(WuestConfiguration.enableExtraGrassDropsName, this.enableExtraGrassDrops);
+		tag.setBoolean(WuestConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
 		tag.setBoolean(WuestConfiguration.addMetalRecipesName, this.addMetalRecipes);
 		tag.setBoolean(WuestConfiguration.addWoodRecipesName, this.addWoodRecipes);
 		tag.setBoolean(WuestConfiguration.addStoneRecipesName, this.addStoneRecipes);
@@ -173,6 +180,7 @@ public class WuestConfiguration
 		config.enableVersionCheckMessage = tag.getBoolean(WuestConfiguration.enableVersionCheckMessageName);
 		config.enableExtraGrassDrops = tag.getBoolean(WuestConfiguration.enableExtraGrassDropsName);
 		config.addMetalRecipes = tag.getBoolean(WuestConfiguration.addMetalRecipesName);
+		config.enableStepAssistEnchantment = tag.getBoolean(WuestConfiguration.enableStepAssistEnchantmentName);
 		
 		config.addWoodRecipes = tag.getBoolean(WuestConfiguration.addWoodRecipesName);
 		config.addStoneRecipes = tag.getBoolean(WuestConfiguration.addStoneRecipesName);
