@@ -40,8 +40,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -449,6 +451,14 @@ public class WuestEventHandler
 			{
 				event.setOutput(enchantedBook);
 			}
+		}
+		else if ((rightItem.getItem() instanceof ItemArmor && ((ItemArmor)rightItem.getItem()).getEquipmentSlot() == EntityEquipmentSlot.FEET && leftItem.getItem() instanceof ItemFluffyFabric)
+				|| (leftItem.getItem() instanceof ItemArmor && ((ItemArmor)leftItem.getItem()).getEquipmentSlot() == EntityEquipmentSlot.FEET && rightItem.getItem() instanceof ItemFluffyFabric))
+		{
+			ItemStack result = rightItem.getItem() instanceof ItemArmor ? rightItem : leftItem;
+			result.addEnchantment(ModRegistry.StepAssist(), 1);
+			event.setCost(2);
+			event.setOutput(result);
 		}
 	}
 	
