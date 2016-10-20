@@ -62,11 +62,13 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class WuestEventHandler
@@ -253,7 +255,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if (event.side.isClient())
+		if (event.side.isClient() && event.phase == Phase.START)
 		{	
 			EntityPlayer player = event.player;
 			ItemStack bootsStack = player.inventory.armorInventory[0];
