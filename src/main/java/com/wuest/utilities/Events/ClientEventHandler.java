@@ -2,27 +2,25 @@ package com.wuest.utilities.Events;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.wuest.utilities.WuestUtilities;
+import com.wuest.utilities.Enchantment.EnchantmentStepAssist;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiControls;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiOptions;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 /**
  * This class is used to handle client side only events.
@@ -38,6 +36,8 @@ public class ClientEventHandler extends Gui
 	private static final int BUFF_ICON_BASE_U_OFFSET = 0;
 	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
 	private static final int BUFF_ICONS_OFFSET = 8;
+	
+	private HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
 	
 	//
 	// This event is called by GuiIngameForge during each frame by
@@ -57,6 +57,125 @@ public class ClientEventHandler extends Gui
 		}
 		
 		this.ShowPlayerBed(event);
+	}
+	
+	@SubscribeEvent
+	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
+	{
+		if (event.side.isClient() && event.phase == Phase.START)
+		{	
+			EntityPlayer player = event.player;
+			ItemStack bootsStack = player.inventory.armorInventory[0];
+			
+			// Check to see if the player is wearing a pair of enchanted boots with step assist.
+			// Check to see if the player was added to the hashset and the game setting for auto-jump was enabled.
+			// If it was, re-set their step height to the original step height and remove them from the hashset.
+			if (this.playerStepAssists.containsKey(player.getName()) && (bootsStack == null || !bootsStack.isItemEnchanted() || Minecraft.getMinecraft().gameSettings.field_189989_R))
+			{
+				// Reset the player step height to the original step height and remove this record from the hashset.
+				StepAssistInfo info = this.playerStepAssists.get(player.getName());
+				player.stepHeight = info.oldStepHeight;
+				this.playerStepAssists.remove(player.getName());
+				return;
+			}
+			
+			// Don't bother adding them to the hashset if auto-jump is enabled.
+			// On the tick after re-setting the player's step height, check to see if the the enchantment is even enabled in the configuration.
+			if (!Minecraft.getMinecraft().gameSettings.field_189989_R && WuestUtilities.proxy.getServerConfiguration().enableStepAssistEnchantment) 
+			{
+				if (this.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
+				{
+					// The player was in the list and still has boots. Make sure they have the enchantment. 
+					// If they don't remove the player from the list and re-set the step height to the difference between the old step height and the new step height.
+					boolean foundStepAssist = false;
+					StepAssistInfo info = this.playerStepAssists.get(player.getName());
+					
+					for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet())
+					{
+						if (entry.getKey() instanceof EnchantmentStepAssist)
+						{
+							// Found the step assist, create the info and update the player's step height based on level.
+							if (entry.getValue() != info.enchantmentLevel)
+							{
+								// Adjust the step height because the item changed.
+								float newStepHeightAdjustment = (entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F);
+								float oldStepHeightAdjustment = (info.enchantmentLevel == 1 ? 1.0F : info.enchantmentLevel == 2 ? 1.5F : 2.0F);
+								float stepHeightAdjustment = oldStepHeightAdjustment - newStepHeightAdjustment;
+								player.stepHeight = player.stepHeight - stepHeightAdjustment;
+								
+								// If the player's step height is now greater than what the enchantment allows, set it to the maximum the enchantment allows
+								if (player.stepHeight > (entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F))
+								{
+									player.stepHeight = entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F;
+								}
+								
+								info.enchantmentLevel = entry.getValue();
+								info.newStepHeight = player.stepHeight;
+								
+								if (player.stepHeight < 0.0F)
+								{
+									player.stepHeight = 0.0F;
+									this.playerStepAssists.remove(player.getName());
+								}
+							}
+							
+							foundStepAssist = true;
+							break;
+						}
+					}
+					
+					if (!foundStepAssist)
+					{	
+						player.stepHeight = info.newStepHeight - info.oldStepHeight;
+						
+						// Make sure the player cannot get stuck.
+						if (player.stepHeight < 0.0F)
+						{
+							player.stepHeight = 0.0F;
+						}
+						
+						this.playerStepAssists.remove(player.getName());
+					}
+				}
+				else if (!this.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
+				{
+					// The player has equipped enchanted boots.
+					for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet())
+					{
+						if (entry.getKey() instanceof EnchantmentStepAssist)
+						{
+							// Found the step assist, create the info and update the player's step height based on level.
+							StepAssistInfo info = new StepAssistInfo();
+							info.oldStepHeight = player.stepHeight;
+							info.enchantmentLevel = entry.getValue();
+							
+							// Get the adjusted step height to determine if we need to change it.
+							float adjustedStepHeight = player.stepHeight - (entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F);
+							info.newStepHeight = player.stepHeight;
+							
+							if (adjustedStepHeight < 0.0F)
+							{
+								adjustedStepHeight = adjustedStepHeight * -1;
+								
+								info.newStepHeight = player.stepHeight + adjustedStepHeight;
+								
+								// If the new step height would be greater than the maximum step height for this level, set it to the maximum step height.
+								if (info.newStepHeight > (entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F))
+								{
+									info.newStepHeight = entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F;
+								}
+								
+								player.stepHeight = info.newStepHeight;
+							}
+							
+							this.playerStepAssists.put(player.getName(), info);
+							
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void ShowPlayerBed(RenderGameOverlayEvent event)
@@ -158,4 +277,15 @@ public class ClientEventHandler extends Gui
 	}
 
 	
+	/**
+	 * This class is used to hold information stored about a player's step assist.
+	 * @author WuestMan
+	 *
+	 */
+	public class StepAssistInfo
+	{
+		public float oldStepHeight = 0.0F;
+		public float newStepHeight = 0.0F;
+		public int enchantmentLevel = 0;
+	}
 }
