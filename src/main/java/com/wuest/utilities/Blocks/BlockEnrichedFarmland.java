@@ -67,7 +67,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 	 * Called when a neighboring block changes.
 	 */
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos p_189540_5_)
 	{
 	}
 

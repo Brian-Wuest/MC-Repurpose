@@ -59,7 +59,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote) 
 		{
@@ -138,17 +138,17 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 
 	public void notifyNeighborsOfStateChange(World worldIn, BlockPos pos, Block blockType)
 	{
-		if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class)).isCanceled())
+		if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class), true).isCanceled())
 		{
 			return;
 		}
 
-		worldIn.notifyBlockOfStateChange(pos.west(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.east(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.down(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.up(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.north(), blockType);
-		worldIn.notifyBlockOfStateChange(pos.south(), blockType);
+		worldIn.func_190524_a(pos.west(), blockType, pos);
+		worldIn.func_190524_a(pos.east(), blockType, pos);
+		worldIn.func_190524_a(pos.down(), blockType, pos);
+		worldIn.func_190524_a(pos.up(), blockType, pos);
+		worldIn.func_190524_a(pos.north(), blockType, pos);
+		worldIn.func_190524_a(pos.south(), blockType, pos);
 	}
 
 	/**

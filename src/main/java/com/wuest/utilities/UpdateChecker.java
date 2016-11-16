@@ -60,7 +60,7 @@ public class UpdateChecker
 			}
 			else
 			{
-				url = new URL("https://raw.githubusercontent.com/Brian-Wuest/MC-WuestUtilities/MC-1.10.2/src/main/resources/mcmod.info");
+				url = new URL("https://raw.githubusercontent.com/Brian-Wuest/MC-WuestUtilities/MC-1.11/src/main/resources/mcmod.info");
 			}
 			
 			Gson file = new Gson();

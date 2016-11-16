@@ -109,22 +109,22 @@ public class HomeCommand extends CommandBase
 					if (player.dimension == 0)
 					{
 						// Send the player saying that the bed could not be
-						// found.
-						player.addChatComponentMessage(new TextComponentString("Bed Not Found."));
+						// found.	
+						player.addChatComponentMessage(new TextComponentString("Bed Not Found."), true);
 					}
 					else
 					{
 						// Send the player a chat saying that the original
 						// starting position is blocked.
 						player.addChatComponentMessage(
-								new TextComponentString("The entrance you can in from for this dimension is blocked. You need to find another way out."));
+								new TextComponentString("The entrance you can in from for this dimension is blocked. You need to find another way out."), true);
 					}
 				}
 			}
 			else
 			{
 				// Send the player saying that the bed could not be found.
-				player.addChatComponentMessage(new TextComponentString("Bed Not Found."));
+				player.addChatComponentMessage(new TextComponentString("Bed Not Found."), true);
 			}
 		}
 	}

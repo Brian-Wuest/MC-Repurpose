@@ -33,7 +33,7 @@ public class ItemBedCompass extends Item
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
     @Override
-    public ActionResult onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
     	if (worldIn.isRemote)
     	{
@@ -41,7 +41,7 @@ public class ItemBedCompass extends Item
     		ClientEventHandler.bedCompassTime = LocalDateTime.now();
     	}
     	
-    	return new ActionResult(EnumActionResult.PASS, itemStackIn);
+    	return new ActionResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
     }
     
     /**

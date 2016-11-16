@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
@@ -14,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -318,14 +320,14 @@ public class GeneralRecipes
 		
 		// Make a recipe for Village Eggs.
 		ItemStack eggReturnStack = new ItemStack(Items.SPAWN_EGG, 1);
-		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get("Villager");
+		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(EntityList.func_191306_a(EntityVillager.class));
 		ItemStack potionOfWeakness = new ItemStack(Items.POTIONITEM);
 		
 		potionOfWeakness = PotionUtils.addPotionToItemStack(potionOfWeakness, PotionTypes.WEAKNESS);
 		
 		NBTTagCompound nbttagcompound = eggReturnStack.hasTagCompound() ? eggReturnStack.getTagCompound() : new NBTTagCompound();
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        nbttagcompound1.setString("id", eggInfo.spawnedID);
+        nbttagcompound1.setString("id", eggInfo.spawnedID.toString());
         nbttagcompound.setTag("EntityTag", nbttagcompound1);
         eggReturnStack.setTagCompound(nbttagcompound);
         

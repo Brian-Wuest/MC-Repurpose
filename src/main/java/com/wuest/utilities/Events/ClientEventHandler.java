@@ -65,12 +65,12 @@ public class ClientEventHandler extends Gui
 		if (event.side.isClient() && event.phase == Phase.START)
 		{	
 			EntityPlayer player = event.player;
-			ItemStack bootsStack = player.inventory.armorInventory[0];
+			ItemStack bootsStack = player.inventory.armorInventory.get(0);
 			
 			// Check to see if the player is wearing a pair of enchanted boots with step assist.
 			// Check to see if the player was added to the hashset and the game setting for auto-jump was enabled.
 			// If it was, re-set their step height to the original step height and remove them from the hashset.
-			if (this.playerStepAssists.containsKey(player.getName()) && (bootsStack == null || !bootsStack.isItemEnchanted() || Minecraft.getMinecraft().gameSettings.field_189989_R))
+			if (this.playerStepAssists.containsKey(player.getName()) && (bootsStack == null || !bootsStack.isItemEnchanted() || Minecraft.getMinecraft().gameSettings.autoJump))
 			{
 				// Reset the player step height to the original step height and remove this record from the hashset.
 				StepAssistInfo info = this.playerStepAssists.get(player.getName());
@@ -81,7 +81,7 @@ public class ClientEventHandler extends Gui
 			
 			// Don't bother adding them to the hashset if auto-jump is enabled.
 			// On the tick after re-setting the player's step height, check to see if the the enchantment is even enabled in the configuration.
-			if (!Minecraft.getMinecraft().gameSettings.field_189989_R && WuestUtilities.proxy.getServerConfiguration().enableStepAssistEnchantment) 
+			if (!Minecraft.getMinecraft().gameSettings.autoJump && WuestUtilities.proxy.getServerConfiguration().enableStepAssistEnchantment) 
 			{
 				if (this.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
 				{
