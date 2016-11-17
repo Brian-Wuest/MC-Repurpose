@@ -55,27 +55,27 @@ public class ItemSwiftBlade extends ItemSword
 		{
 			case STONE:
 			{
-				return "itemSwiftBladeStone";
+				return "item_swift_blade_stone";
 			}
 	
 			case IRON:
 			{
-				return "itemSwiftBladeIron";
+				return "item_swift_blade_iron";
 			}
 	
 			case GOLD:
 			{
-				return "itemSwiftBladeGold";
+				return "item_swift_blade_gold";
 			}
 	
 			case DIAMOND:
 			{
-				return "itemSwiftBladeDiamond";
+				return "item_swift_blade_diamond";
 			}
 			
 			default:
 			{
-				return "itemSwiftBladeWood";
+				return "item_swift_blade_wood";
 			}
 		}
 	}

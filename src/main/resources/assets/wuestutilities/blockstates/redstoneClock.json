@@ -1,7 +1,0 @@
-{
-	"variants": 
-	{
-		"powered=false": { "model": "wuestutilities:redstoneClockUnpowered" },
-		"powered=true": { "model": "wuestutilities:redstoneClock" }
-	}
-}

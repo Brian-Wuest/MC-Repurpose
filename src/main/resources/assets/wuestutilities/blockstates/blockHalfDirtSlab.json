@@ -1,9 +1,0 @@
-{
-    "variants": 
-    {
-        "half=bottom,variant=false": { "model": "wuestutilities:blockDirtSlab_half" },
-        "half=bottom,variant=true": { "model": "wuestutilities:blockDirtSlab_half" },
-        "half=top,variant=false": { "model": "wuestutilities:blockDirtSlab_upper" },
-        "half=top,variant=true": { "model": "wuestutilities:blockDirtSlab_upper" }
-    }
-}

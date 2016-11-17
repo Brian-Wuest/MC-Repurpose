@@ -28,7 +28,7 @@ import net.minecraftforge.fml.client.config.HoverChecker;
 public class GuiRedstoneScanner extends GuiScreen
 {
 	public static final int GUI_ID = 6;
-	private static final ResourceLocation backgroundTextures = new ResourceLocation("wuestutilities", "textures/gui/defaultBackground.png");
+	private static final ResourceLocation backgroundTextures = new ResourceLocation("wuestutilities", "textures/gui/default_background.png");
 	public BlockPos pos;
 	public RedstoneScannerConfig Config;
 	protected TileEntityRedstoneScanner scannerTile;

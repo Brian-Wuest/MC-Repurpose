@@ -55,7 +55,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.valueOf(true)));
-		ModRegistry.setBlockName(this, "redstoneClock");
+		ModRegistry.setBlockName(this, name);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import net.minecraft.init.*;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -215,9 +216,9 @@ public class ModRegistry
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 
-		ModRegistry.registerItem(new ItemBedCompass("itemBedCompass"));
+		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
 
-		ModRegistry.registerBlock(new RedstoneClock("redstoneClock"));
+		ModRegistry.registerBlock(new RedstoneClock("redstone_clock"));
 		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
 
 		ModRegistry.RegisterSwiftBlades();
@@ -231,7 +232,7 @@ public class ModRegistry
 
 		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock, registeredDoubleDirtSlab, true);
 
-		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("blockHalfDirtSlab");
+		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("block_half_dirt_slab");
 
 		ModRegistry.registerBlock(registeredHalfDirtBlock, itemHalfDirtSlab);
 		ModRegistry.registerBlock(registeredDoubleDirtSlab, false);
@@ -242,7 +243,7 @@ public class ModRegistry
 
 		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock, registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
 
-		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("blockHalfGrassSlab");
+		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("block_half_grass_slab");
 
 		ModRegistry.registerBlock(registeredHalfGrassBlock, itemHalfGrassSlab);
 		ModRegistry.registerBlock(registeredDoubleGrassSlab, false);
@@ -254,16 +255,16 @@ public class ModRegistry
 		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 
 		// Diamond Shard
-		ModRegistry.registerItem(new ItemDiamondShard("itemDiamondShard"));
+		ModRegistry.registerItem(new ItemDiamondShard("item_diamond_shard"));
 
 		// Fluffy Fabric
-		ModRegistry.registerItem(new ItemFluffyFabric("itemFluffyFabric"));
+		ModRegistry.registerItem(new ItemFluffyFabric("item_fluffy_fabric"));
 
 		// Snorkel
-		ModRegistry.registerItem(new ItemSnorkel("itemSnorkel"));
+		ModRegistry.registerItem(new ItemSnorkel("item_snorkel"));
 
 		// Whetstone
-		ModRegistry.registerItem(new ItemWhetStone("itemWhetStone"));
+		ModRegistry.registerItem(new ItemWhetStone("item_whet_stone"));
 
 		// Glowstone Slabs.
 		BlockHalfGlowstoneSlab registeredHalfGlowstoneBlock = new BlockHalfGlowstoneSlab();
@@ -272,7 +273,7 @@ public class ModRegistry
 		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(registeredHalfGlowstoneBlock, registeredHalfGlowstoneBlock,
 				registeredDoubleGlowstoneSlab, true);
 
-		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("blockHalfGlowstoneSlab");
+		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("block_half_glowstone_slab");
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);

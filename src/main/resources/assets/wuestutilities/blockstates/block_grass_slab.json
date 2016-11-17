@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "variant=false": [
+            { "model": "wuestutilities:block_grass_slab" },
+            { "model": "wuestutilities:block_grass_slab", "y": 90 },
+            { "model": "wuestutilities:block_grass_slab", "y": 180 },
+            { "model": "wuestutilities:block_grass_slab", "y": 270 }
+        ],
+        "variant=true": [
+            { "model": "wuestutilities:block_grass_slab" },
+            { "model": "wuestutilities:block_grass_slab", "y": 90 },
+            { "model": "wuestutilities:block_grass_slab", "y": 180 },
+            { "model": "wuestutilities:block_grass_slab", "y": 270 }
+        ]
+    }
+}

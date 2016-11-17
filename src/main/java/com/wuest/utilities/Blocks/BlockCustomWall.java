@@ -359,8 +359,8 @@ public class BlockCustomWall extends Block
 
 	public static enum EnumType implements IStringSerializable
 	{
-		DIRT(0, "blockdirtwall", "blockDirtWall", Material.GROUND),
-		GRASS(1, "blockgrasswall", "blockGrassWall", Material.GROUND);
+		DIRT(0, "block_dirt_wall", "block_dirt_wall", Material.GROUND),
+		GRASS(1, "block_grass_wall", "block_grass_wall", Material.GROUND);
 
 		private static final BlockCustomWall.EnumType[] META_LOOKUP = new BlockCustomWall.EnumType[values().length];
 		private final int meta;

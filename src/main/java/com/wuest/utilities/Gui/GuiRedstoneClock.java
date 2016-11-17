@@ -25,7 +25,7 @@ public class GuiRedstoneClock extends GuiScreen
 {
 	public static final int GUI_ID = 5;
 	public BlockPos pos;
-	private static final ResourceLocation backgroundTextures = new ResourceLocation("wuestutilities", "textures/gui/defaultBackground.png");
+	private static final ResourceLocation backgroundTextures = new ResourceLocation("wuestutilities", "textures/gui/default_background.png");
 	public RedstoneClockPowerConfiguration powerConfiguration;
 	protected GuiButtonExt btnCancel;
 	protected GuiButtonExt btnDone;
