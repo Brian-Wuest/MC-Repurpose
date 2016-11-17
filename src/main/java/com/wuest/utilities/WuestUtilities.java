@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 public class WuestUtilities 
 {
 	public static final String MODID = "wuestutilities";
-	public static final String VERSION = "1.11";
+	public static final String VERSION = "1.11.0.0";
 	
 	// compilation flag used for debugging purposes.
 	public static boolean isDebug = false;
