@@ -1,0 +1,9 @@
+{
+    "variants": 
+    {
+        "half=bottom,variant=false": { "model": "wuestutilities:blockglowstoneslabhalf" },
+        "half=bottom,variant=true": { "model": "wuestutilities:blockglowstoneslabhalf" },
+        "half=top,variant=false": { "model": "wuestutilities:blockglowstoneslabupper" },
+        "half=top,variant=true": { "model": "wuestutilities:blockglowstoneslabupper" }
+    }
+}

@@ -1,5 +1,5 @@
 {
-	"parent": "wuestutilities:block/block_mini_redstone",
+	"parent": "wuestutilities:block/blockminiredstone",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

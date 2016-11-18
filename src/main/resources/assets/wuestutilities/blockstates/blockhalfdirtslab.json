@@ -1,0 +1,9 @@
+{
+    "variants": 
+    {
+        "half=bottom,variant=false": { "model": "wuestutilities:blockdirtslabhalf" },
+        "half=bottom,variant=true": { "model": "wuestutilities:blockdirtslabhalf" },
+        "half=top,variant=false": { "model": "wuestutilities:blockdirtslabupper" },
+        "half=top,variant=true": { "model": "wuestutilities:blockdirtslabupper" }
+    }
+}

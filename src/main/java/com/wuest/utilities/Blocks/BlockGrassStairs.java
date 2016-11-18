@@ -42,7 +42,7 @@ public class BlockGrassStairs extends BlockStairs
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
 		this.useNeighborBrightness = true;
-		ModRegistry.setBlockName(this, "block_grass_stairs");
+		ModRegistry.setBlockName(this, "blockgrassstairs");
 	}
 
 	@SideOnly(Side.CLIENT)

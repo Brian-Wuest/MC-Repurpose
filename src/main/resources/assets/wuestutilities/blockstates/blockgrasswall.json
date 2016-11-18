@@ -1,0 +1,19 @@
+{
+    "multipart": [
+        {   "when": { "up": "true" },
+            "apply": { "model": "wuestutilities:blockgrasswallpost" }
+        },
+        {   "when": { "north": "true" },
+            "apply": { "model": "wuestutilities:blockgrasswallside", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "wuestutilities:blockgrasswallside", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "wuestutilities:blockgrasswallside", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "wuestutilities:blockgrasswallside", "y": 270, "uvlock": true }
+        }
+    ]
+}

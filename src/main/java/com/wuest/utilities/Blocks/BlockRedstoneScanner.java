@@ -68,7 +68,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	{
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
-		ModRegistry.setBlockName(this, "block_redstone_scanner");
+		ModRegistry.setBlockName(this, "blockredstonescanner");
 		this.setHarvestLevel(null, 0);
 		this.setHardness(.5f);
 		this.setResistance(10.0f);

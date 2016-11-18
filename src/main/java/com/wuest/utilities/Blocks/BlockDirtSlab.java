@@ -52,12 +52,12 @@ public abstract class BlockDirtSlab extends BlockSlab
 		if (!this.isDouble())
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-			ModRegistry.setBlockName(this, "block_half_dirt_slab");
+			ModRegistry.setBlockName(this, "blockhalfdirtslab");
 			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
-			ModRegistry.setBlockName(this, "block_dirt_slab");
+			ModRegistry.setBlockName(this, "blockdirtslab");
 		}
 		
 		iblockstate = iblockstate.withProperty(VARIANT_PROPERTY, false);

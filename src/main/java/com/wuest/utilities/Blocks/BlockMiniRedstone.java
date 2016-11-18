@@ -43,7 +43,7 @@ public class BlockMiniRedstone extends BlockCompressedPowered
 	{
 		super(Material.IRON, MapColor.TNT);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
-		ModRegistry.setBlockName(this, "block_mini_redstone");
+		ModRegistry.setBlockName(this, "blockminiredstone");
 		this.setHarvestLevel(null, 0);
 		this.setHardness(.5f);
 		this.setResistance(10.0f);

@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "variant=false": [
+            { "model": "wuestutilities:blockgrassslab" },
+            { "model": "wuestutilities:blockgrassslab", "y": 90 },
+            { "model": "wuestutilities:blockgrassslab", "y": 180 },
+            { "model": "wuestutilities:blockgrassslab", "y": 270 }
+        ],
+        "variant=true": [
+            { "model": "wuestutilities:blockgrassslab" },
+            { "model": "wuestutilities:blockgrassslab", "y": 90 },
+            { "model": "wuestutilities:blockgrassslab", "y": 180 },
+            { "model": "wuestutilities:blockgrassslab", "y": 270 }
+        ]
+    }
+}

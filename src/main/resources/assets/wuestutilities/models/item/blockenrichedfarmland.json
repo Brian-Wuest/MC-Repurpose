@@ -1,5 +1,5 @@
 {
-	"parent": "wuestutilities:block/block_enriched_farmland",
+	"parent": "wuestutilities:block/blockenrichedfarmland",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

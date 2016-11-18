@@ -40,12 +40,12 @@ public abstract class BlockGlowstoneSlab extends BlockSlab
 		if (!this.isDouble())
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-			ModRegistry.setBlockName(this, "block_half_glowstone_slab");
+			ModRegistry.setBlockName(this, "blockhalfglowstoneslab");
 			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
-			ModRegistry.setBlockName(this, "block_glowstone_slab");
+			ModRegistry.setBlockName(this, "blockglowstoneslab");
 		}
 		
 		iblockstate = iblockstate.withProperty(VARIANT_PROPERTY, false);
