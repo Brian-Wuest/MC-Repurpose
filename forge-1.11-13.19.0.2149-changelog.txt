@@ -1,5 +1,56 @@
 Changelog:
-Build 2137:
+Build 2149:
+	LexManos: First draft of Entity Registry re-write.
+
+Build 1.11-13.19.0.2148:
+	LexManos:
+		Make Wither Skulls respect Block.canEntityDestroy. Closes #3404
+		(cherry picked from commit 6b52023a5c341420d976cb50359e2a2a4a6a9192)
+
+Build 1.10.2-12.18.2.2147:
+	LexManos: Make Wither Skulls respect Block.canEntityDestroy. Closes #3404
+
+Build 1.11-13.19.0.2146:
+	Bartek_s2: Added EnumHand parameter to Block.getStateForPlacement (#3402)
+
+Build 1.11-13.19.0.2145:
+	LexManos:
+		Fix issues with ZombieVillagers Closes #3398 1.11 doesn't intertwine
+		zombie types anymore so our edits to split them out for custom
+		professions are not needed.
+	LexManos: Fix client side placement issue on blocks with GUIs. Closes #3399
+
+Build 1.11-13.19.0.2144:
+	ezterry3:
+		Fix Villagers for 1.11 (#3401)
+		- Add cartographer registry entry
+		- Fix textures for the nitwit
+
+Build 1.11-13.19.0.2143:
+	mezz: [1.11] Fix nullability issues around ForgeHooks and Capabilities (#3395)
+
+Build 1.11-13.19.0.2142:
+	larsgerrits99:
+		Change OreDictionary over from "null" to the new ItemStack system.
+		(#3400)
+
+Build 1.11-13.19.0.2141:
+	LexManos:
+		Do not install mod_list.json for optional mods. Classpath scanning is in
+		so they will still be detected
+
+Build 1.10.2-12.18.2.2140:
+	LexManos:
+		Do not install mod_list.json for optional mods. Classpath scanning is in
+		so they will still be detected
+
+Build 1.10.2-12.18.2.2139:
+	LexManos: Include Mercurius in installer. See Forge Forums for more info.
+
+Build 1.11-13.19.0.2138:
+	LexManos: Include Mercurius in installer. See Forge Forums for more info.
+
+Build 1.11-13.19.0.2137:
 	LexManos: Restore the ability to register modded TileEntities.
 
 Build 1.11-13.19.0.2136:
