@@ -33,7 +33,7 @@ public abstract class BlockGlowstoneSlab extends BlockSlab
 		this.setSoundType(SoundType.GLASS);
 		IBlockState iblockstate = this.blockState.getBaseState();
 		this.setHardness(0.5F);
-		this.setHarvestLevel("shovel", 0);
+		this.setHarvestLevel("pickaxe", 0);
 		this.setTickRandomly(true);
 		this.setLightLevel(1.0f);
 		
