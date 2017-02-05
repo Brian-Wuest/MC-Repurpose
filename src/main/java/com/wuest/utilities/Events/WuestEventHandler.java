@@ -75,7 +75,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public void onPlayerLoginEvent(PlayerLoggedInEvent event)
 	{
-		if(!event.player.worldObj.isRemote)
+		if(!event.player.world.isRemote)
 		{
 			NBTTagCompound tag = WuestUtilities.proxy.proxyConfiguration.ToNBTTagCompound();
 			WuestUtilities.network.sendTo(new ConfigSyncMessage(tag), (EntityPlayerMP)event.player);
@@ -438,7 +438,7 @@ public class WuestEventHandler
 	
 	private void setPlayerLight(TickEvent.PlayerTickEvent event)
 	{
-		World world = event.player.worldObj;
+		World world = event.player.world;
 		EntityPlayer player = event.player;
 		BlockPos pos = new BlockPos(player.posX, player.posY + 1, player.posZ);
 		BlockPos prevPos = new BlockPos(player.prevPosX, player.prevPosY + 1, player.prevPosZ);

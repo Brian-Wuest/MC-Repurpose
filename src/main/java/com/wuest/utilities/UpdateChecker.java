@@ -56,7 +56,7 @@ public class UpdateChecker
 			
 			if (WuestUtilities.isDebug)
 			{
-				url = new File("C:\\Users\\Brian\\Documents\\GitHub\\MC-WuestUtilities\\src\\main\\resources\\mcmod.info").toURI().toURL();
+				url = new File("..\\src\\main\\resources\\mcmod.info").toURI().toURL();
 			}
 			else
 			{

@@ -320,7 +320,8 @@ public class GeneralRecipes
 		
 		// Make a recipe for Village Eggs.
 		ItemStack eggReturnStack = new ItemStack(Items.SPAWN_EGG, 1);
-		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(EntityList.func_191306_a(EntityVillager.class));
+
+		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(EntityList.getKey(EntityVillager.class));
 		ItemStack potionOfWeakness = new ItemStack(Items.POTIONITEM);
 		
 		potionOfWeakness = PotionUtils.addPotionToItemStack(potionOfWeakness, PotionTypes.WEAKNESS);

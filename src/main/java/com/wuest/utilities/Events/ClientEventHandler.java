@@ -183,7 +183,7 @@ public class ClientEventHandler extends Gui
 		if (ClientEventHandler.bedCompassTime != null)
 		{
 			Minecraft mc = Minecraft.getMinecraft();
-			EntityPlayer player = mc.thePlayer;
+			EntityPlayer player = mc.player;
 			long timeBetween = java.time.temporal.ChronoUnit.SECONDS.between(ClientEventHandler.bedCompassTime, LocalDateTime.now()); 
 			
 			// Do drawing logic here.
@@ -265,7 +265,7 @@ public class ClientEventHandler extends Gui
 			else
 			{
 				// Send a chat to the user that their bed was not found.
-				mc.thePlayer.sendChatMessage("Bed Not Found");
+				mc.player.sendChatMessage("Bed Not Found");
 				timeBetween = 99999999;
 			}
 			

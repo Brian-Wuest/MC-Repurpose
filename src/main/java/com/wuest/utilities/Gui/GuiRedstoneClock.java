@@ -55,7 +55,7 @@ public class GuiRedstoneClock extends GuiScreen
 	public void Initialize()
 	{
 		// Get the power configuration settings.
-		TileEntity entity = this.mc.theWorld.getTileEntity(this.pos);
+		TileEntity entity = this.mc.world.getTileEntity(this.pos);
 
 		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class)
 		{
@@ -65,7 +65,7 @@ public class GuiRedstoneClock extends GuiScreen
 		else
 		{
 			this.tileEntity = new TileEntityRedstoneClock();
-			this.mc.theWorld.setTileEntity(pos, this.tileEntity);
+			this.mc.world.setTileEntity(pos, this.tileEntity);
 
 			this.powerConfiguration = this.tileEntity.getConfig();
 		}
@@ -222,8 +222,8 @@ public class GuiRedstoneClock extends GuiScreen
 
 			// After sending the info to the server, make sure the client is updated.
 			this.tileEntity.setConfig(this.powerConfiguration);
-			Block block = this.mc.theWorld.getBlockState(this.tileEntity.getPos()).getBlock();
-			this.mc.theWorld.scheduleUpdate(this.tileEntity.getPos(), block, 2);
+			Block block = this.mc.world.getBlockState(this.tileEntity.getPos()).getBlock();
+			this.mc.world.scheduleUpdate(this.tileEntity.getPos(), block, 2);
 
 			this.mc.displayGuiScreen(null);
 		}

@@ -107,7 +107,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
     }
     
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
     {
         this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK1_AABB);
         this.addCollisionBoxToList(pos, entityBox, collidingBoxes, STICK2_AABB);
@@ -242,12 +242,12 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 			return;
 		}
 
-		worldIn.func_190524_a(pos.west(), blockType, pos);
-		worldIn.func_190524_a(pos.east(), blockType, pos);
-		worldIn.func_190524_a(pos.down(), blockType, pos);
-		worldIn.func_190524_a(pos.up(), blockType, pos);
-		worldIn.func_190524_a(pos.north(), blockType, pos);
-		worldIn.func_190524_a(pos.south(), blockType, pos);
+		worldIn.notifyNeighborsOfStateChange(pos.west(), blockType, true);
+		worldIn.notifyNeighborsOfStateChange(pos.east(), blockType, true);
+		worldIn.notifyNeighborsOfStateChange(pos.down(), blockType, true);
+		worldIn.notifyNeighborsOfStateChange(pos.up(), blockType, true);
+		worldIn.notifyNeighborsOfStateChange(pos.north(), blockType, true);
+		worldIn.notifyNeighborsOfStateChange(pos.south(), blockType, true);
 	}
 
 }

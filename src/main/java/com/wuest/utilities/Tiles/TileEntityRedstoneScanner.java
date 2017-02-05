@@ -147,7 +147,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 		{
 			// We want to include the full block when trying to get the entities within this block position.
 			AxisAlignedBB axisPos = Block.FULL_BLOCK_AABB.offset(currentPos);
-			List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)null, axisPos);
+			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)null, axisPos);
 			
 	        if (!list.isEmpty())
 	        {

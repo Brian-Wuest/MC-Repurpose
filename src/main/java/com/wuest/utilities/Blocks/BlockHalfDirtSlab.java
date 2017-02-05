@@ -13,26 +13,4 @@ public class BlockHalfDirtSlab extends BlockDirtSlab
 	{
 		return false;
 	}
-	
-	@Override
-    protected ItemStack createStackedBlock(IBlockState state)
-    {
-        Item item = Item.getItemFromBlock(ModRegistry.DirtSlab());
-
-        if (item == null)
-        {
-            return null;
-        }
-        else
-        {
-            int i = 0;
-
-            if (item.getHasSubtypes())
-            {
-                i = this.getMetaFromState(this.getDefaultState());
-            }
-
-            return new ItemStack(item, 1, i);
-        }
-    }
 }

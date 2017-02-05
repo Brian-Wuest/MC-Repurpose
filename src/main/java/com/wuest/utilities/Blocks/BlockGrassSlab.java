@@ -105,8 +105,8 @@ public abstract class BlockGrassSlab extends BlockSlab
 					
 					if (itemBlock.getBlock() instanceof BlockGrassSlab)
 					{
-						BlockPos pos = Minecraft.getMinecraft().thePlayer.getPosition();
-						WorldClient world = Minecraft.getMinecraft().theWorld;
+						BlockPos pos = Minecraft.getMinecraft().player.getPosition();
+						WorldClient world = Minecraft.getMinecraft().world;
 						return pos != null ? BiomeColorHelper.getGrassColorAtPos(world, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 					}
 				}

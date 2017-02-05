@@ -23,7 +23,7 @@ IMessageHandler<RedstoneClockMessage, IMessage>
 			final MessageContext ctx) 
 	{
 		// Or Minecraft.getMinecraft() on the client.
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; 
+		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; 
 
 		mainThread.addScheduledTask(new Runnable() 
 		{
@@ -46,7 +46,7 @@ IMessageHandler<RedstoneClockMessage, IMessage>
 					e.printStackTrace();
 				}
 
-				World world = ctx.getServerHandler().playerEntity.worldObj;
+				World world = ctx.getServerHandler().playerEntity.world;
 				IBlockState state = world.getBlockState(configuration.getPos());
 				Block block = state.getBlock();
 

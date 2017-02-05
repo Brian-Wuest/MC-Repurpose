@@ -181,8 +181,8 @@ public class GuiRedstoneScanner extends GuiScreen
 			
 			// After sending the info to the server, make sure the client is updated.
 			this.scannerTile.setConfig(this.Config);
-			Block block = this.mc.theWorld.getBlockState(this.scannerTile.getPos()).getBlock();
-			this.mc.theWorld.scheduleUpdate(this.scannerTile.getPos(), block, 2);
+			Block block = this.mc.world.getBlockState(this.scannerTile.getPos()).getBlock();
+			this.mc.world.scheduleUpdate(this.scannerTile.getPos(), block, 2);
 			
 			this.mc.displayGuiScreen(null);
 		}
@@ -194,7 +194,7 @@ public class GuiRedstoneScanner extends GuiScreen
 	protected void Initialize()
 	{
 		// Get the power configuration settings.
-		TileEntity entity = this.mc.theWorld.getTileEntity(this.pos);
+		TileEntity entity = this.mc.world.getTileEntity(this.pos);
 
 		if (entity != null && entity.getClass() == TileEntityRedstoneScanner.class)
 		{
@@ -204,7 +204,7 @@ public class GuiRedstoneScanner extends GuiScreen
 		else
 		{
 			this.scannerTile = new TileEntityRedstoneScanner();
-			this.mc.theWorld.setTileEntity(pos, this.scannerTile);
+			this.mc.world.setTileEntity(pos, this.scannerTile);
 
 			this.Config = this.scannerTile.getConfig();
 		}

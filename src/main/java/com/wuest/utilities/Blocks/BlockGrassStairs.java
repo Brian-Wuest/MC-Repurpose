@@ -72,8 +72,8 @@ public class BlockGrassStairs extends BlockStairs
 					
 					if (itemBlock.getBlock() instanceof BlockGrassStairs)
 					{
-						BlockPos pos = Minecraft.getMinecraft().thePlayer.getPosition();
-						WorldClient world = Minecraft.getMinecraft().theWorld;
+						BlockPos pos = Minecraft.getMinecraft().player.getPosition();
+						WorldClient world = Minecraft.getMinecraft().world;
 						return pos != null ? BiomeColorHelper.getGrassColorAtPos(world, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 					}
 				}

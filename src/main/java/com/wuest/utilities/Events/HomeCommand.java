@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class HomeCommand extends CommandBase
 {
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "home";
 	}
@@ -48,7 +48,7 @@ public class HomeCommand extends CommandBase
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		// Message to show when the user uses "/help test"
 		return "Teleports the player to the last bed they slept in.";
@@ -86,7 +86,7 @@ public class HomeCommand extends CommandBase
 
 			if (bedLocation != null)
 			{
-				World world = player.worldObj;
+				World world = player.world;
 
 				BlockPos blockpos1 = null;
 
@@ -110,21 +110,21 @@ public class HomeCommand extends CommandBase
 					{
 						// Send the player saying that the bed could not be
 						// found.	
-						player.addChatComponentMessage(new TextComponentString("Bed Not Found."), true);
+						player.sendMessage(new TextComponentString("Bed Not Found."));
 					}
 					else
 					{
 						// Send the player a chat saying that the original
 						// starting position is blocked.
-						player.addChatComponentMessage(
-								new TextComponentString("The entrance you can in from for this dimension is blocked. You need to find another way out."), true);
+						player.sendMessage(
+								new TextComponentString("The entrance you can in from for this dimension is blocked. You need to find another way out."));
 					}
 				}
 			}
 			else
 			{
 				// Send the player saying that the bed could not be found.
-				player.addChatComponentMessage(new TextComponentString("Bed Not Found."), true);
+				player.sendMessage(new TextComponentString("Bed Not Found."));
 			}
 		}
 	}
@@ -142,7 +142,7 @@ public class HomeCommand extends CommandBase
 		player.posZ = z;
 		boolean flag = false;
 		BlockPos blockpos = new BlockPos(player);
-		World world = player.worldObj;
+		World world = player.world;
 		Random random = player.getRNG();
 
 		if (world.isBlockLoaded(blockpos))

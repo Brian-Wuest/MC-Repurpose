@@ -12,9 +12,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -161,7 +163,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 	{
 		for (EnumFacing enumfacing : EnumFacing.values())
 		{
-			worldIn.func_190524_a(pos.offset(enumfacing), this, pos);
+			worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), state.getBlock(), true);
 		}
 
 		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
@@ -188,15 +190,24 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 		this.updateState(worldIn, pos, state);
 	}
 	
-	/**
-	 * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
-	 * IBlockstate
-	 */
-	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
-		return this.getDefaultState();
-	}
+    /**
+     * Gets the {@link IBlockState} to place
+     * @param world The world the block is being placed in
+     * @param pos The position the block is being placed at
+     * @param facing The side the block is being placed on
+     * @param hitX The X coordinate of the hit vector
+     * @param hitY The Y coordinate of the hit vector
+     * @param hitZ The Z coordinate of the hit vector
+     * @param meta The metadata of {@link ItemStack} as processed by {@link Item#getMetadata(int)}
+     * @param placer The entity placing the block
+     * @param hand The player hand used to place this block
+     * @return The state to be placed in the world
+     */
+    @Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    {
+    	return this.getDefaultState();
+    }
 	
 	public void updateState(World worldIn, BlockPos pos, IBlockState state)
 	{

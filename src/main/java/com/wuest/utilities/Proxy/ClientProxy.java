@@ -85,7 +85,7 @@ public class ClientProxy extends CommonProxy
 
 		// Solution is to double-check side before returning the player:
 		System.out.println("Retrieving player from ClientProxy for message on side " + ctx.side);
-		return (ctx.side.isClient() ? Minecraft.getMinecraft().thePlayer : super.getPlayerEntity(ctx));
+		return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx));
 	}
 
 	@Override
@@ -97,13 +97,13 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void generateParticles(EntityPlayer player)
 	{
-		double motionX = player.worldObj.rand.nextGaussian() * 0.02D;
-		double motionY = player.worldObj.rand.nextGaussian() * 0.02D;
-		double motionZ = player.worldObj.rand.nextGaussian() * 0.02D;
-		Particle particleMysterious = new MysteriousParticle(player.worldObj,
-				player.posX + player.worldObj.rand.nextFloat() * player.width * 2.0F - player.width,
-				player.posY + 0.5D + player.worldObj.rand.nextFloat() * player.height,
-				player.posZ + player.worldObj.rand.nextFloat() * player.width * 2.0F - player.width, motionX, motionY, motionZ);
+		double motionX = player.world.rand.nextGaussian() * 0.02D;
+		double motionY = player.world.rand.nextGaussian() * 0.02D;
+		double motionZ = player.world.rand.nextGaussian() * 0.02D;
+		Particle particleMysterious = new MysteriousParticle(player.world,
+				player.posX + player.world.rand.nextFloat() * player.width * 2.0F - player.width,
+				player.posY + 0.5D + player.world.rand.nextFloat() * player.height,
+				player.posZ + player.world.rand.nextFloat() * player.width * 2.0F - player.width, motionX, motionY, motionZ);
 		
 		Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);
 	}

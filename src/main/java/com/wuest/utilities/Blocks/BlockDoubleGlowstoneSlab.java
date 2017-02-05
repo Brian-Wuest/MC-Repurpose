@@ -13,26 +13,4 @@ public class BlockDoubleGlowstoneSlab extends BlockGlowstoneSlab
 	{
 		return true;
 	}
-	
-	@Override
-    protected ItemStack createStackedBlock(IBlockState state)
-    {
-        Item item = Item.getItemFromBlock(ModRegistry.GlowstoneSlab());
-
-        if (item == null)
-        {
-            return null;
-        }
-        else
-        {
-            int i = 0;
-
-            if (item.getHasSubtypes())
-            {
-                i = this.getMetaFromState(state);
-            }
-
-            return new ItemStack(item, 2, i);
-        }
-    }
 }
