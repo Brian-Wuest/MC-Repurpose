@@ -34,7 +34,10 @@ public class WuestConfiguration
 	private static String enableSwiftBladeName = "Enable Swift Blade Recipes";
 	private static String enableEnchrichedFarmlandName = "Enable Enriched Farmland Recipes";
 	private static String enableMiniRedstoneBlockName = "Enable Mini Redstone Block Recipe";
-
+	private static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
+	private static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
+	private static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";
+	
 	private static String addSwordName = "Add Sword";
 	private static String addAxeName = "Add Axe";
 	private static String addHoeName = "Add Hoe";
@@ -58,6 +61,9 @@ public class WuestConfiguration
 	public boolean enableExtraGrassDrops;
 	public boolean enableVersionCheckMessage;
 	public boolean enableStepAssistEnchantment;
+	public boolean enableAppleStickExtraDrops;
+	public boolean enableExtraDropsFromDirt;
+	public boolean enableExtraDropsFromStone;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -104,9 +110,12 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
 		WuestUtilities.proxy.proxyConfiguration.enableVersionCheckMessage = config.getBoolean(WuestConfiguration.enableVersionCheckMessageName, WuestConfiguration.OPTIONS, true, "Determines if version checking is enabled when application starts. Also determines if the chat message about old versions is shown when joining a world. Server configuration overrides client.");
+		WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops = config.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName, WuestConfiguration.OPTIONS, true, "Determines if all types of leaves will drop apples and/or sticks.");
+		WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt = config.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName, WuestConfiguration.OPTIONS, true, "Determines if Potatoes, Carrots, Bones, Clay and Beetroots will drop when breaking dirt/grasss blocks.");
+		WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone = config.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName, WuestConfiguration.OPTIONS, true, "Determines if Coal, Iron Nuggets and Flint will drop when breaking stone");
 		
 		// This one is special since it requires a minecraft restart.
-		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: potatoes, carrots and beetroot seeds. Server configuration overrides client.");
+		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: melon, pumpkin, cocoa and beetroot seeds. Server configuration overrides client.");
 		prop.setRequiresMcRestart(true);
 		WuestUtilities.proxy.proxyConfiguration.enableExtraGrassDrops = prop.getBoolean();
 		
@@ -162,6 +171,9 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableSwiftBladeName, this.addSwiftBladeRecipe);
 		tag.setBoolean(WuestConfiguration.enableEnchrichedFarmlandName, this.addEnrichedFarmlandRecipe);
 		tag.setBoolean(WuestConfiguration.enableMiniRedstoneBlockName, this.addMiniRedstoneBlockRecipe);
+		tag.setBoolean(WuestConfiguration.enableAppleStickExtraDropsName, this.enableAppleStickExtraDrops);
+		tag.setBoolean(WuestConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
+		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
 		
 		tag.setString(WuestConfiguration.versionMessageName, UpdateChecker.messageToShow);
 		tag.setBoolean(WuestConfiguration.showMessageName, UpdateChecker.showMessage);
@@ -196,6 +208,10 @@ public class WuestConfiguration
 		
 		config.versionMessage = tag.getString(WuestConfiguration.versionMessageName);
 		config.showMessage = tag.getBoolean(WuestConfiguration.showMessageName);
+		
+		config.enableAppleStickExtraDrops = tag.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName);
+		config.enableExtraDropsFromDirt = tag.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName);
+		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
 		
 		return config;
 	}

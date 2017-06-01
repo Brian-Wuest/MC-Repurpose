@@ -29,6 +29,10 @@ import com.wuest.utilities.Proxy.Messages.ConfigSyncMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
@@ -354,45 +358,71 @@ public class WuestEventHandler
 	{
 		Block block = event.getState().getBlock();
 		
-		// For coal ore, add a random chance that a diamond shard can drop.
-		if (block == Blocks.COAL_ORE && !event.isCanceled() && !event.isSilkTouching())
-		{ 
-			double randomChance = event.getWorld().rand.nextDouble();
-			BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
-			bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
-			randomChance = bigDecimal.doubleValue();
-			int fortuneLevel = event.getFortuneLevel();
+		if (!event.isCanceled() && !event.isSilkTouching())
+		{
+			// Get the random chance.
 			double maxPercentage = 0.01;
 			
-			switch (fortuneLevel)
-			{
-				case 1:
+			// For coal ore, add a random chance that a diamond shard can drop.
+			if (block == Blocks.COAL_ORE)
+			{ 
+				int fortuneLevel = event.getFortuneLevel();
+				
+				switch (fortuneLevel)
 				{
-					maxPercentage = 0.015;
-					break;
+					case 1:
+					{
+						maxPercentage = 0.015;
+						break;
+					}
+					
+					case 2:
+					{
+						maxPercentage = 0.02;
+						break;
+					}
+					
+					case 3:
+					{
+						maxPercentage = 0.025;
+						break;
+					}
+					
+					default:
+					{
+						maxPercentage = 0.01;
+					}
 				}
 				
-				case 2:
-				{
-					maxPercentage = 0.02;
-					break;
-				}
-				
-				case 3:
-				{
-					maxPercentage = 0.025;
-					break;
-				}
-				
-				default:
-				{
-					maxPercentage = 0.01;
-				}
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, ModRegistry.DiamondShard(), 1);
 			}
-			
-			if (randomChance <= maxPercentage)
+			else if (block instanceof BlockLeaves && WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
-				event.getDrops().add(new ItemStack(ModRegistry.DiamondShard()));
+				// 10% chance to drop apples.
+				maxPercentage = 0.1;
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
+				
+				// 15% chance to drop sticks.
+				maxPercentage = 0.15;
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
+			}
+			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt)
+			{
+				// Check for chance of drop for carrots, potatoes, beetroots and bones.
+				maxPercentage = 0.10;
+				
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BEETROOT, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BONE, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CLAY_BALL, 1);
+			}
+			else if (block instanceof BlockStone && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone)
+			{
+				maxPercentage = 0.05;
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.field_191525_da, 1);
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
 			}
 		}
 	}
@@ -515,5 +545,23 @@ public class WuestEventHandler
 			this.playerExistedTicks.put(player.getName(), 0);
 		}
 		
+	}
+
+	private void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage, Item itemToDrop, int quantity)
+	{
+		double randomChance = this.getRandomChance(world);
+		
+		if (randomChance <= maxPercentage)
+		{
+			drops.add(new ItemStack(itemToDrop, quantity));
+		}
+	}
+	
+	private double getRandomChance(World world)
+	{
+		double randomChance = world.rand.nextDouble();
+		BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
+		bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
+		return bigDecimal.doubleValue();
 	}
 }

@@ -3,6 +3,7 @@ package com.wuest.utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
@@ -13,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
@@ -71,7 +73,7 @@ public class GeneralRecipes
 		for (String ingot : ingots)
 		{
 			// Add recipes for each type of basic metal.
-			// Since multiple ores can register this metal, get all instances of that from the dictionary and create recipies for it.
+			// Since multiple ores can register this metal, get all instances of that from the dictionary and create recipes for it.
 			for (ItemStack stack : OreDictionary.getOres(ingot))
 			{
 				GeneralRecipes.LoadBucketRecipes(stack);
@@ -143,6 +145,9 @@ public class GeneralRecipes
 					"x",
 					'x', new ItemStack(set.getKey()));
 		}
+		
+		// Ladders back to sticks.
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 2), new ItemStack(Item.getItemFromBlock(Blocks.LADDER)));
 	}
 
 	private static void LoadStoneRecipes()
@@ -238,6 +243,29 @@ public class GeneralRecipes
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 4), new ItemStack(Items.LEATHER_BOOTS, 1, 0));
 
 		// Smelt iron armor to ingots.
+		Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
+		ArrayList<Entry<ItemStack, ItemStack>> itemsToRemove = new ArrayList<Entry<ItemStack, ItemStack>>();
+		
+		for (Entry<ItemStack, ItemStack> entry : smeltingList.entrySet())
+		{
+			if ((entry.getKey().getItem() == Items.IRON_HELMET && entry.getValue().getItem() == Items.field_191525_da)
+					|| (entry.getKey().getItem() == Items.IRON_CHESTPLATE && entry.getValue().getItem() == Items.field_191525_da)
+					|| (entry.getKey().getItem() == Items.IRON_LEGGINGS && entry.getValue().getItem() == Items.field_191525_da)
+					|| (entry.getKey().getItem() == Items.IRON_BOOTS && entry.getValue().getItem() == Items.field_191525_da)
+					|| (entry.getKey().getItem() == Items.GOLDEN_HELMET && entry.getValue().getItem() == Items.GOLD_NUGGET)
+					|| (entry.getKey().getItem() == Items.GOLDEN_CHESTPLATE && entry.getValue().getItem() == Items.GOLD_NUGGET)
+					|| (entry.getKey().getItem() == Items.GOLDEN_LEGGINGS && entry.getValue().getItem() == Items.GOLD_NUGGET)
+					|| (entry.getKey().getItem() == Items.GOLDEN_BOOTS && entry.getValue().getItem() == Items.GOLD_NUGGET))
+			{
+				itemsToRemove.add(entry);
+			}
+		}
+		
+		for (Entry<ItemStack, ItemStack> entry : itemsToRemove)
+		{
+			FurnaceRecipes.instance().getSmeltingList().remove(entry.getKey(), entry.getValue());
+		}
+		
 		GameRegistry.addSmelting(Items.IRON_HELMET, new ItemStack(Items.IRON_INGOT, 5), 1f);
 		GameRegistry.addSmelting(Items.IRON_CHESTPLATE, new ItemStack(Items.IRON_INGOT, 8), 1f);
 		GameRegistry.addSmelting(Items.IRON_LEGGINGS, new ItemStack(Items.IRON_INGOT, 7), 1f);
@@ -366,7 +394,8 @@ public class GeneralRecipes
 	private static void AddSeedsToGrassDrop()
 	{
 		MinecraftForge.addGrassSeed(new ItemStack(Items.BEETROOT_SEEDS), 5);
-		MinecraftForge.addGrassSeed(new ItemStack(Items.POTATO), 5);
-		MinecraftForge.addGrassSeed(new ItemStack(Items.CARROT), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.MELON_SEEDS), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.PUMPKIN_SEEDS), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(Items.DYE, 1, 3), 5);
 	}
 }
