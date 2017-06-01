@@ -18,7 +18,7 @@ public class ItemStoneShears extends ItemShears
 	public ItemStoneShears(String name)
 	{
 		super();
-		this.setMaxDamage(179);
+		this.setMaxDamage(124);
 		ModRegistry.setItemName(this, name);
 	}
 }
