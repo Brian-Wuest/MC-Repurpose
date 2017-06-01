@@ -159,6 +159,11 @@ public class ModRegistry
 		return ModRegistry.GetItem(ItemWhetStone.class);
 	}
 
+	public static ItemStoneShears StoneShears()
+	{
+		return ModRegistry.GetItem(ItemStoneShears.class);
+	}
+	
 	public static BlockHalfGlowstoneSlab GlowstoneSlab()
 	{
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
@@ -277,6 +282,9 @@ public class ModRegistry
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
+		
+		// Stone shears.
+		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
 	}
 
 	public static void RegisterEnchantments()
@@ -367,6 +375,13 @@ public class ModRegistry
 		GameRegistry.addRecipe(new ItemStack(ModRegistry.GlowstoneSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GLOWSTONE));
 
 		GameRegistry.addRecipe(new ItemStack(Blocks.GLOWSTONE, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GlowstoneSlab()));
+		
+		// Stone Shears
+		GameRegistry.addRecipe(new ItemStack(ModRegistry.StoneShears()),
+				"a a",
+				" b ",
+				'a', Items.FLINT,
+				'b', Item.getItemFromBlock(Blocks.COBBLESTONE));
 	}
 
 	/**

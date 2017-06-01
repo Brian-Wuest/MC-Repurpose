@@ -8,6 +8,7 @@ item.wuestutilities:itemfluffyfabric.name=Fluffy Fabric
 item.wuestutilities:itemwhetstone.name=Whetstone
 item.wuestutilities:itemsnorkel.name=Snorkel
 item.wuestutilities:itemdiamondshard.name=Diamond Shard
+item.wuestutilities:item_stone_shears.name=Stone Shears
 
 tile.wuestutilities:redstoneclock.name=Redstone Clock
 tile.wuestutilities:blockdirtstairs.name=Dirt Stairs
