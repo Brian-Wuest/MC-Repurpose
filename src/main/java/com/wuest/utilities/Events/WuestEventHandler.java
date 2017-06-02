@@ -7,6 +7,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
 
 import com.wuest.utilities.ModRegistry;
@@ -28,11 +30,13 @@ import com.wuest.utilities.Proxy.Messages.ConfigSyncMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
@@ -185,67 +189,89 @@ public class WuestEventHandler
 			IBlockState cropState = event.getWorld().getBlockState(event.getPos());
 			Block crop = cropState.getBlock();
 			PropertyInteger ageInteger = crop instanceof BlockBeetroot ? BlockBeetroot.BEETROOT_AGE : BlockCrops.AGE;
-			int maxAge = crop instanceof BlockBeetroot ? 3 : 7;
-
+			
 			// Only re-plant when this is a fully grown plant.
-			if (crop instanceof BlockCrops && (Integer)cropState.getValue(ageInteger) == maxAge)
+			if (crop instanceof BlockCrops || crop instanceof BlockBush)
 			{
-				// Get the farmland below the crop.
-				BlockPos farmlandPosition = event.getPos().down();
-
-				// Get the drops from this crop and add it to the inventory.
-				List<ItemStack> drops = crop.getDrops(event.getWorld(), event.getPos(), cropState, 1);
-
-				// Break the original crop block.
-				event.getWorld().setBlockToAir(event.getPos());
-
-				EnumActionResult replanted = EnumActionResult.FAIL;
-				BlockCrops blockCrop = (BlockCrops)crop;
-				IBlockState tempState = cropState.withProperty(ageInteger, 0);
-				Item seed = blockCrop.getItemDropped(tempState, new Random(), 0);
-
-				for (ItemStack drop : drops)
+				boolean cropIsMaxAge = false;
+				
+				// Look for a specific property called "age". All vanilla minecraft crops use this name for their property and most other mods do to.
+				for (IProperty property : cropState.getPropertyKeys())
 				{
-					Item dropItem = drop.getItem();
-
-					// Make sure this is the same class as the crop's seed.
-					if (dropItem.getClass() == seed.getClass()
-							&& replanted != EnumActionResult.PASS)
+					if (property.getName().toLowerCase().equals("age") && property instanceof PropertyInteger)
 					{
-						EnumFacing facing = event.getFace();
-						replanted = drop.onItemUse(p, event.getWorld(), farmlandPosition, event.getHand(), EnumFacing.UP, 0, 0, 0);
-
-						if (replanted == EnumActionResult.SUCCESS 
-								|| replanted == EnumActionResult.PASS)
+						// Found the age property, get the max age.
+						ageInteger = (PropertyInteger)property;
+						Optional<Integer> tempMax = ageInteger.getAllowedValues().stream().max(Integer::compare);
+						
+						if (tempMax.isPresent())
 						{
-							replanted = EnumActionResult.PASS;
-							continue;
-						}	
+							int maxAge = tempMax.get();
+							cropIsMaxAge = cropState.getValue(ageInteger) == maxAge;
+						}
+						
+						break;
 					}
-
-					p.inventory.addItemStackToInventory(drop);
-					p.inventoryContainer.detectAndSendChanges();
 				}
-
-				if (replanted != EnumActionResult.PASS)
+				
+				if (cropIsMaxAge)
 				{
-					// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
-					// This should work with other plants that override BlockCrops.GetItem with their own seed.
-					// Make sure to re-set the age to 0 to get the seed.
-					// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
-					ItemStack seeds = new ItemStack(seed);
-
-					if (seeds != null && p.inventory.hasItemStack(seeds))
+					// Get the farmland below the crop.
+					BlockPos farmlandPosition = event.getPos().down();
+	
+					// Get the drops from this crop and add it to the inventory.
+					List<ItemStack> drops = crop.getDrops(event.getWorld(), event.getPos(), cropState, 1);
+	
+					// Break the original crop block.
+					event.getWorld().setBlockToAir(event.getPos());
+	
+					EnumActionResult replanted = EnumActionResult.FAIL;
+					IBlockState tempState = cropState.withProperty(ageInteger, 0);
+					Item seed = crop.getItemDropped(tempState, new Random(), 0);
+	
+					for (ItemStack drop : drops)
 					{
-						seeds.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
-
-						p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
-
+						Item dropItem = drop.getItem();
+	
+						// Make sure this is the same class as the crop's seed.
+						if (dropItem.getClass() == seed.getClass()
+								&& replanted != EnumActionResult.PASS)
+						{
+							EnumFacing facing = event.getFace();
+							replanted = drop.onItemUse(p, event.getWorld(), farmlandPosition, event.getHand(), EnumFacing.UP, 0, 0, 0);
+	
+							if (replanted == EnumActionResult.SUCCESS 
+									|| replanted == EnumActionResult.PASS)
+							{
+								replanted = EnumActionResult.PASS;
+								continue;
+							}	
+						}
+	
+						p.inventory.addItemStackToInventory(drop);
 						p.inventoryContainer.detectAndSendChanges();
 					}
+	
+					if (replanted != EnumActionResult.PASS)
+					{
+						// The only reason why we wouldn't have re-planted at this point is because the wheat didn't drop a seed. Check the player inventory for a seed and plant it.
+						// This should work with other plants that override BlockCrops.GetItem with their own seed.
+						// Make sure to re-set the age to 0 to get the seed.
+						// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
+						ItemStack seeds = new ItemStack(seed);
+	
+						if (seeds != null && p.inventory.hasItemStack(seeds))
+						{
+							seeds.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
+	
+							p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
+	
+							p.inventoryContainer.detectAndSendChanges();
+						}
+					}
+					
+					event.setCanceled(true);
 				}
-
-				event.setCanceled(true);
 			}
 		}
 	}
@@ -399,17 +425,17 @@ public class WuestEventHandler
 			else if (block instanceof BlockLeaves && WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
 				// Chance to drop apples.
-				maxPercentage = 0.05;
+				maxPercentage = 0.04;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
 				
 				// Chance to drop sticks.
-				maxPercentage = 0.8;
+				maxPercentage = 0.06;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
 			}
 			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt)
 			{
 				// Check for chance of drop for carrots, potatoes, beetroots and bones.
-				maxPercentage = 0.5;
+				maxPercentage = 0.04;
 				
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
@@ -419,7 +445,7 @@ public class WuestEventHandler
 			}
 			else if (block instanceof BlockStone && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone)
 			{
-				maxPercentage = 0.05;
+				maxPercentage = 0.04;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.field_191525_da, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
