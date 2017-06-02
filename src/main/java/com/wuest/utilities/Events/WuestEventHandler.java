@@ -399,17 +399,17 @@ public class WuestEventHandler
 			else if (block instanceof BlockLeaves && WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
 				// Chance to drop apples.
-				maxPercentage = 0.08;
+				maxPercentage = 0.05;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
 				
 				// Chance to drop sticks.
-				maxPercentage = 0.10;
+				maxPercentage = 0.8;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
 			}
 			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt)
 			{
 				// Check for chance of drop for carrots, potatoes, beetroots and bones.
-				maxPercentage = 0.6;
+				maxPercentage = 0.5;
 				
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
