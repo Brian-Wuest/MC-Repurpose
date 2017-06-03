@@ -449,6 +449,9 @@ public class WuestEventHandler
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.field_191525_da, 1);
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
+				
+				maxPercentage = 0.02;
+				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
 			}
 		}
 	}
