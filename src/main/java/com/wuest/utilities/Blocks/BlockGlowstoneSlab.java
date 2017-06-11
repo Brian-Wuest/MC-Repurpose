@@ -17,6 +17,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class BlockGlowstoneSlab extends BlockSlab
 {
@@ -128,9 +130,9 @@ public abstract class BlockGlowstoneSlab extends BlockSlab
 	 * Get the MapColor for this Block and the given BlockState
 	 */
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos)
 	{
-		return ((BlockGlowstone)Blocks.GLOWSTONE).getMapColor(Blocks.GLOWSTONE.getDefaultState());
+		return ((BlockGlowstone)Blocks.GLOWSTONE).getMapColor(Blocks.GLOWSTONE.getDefaultState(), world, pos);
 	}
 
 	/**

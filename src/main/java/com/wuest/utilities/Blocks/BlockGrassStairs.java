@@ -119,7 +119,7 @@ public class BlockGrassStairs extends BlockStairs
      */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos)
     {
         return this.blockMapColor;
     }

@@ -1,11 +1,15 @@
 package com.wuest.utilities;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.wuest.utilities.Capabilities.*;
 import com.wuest.utilities.Capabilities.Storage.BlockModelStorage;
 import com.wuest.utilities.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.utilities.Enchantment.EnchantmentStepAssist;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.wuest.utilities.Blocks.*;
 import com.wuest.utilities.Items.*;
 import com.wuest.utilities.Proxy.CommonProxy;
@@ -21,7 +25,13 @@ import net.minecraft.init.*;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -298,86 +308,86 @@ public class ModRegistry
 	 */
 	public static void RegisterRecipes()
 	{
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.DirtWall(), 6, BlockCustomWall.EnumType.DIRT.getMetadata()), "xxx", "xxx", 'x',
+		ModRegistry.addShapedRecipe("dirt_wall", new ItemStack(ModRegistry.DirtWall(), 6, BlockCustomWall.EnumType.DIRT.getMetadata()), "xxx", "xxx", 'x',
 				Item.getItemFromBlock(Blocks.DIRT));
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1), "x", 'x',
+		ModRegistry.addShapedRecipe("dirt_wass_reverse", new ItemStack(Blocks.DIRT, 1), "x", 'x',
 				new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall()), 1, BlockCustomWall.EnumType.DIRT.getMetadata()));
 
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.GrassWall(), 6), "xxx", "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
+		ModRegistry.addShapedRecipe("grass_wall", new ItemStack(ModRegistry.GrassWall(), 6), "xxx", "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1), "x", 'x', new ItemStack(Item.getItemFromBlock(ModRegistry.GrassWall()), 1));
+		ModRegistry.addShapedRecipe("grass_wall_reverse", new ItemStack(Blocks.GRASS, 1), "x", 'x', new ItemStack(Item.getItemFromBlock(ModRegistry.GrassWall()), 1));
 
 		if (WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe)
 		{
 			// Register recipe.
-			GameRegistry.addShapelessRecipe(new ItemStack(ModRegistry.BedCompass()), Items.BED, Items.COMPASS);
+			ModRegistry.addShapelessRecipe("bed_compass", new ItemStack(ModRegistry.BedCompass()), Items.BED, Items.COMPASS);
 		}
 
 		if (WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe)
 		{
 			// Register recipe.
-			GameRegistry.addRecipe(new ItemStack(ModRegistry.RedStoneClock()), "xzx", "xyz", "xxx", 'x', Item.getItemFromBlock(Blocks.STONE), 'y',
+			ModRegistry.addShapedRecipe("redstone_clock", new ItemStack(ModRegistry.RedStoneClock()), "xzx", "xyz", "xxx", 'x', Item.getItemFromBlock(Blocks.STONE), 'y',
 					Items.REPEATER, 'z', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
 		}
 
 		GeneralRecipes.LoadRecipies();
 
 		// Dirt Stairs.
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.DirtStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.DIRT);
+		ModRegistry.addShapedRecipe("dirt_stairs", new ItemStack(ModRegistry.DirtStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.DIRT);
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 3), "x", "x", 'x', ModRegistry.DirtStairs());
+		ModRegistry.addShapedRecipe("dirt_stairs_reverse", new ItemStack(Blocks.DIRT, 3), "x", "x", 'x', ModRegistry.DirtStairs());
 
 		// Grass Stairs.
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.GrassStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.GRASS);
+		ModRegistry.addShapedRecipe("grass_stairs", new ItemStack(ModRegistry.GrassStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.GRASS);
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 3), "x", "x", 'x', ModRegistry.GrassStairs());
+		ModRegistry.addShapedRecipe("grass_stairs_reverse", new ItemStack(Blocks.GRASS, 3), "x", "x", 'x', ModRegistry.GrassStairs());
 
 		// Dirt Slab
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.DirtSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT));
+		ModRegistry.addShapedRecipe("dirt_slab", new ItemStack(ModRegistry.DirtSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT));
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.DirtSlab()));
+		ModRegistry.addShapedRecipe("dirt_slab_reverse", new ItemStack(Blocks.DIRT, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.DirtSlab()));
 
 		// Grass Slab
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.GrassSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
+		ModRegistry.addShapedRecipe("grass_slab", new ItemStack(ModRegistry.GrassSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.GRASS, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GrassSlab()));
+		ModRegistry.addShapedRecipe("grass_slab_reverse", new ItemStack(Blocks.GRASS, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GrassSlab()));
 
 		// Enriched Farmland
 		if (WuestUtilities.proxy.proxyConfiguration.addEnrichedFarmlandRecipe)
 		{
-			GameRegistry.addRecipe(new ItemStack(ModRegistry.EnrichedFarmland(), 3), "xxx", "aby", "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT), 'a',
+			ModRegistry.addShapedRecipe("enriched_farmland", new ItemStack(ModRegistry.EnrichedFarmland(), 3), "xxx", "aby", "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT), 'a',
 					Items.WHEAT, 'b', Items.WATER_BUCKET, 'y', Items.BONE);
 		}
 
 		// Mini-redstone
-		GameRegistry.addShapedRecipe(new ItemStack(ModRegistry.MiniRedstone()), "xx", "xx", 'x', Items.REDSTONE);
+		ModRegistry.addShapedRecipe("mini_redstone", new ItemStack(ModRegistry.MiniRedstone()), "xx", "xx", 'x', Items.REDSTONE);
 
 		// Redstone Scanner
-		GameRegistry.addShapedRecipe(new ItemStack(ModRegistry.RedstoneScanner()), "x x", "zyz", "x x", 'x', Items.REPEATER, 'y',
+		ModRegistry.addShapedRecipe("redstone_scanner", new ItemStack(ModRegistry.RedstoneScanner()), "x x", "zyz", "x x", 'x', Items.REPEATER, 'y',
 				Item.getItemFromBlock(Blocks.REDSTONE_BLOCK), 'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE));
 
 		// Diamond Shard
-		GameRegistry.addShapedRecipe(new ItemStack(Items.DIAMOND), "xx", "xx", 'x', ModRegistry.DiamondShard());
+		ModRegistry.addShapedRecipe("diamond_shard", new ItemStack(Items.DIAMOND), "xx", "xx", 'x', ModRegistry.DiamondShard());
 
 		// Fluffy Fabric
-		GameRegistry.addShapedRecipe(new ItemStack(ModRegistry.FluffyFabric()), "xyx", "yyy", "xyx", 'x', Items.STRING, 'y',
+		ModRegistry.addShapedRecipe("fluffy_fabric", new ItemStack(ModRegistry.FluffyFabric()), "xyx", "yyy", "xyx", 'x', Items.STRING, 'y',
 				Item.getItemFromBlock(Blocks.WOOL));
 
 		// Snorkel
-		GameRegistry.addShapedRecipe(new ItemStack(ModRegistry.Snorkel()), "  x", "zzx", "yyx", 'x', Items.REEDS, 'y', Item.getItemFromBlock(Blocks.GLASS_PANE),
+		ModRegistry.addShapedRecipe("snorkel", new ItemStack(ModRegistry.Snorkel()), "  x", "zzx", "yyx", 'x', Items.REEDS, 'y', Item.getItemFromBlock(Blocks.GLASS_PANE),
 				'z', Items.STRING);
 
 		// Whetstone
-		GameRegistry.addShapedRecipe(new ItemStack(ModRegistry.WhetStone()), "xxx", "xyx", "xxx", 'x', Items.FLINT, 'y', Item.getItemFromBlock(Blocks.CLAY));
+		ModRegistry.addShapedRecipe("whetstone", new ItemStack(ModRegistry.WhetStone()), "xxx", "xyx", "xxx", 'x', Items.FLINT, 'y', Item.getItemFromBlock(Blocks.CLAY));
 
 		// Glowstone Slab
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.GlowstoneSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GLOWSTONE));
+		ModRegistry.addShapedRecipe("glowstone_slab", new ItemStack(ModRegistry.GlowstoneSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GLOWSTONE));
 
-		GameRegistry.addRecipe(new ItemStack(Blocks.GLOWSTONE, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GlowstoneSlab()));
+		ModRegistry.addShapedRecipe("glowstone_slab_reverse", new ItemStack(Blocks.GLOWSTONE, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GlowstoneSlab()));
 		
 		// Stone Shears
-		GameRegistry.addRecipe(new ItemStack(ModRegistry.StoneShears()),
+		ModRegistry.addShapedRecipe("stone_shears", new ItemStack(ModRegistry.StoneShears()),
 				"a a",
 				" b ",
 				'a', Items.FLINT,
@@ -528,10 +538,123 @@ public class ModRegistry
 			if (WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe)
 			{
 				// Register recipe.
-				GameRegistry.addShapedRecipe(new ItemStack(itemToRegister), "  x", " x ", "y  ", 'x', bladeItem, 'y', Items.STICK);
+				ModRegistry.addShapedRecipe("swift_blade_" + ((Integer)i).toString(), new ItemStack(itemToRegister), "  x", " x ", "y  ", 'x', bladeItem, 'y', Items.STICK);
 
-				GameRegistry.addShapedRecipe(new ItemStack(itemToRegister), "x  ", " x ", "  y", 'x', bladeItem, 'y', Items.STICK);
+				ModRegistry.addShapedRecipe("swift_blade_reverse_" + ((Integer)i).toString(), new ItemStack(itemToRegister), "x  ", " x ", "  y", 'x', bladeItem, 'y', Items.STICK);
 			}
 		}
 	}
+	
+	/**
+	 * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
+	 * @param name The name of the recipe. ModID is pre-pended to it.
+	 * @param stack The output of the recipe.
+	 * @param recipeComponents The recipe components.
+	 */
+	public static void addShapedRecipe(String name, ItemStack stack, Object... recipeComponents)
+	{	
+		name = WuestUtilities.MODID.toLowerCase() + ":" + name;
+        String s = "";
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        if (recipeComponents[i] instanceof String[])
+        {
+            String[] astring = (String[])((String[])recipeComponents[i++]);
+
+            for (String s2 : astring)
+            {
+                ++k;
+                j = s2.length();
+                s = s + s2;
+            }
+        }
+        else
+        {
+            while (recipeComponents[i] instanceof String)
+            {
+                String s1 = (String)recipeComponents[i++];
+                ++k;
+                j = s1.length();
+                s = s + s1;
+            }
+        }
+
+        Map<Character, ItemStack> map;
+
+        for (map = Maps.<Character, ItemStack>newHashMap(); i < recipeComponents.length; i += 2)
+        {
+            Character character = (Character)recipeComponents[i];
+            ItemStack itemstack = ItemStack.EMPTY;
+
+            if (recipeComponents[i + 1] instanceof Item)
+            {
+                itemstack = new ItemStack((Item)recipeComponents[i + 1]);
+            }
+            else if (recipeComponents[i + 1] instanceof Block)
+            {
+                itemstack = new ItemStack((Block)recipeComponents[i + 1], 1, 32767);
+            }
+            else if (recipeComponents[i + 1] instanceof ItemStack)
+            {
+                itemstack = (ItemStack)recipeComponents[i + 1];
+            }
+
+            map.put(character, itemstack);
+        }
+
+        NonNullList<Ingredient> aitemstack = NonNullList.withSize(j*k, Ingredient.field_193370_a);
+
+        for (int l = 0; l < j * k; ++l)
+        {
+            char c0 = s.charAt(l);
+
+            if (map.containsKey(Character.valueOf(c0)))
+            {
+                aitemstack.set(l, Ingredient.func_193369_a(((ItemStack)map.get(Character.valueOf(c0))).copy()));
+            }
+        }
+
+        ShapedRecipes shapedrecipes = new ShapedRecipes(name ,j, k, aitemstack, stack);
+		
+		CraftingManager.func_193379_a(name, shapedrecipes);
+	}
+	
+    /**
+     * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
+     * @param name The name of the recipe.
+     * @param stack The output stack.
+     * @param recipeComponents The recipe components.
+     */
+    public static void addShapelessRecipe(String name, ItemStack stack, Object... recipeComponents)
+    {
+    	name = WuestUtilities.MODID.toLowerCase() + ":" + name;
+        NonNullList<Ingredient> list = NonNullList.create();
+
+        for (Object object : recipeComponents)
+        {
+            if (object instanceof ItemStack)
+            {
+                list.add(Ingredient.func_193369_a(((ItemStack)object).copy()));
+            }
+            else if (object instanceof Item)
+            {
+                list.add(Ingredient.func_193369_a(new ItemStack((Item)object)));
+            }
+            else
+            {
+                if (!(object instanceof Block))
+                {
+                    throw new IllegalArgumentException("Invalid shapeless recipe: unknown type " + object.getClass().getName() + "!");
+                }
+
+                list.add(Ingredient.func_193369_a(new ItemStack((Block)object)));
+            }
+        }
+
+        ShapelessRecipes shapelessRecipes = new ShapelessRecipes(name, stack, list);
+		
+		CraftingManager.func_193379_a(name, shapelessRecipes);
+    }
 }

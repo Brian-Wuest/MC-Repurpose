@@ -111,7 +111,7 @@ public class GuiRedstoneScanner extends GuiScreen
 		
 		for (int i = 0; i < this.buttonList.size(); ++i)
 		{
-			((GuiButton)this.buttonList.get(i)).drawButton(this.mc, x, y);
+			((GuiButton)this.buttonList.get(i)).func_191745_a(this.mc, x, y, f);
 		}
 
 		for (int j = 0; j < this.labelList.size(); ++j)

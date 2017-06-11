@@ -28,6 +28,7 @@ import com.wuest.utilities.Proxy.ClientProxy;
 import com.wuest.utilities.Proxy.Messages.BedLocationMessage;
 import com.wuest.utilities.Proxy.Messages.ConfigSyncMessage;
 
+import net.minecraft.advancements.AdvancementList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockBush;
@@ -40,6 +41,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -50,9 +52,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBook;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.AchievementList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -100,31 +103,31 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void AttachEntityCapabilities(AttachCapabilitiesEvent.Entity event)
+	public void AttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
 	{
 		// Only attach for players.
-		if (event.getEntity() instanceof EntityPlayer)
+		if (event.getObject() instanceof EntityPlayer)
 		{
-			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "DimensionHome"), new DimensionHomeProvider(event.getEntity(), new DimensionHome()));
+			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "DimensionHome"), new DimensionHomeProvider(event.getObject(), new DimensionHome()));
 		}
 	}
 	
 	@SubscribeEvent
 	public void AttachItemStackCapabilities(AttachCapabilitiesEvent.Item event)
 	{
-		if (event.getItem() instanceof ItemBlockCapability
-				&& ((ItemBlockCapability)event.getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
+		if (event.getItemStack().getItem() instanceof ItemBlockCapability
+				&& ((ItemBlockCapability)event.getItemStack().getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
 		{
 			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
 		}
 	}
 	
 	@SubscribeEvent
-	public void AttachTileEntityCapabilities(AttachCapabilitiesEvent.TileEntity event)
+	public void AttachTileEntityCapabilities(AttachCapabilitiesEvent<TileEntity> event)
 	{
-		if (event.getTileEntity() instanceof TileEntityBase)
+		if (event.getObject() instanceof TileEntityBase)
 		{
-			ArrayList<Capability> allowedCapabilities = ((TileEntityBase)event.getTileEntity()).getAllowedCapabilities();
+			ArrayList<Capability> allowedCapabilities = ((TileEntityBase)event.getObject()).getAllowedCapabilities();
 			
 			if (allowedCapabilities.contains(ModRegistry.BlockModel))
 			{
@@ -323,7 +326,8 @@ public class WuestEventHandler
 				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.GOLD)
 				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.DIAMOND))
 		{
-			player.addStat(AchievementList.BUILD_SWORD);
+			// TODO: Fix this when advancements are done.
+			//player.addStat(AchievementList.BUILD_SWORD);
 		}
 	}
 
@@ -341,20 +345,20 @@ public class WuestEventHandler
 			if (leftItem.getItem() instanceof ItemFluffyFabric)
 			{
 				// Set the output to an enchanted book with the Silk Touch enchantment.
-				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.SILK_TOUCH, 1));
+				enchantedBook = ((ItemEnchantedBook)Items.ENCHANTED_BOOK).getEnchantedItemStack(new EnchantmentData(Enchantments.SILK_TOUCH, 1));
 				event.setCost(3);
 			}
 			else if (leftItem.getItem() instanceof ItemWhetStone)
 			{
 				// Set the output to an enchanted book with the Sharpness 1 enchantment.
-				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.SHARPNESS, 1));
+				enchantedBook = ((ItemEnchantedBook)Items.ENCHANTED_BOOK).getEnchantedItemStack(new EnchantmentData(Enchantments.SHARPNESS, 1));
 				event.setCost(1);
 				
 			}
 			else if (leftItem.getItem() instanceof ItemSnorkel)
 			{
 				// Set the output to an enchanted book with water breathing 1 enchantment.
-				enchantedBook = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.RESPIRATION, 1));
+				enchantedBook = ((ItemEnchantedBook)Items.ENCHANTED_BOOK).getEnchantedItemStack(new EnchantmentData(Enchantments.RESPIRATION, 1));
 				event.setCost(2);
 			}
 			

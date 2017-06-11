@@ -21,11 +21,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.11.2]", guiFactory = "com.wuest.utilities.Gui.ConfigGuiFactory")
+@Mod(modid=WuestUtilities.MODID, name="Wuest Utilities", version=WuestUtilities.VERSION, acceptedMinecraftVersions="[1.12]", guiFactory = "com.wuest.utilities.Gui.ConfigGuiFactory")
 public class WuestUtilities 
 {
 	public static final String MODID = "wuestutilities";
-	public static final String VERSION = "1.11.2.1";
+	public static final String VERSION = "1.12.0.0";
 	
 	// compilation flag used for debugging purposes.
 	public static boolean isDebug = false;

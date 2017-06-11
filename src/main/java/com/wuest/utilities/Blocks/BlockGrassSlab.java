@@ -211,9 +211,9 @@ public abstract class BlockGrassSlab extends BlockSlab
 	 * Get the MapColor for this Block and the given BlockState
 	 */
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos)
 	{
-		return ((BlockGrass)Blocks.GRASS).getMapColor(Blocks.GRASS.getDefaultState());
+		return ((BlockGrass)Blocks.GRASS).getMapColor(Blocks.GRASS.getDefaultState(), world, pos);
 	}
 
 	/**

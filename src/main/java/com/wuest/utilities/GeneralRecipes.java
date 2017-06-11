@@ -14,9 +14,13 @@ import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -64,7 +68,7 @@ public class GeneralRecipes
 
 	private static void LoadMetalRecipes()
 	{
-		ArrayList<String> ingots = new ArrayList<String>();
+/*		ArrayList<String> ingots = new ArrayList<String>();
 
 		ingots.add("ingotCopper");
 		ingots.add("ingotTin");
@@ -80,10 +84,10 @@ public class GeneralRecipes
 
 				GeneralRecipes.LoadShearsRecipes(stack);
 			}
-		}
+		}*/
 	}
 
-	private static void LoadBucketRecipes(ItemStack stack)
+/*	private static void LoadBucketRecipes(ItemStack stack)
 	{
 		GameRegistry.addRecipe(new ItemStack(Items.BUCKET),
 				"x x",
@@ -101,20 +105,20 @@ public class GeneralRecipes
 	{
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.SHEARS), stack, stack);
 	}
-
+*/
 	private static void LoadWoodRecipes()
 	{
 		for (int i = 0; i < 6; i++)
 		{
 			// wood slabs into sticks.
-			GameRegistry.addRecipe(new ItemStack(Items.STICK, 4), 
+			ModRegistry.addShapedRecipe("slab_to_stick" + ((Integer)i).toString(), new ItemStack(Items.STICK, 4), 
 					"xx",
 					"xx", 
 					'x', 
 					new ItemStack(Blocks.WOODEN_SLAB, 1, i));
 
 			// Wooden slabs into planks.
-			GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 1, i),
+			ModRegistry.addShapedRecipe("slab_to_plank" + ((Integer)i).toString(), new ItemStack(Blocks.PLANKS, 1, i),
 					"x",
 					"x",
 					'x',
@@ -140,14 +144,14 @@ public class GeneralRecipes
 		for(Map.Entry<Block, ItemStack> set : stairs.entrySet())
 		{
 			// Add recipe to turn 2 stairs into 3 blocks. This gets us back to 6 blocks used to make 4 stairs.
-			GameRegistry.addRecipe(set.getValue(),
+			ModRegistry.addShapedRecipe("stairs_to_planks" + set.getKey().getUnlocalizedName(), set.getValue(),
 					"x",
 					"x",
 					'x', new ItemStack(set.getKey()));
 		}
 		
 		// Ladders back to sticks.
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 2), new ItemStack(Item.getItemFromBlock(Blocks.LADDER)));
+		ModRegistry.addShapelessRecipe("ladders_to_sticks", new ItemStack(Items.STICK, 2), new ItemStack(Item.getItemFromBlock(Blocks.LADDER)));
 	}
 
 	private static void LoadStoneRecipes()
@@ -212,15 +216,15 @@ public class GeneralRecipes
 			GeneralRecipes.AddSlabRecipe(currentBlock, currentSlab, i);
 		}
 
-		GeneralRecipes.AddSlabRecipe(new ItemStack(Item.getItemFromBlock(Blocks.RED_SANDSTONE)), new ItemStack(Item.getItemFromBlock(Blocks.STONE_SLAB2)), 1);
+		GeneralRecipes.AddSlabRecipe(new ItemStack(Item.getItemFromBlock(Blocks.RED_SANDSTONE)), new ItemStack(Item.getItemFromBlock(Blocks.STONE_SLAB2)), 99);
 	}
 
 	private static void AddSlabRecipe(ItemStack currentBlock, ItemStack currentSlab, int i)
 	{
 		// Need a different recipe for stone brick as this will interfere with the chiseled stone.
-		if (i == 5 || i == 1 || i == 7)
+		if (i == 5 || i == 1 || i == 7 || i == 99)
 		{
-			GameRegistry.addRecipe(currentBlock, 
+			ModRegistry.addShapedRecipe("stone_slab_to_block_" + ((Integer)i).toString(), currentBlock, 
 					"xx",
 					"xx",
 					'x', currentSlab);
@@ -228,7 +232,7 @@ public class GeneralRecipes
 			return;
 		}
 
-		GameRegistry.addRecipe(currentBlock, 
+		ModRegistry.addShapedRecipe("stone_slab_to_block_" + ((Integer)i).toString(), currentBlock, 
 				"x",
 				"x",
 				'x', currentSlab);
@@ -237,10 +241,10 @@ public class GeneralRecipes
 	private static void LoadArmorRecipes()
 	{
 		// Start with leather armor back to leather.
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 5), new ItemStack(Items.LEATHER_HELMET, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 8), new ItemStack(Items.LEATHER_CHESTPLATE, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 7), new ItemStack(Items.LEATHER_LEGGINGS, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.LEATHER, 4), new ItemStack(Items.LEATHER_BOOTS, 1, 0));
+		ModRegistry.addShapelessRecipe("leather_helm_to_leather", new ItemStack(Items.LEATHER, 5), new ItemStack(Items.LEATHER_HELMET, 1, 0));
+		ModRegistry.addShapelessRecipe("leather_chest_to_leather", new ItemStack(Items.LEATHER, 8), new ItemStack(Items.LEATHER_CHESTPLATE, 1, 0));
+		ModRegistry.addShapelessRecipe("leather_legs_to_leather", new ItemStack(Items.LEATHER, 7), new ItemStack(Items.LEATHER_LEGGINGS, 1, 0));
+		ModRegistry.addShapelessRecipe("leather_boots_to_leather", new ItemStack(Items.LEATHER, 4), new ItemStack(Items.LEATHER_BOOTS, 1, 0));
 
 		// Smelt iron armor to ingots.
 		Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
@@ -284,28 +288,28 @@ public class GeneralRecipes
 		GameRegistry.addSmelting(Items.DIAMOND_BOOTS, new ItemStack(Items.DIAMOND, 4), 1f);
 
 		// Chainmail recipes.
-		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_HELMET, 1), 
+		ModRegistry.addShapedRecipe("chain_helmet", new ItemStack(Items.CHAINMAIL_HELMET, 1), 
 				"xxx",
 				"y y",
 				"   ",
 				'x', Items.IRON_INGOT, 
 				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1), 
+		ModRegistry.addShapedRecipe("chain_chest", new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1), 
 				"y y",
 				"yxy",
 				"xxx",
 				'x', Items.IRON_INGOT, 
 				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_LEGGINGS, 1), 
+		ModRegistry.addShapedRecipe("chain_legs", new ItemStack(Items.CHAINMAIL_LEGGINGS, 1), 
 				"xxx",
 				"y y",
 				"y y",
 				'x', Items.IRON_INGOT, 
 				'y', Items.LEATHER);
 
-		GameRegistry.addRecipe(new ItemStack(Items.CHAINMAIL_BOOTS, 1), 
+		ModRegistry.addShapedRecipe("chain_boots", new ItemStack(Items.CHAINMAIL_BOOTS, 1), 
 				"   ",
 				"y y",
 				"x x",
@@ -319,7 +323,7 @@ public class GeneralRecipes
 		GameRegistry.addSmelting(Items.ROTTEN_FLESH, new ItemStack(Items.LEATHER), 1f);
 
 		// 4 Feathers and 1 string to 1 wool.
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(Blocks.WOOL), 1), 
+		ModRegistry.addShapedRecipe("string_to_wool", new ItemStack(Item.getItemFromBlock(Blocks.WOOL), 1), 
 				" x ",
 				"xyx",
 				" x ",
@@ -327,19 +331,19 @@ public class GeneralRecipes
 				Items.FEATHER, 'y', Items.STRING);
 
 		// Make a recipe for Clay: Sand + Water Bucket = Clay.
-		GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CLAY), 2), 
+		ModRegistry.addShapelessRecipe("clay", new ItemStack(Item.getItemFromBlock(Blocks.CLAY), 2), 
 				new ItemStack(Items.WATER_BUCKET),
 				new ItemStack(Item.getItemFromBlock(Blocks.SAND)),
 				new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)));
 
 		// Make a recipe for glowstone: redstone + gun powder + yellow dye.
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.GLOWSTONE_DUST, 2), 
+		ModRegistry.addShapelessRecipe("glowstone", new ItemStack(Items.GLOWSTONE_DUST, 2), 
 				new ItemStack(Items.REDSTONE),
 				new ItemStack(Items.GUNPOWDER),
 				new ItemStack(Items.DYE, 1, 11));
 		
 		// Make a recipe for slimeballs: Clay Ball + Lime Dye + Water Bucket
-		GameRegistry.addRecipe(new ItemStack(Items.SLIME_BALL, 2),
+		ModRegistry.addShapedRecipe("slimeball", new ItemStack(Items.SLIME_BALL, 2),
 				" x",
 				"yz",
 				'x', Items.WATER_BUCKET,
@@ -360,7 +364,7 @@ public class GeneralRecipes
         nbttagcompound.setTag("EntityTag", nbttagcompound1);
         eggReturnStack.setTagCompound(nbttagcompound);
         
-        GameRegistry.addRecipe(eggReturnStack,
+        ModRegistry.addShapedRecipe("villager_egg", eggReturnStack,
         		"abc",
         		"def",
         		"ghi",
@@ -382,7 +386,7 @@ public class GeneralRecipes
 	private static void LoadNetherStarRecipe()
 	{
 		// 4 Quartz Blocks + 4 wither skulls + 1 Diamond Block = Nether Star
-		GameRegistry.addRecipe(new ItemStack(Items.NETHER_STAR, 1), 
+		ModRegistry.addShapedRecipe("nether_star", new ItemStack(Items.NETHER_STAR, 1), 
 				"yxy",
 				"xzx",
 				"yxy",

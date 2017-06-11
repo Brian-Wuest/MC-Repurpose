@@ -222,7 +222,7 @@ public class BlockCustomWall extends Block
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos)
 	{
 		return this.blockMapColor;
 	}
