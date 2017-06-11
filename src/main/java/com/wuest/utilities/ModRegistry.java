@@ -553,7 +553,7 @@ public class ModRegistry
 	 */
 	public static void addShapedRecipe(String name, ItemStack stack, Object... recipeComponents)
 	{	
-		name = WuestUtilities.MODID.toLowerCase() + ":" + name;
+        name = WuestUtilities.MODID.toLowerCase() + ":" + name;
         String s = "";
         int i = 0;
         int j = 0;
@@ -604,7 +604,7 @@ public class ModRegistry
             map.put(character, itemstack);
         }
 
-        NonNullList<Ingredient> aitemstack = NonNullList.withSize(j*k, Ingredient.field_193370_a);
+        NonNullList<Ingredient> aitemstack = NonNullList.withSize(j * k, Ingredient.field_193370_a);
 
         for (int l = 0; l < j * k; ++l)
         {
@@ -616,7 +616,7 @@ public class ModRegistry
             }
         }
 
-        ShapedRecipes shapedrecipes = new ShapedRecipes(name ,j, k, aitemstack, stack);
+        ShapedRecipes shapedrecipes = new ShapedRecipes(name, j, k, aitemstack, stack);
 		
 		CraftingManager.func_193379_a(name, shapedrecipes);
 	}
@@ -629,7 +629,7 @@ public class ModRegistry
      */
     public static void addShapelessRecipe(String name, ItemStack stack, Object... recipeComponents)
     {
-    	name = WuestUtilities.MODID.toLowerCase() + ":" + name;
+        name = WuestUtilities.MODID.toLowerCase() + ":" + name;
         NonNullList<Ingredient> list = NonNullList.create();
 
         for (Object object : recipeComponents)
