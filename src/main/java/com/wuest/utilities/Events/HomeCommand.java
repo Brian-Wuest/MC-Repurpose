@@ -92,7 +92,7 @@ public class HomeCommand extends CommandBase
 
 				if (player.dimension == 0)
 				{
-					blockpos1 = EntityPlayer.getBedSpawnLocation(server.worldServerForDimension(player.dimension), bedLocation, true);
+					blockpos1 = EntityPlayer.getBedSpawnLocation(server.getWorld(player.dimension), bedLocation, true);
 				}
 				else
 				{

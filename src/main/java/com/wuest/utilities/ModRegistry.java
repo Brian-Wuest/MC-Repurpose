@@ -32,7 +32,9 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -185,6 +187,14 @@ public class ModRegistry
 	}
 	
 	/**
+	 * Static constructor for the mod registry.
+	 */
+	static
+	{
+		ModRegistry.RegisterModComponents();
+	}
+	
+	/**
 	 * Gets the item from the ModItems collections.
 	 * 
 	 * @param genericClass The class of item to get from the collection.
@@ -300,7 +310,7 @@ public class ModRegistry
 	public static void RegisterEnchantments()
 	{
 		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[] {EntityEquipmentSlot.FEET});
-		GameRegistry.register(ModRegistry.stepAssist);
+		ForgeRegistries.ENCHANTMENTS.register(ModRegistry.stepAssist);
 	}
 	
 	/**
@@ -321,7 +331,7 @@ public class ModRegistry
 		if (WuestUtilities.proxy.proxyConfiguration.addBedCompassRecipe)
 		{
 			// Register recipe.
-			ModRegistry.addShapelessRecipe("bed_compass", new ItemStack(ModRegistry.BedCompass()), Items.BED, Items.COMPASS);
+			ModRegistry.addShapelessRecipe("bed_compass", new ItemStack(ModRegistry.BedCompass()), Ingredient.fromItem(Items.BED), Ingredient.fromItem(Items.COMPASS));
 		}
 
 		if (WuestUtilities.proxy.proxyConfiguration.addRedstoneClockRecipe)
@@ -392,6 +402,71 @@ public class ModRegistry
 				" b ",
 				'a', Items.FLINT,
 				'b', Item.getItemFromBlock(Blocks.COBBLESTONE));
+		
+		for (int i = 0; i < 5; i++)
+		{
+			Object bladeItem = null;
+
+			ToolMaterial material = ToolMaterial.WOOD;
+			switch (i)
+			{
+				case 0:
+				{
+					bladeItem = Blocks.PLANKS;
+					break;
+				}
+
+				case 1:
+				{
+					material = ToolMaterial.STONE;
+					bladeItem = Item.getItemFromBlock(Blocks.COBBLESTONE);
+					break;
+				}
+
+				case 2:
+				{
+					material = ToolMaterial.IRON;
+					bladeItem = Items.IRON_INGOT;
+					break;
+				}
+
+				case 3:
+				{
+					material = ToolMaterial.GOLD;
+					bladeItem = Items.GOLD_INGOT;
+					break;
+				}
+
+				case 4:
+				{
+					material = ToolMaterial.DIAMOND;
+					bladeItem = Items.DIAMOND;
+					break;
+				}
+			}
+
+			if (WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe)
+			{
+				Item recipeOutput = null;
+				
+				for (Item item : ModRegistry.ModItems)
+				{
+					if (item instanceof ItemSwiftBlade && ((ItemSwiftBlade) item).getToolMaterial() == material)
+					{
+						recipeOutput = item;
+						break;
+					}
+				}
+				
+				if (recipeOutput != null)
+				{
+					// Register recipe.
+					ModRegistry.addShapedRecipe("swift_blade_" + ((Integer)i).toString(), new ItemStack(recipeOutput), "  x", " x ", "y  ", 'x', bladeItem, 'y', Items.STICK);
+	
+					ModRegistry.addShapedRecipe("swift_blade_reverse_" + ((Integer)i).toString(), new ItemStack(recipeOutput), "x  ", " x ", "  y", 'x', bladeItem, 'y', Items.STICK);
+				}
+			}
+		}
 	}
 
 	/**
@@ -424,7 +499,7 @@ public class ModRegistry
 	 */
 	public static <T extends Item> T registerItem(T item)
 	{
-		GameRegistry.register(item);
+		//ForgeRegistries.ITEMS.register(item);
 		ModRegistry.ModItems.add(item);
 
 		return item;
@@ -437,11 +512,9 @@ public class ModRegistry
 
 	public static <T extends Block> T registerBlock(T block, boolean includeItemBlock)
 	{
-		GameRegistry.register(block);
-
 		if (includeItemBlock)
 		{
-			GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+			ModRegistry.ModItems.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 		}
 
 		ModRegistry.ModBlocks.add(block);
@@ -450,12 +523,12 @@ public class ModRegistry
 
 	public static <T extends Block, I extends ItemBlock> T registerBlock(T block, I itemBlock)
 	{
-		GameRegistry.register(block);
+		ForgeRegistries.BLOCKS.register(block);
 		ModRegistry.ModBlocks.add(block);
 
 		if (itemBlock != null)
 		{
-			GameRegistry.register(itemBlock);
+			ForgeRegistries.ITEMS.register(itemBlock);
 			ModRegistry.ModItems.add(itemBlock);
 		}
 
@@ -534,14 +607,6 @@ public class ModRegistry
 			}
 
 			ModRegistry.registerItem(itemToRegister);
-
-			if (WuestUtilities.proxy.proxyConfiguration.addSwiftBladeRecipe)
-			{
-				// Register recipe.
-				ModRegistry.addShapedRecipe("swift_blade_" + ((Integer)i).toString(), new ItemStack(itemToRegister), "  x", " x ", "y  ", 'x', bladeItem, 'y', Items.STICK);
-
-				ModRegistry.addShapedRecipe("swift_blade_reverse_" + ((Integer)i).toString(), new ItemStack(itemToRegister), "x  ", " x ", "  y", 'x', bladeItem, 'y', Items.STICK);
-			}
 		}
 	}
 	
@@ -553,72 +618,9 @@ public class ModRegistry
 	 */
 	public static void addShapedRecipe(String name, ItemStack stack, Object... recipeComponents)
 	{	
-        name = WuestUtilities.MODID.toLowerCase() + ":" + name;
-        String s = "";
-        int i = 0;
-        int j = 0;
-        int k = 0;
-
-        if (recipeComponents[i] instanceof String[])
-        {
-            String[] astring = (String[])((String[])recipeComponents[i++]);
-
-            for (String s2 : astring)
-            {
-                ++k;
-                j = s2.length();
-                s = s + s2;
-            }
-        }
-        else
-        {
-            while (recipeComponents[i] instanceof String)
-            {
-                String s1 = (String)recipeComponents[i++];
-                ++k;
-                j = s1.length();
-                s = s + s1;
-            }
-        }
-
-        Map<Character, ItemStack> map;
-
-        for (map = Maps.<Character, ItemStack>newHashMap(); i < recipeComponents.length; i += 2)
-        {
-            Character character = (Character)recipeComponents[i];
-            ItemStack itemstack = ItemStack.EMPTY;
-
-            if (recipeComponents[i + 1] instanceof Item)
-            {
-                itemstack = new ItemStack((Item)recipeComponents[i + 1]);
-            }
-            else if (recipeComponents[i + 1] instanceof Block)
-            {
-                itemstack = new ItemStack((Block)recipeComponents[i + 1], 1, 32767);
-            }
-            else if (recipeComponents[i + 1] instanceof ItemStack)
-            {
-                itemstack = (ItemStack)recipeComponents[i + 1];
-            }
-
-            map.put(character, itemstack);
-        }
-
-        NonNullList<Ingredient> aitemstack = NonNullList.withSize(j * k, Ingredient.field_193370_a);
-
-        for (int l = 0; l < j * k; ++l)
-        {
-            char c0 = s.charAt(l);
-
-            if (map.containsKey(Character.valueOf(c0)))
-            {
-                aitemstack.set(l, Ingredient.func_193369_a(((ItemStack)map.get(Character.valueOf(c0))).copy()));
-            }
-        }
-
-        ShapedRecipes shapedrecipes = new ShapedRecipes(name, j, k, aitemstack, stack);
+		ResourceLocation resourceLocation = new ResourceLocation(WuestUtilities.MODID.toLowerCase(), name);
 		
-		CraftingManager.func_193379_a(name, shapedrecipes);
+		GameRegistry.addShapedRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
 	}
 	
     /**
@@ -627,34 +629,10 @@ public class ModRegistry
      * @param stack The output stack.
      * @param recipeComponents The recipe components.
      */
-    public static void addShapelessRecipe(String name, ItemStack stack, Object... recipeComponents)
+    public static void addShapelessRecipe(String name, ItemStack stack, Ingredient... recipeComponents)
     {
-        name = WuestUtilities.MODID.toLowerCase() + ":" + name;
-        NonNullList<Ingredient> list = NonNullList.create();
+    	ResourceLocation resourceLocation = new ResourceLocation(WuestUtilities.MODID.toLowerCase(), name);
 
-        for (Object object : recipeComponents)
-        {
-            if (object instanceof ItemStack)
-            {
-                list.add(Ingredient.func_193369_a(((ItemStack)object).copy()));
-            }
-            else if (object instanceof Item)
-            {
-                list.add(Ingredient.func_193369_a(new ItemStack((Item)object)));
-            }
-            else
-            {
-                if (!(object instanceof Block))
-                {
-                    throw new IllegalArgumentException("Invalid shapeless recipe: unknown type " + object.getClass().getName() + "!");
-                }
-
-                list.add(Ingredient.func_193369_a(new ItemStack((Block)object)));
-            }
-        }
-
-        ShapelessRecipes shapelessRecipes = new ShapelessRecipes(name, stack, list);
-		
-		CraftingManager.func_193379_a(name, shapelessRecipes);
+		GameRegistry.addShapelessRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
     }
 }

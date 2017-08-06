@@ -103,15 +103,15 @@ public class GuiRedstoneScanner extends GuiScreen
 		int grayBoxY = (this.height / 2) - 83;
 		this.drawTexturedModalRect(grayBoxX, grayBoxY, 0, 0, 256, 256);
 
-		this.mc.fontRendererObj.drawString("Active Sides", grayBoxX + 170, grayBoxY + 10, darkGray);
-		this.mc.fontRendererObj.drawString("Horizontal Scan Radius", grayBoxX + 5, grayBoxY + 5, darkGray);		
-		this.mc.fontRendererObj.drawString("Up Scan Range", grayBoxX + 5, grayBoxY + 40, darkGray);
-		this.mc.fontRendererObj.drawString("Down Scan Range", grayBoxX + 90, grayBoxY + 40, darkGray);
-		this.mc.fontRendererObj.drawString("Types of entities to scan for:", grayBoxX + 5, grayBoxY + 85, darkGray);
+		this.mc.fontRenderer.drawString("Active Sides", grayBoxX + 170, grayBoxY + 10, darkGray);
+		this.mc.fontRenderer.drawString("Horizontal Scan Radius", grayBoxX + 5, grayBoxY + 5, darkGray);		
+		this.mc.fontRenderer.drawString("Up Scan Range", grayBoxX + 5, grayBoxY + 40, darkGray);
+		this.mc.fontRenderer.drawString("Down Scan Range", grayBoxX + 90, grayBoxY + 40, darkGray);
+		this.mc.fontRenderer.drawString("Types of entities to scan for:", grayBoxX + 5, grayBoxY + 85, darkGray);
 		
 		for (int i = 0; i < this.buttonList.size(); ++i)
 		{
-			((GuiButton)this.buttonList.get(i)).func_191745_a(this.mc, x, y, f);
+			((GuiButton)this.buttonList.get(i)).drawButton(this.mc, x, y, f);
 		}
 
 		for (int j = 0; j < this.labelList.size(); ++j)
@@ -121,31 +121,31 @@ public class GuiRedstoneScanner extends GuiScreen
 		
 		if (this.upChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
 		}
 		else if (this.northChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'North' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), x, y);
 		}
 		else if (this.downChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
 		}
 		else if (this.eastChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'East' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), x, y);
 		}
 		else if (this.westChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'West' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), x, y);
 		}
 		else if (this.southChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'South' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), x, y);
 		}
 		else if (this.animalChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("This includes things such as: pigs, cows, iron golems, etc...", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("This includes things such as: pigs, cows, iron golems, etc...", 300), x, y);
 		}
 		
 		// This is for the middle.

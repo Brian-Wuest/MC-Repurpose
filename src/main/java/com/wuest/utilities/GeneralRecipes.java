@@ -151,7 +151,7 @@ public class GeneralRecipes
 		}
 		
 		// Ladders back to sticks.
-		ModRegistry.addShapelessRecipe("ladders_to_sticks", new ItemStack(Items.STICK, 2), new ItemStack(Item.getItemFromBlock(Blocks.LADDER)));
+		ModRegistry.addShapelessRecipe("ladders_to_sticks", new ItemStack(Items.STICK, 2), Ingredient.fromStacks(new ItemStack(Item.getItemFromBlock(Blocks.LADDER))));
 	}
 
 	private static void LoadStoneRecipes()
@@ -241,10 +241,10 @@ public class GeneralRecipes
 	private static void LoadArmorRecipes()
 	{
 		// Start with leather armor back to leather.
-		ModRegistry.addShapelessRecipe("leather_helm_to_leather", new ItemStack(Items.LEATHER, 5), new ItemStack(Items.LEATHER_HELMET, 1, 0));
-		ModRegistry.addShapelessRecipe("leather_chest_to_leather", new ItemStack(Items.LEATHER, 8), new ItemStack(Items.LEATHER_CHESTPLATE, 1, 0));
-		ModRegistry.addShapelessRecipe("leather_legs_to_leather", new ItemStack(Items.LEATHER, 7), new ItemStack(Items.LEATHER_LEGGINGS, 1, 0));
-		ModRegistry.addShapelessRecipe("leather_boots_to_leather", new ItemStack(Items.LEATHER, 4), new ItemStack(Items.LEATHER_BOOTS, 1, 0));
+		ModRegistry.addShapelessRecipe("leather_helm_to_leather", new ItemStack(Items.LEATHER, 5), Ingredient.fromStacks(new ItemStack(Items.LEATHER_HELMET, 1, 0)));
+		ModRegistry.addShapelessRecipe("leather_chest_to_leather", new ItemStack(Items.LEATHER, 8), Ingredient.fromStacks(new ItemStack(Items.LEATHER_CHESTPLATE, 1, 0)));
+		ModRegistry.addShapelessRecipe("leather_legs_to_leather", new ItemStack(Items.LEATHER, 7), Ingredient.fromStacks(new ItemStack(Items.LEATHER_LEGGINGS, 1, 0)));
+		ModRegistry.addShapelessRecipe("leather_boots_to_leather", new ItemStack(Items.LEATHER, 4), Ingredient.fromStacks(new ItemStack(Items.LEATHER_BOOTS, 1, 0)));
 
 		// Smelt iron armor to ingots.
 		Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
@@ -252,10 +252,10 @@ public class GeneralRecipes
 		
 		for (Entry<ItemStack, ItemStack> entry : smeltingList.entrySet())
 		{
-			if ((entry.getKey().getItem() == Items.IRON_HELMET && entry.getValue().getItem() == Items.field_191525_da)
-					|| (entry.getKey().getItem() == Items.IRON_CHESTPLATE && entry.getValue().getItem() == Items.field_191525_da)
-					|| (entry.getKey().getItem() == Items.IRON_LEGGINGS && entry.getValue().getItem() == Items.field_191525_da)
-					|| (entry.getKey().getItem() == Items.IRON_BOOTS && entry.getValue().getItem() == Items.field_191525_da)
+			if ((entry.getKey().getItem() == Items.IRON_HELMET && entry.getValue().getItem() == Items.IRON_NUGGET)
+					|| (entry.getKey().getItem() == Items.IRON_CHESTPLATE && entry.getValue().getItem() == Items.IRON_NUGGET)
+					|| (entry.getKey().getItem() == Items.IRON_LEGGINGS && entry.getValue().getItem() == Items.IRON_NUGGET)
+					|| (entry.getKey().getItem() == Items.IRON_BOOTS && entry.getValue().getItem() == Items.IRON_NUGGET)
 					|| (entry.getKey().getItem() == Items.GOLDEN_HELMET && entry.getValue().getItem() == Items.GOLD_NUGGET)
 					|| (entry.getKey().getItem() == Items.GOLDEN_CHESTPLATE && entry.getValue().getItem() == Items.GOLD_NUGGET)
 					|| (entry.getKey().getItem() == Items.GOLDEN_LEGGINGS && entry.getValue().getItem() == Items.GOLD_NUGGET)
@@ -332,15 +332,15 @@ public class GeneralRecipes
 
 		// Make a recipe for Clay: Sand + Water Bucket = Clay.
 		ModRegistry.addShapelessRecipe("clay", new ItemStack(Item.getItemFromBlock(Blocks.CLAY), 2), 
-				new ItemStack(Items.WATER_BUCKET),
-				new ItemStack(Item.getItemFromBlock(Blocks.SAND)),
-				new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)));
+				Ingredient.fromStacks(new ItemStack(Items.WATER_BUCKET)),
+				Ingredient.fromStacks(new ItemStack(Item.getItemFromBlock(Blocks.SAND))),
+				Ingredient.fromStacks(new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL))));
 
 		// Make a recipe for glowstone: redstone + gun powder + yellow dye.
 		ModRegistry.addShapelessRecipe("glowstone", new ItemStack(Items.GLOWSTONE_DUST, 2), 
-				new ItemStack(Items.REDSTONE),
-				new ItemStack(Items.GUNPOWDER),
-				new ItemStack(Items.DYE, 1, 11));
+				Ingredient.fromStacks(new ItemStack(Items.REDSTONE)),
+				Ingredient.fromStacks(new ItemStack(Items.GUNPOWDER)),
+				Ingredient.fromStacks(new ItemStack(Items.DYE, 1, 11)));
 		
 		// Make a recipe for slimeballs: Clay Ball + Lime Dye + Water Bucket
 		ModRegistry.addShapedRecipe("slimeball", new ItemStack(Items.SLIME_BALL, 2),

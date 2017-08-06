@@ -54,6 +54,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -66,25 +67,29 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+@EventBusSubscriber(value = {Side.SERVER, Side.CLIENT })
 public class WuestEventHandler
 {
 	private static HashMap<String, BlockPos> playerBedLocation;
 	
-	private HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
+	private static HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
 	
 	@SubscribeEvent
-	public void onPlayerLoginEvent(PlayerLoggedInEvent event)
+	public static void onPlayerLoginEvent(PlayerLoggedInEvent event)
 	{
 		if(!event.player.world.isRemote)
 		{
@@ -95,7 +100,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void OnClientDisconnectEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
+	public static void OnClientDisconnectEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
 	{
 		// When the player logs out, make sure to re-set the server configuration. 
 		// This is so a new configuration can be successfully loaded when they switch servers or worlds (on single player.
@@ -103,7 +108,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void AttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
+	public static void AttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
 	{
 		// Only attach for players.
 		if (event.getObject() instanceof EntityPlayer)
@@ -113,17 +118,17 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void AttachItemStackCapabilities(AttachCapabilitiesEvent.Item event)
+	public static void AttachItemStackCapabilities(AttachCapabilitiesEvent<ItemStack> event)
 	{
-		if (event.getItemStack().getItem() instanceof ItemBlockCapability
-				&& ((ItemBlockCapability)event.getItemStack().getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
+		if (event.getObject().getItem() instanceof ItemBlockCapability
+				&& ((ItemBlockCapability)event.getObject().getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
 		{
 			event.addCapability(new ResourceLocation(WuestUtilities.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
 		}
 	}
 	
 	@SubscribeEvent
-	public void AttachTileEntityCapabilities(AttachCapabilitiesEvent<TileEntity> event)
+	public static void AttachTileEntityCapabilities(AttachCapabilitiesEvent<TileEntity> event)
 	{
 		if (event.getObject() instanceof TileEntityBase)
 		{
@@ -137,7 +142,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void PlayerChangedDimension(PlayerChangedDimensionEvent event)
+	public static void PlayerChangedDimension(PlayerChangedDimensionEvent event)
 	{
 		IDimensionHome dimensionHome = event.player.getCapability(ModRegistry.DimensionHomes, null);
 		
@@ -148,7 +153,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void PlayerCloned(PlayerEvent.Clone event)
+	public static void PlayerCloned(PlayerEvent.Clone event)
 	{
 		if (event.isWasDeath())
 		{
@@ -165,7 +170,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent(receiveCanceled = true)
-	public void PlayerRightClicked(PlayerInteractEvent event)
+	public static void PlayerRightClicked(PlayerInteractEvent event)
 	{
 		// This only happens during the right-click event.
 		// Can use the proxy's configuration.
@@ -280,13 +285,13 @@ public class WuestEventHandler
 	}
 
 	@SubscribeEvent
-	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void PlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if (event.side.isServer())
 		{
 			// Send the player's actual bed location to the client for the bed compass object.
 			// This is needed as the client doesn't properly store the bed location.
-			this.sendPlayerBedLocation(event);
+			WuestEventHandler.sendPlayerBedLocation(event);
 		}
 		
 		//this.generatePlayerParticles(event);
@@ -302,7 +307,7 @@ public class WuestEventHandler
 	}*/
 
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
+	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent onConfigChangedEvent)
 	{
 		if(onConfigChangedEvent.getModID().equals(WuestUtilities.MODID))
 		{
@@ -315,7 +320,7 @@ public class WuestEventHandler
 	 * @param event The event object used for this method.
 	 */
 	@SubscribeEvent
-	public void onCrafted(ItemCraftedEvent event)
+	public static void onCrafted(ItemCraftedEvent event)
 	{
 		Item craftedItem = event.crafting.getItem();
 		EntityPlayer player = event.player;
@@ -332,7 +337,7 @@ public class WuestEventHandler
 	}
 
 	@SubscribeEvent
-	public void AnvilUpdate(AnvilUpdateEvent event)
+	public static void AnvilUpdate(AnvilUpdateEvent event)
 	{
 		ItemStack rightItem = event.getRight();
 		ItemStack leftItem = event.getLeft();
@@ -384,7 +389,7 @@ public class WuestEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onDrops(HarvestDropsEvent event) 
+	public static void onDrops(HarvestDropsEvent event) 
 	{
 		Block block = event.getState().getBlock();
 		
@@ -424,43 +429,62 @@ public class WuestEventHandler
 					}
 				}
 				
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, ModRegistry.DiamondShard(), 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, ModRegistry.DiamondShard(), 1);
 			}
 			else if (block instanceof BlockLeaves && WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
 				// Chance to drop apples.
 				maxPercentage = 0.04;
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
 				
 				// Chance to drop sticks.
 				maxPercentage = 0.06;
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
 			}
 			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt)
 			{
 				// Check for chance of drop for carrots, potatoes, beetroots and bones.
 				maxPercentage = 0.04;
 				
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BEETROOT, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BONE, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CLAY_BALL, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BEETROOT, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BONE, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CLAY_BALL, 1);
 			}
 			else if (block instanceof BlockStone && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone)
 			{
 				maxPercentage = 0.04;
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.field_191525_da, 1);
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.IRON_NUGGET, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
 				
 				maxPercentage = 0.02;
-				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
+				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
 			}
 		}
 	}
 	
-	private void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event)
+	{	
+		event.getRegistry().registerAll(ModRegistry.ModBlocks.toArray(new Block[ModRegistry.ModBlocks.size()]));
+	}
+	
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> event)
+	{	
+		event.getRegistry().registerAll(ModRegistry.ModItems.toArray(new Item[ModRegistry.ModItems.size()]));
+	}
+	
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> event)
+	{		
+		// Register the ore dictionary blocks.
+		ModRegistry.RegisterRecipes();
+	}
+	
+	private static void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)
 	{
 		if (WuestEventHandler.playerBedLocation == null)
 		{
@@ -499,7 +523,7 @@ public class WuestEventHandler
 		}
 	}
 	
-	private void setPlayerLight(TickEvent.PlayerTickEvent event)
+	private static void setPlayerLight(TickEvent.PlayerTickEvent event)
 	{
 		World world = event.player.world;
 		EntityPlayer player = event.player;
@@ -556,13 +580,13 @@ public class WuestEventHandler
 		}
 	}
 
-	private void generatePlayerParticles(TickEvent.PlayerTickEvent event)
+	private static void generatePlayerParticles(TickEvent.PlayerTickEvent event)
 	{
 		EntityPlayer player = event.player;
 		
-		if (this.playerExistedTicks.containsKey(player.getName()))
+		if (WuestEventHandler.playerExistedTicks.containsKey(player.getName()))
 		{
-			int ticks = this.playerExistedTicks.get(player.getName());
+			int ticks = WuestEventHandler.playerExistedTicks.get(player.getName());
 			
 			if (ticks % 20 == 0)
 			{
@@ -571,18 +595,18 @@ public class WuestEventHandler
 			}
 			
 			ticks++;
-			this.playerExistedTicks.put(player.getName(), ticks);
+			WuestEventHandler.playerExistedTicks.put(player.getName(), ticks);
 		}
 		else
 		{
-			this.playerExistedTicks.put(player.getName(), 0);
+			WuestEventHandler.playerExistedTicks.put(player.getName(), 0);
 		}
 		
 	}
 
-	private void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage, Item itemToDrop, int quantity)
+	private static void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage, Item itemToDrop, int quantity)
 	{
-		double randomChance = this.getRandomChance(world);
+		double randomChance = WuestEventHandler.getRandomChance(world);
 		
 		if (randomChance <= maxPercentage)
 		{
@@ -590,7 +614,7 @@ public class WuestEventHandler
 		}
 	}
 	
-	private double getRandomChance(World world)
+	private static double getRandomChance(World world)
 	{
 		double randomChance = world.rand.nextDouble();
 		BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));

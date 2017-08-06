@@ -5,29 +5,39 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Enchantment.EnchantmentStepAssist;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is used to handle client side only events.
  * @author WuestMan
  *
  */
-public class ClientEventHandler extends Gui
+@EventBusSubscriber(value = {Side.CLIENT })
+public class ClientEventHandler
 {
 	public static LocalDateTime bedCompassTime;
 	public static BlockPos bedLocation;
@@ -37,14 +47,14 @@ public class ClientEventHandler extends Gui
 	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
 	private static final int BUFF_ICONS_OFFSET = 8;
 	
-	private HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
+	private static HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
 	
-	//
-	// This event is called by GuiIngameForge during each frame by
-	// GuiIngameForge.pre() and GuiIngameForce.post().
-	//
+	/**
+	 * This event is called by GuiIngameForge during each frame by GuiIngameForge.pre() and GuiIngameForce.post().
+	 * @param event
+	 */
 	@SubscribeEvent(priority = EventPriority.NORMAL)
-	public void onRenderExperienceBar(RenderGameOverlayEvent event)
+	public static void onRenderExperienceBar(RenderGameOverlayEvent event)
 	{
 		// We draw after the ExperienceBar has drawn.  The event raised by GuiIngameForge.pre()
 		// will return true from isCancelable.  If you call event.setCanceled(true) in
@@ -56,11 +66,11 @@ public class ClientEventHandler extends Gui
 			return;
 		}
 		
-		this.ShowPlayerBed(event);
+		ClientEventHandler.ShowPlayerBed(event);
 	}
 	
 	@SubscribeEvent
-	public void PlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void PlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
 		if (event.side.isClient() && event.phase == Phase.START)
 		{	
@@ -70,12 +80,12 @@ public class ClientEventHandler extends Gui
 			// Check to see if the player is wearing a pair of enchanted boots with step assist.
 			// Check to see if the player was added to the hashset and the game setting for auto-jump was enabled.
 			// If it was, re-set their step height to the original step height and remove them from the hashset.
-			if (this.playerStepAssists.containsKey(player.getName()) && (bootsStack == null || !bootsStack.isItemEnchanted() || Minecraft.getMinecraft().gameSettings.autoJump))
+			if (ClientEventHandler.playerStepAssists.containsKey(player.getName()) && (bootsStack == null || !bootsStack.isItemEnchanted() || Minecraft.getMinecraft().gameSettings.autoJump))
 			{
 				// Reset the player step height to the original step height and remove this record from the hashset.
-				StepAssistInfo info = this.playerStepAssists.get(player.getName());
+				StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName());
 				player.stepHeight = info.oldStepHeight;
-				this.playerStepAssists.remove(player.getName());
+				ClientEventHandler.playerStepAssists.remove(player.getName());
 				return;
 			}
 			
@@ -83,12 +93,12 @@ public class ClientEventHandler extends Gui
 			// On the tick after re-setting the player's step height, check to see if the the enchantment is even enabled in the configuration.
 			if (!Minecraft.getMinecraft().gameSettings.autoJump && WuestUtilities.proxy.getServerConfiguration().enableStepAssistEnchantment) 
 			{
-				if (this.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
+				if (ClientEventHandler.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
 				{
 					// The player was in the list and still has boots. Make sure they have the enchantment. 
 					// If they don't remove the player from the list and re-set the step height to the difference between the old step height and the new step height.
 					boolean foundStepAssist = false;
-					StepAssistInfo info = this.playerStepAssists.get(player.getName());
+					StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName());
 					
 					for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet())
 					{
@@ -115,7 +125,7 @@ public class ClientEventHandler extends Gui
 								if (player.stepHeight < 0.0F)
 								{
 									player.stepHeight = 0.0F;
-									this.playerStepAssists.remove(player.getName());
+									ClientEventHandler.playerStepAssists.remove(player.getName());
 								}
 							}
 							
@@ -134,10 +144,10 @@ public class ClientEventHandler extends Gui
 							player.stepHeight = 0.0F;
 						}
 						
-						this.playerStepAssists.remove(player.getName());
+						ClientEventHandler.playerStepAssists.remove(player.getName());
 					}
 				}
-				else if (!this.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
+				else if (!ClientEventHandler.playerStepAssists.containsKey(player.getName()) && bootsStack != null && bootsStack.isItemEnchanted())
 				{
 					// The player has equipped enchanted boots.
 					for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet())
@@ -168,7 +178,7 @@ public class ClientEventHandler extends Gui
 								player.stepHeight = info.newStepHeight;
 							}
 							
-							this.playerStepAssists.put(player.getName(), info);
+							ClientEventHandler.playerStepAssists.put(player.getName(), info);
 							
 							break;
 						}
@@ -178,7 +188,7 @@ public class ClientEventHandler extends Gui
 		}
 	}
 	
-	private void ShowPlayerBed(RenderGameOverlayEvent event)
+	private static void ShowPlayerBed(RenderGameOverlayEvent event)
 	{
 		if (ClientEventHandler.bedCompassTime != null)
 		{
@@ -204,17 +214,17 @@ public class ClientEventHandler extends Gui
 				// If the offset is greater than 0 then the player is south of the bed, otherwise the player is north of the bed.
 				int zOffSet = playerPosition.getZ() - ClientEventHandler.bedLocation.getZ();
 				
-				this.drawString(mc.fontRendererObj, "Your bed is...", x, y, Color.WHITE.getRGB());
+				Minecraft.getMinecraft().fontRenderer.drawString("Your bed is...", x, y, Color.WHITE.getRGB());
 				
 				y = y + 10;
 				
 				if (yOffSet > 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)yOffSet).toString() + " Block(s) Lower", x, y, (new Color(200, 117, 51).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)yOffSet).toString() + " Block(s) Lower", x, y, (new Color(200, 117, 51).getRGB()));
 				}
 				else if (yOffSet < 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)Math.abs(yOffSet)).toString() + " Block(s) Higher", x, y, (new Color(52,221,221).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)Math.abs(yOffSet)).toString() + " Block(s) Higher", x, y, (new Color(52,221,221).getRGB()));
 				}
 				else
 				{
@@ -225,11 +235,11 @@ public class ClientEventHandler extends Gui
 				
 				if (xOffSet > 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)xOffSet).toString() + " Block(s) West", x, y, (new Color(207,83,0).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)xOffSet).toString() + " Block(s) West", x, y, (new Color(207,83,0).getRGB()));
 				}
 				else if (xOffSet < 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)Math.abs(xOffSet)).toString() + " Block(s) East", x, y, (new Color(255,204,0).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)Math.abs(xOffSet)).toString() + " Block(s) East", x, y, (new Color(255,204,0).getRGB()));
 				}
 				else
 				{
@@ -240,11 +250,11 @@ public class ClientEventHandler extends Gui
 				
 				if (zOffSet > 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)zOffSet).toString() + " Block(s) North", x, y, (new Color(204,204,255).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)zOffSet).toString() + " Block(s) North", x, y, (new Color(204,204,255).getRGB()));
 				}
 				else if (zOffSet < 0)
 				{
-					this.drawString(mc.fontRendererObj, ((Integer)Math.abs(zOffSet)).toString() + " Block(s) South", x, y, (new Color(91,194,54).getRGB()));
+					Minecraft.getMinecraft().fontRenderer.drawString(((Integer)Math.abs(zOffSet)).toString() + " Block(s) South", x, y, (new Color(91,194,54).getRGB()));
 				}
 				else
 				{
@@ -255,11 +265,11 @@ public class ClientEventHandler extends Gui
 				
 				if (xOffSet == 0 && yOffSet == 0 && zOffSet == 0)
 				{
-					this.drawString(mc.fontRendererObj, "Right next to you", x, y, Color.WHITE.getRGB());
+					Minecraft.getMinecraft().fontRenderer.drawString("Right next to you", x, y, Color.WHITE.getRGB());
 				}
 				else
 				{
-					this.drawString(mc.fontRendererObj, "Of you", x, y, Color.WHITE.getRGB());
+					Minecraft.getMinecraft().fontRenderer.drawString("Of you", x, y, Color.WHITE.getRGB());
 				}
 			}
 			else
@@ -276,13 +286,81 @@ public class ClientEventHandler extends Gui
 		}
 	}
 
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event)
+	{
+		for (Block block: ModRegistry.ModBlocks)
+		{
+			ClientEventHandler.regBlock(block);
+		}
+		
+		for (Item item: ModRegistry.ModItems)
+		{
+			ClientEventHandler.regItem(item);
+		}
+	}
+	
+	/**
+	 * Registers an item to be rendered. This is needed for textures.
+	 * @param item The item to register.
+	 */
+	public static void regItem(Item item) 
+	{
+		ClientEventHandler.regItem(item, 0, item.getUnlocalizedName().substring(5));
+	}
+	
+	/**
+	 * Registers an item to be rendered. This is needed for textures.
+	 * @param item The item to register.
+	 * @param metaData The meta data for the item to register.
+	 * @param blockName the name of the block.
+	 */
+	public static void regItem(Item item, int metaData, String blockName)
+	{
+		ModelResourceLocation location = new ModelResourceLocation(blockName, "inventory");
+		//System.out.println("Registering Item: " + location.getResourceDomain() + "[" + location.getResourcePath() + "]");
+
+		ModelLoader.setCustomModelResourceLocation(item, metaData, location);
+	}
+
+	/**
+	 * Registers a block to be rendered. This is needed for textures.
+	 * @param block The block to register.
+	 */
+	public static void regBlock(Block block)
+	{
+		NonNullList<ItemStack> stacks = NonNullList.create();
+		
+		Item itemBlock = Item.getItemFromBlock(block);
+		
+		// If there are sub-blocks for this block, register each of them.
+		block.getSubBlocks(null, stacks);
+		
+		if (itemBlock != null)
+		{
+			if (stacks.size() > 0)
+			{
+				for (ItemStack stack : stacks)
+				{
+					Block subBlock = block.getStateFromMeta(stack.getMetadata()).getBlock();
+					String name = subBlock.getRegistryName().toString();
+					
+					ClientEventHandler.regItem(stack.getItem(), stack.getMetadata(), name);
+				}
+			}
+			else
+			{
+				ClientEventHandler.regItem(itemBlock);
+			}
+		}
+	}
 	
 	/**
 	 * This class is used to hold information stored about a player's step assist.
 	 * @author WuestMan
 	 *
 	 */
-	public class StepAssistInfo
+	public static class StepAssistInfo
 	{
 		public float oldStepHeight = 0.0F;
 		public float newStepHeight = 0.0F;

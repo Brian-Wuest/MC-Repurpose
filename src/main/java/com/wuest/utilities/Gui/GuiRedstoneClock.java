@@ -147,7 +147,7 @@ public class GuiRedstoneClock extends GuiScreen
 
 		for (int i = 0; i < this.buttonList.size(); ++i)
 		{
-			((GuiButton)this.buttonList.get(i)).func_191745_a(this.mc, x, y, f);
+			((GuiButton)this.buttonList.get(i)).drawButton(this.mc, x, y, f);
 		}
 
 		for (int j = 0; j < this.labelList.size(); ++j)
@@ -158,40 +158,40 @@ public class GuiRedstoneClock extends GuiScreen
 		// Draw the text here.
 		int color = Color.DARK_GRAY.getRGB();
 
-		this.mc.fontRendererObj.drawString("Powered Sides", grayBoxX + 150, grayBoxY + 10, color);
+		this.mc.fontRenderer.drawString("Powered Sides", grayBoxX + 150, grayBoxY + 10, color);
 
-		this.mc.fontRendererObj.drawString("Powered Duration", grayBoxX + 10, grayBoxY + 10, color);
-		this.mc.fontRendererObj.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 20, color);
+		this.mc.fontRenderer.drawString("Powered Duration", grayBoxX + 10, grayBoxY + 10, color);
+		this.mc.fontRenderer.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 20, color);
 
-		this.mc.fontRendererObj.drawString("Un-Powered Duration", grayBoxX + 10, grayBoxY + 60, color);
-		this.mc.fontRendererObj.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 70, color);
+		this.mc.fontRenderer.drawString("Un-Powered Duration", grayBoxX + 10, grayBoxY + 60, color);
+		this.mc.fontRenderer.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 70, color);
 
-		this.mc.fontRendererObj.drawString("Changes reflected after current state", grayBoxX + 10, grayBoxY + 116, color);
-		this.mc.fontRendererObj.drawString("is complete.", grayBoxX + 10, grayBoxY + 126, color);
+		this.mc.fontRenderer.drawString("Changes reflected after current state", grayBoxX + 10, grayBoxY + 116, color);
+		this.mc.fontRenderer.drawString("is complete.", grayBoxX + 10, grayBoxY + 126, color);
 
 		if (this.upChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
 		}
 		else if (this.northChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'North' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), x, y);
 		}
 		else if (this.downChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
 		}
 		else if (this.eastChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'East' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), x, y);
 		}
 		else if (this.westChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'West' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), x, y);
 		}
 		else if (this.southChecker.checkHover(x, y))
 		{
-			this.drawHoveringText(this.mc.fontRendererObj.listFormattedStringToWidth("The 'South' side.", 300), x, y);
+			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), x, y);
 		}
 	}
 

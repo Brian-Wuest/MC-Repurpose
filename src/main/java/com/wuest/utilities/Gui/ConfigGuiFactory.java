@@ -13,23 +13,15 @@ public class ConfigGuiFactory extends DefaultGuiFactory
 {
 	public ConfigGuiFactory() 
 	{
-		super("", "");
-		
-		this.modid = WuestUtilities.MODID;
-		this.title = "WuestUtilities";
+		super(WuestUtilities.MODID, "WuestUtilities");
 	}
 	
 	@Override
 	public void initialize(Minecraft minecraftInstance) 
 	{
+		super.initialize(minecraftInstance);
 	}
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() 
-	{
-		return GuiWuest.class;
-	}
-	
     @Override
     public GuiScreen createConfigGui(GuiScreen parentScreen)
     {  

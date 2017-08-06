@@ -66,11 +66,7 @@ public class CommonProxy implements IGuiHandler
 
 	public void init(FMLInitializationEvent event)
 	{
-		ModRegistry.RegisterModComponents();
-		
 		ModRegistry.RegisterEnchantments();
-		
-		ModRegistry.RegisterRecipes();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(WuestUtilities.instance, WuestUtilities.proxy);
 		this.RegisterEventListeners();
@@ -90,7 +86,7 @@ public class CommonProxy implements IGuiHandler
 
 	public IThreadListener getThreadFromContext(MessageContext ctx)
 	{
-		return ctx.getServerHandler().playerEntity.getServer();
+		return ctx.getServerHandler().player.getServer();
 	}
 
 	/**
@@ -99,7 +95,7 @@ public class CommonProxy implements IGuiHandler
 	public EntityPlayer getPlayerEntity(MessageContext ctx)
 	{
 		System.out.println("Retrieving player from CommonProxy for message on side " + ctx.side);
-		return ctx.getServerHandler().playerEntity;
+		return ctx.getServerHandler().player;
 	}
 
 	@Override

@@ -29,7 +29,7 @@ IMessageHandler<BedLocationMessage, IMessage>
 		}
 		else
 		{
-			mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
+			mainThread = (WorldServer) ctx.getServerHandler().player.world;
 		}
 		
 		mainThread.addScheduledTask(new Runnable() 

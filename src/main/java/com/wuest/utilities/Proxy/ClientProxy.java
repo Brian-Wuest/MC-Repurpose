@@ -1,6 +1,5 @@
 package com.wuest.utilities.Proxy;
 
-import com.wuest.utilities.ItemRenderRegister;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Blocks.BlockCustomWall;
 import com.wuest.utilities.Blocks.BlockGrassSlab;
@@ -65,8 +64,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers()
 	{
-		ItemRenderRegister.registerItemRenderer();
-
 		// Register block colors.
 		BlockGrassStairs.RegisterBlockRenderer();
 
