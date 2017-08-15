@@ -21,6 +21,7 @@ public class WuestConfiguration
 	private static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
 	private static String enableVersionCheckMessageName = "Enable Version Checking";
 	private static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
+	private static String enableSwiftCombatName = "Enable Swift Combat";
 
 	private static String addMetalRecipesName = "Add Metal Recipes";
 	private static String addWoodRecipesName = "Add Wood Recipes";
@@ -64,6 +65,7 @@ public class WuestConfiguration
 	public boolean enableAppleStickExtraDrops;
 	public boolean enableExtraDropsFromDirt;
 	public boolean enableExtraDropsFromStone;
+	public boolean enableSwiftCombat;
 
 	// Recipe options.
 	public boolean addMetalRecipes;
@@ -94,6 +96,7 @@ public class WuestConfiguration
 		this.enableGrassSpreadToCustomDirt = true;
 		this.enableExtraGrassDrops = true;
 		this.enableVersionCheckMessage = true;
+		this.enableSwiftCombat = true;
 	}
 
 	public static void syncConfig()
@@ -113,6 +116,7 @@ public class WuestConfiguration
 		WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops = config.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName, WuestConfiguration.OPTIONS, true, "Determines if all types of leaves will drop apples and/or sticks.");
 		WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt = config.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName, WuestConfiguration.OPTIONS, true, "Determines if Potatoes, Carrots, Bones, Clay and Beetroots will drop when breaking dirt/grasss blocks.");
 		WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone = config.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName, WuestConfiguration.OPTIONS, true, "Determines if Coal, Iron Nuggets and Flint will drop when breaking stone");
+		WuestUtilities.proxy.proxyConfiguration.enableSwiftCombat = config.getBoolean(WuestConfiguration.enableSwiftCombatName, WuestConfiguration.OPTIONS, true, "Determines if all items are updated to have swift combat swings. Similar to attacking in pre-1.9 minecraft. New combat speeds only show in inventories. Server configuration overrides client.");
 		
 		// This one is special since it requires a minecraft restart.
 		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: melon, pumpkin, cocoa and beetroot seeds. Server configuration overrides client.");
@@ -174,6 +178,7 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableAppleStickExtraDropsName, this.enableAppleStickExtraDrops);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
+		tag.setBoolean(WuestConfiguration.enableSwiftCombatName, this.enableSwiftCombat);
 		
 		tag.setString(WuestConfiguration.versionMessageName, UpdateChecker.messageToShow);
 		tag.setBoolean(WuestConfiguration.showMessageName, UpdateChecker.showMessage);
@@ -212,6 +217,8 @@ public class WuestConfiguration
 		config.enableAppleStickExtraDrops = tag.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName);
 		config.enableExtraDropsFromDirt = tag.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName);
 		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
+		
+		config.enableSwiftCombat = tag.getBoolean(WuestConfiguration.enableSwiftCombatName);
 		
 		return config;
 	}

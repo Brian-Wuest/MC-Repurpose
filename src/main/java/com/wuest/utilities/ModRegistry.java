@@ -523,12 +523,10 @@ public class ModRegistry
 
 	public static <T extends Block, I extends ItemBlock> T registerBlock(T block, I itemBlock)
 	{
-		ForgeRegistries.BLOCKS.register(block);
 		ModRegistry.ModBlocks.add(block);
 
 		if (itemBlock != null)
 		{
-			ForgeRegistries.ITEMS.register(itemBlock);
 			ModRegistry.ModItems.add(itemBlock);
 		}
 

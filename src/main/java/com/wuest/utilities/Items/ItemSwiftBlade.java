@@ -1,5 +1,7 @@
 package com.wuest.utilities.Items;
 
+import java.util.UUID;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.wuest.utilities.ModRegistry;
@@ -80,10 +82,20 @@ public class ItemSwiftBlade extends ItemSword
 		}
 	}
 	
+	public static final UUID getAttackSpeedID()
+	{
+		return Item.ATTACK_SPEED_MODIFIER;
+	}
+	
+	public static final UUID getAttackDamageID()
+	{
+		return Item.ATTACK_DAMAGE_MODIFIER;
+	}
+	
     /**
      * Returns the amount of damage this item will deal. One heart of damage is equal to 2 damage points.
      */
-	public float getDamageVsEntity()
+ 	public float getDamageVsEntity()
     {
         return this.material.getDamageVsEntity();
     }

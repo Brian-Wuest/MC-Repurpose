@@ -1,7 +1,5 @@
 package com.wuest.utilities.Events;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -11,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 
+import com.google.common.collect.Multimap;
 import com.wuest.utilities.ModRegistry;
 import com.wuest.utilities.WuestUtilities;
 import com.wuest.utilities.Base.ItemBlockCapability;
@@ -23,12 +22,12 @@ import com.wuest.utilities.Capabilities.IDimensionHome;
 import com.wuest.utilities.Config.WuestConfiguration;
 import com.wuest.utilities.Items.ItemFluffyFabric;
 import com.wuest.utilities.Items.ItemSnorkel;
+import com.wuest.utilities.Items.ItemSwiftBlade;
 import com.wuest.utilities.Items.ItemWhetStone;
 import com.wuest.utilities.Proxy.ClientProxy;
 import com.wuest.utilities.Proxy.Messages.BedLocationMessage;
 import com.wuest.utilities.Proxy.Messages.ConfigSyncMessage;
 
-import net.minecraft.advancements.AdvancementList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockBush;
@@ -41,7 +40,12 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -62,12 +66,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
@@ -87,6 +94,120 @@ public class WuestEventHandler
 	private static HashMap<String, BlockPos> playerBedLocation;
 	
 	private static HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
+	
+	@SubscribeEvent
+	public static void itemToolTipEvent(ItemTooltipEvent event)
+	{
+		if (event.getEntityPlayer() != null)
+		{
+			List<String> currentToolTip = event.getToolTip();
+			ItemStack stack = event.getItemStack();
+			
+			Multimap<String, AttributeModifier> modifiers = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
+			
+			if (modifiers.containsKey(
+					SharedMonsterAttributes.ATTACK_SPEED.getName()))
+			{
+				int attackSpeedIndex = 0;
+				int attackDamageIndex = 0;
+				
+				// Find the appropriate index for each of the attributes.
+				for (String value : currentToolTip)
+				{
+					if (value.contains(I18n.translateToLocal("attribute.name." + SharedMonsterAttributes.ATTACK_SPEED.getName())))
+					{
+						attackSpeedIndex = currentToolTip.indexOf(value);
+					}
+					else if (value.contains(I18n.translateToLocal("attribute.name." + SharedMonsterAttributes.ATTACK_DAMAGE.getName()))) 
+					{
+						attackDamageIndex = currentToolTip.indexOf(value);
+					}
+					
+					if (attackSpeedIndex != 0 && attackDamageIndex != 0)
+					{
+						break;
+					}
+				}
+				
+				// Get the appropriate text for the tool tip. This is copied from the ItemStack class except for the equal check below since == doesn't work for UUIDs and .equals is necessary.
+				for (Entry<String, AttributeModifier> entry : modifiers.entries())
+	            {
+	                AttributeModifier attributemodifier = entry.getValue();
+	                double d0 = attributemodifier.getAmount();
+	                boolean foundAttribute = false;
+	                boolean foundAttackSpeed = false;
+	                
+	                if (attributemodifier.getID().equals(ItemSwiftBlade.getAttackDamageID()))
+	                {
+	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE); 
+	                	
+	                	if (attributeInstance != null)
+	                	{
+		                    d0 = d0 + attributeInstance.getBaseValue();
+		                    d0 = d0 + (double)EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
+		                    foundAttribute = true;
+	                	}
+	                }
+	                else if (attributemodifier.getID().equals(ItemSwiftBlade.getAttackSpeedID()))
+	                {
+	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+	                	
+	                	if (attributeInstance != null)
+	                	{
+		                    d0 += attributeInstance.getBaseValue();
+		                    foundAttribute = true;
+		                    foundAttackSpeed = true;
+	                	}
+	                }
+	                
+	                if (foundAttribute)
+	                {
+	                	String value = " " + I18n.translateToLocalFormatted("attribute.modifier.equals." + attributemodifier.getOperation(), ItemStack.DECIMALFORMAT.format(d0), I18n.translateToLocal("attribute.name." + (String)entry.getKey()));
+	                	
+	                	if (foundAttackSpeed)
+	                	{
+	                		currentToolTip.set(attackSpeedIndex, value);
+	                	}
+	                	else
+	                	{
+	                		currentToolTip.set(attackDamageIndex, value);
+	                	}
+	                }
+	            }
+				
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void equipmentChangeEvent(LivingEquipmentChangeEvent event)
+	{
+		if (event.getEntity() instanceof EntityPlayer && event.getSlot() == EntityEquipmentSlot.MAINHAND
+				&& WuestUtilities.proxy.getServerConfiguration().enableSwiftCombat)
+		{
+			// Every item the player equips in the main hand which has an attack speed modifier on it will be adjusted to be pre-cooldown combat speed.
+			Multimap<String, AttributeModifier> modifiers = event.getTo()
+					.getAttributeModifiers(event.getSlot());
+
+			if (modifiers.containsKey(
+					SharedMonsterAttributes.ATTACK_SPEED.getName()))
+			{
+				modifiers.removeAll(
+						SharedMonsterAttributes.ATTACK_SPEED.getName());
+				
+				modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+						new AttributeModifier(ItemSwiftBlade.getAttackSpeedID(),
+								"Weapon modifier", 6, 0));
+
+				// Add the attributes to the item stack's NBT tag. This way when the attributes are received for this item the NBT data is used instead.
+				for (Entry<String, AttributeModifier> entry : modifiers.entries())
+				{
+					event.getTo().addAttributeModifier(entry.getKey(),
+							entry.getValue(), event.getSlot());
+				}
+			}
+		}
+	}
 	
 	@SubscribeEvent
 	public static void onPlayerLoginEvent(PlayerLoggedInEvent event)
@@ -621,4 +742,5 @@ public class WuestEventHandler
 		bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
 		return bigDecimal.doubleValue();
 	}
+
 }
