@@ -50,7 +50,7 @@ public class CommonProxy implements IGuiHandler
 		Repurpose.config.load();
 		WuestConfiguration.syncConfig();
 
-		Repurpose.network = NetworkRegistry.INSTANCE.newSimpleChannel("WuestUtilChnl");
+		Repurpose.network = NetworkRegistry.INSTANCE.newSimpleChannel("RepurposeChnl");
 		
 		if (this.proxyConfiguration.enableVersionCheckMessage)
 		{

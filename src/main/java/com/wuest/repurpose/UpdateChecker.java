@@ -24,7 +24,7 @@ public class UpdateChecker
 		
 		if (UpdateChecker.modInfo != null)
 		{
-			UpdateChecker.messageToShow = "[Wuest-Utilities] There is a new version available! [New Version: " 
+			UpdateChecker.messageToShow = "[Repurpose] There is a new version available! [New Version: " 
 					+ UpdateChecker.modInfo.version + "] [Your Version: " + Repurpose.VERSION + "]";
 			
 			if (!Repurpose.VERSION.equals(modInfo.version))
@@ -36,14 +36,14 @@ public class UpdateChecker
 			}
 			else
 			{
-				System.out.println("[Wuest-Utilities] - This is the latest version.");
+				System.out.println("[Repurpose] - This is the latest version.");
 			}
 		}
 		else
 		{
 			UpdateChecker.messageToShow = "Unable to retreive version information, something may be wrong with your network connection.";
 			UpdateChecker.showMessage = true;
-			System.out.println("[Wuest-Utilities] - " + UpdateChecker.messageToShow);
+			System.out.println("[Repurpose] - " + UpdateChecker.messageToShow);
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class UpdateChecker
 	{
 		try
 		{
-			System.out.println("[Wuest-Utilities] - Checking for latest version.");
+			System.out.println("[Repurpose] - Checking for latest version.");
 			URL url = null;
 			
 			if (Repurpose.isDebug)
@@ -60,7 +60,7 @@ public class UpdateChecker
 			}
 			else
 			{
-				url = new URL("https://raw.githubusercontent.com/Brian-Wuest/MC-WuestUtilities/MC-1.12/src/main/resources/mcmod.info");
+				url = new URL("https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/MC-1.12/src/main/resources/mcmod.info");
 			}
 			
 			Gson file = new Gson();

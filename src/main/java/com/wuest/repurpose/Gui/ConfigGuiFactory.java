@@ -13,7 +13,7 @@ public class ConfigGuiFactory extends DefaultGuiFactory
 {
 	public ConfigGuiFactory() 
 	{
-		super(Repurpose.MODID, "WuestUtilities");
+		super(Repurpose.MODID, "Repurpose");
 	}
 	
 	@Override

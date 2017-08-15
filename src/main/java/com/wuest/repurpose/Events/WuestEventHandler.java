@@ -424,7 +424,7 @@ public class WuestEventHandler
 	public void TextureStitch(TextureStitchEvent.Pre preEvent)
 	{
 		// This is how I could register a sprite texture for use in particles and other things.
-		// preEvent.getMap().registerSprite(new ResourceLocation(WuestUtilities.MODID, ""));
+		// preEvent.getMap().registerSprite(new ResourceLocation(Repurpose.MODID, ""));
 	}*/
 
 	@SubscribeEvent
