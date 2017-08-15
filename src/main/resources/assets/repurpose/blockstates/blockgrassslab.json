@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "variant=false": [
+            { "model": "repurpose:blockgrassslab" },
+            { "model": "repurpose:blockgrassslab", "y": 90 },
+            { "model": "repurpose:blockgrassslab", "y": 180 },
+            { "model": "repurpose:blockgrassslab", "y": 270 }
+        ],
+        "variant=true": [
+            { "model": "repurpose:blockgrassslab" },
+            { "model": "repurpose:blockgrassslab", "y": 90 },
+            { "model": "repurpose:blockgrassslab", "y": 180 },
+            { "model": "repurpose:blockgrassslab", "y": 270 }
+        ]
+    }
+}

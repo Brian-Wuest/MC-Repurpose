@@ -1,9 +1,0 @@
-{
-    "variants": 
-    {
-        "half=bottom,variant=false": { "model": "wuestutilities:blockgrassslabhalf" },
-        "half=bottom,variant=true": { "model": "wuestutilities:blockgrassslabhalf" },
-        "half=top,variant=false": { "model": "wuestutilities:blockgrassslabupper" },
-        "half=top,variant=true": { "model": "wuestutilities:blockgrassslabupper" }
-    }
-}

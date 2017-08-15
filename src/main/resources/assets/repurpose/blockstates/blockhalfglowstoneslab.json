@@ -1,0 +1,9 @@
+{
+    "variants": 
+    {
+        "half=bottom,variant=false": { "model": "repurpose:blockglowstoneslabhalf" },
+        "half=bottom,variant=true": { "model": "repurpose:blockglowstoneslabhalf" },
+        "half=top,variant=false": { "model": "repurpose:blockglowstoneslabupper" },
+        "half=top,variant=true": { "model": "repurpose:blockglowstoneslabupper" }
+    }
+}

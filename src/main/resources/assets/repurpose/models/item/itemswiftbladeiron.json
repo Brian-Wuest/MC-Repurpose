@@ -1,0 +1,6 @@
+{
+	"parent": "item/handheld",
+	"textures": {
+		"layer0": "repurpose:items/item_swift_blade_iron"
+	}
+}

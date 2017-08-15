@@ -12,8 +12,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "1.12.0.0"
-group= "com.wuest.utilities" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "wuestUtilities"
+group= "com.wuest.repurpose" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Repurpose"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {

@@ -1,0 +1,7 @@
+{
+	"variants": 
+	{
+		"powered=false": { "model": "repurpose:blockredstonescannerunpowered" },
+		"powered=true": { "model": "repurpose:blockredstonescanner" }
+	}
+}

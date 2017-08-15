@@ -1,0 +1,19 @@
+{
+    "multipart": [
+        {   "when": { "up": "true" },
+            "apply": { "model": "repurpose:blockdirtwallpost" }
+        },
+        {   "when": { "north": "true" },
+            "apply": { "model": "repurpose:blockdirtwallside", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "repurpose:blockdirtwallside", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "repurpose:blockdirtwallside", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "repurpose:blockdirtwallside", "y": 270, "uvlock": true }
+        }
+    ]
+}

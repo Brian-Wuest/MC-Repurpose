@@ -1,7 +1,0 @@
-{
-	"variants": 
-	{
-		"powered=false": { "model": "wuestUtilities:blockredstonescannerunpowered" },
-		"powered=true": { "model": "wuestUtilities:blockredstonescanner" }
-	}
-}

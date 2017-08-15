@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "moisture=0": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=1": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=2": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=3": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=4": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=5": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=6": { "model": "repurpose:blockenrichedfarmland" },
+        "moisture=7": { "model": "repurpose:blockenrichedfarmland" }
+    }
+}
