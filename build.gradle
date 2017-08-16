@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.12.0.0"
+version = "${mod_version}"
 group= "com.wuest.repurpose" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Repurpose"
 
@@ -23,6 +23,9 @@ compileJava {
 minecraft {
     version = "1.12-14.21.1.2387"
     runDir = "run"
+
+    replace "@VERSION@", project.version
+    replaceIn "Repurpose.java"
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.

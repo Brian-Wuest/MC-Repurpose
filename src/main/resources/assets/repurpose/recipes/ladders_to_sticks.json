@@ -1,0 +1,20 @@
+{
+    "conditions": [
+        {
+            "type": "prefab:config_recipe",
+            "recipeKey": "Wood Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Wood Recipes",
+    "ingredients": [
+        {
+            "item": "minecraft:ladder"
+        }
+    ],
+    "result": {
+        "item": "minecraft:stick",
+        "data": 0,
+        "count": 2
+    }
+}

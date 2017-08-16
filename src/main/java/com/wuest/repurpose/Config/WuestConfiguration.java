@@ -1,5 +1,8 @@
 package com.wuest.repurpose.Config;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.UpdateChecker;
 
@@ -16,44 +19,31 @@ public class WuestConfiguration
 	public static String tagKey = "WuestConfig";
 
 	// Config file option names.
-	private static String rightClickCropHarvestName = "Right Click Crop Harvest";
-	private static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
-	private static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
-	private static String enableVersionCheckMessageName = "Enable Version Checking";
-	private static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
-	private static String enableSwiftCombatName = "Enable Swift Combat";
+	public static String rightClickCropHarvestName = "Right Click Crop Harvest";
+	public static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
+	public static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
+	public static String enableVersionCheckMessageName = "Enable Version Checking";
+	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
+	public static String enableSwiftCombatName = "Enable Swift Combat";
 
-	private static String addMetalRecipesName = "Add Metal Recipes";
-	private static String addWoodRecipesName = "Add Wood Recipes";
-	private static String addStoneRecipesName = "Add Stone Recipes";
-	private static String addArmorRecipesName = "Add Armor Recipes";
-	private static String addMiscRecipesName = "Add Misc Recipes";
-	private static String addNetherStarRecipeName = "Add Nether Star Recipe";
-	private static String enableHomeCommandName = "Enable Home Command";
-	private static String enableRedstoneClockName = "Enable Redstone Clock Recipe";
-	private static String enableBedCompassName = "Enable Bed Compass Recipe";
-	private static String enableSwiftBladeName = "Enable Swift Blade Recipes";
-	private static String enableEnchrichedFarmlandName = "Enable Enriched Farmland Recipes";
-	private static String enableMiniRedstoneBlockName = "Enable Mini Redstone Block Recipe";
-	private static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
-	private static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
-	private static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";
+	public static String addMetalRecipesName = "Metal Recipes";
+	public static String addWoodRecipesName = "Wood Recipes";
+	public static String addStoneRecipesName = "Stone Recipes";
+	public static String addArmorRecipesName = "Armor Recipes";
+	public static String addMiscRecipesName = "Misc Recipes";
+	public static String addNetherStarRecipeName = "Nether Star Recipe";
+	public static String enableHomeCommandName = "Enable Home Command";
+	public static String enableRedstoneClockName = "Redstone Clock Recipe";
+	public static String enableBedCompassName = "Bed Compass Recipe";
+	public static String enableSwiftBladeName = "Swift Blade Recipes";
+	public static String enableEnchrichedFarmlandName = "Enriched Farmland Recipes";
+	public static String enableMiniRedstoneBlockName = "Mini Redstone Block Recipe";
+	public static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
+	public static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
+	public static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";
 	
-	private static String addSwordName = "Add Sword";
-	private static String addAxeName = "Add Axe";
-	private static String addHoeName = "Add Hoe";
-	private static String addShovelName = "Add Shovel";
-	private static String addPickAxeName = "Add Pickaxe";
-	private static String addArmorName = "Add Armor";
-	private static String addFoodName = "Add Food";
-	private static String addCropsName = "Add Crops";
-	private static String addDirtName = "Add Dirt";
-	private static String addCobbleName = "Add Cobblestone";
-	private static String addSaplingsName = "Add Saplings";
-	private static String addTorchesName = "Add Torches";
-	
-	private static String versionMessageName = "Version Message";
-	private static String showMessageName = "Show Message";
+	public static String versionMessageName = "Version Message";
+	public static String showMessageName = "Show Message";
 
 	// Configuration Options.
 	public boolean rightClickCropHarvest;
@@ -67,18 +57,23 @@ public class WuestConfiguration
 	public boolean enableExtraDropsFromStone;
 	public boolean enableSwiftCombat;
 
+	public HashMap<String, Boolean> recipeConfiguration;
+	
 	// Recipe options.
-	public boolean addMetalRecipes;
-	public boolean addWoodRecipes;
-	public boolean addStoneRecipes;
-	public boolean addArmorRecipes;
-	public boolean addMiscRecipes;
-	public boolean addNetherStarRecipe;
-	public boolean addRedstoneClockRecipe;
-	public boolean addBedCompassRecipe;
-	public boolean addSwiftBladeRecipe;
-	public boolean addEnrichedFarmlandRecipe;
-	public boolean addMiniRedstoneBlockRecipe;
+	public static String[] recipeKeys = new String[] 
+	{ 
+		addMetalRecipesName,
+		addArmorRecipesName,
+		addMiscRecipesName,
+		addNetherStarRecipeName,
+		addStoneRecipesName,
+		addWoodRecipesName,
+		enableBedCompassName,
+		enableEnchrichedFarmlandName,
+		enableMiniRedstoneBlockName,
+		enableRedstoneClockName,
+		enableSwiftBladeName
+	};
 	
 	// Version Check Message Info
 	public String versionMessage = "";
@@ -87,16 +82,12 @@ public class WuestConfiguration
 	public WuestConfiguration()
 	{
 		this.rightClickCropHarvest = false;
-		this.addMetalRecipes = true;
-		this.addWoodRecipes = true;
-		this.addStoneRecipes = true;
-		this.addArmorRecipes = true;
-		this.addMiscRecipes = true;
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
 		this.enableExtraGrassDrops = true;
 		this.enableVersionCheckMessage = true;
 		this.enableSwiftCombat = true;
+		this.recipeConfiguration = new HashMap<String, Boolean>();
 	}
 
 	public static void syncConfig()
@@ -130,17 +121,12 @@ public class WuestConfiguration
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 
 		// Recipe settings.
-		Repurpose.proxy.proxyConfiguration.addMetalRecipes = config.getBoolean(WuestConfiguration.addMetalRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the metal recipes are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addWoodRecipes = config.getBoolean(WuestConfiguration.addWoodRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the wood recipes are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addStoneRecipes = config.getBoolean(WuestConfiguration.addStoneRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the stone recipes are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addArmorRecipes = config.getBoolean(WuestConfiguration.addArmorRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the armor recipes are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addMiscRecipes = config.getBoolean(WuestConfiguration.addMiscRecipesName, WuestConfiguration.RecipeOptions, true, "Determines if the misc recipes are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addNetherStarRecipe = config.getBoolean(WuestConfiguration.addNetherStarRecipeName, WuestConfiguration.RecipeOptions, true, "Determines if the Nether Star recipe are added. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addRedstoneClockRecipe = config.getBoolean(WuestConfiguration.enableRedstoneClockName, WuestConfiguration.RecipeOptions, true, "Determines if the Redstone Clock block recipe is enabled. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addBedCompassRecipe = config.getBoolean(WuestConfiguration.enableBedCompassName, WuestConfiguration.RecipeOptions, true, "Determines if the Bed Compass item recipe is enabled. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addSwiftBladeRecipe = config.getBoolean(WuestConfiguration.enableSwiftBladeName, WuestConfiguration.RecipeOptions, true, "Determines if the Swift Blade item recipes are enabled. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addEnrichedFarmlandRecipe = config.getBoolean(WuestConfiguration.enableEnchrichedFarmlandName, WuestConfiguration.RecipeOptions, true, "Determines if the Enriched Farmland recipe is enabled. Server Configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.addMiniRedstoneBlockRecipe = config.getBoolean(WuestConfiguration.enableMiniRedstoneBlockName, WuestConfiguration.RecipeOptions, true, "Determines if the Mini Redstone Block recipe is enabled. Server Configuration overrides client.");
+		// Recipe configuration.
+		for (String key : WuestConfiguration.recipeKeys)
+		{
+			boolean value = config.getBoolean(key, RecipeOptions, true, "Determines if the recipe(s) associated with the " + key + " are enabled. Server configuration overrides client.");
+			Repurpose.proxy.proxyConfiguration.recipeConfiguration.put(key, value);
+		}
 		
 		// This entire category requires a minecraft restart.
 		config.setCategoryRequiresMcRestart(WuestConfiguration.RecipeOptions, true);
@@ -164,21 +150,15 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableVersionCheckMessageName, this.enableVersionCheckMessage);
 		tag.setBoolean(WuestConfiguration.enableExtraGrassDropsName, this.enableExtraGrassDrops);
 		tag.setBoolean(WuestConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
-		tag.setBoolean(WuestConfiguration.addMetalRecipesName, this.addMetalRecipes);
-		tag.setBoolean(WuestConfiguration.addWoodRecipesName, this.addWoodRecipes);
-		tag.setBoolean(WuestConfiguration.addStoneRecipesName, this.addStoneRecipes);
-		tag.setBoolean(WuestConfiguration.addArmorRecipesName, this.addArmorRecipes);
-		tag.setBoolean(WuestConfiguration.addMiscRecipesName, this.addMiscRecipes);
-		tag.setBoolean(WuestConfiguration.addNetherStarRecipeName, this.addNetherStarRecipe);
-		tag.setBoolean(WuestConfiguration.enableRedstoneClockName, this.addRedstoneClockRecipe);
-		tag.setBoolean(WuestConfiguration.enableBedCompassName, this.addBedCompassRecipe);
-		tag.setBoolean(WuestConfiguration.enableSwiftBladeName, this.addSwiftBladeRecipe);
-		tag.setBoolean(WuestConfiguration.enableEnchrichedFarmlandName, this.addEnrichedFarmlandRecipe);
-		tag.setBoolean(WuestConfiguration.enableMiniRedstoneBlockName, this.addMiniRedstoneBlockRecipe);
 		tag.setBoolean(WuestConfiguration.enableAppleStickExtraDropsName, this.enableAppleStickExtraDrops);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
 		tag.setBoolean(WuestConfiguration.enableSwiftCombatName, this.enableSwiftCombat);
+		
+		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet())
+		{
+			tag.setBoolean(entry.getKey(), entry.getValue());
+		}
 		
 		tag.setString(WuestConfiguration.versionMessageName, UpdateChecker.messageToShow);
 		tag.setBoolean(WuestConfiguration.showMessageName, UpdateChecker.showMessage);
@@ -196,20 +176,7 @@ public class WuestConfiguration
 		config.enableGrassSpreadToCustomDirt = tag.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName);
 		config.enableVersionCheckMessage = tag.getBoolean(WuestConfiguration.enableVersionCheckMessageName);
 		config.enableExtraGrassDrops = tag.getBoolean(WuestConfiguration.enableExtraGrassDropsName);
-		config.addMetalRecipes = tag.getBoolean(WuestConfiguration.addMetalRecipesName);
 		config.enableStepAssistEnchantment = tag.getBoolean(WuestConfiguration.enableStepAssistEnchantmentName);
-		
-		config.addWoodRecipes = tag.getBoolean(WuestConfiguration.addWoodRecipesName);
-		config.addStoneRecipes = tag.getBoolean(WuestConfiguration.addStoneRecipesName);
-		config.addArmorRecipes = tag.getBoolean(WuestConfiguration.addArmorRecipesName);
-		config.addMiscRecipes = tag.getBoolean(WuestConfiguration.addMiscRecipesName);
-		config.addNetherStarRecipe = tag.getBoolean(WuestConfiguration.addNetherStarRecipeName);
-		
-		config.addRedstoneClockRecipe = tag.getBoolean(WuestConfiguration.enableRedstoneClockName);
-		config.addBedCompassRecipe = tag.getBoolean(WuestConfiguration.enableBedCompassName);
-		config.addSwiftBladeRecipe = tag.getBoolean(WuestConfiguration.enableSwiftBladeName);
-		config.addEnrichedFarmlandRecipe = tag.getBoolean(WuestConfiguration.enableEnchrichedFarmlandName);
-		config.addMiniRedstoneBlockRecipe = tag.getBoolean(WuestConfiguration.enableMiniRedstoneBlockName);
 		
 		config.versionMessage = tag.getString(WuestConfiguration.versionMessageName);
 		config.showMessage = tag.getBoolean(WuestConfiguration.showMessageName);
@@ -219,6 +186,11 @@ public class WuestConfiguration
 		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
 		
 		config.enableSwiftCombat = tag.getBoolean(WuestConfiguration.enableSwiftCombatName);
+		
+		for (String key : WuestConfiguration.recipeKeys)
+		{
+			config.recipeConfiguration.put(key, tag.getBoolean(key));
+		}
 		
 		return config;
 	}

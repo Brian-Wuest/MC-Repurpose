@@ -1,0 +1,26 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Wood Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Wood Recipes",
+    "pattern": [
+        "#",
+        "#"
+    ],
+    "key": {
+        "#": [
+            {
+                "item": "minecraft:birch_stairs"
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:planks",
+        "count": 3,
+        "data": 2
+    }
+}

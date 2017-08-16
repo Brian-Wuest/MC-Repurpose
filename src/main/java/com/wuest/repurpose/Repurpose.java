@@ -21,11 +21,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid=Repurpose.MODID, name="Repurpose", version=Repurpose.VERSION, acceptedMinecraftVersions="[1.12]", guiFactory = "com.wuest.repurpose.Gui.ConfigGuiFactory")
+@Mod(modid=Repurpose.MODID, name="Repurpose", version=Repurpose.VERSION, acceptedMinecraftVersions="[1.12]", 
+guiFactory = "com.wuest.repurpose.Gui.ConfigGuiFactory",
+updateJSON = "https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/master/changeLog.json")
 public class Repurpose 
 {
 	public static final String MODID = "repurpose";
-	public static final String VERSION = "1.12.0.0";
+	public static final String VERSION = "@VERSION@";
 	
 	// compilation flag used for debugging purposes.
 	public static boolean isDebug = false;
