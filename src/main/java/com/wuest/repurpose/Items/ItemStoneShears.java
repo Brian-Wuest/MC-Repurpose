@@ -1,7 +1,10 @@
 package com.wuest.repurpose.Items;
 
+import java.util.UUID;
+
 import com.wuest.repurpose.ModRegistry;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 
 /**
@@ -20,5 +23,15 @@ public class ItemStoneShears extends ItemShears
 		super();
 		this.setMaxDamage(124);
 		ModRegistry.setItemName(this, name);
+	}
+	
+	public static final UUID getAttackSpeedID()
+	{
+		return Item.ATTACK_SPEED_MODIFIER;
+	}
+	
+	public static final UUID getAttackDamageID()
+	{
+		return Item.ATTACK_DAMAGE_MODIFIER;
 	}
 }

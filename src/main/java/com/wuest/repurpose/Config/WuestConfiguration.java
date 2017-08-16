@@ -31,16 +31,23 @@ public class WuestConfiguration
 	public static String addStoneRecipesName = "Stone Recipes";
 	public static String addArmorRecipesName = "Armor Recipes";
 	public static String addMiscRecipesName = "Misc Recipes";
-	public static String addNetherStarRecipeName = "Nether Star Recipe";
+	public static String addNetherStarRecipeName = "Nether Star";
 	public static String enableHomeCommandName = "Enable Home Command";
-	public static String enableRedstoneClockName = "Redstone Clock Recipe";
-	public static String enableBedCompassName = "Bed Compass Recipe";
-	public static String enableSwiftBladeName = "Swift Blade Recipes";
-	public static String enableEnchrichedFarmlandName = "Enriched Farmland Recipes";
-	public static String enableMiniRedstoneBlockName = "Mini Redstone Block Recipe";
+	public static String enableRedstoneClockName = "Redstone Clock";
+	public static String enableBedCompassName = "Bed Compass";
+	public static String enableEnchrichedFarmlandName = "Enriched Farmland";
+	public static String enableMiniRedstoneBlockName = "Mini Redstone Block";
 	public static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
 	public static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
 	public static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";
+	public static String addDirtRecipesName = "Dirt Recipes";
+	public static String addSnorkelName = "Snorkel";
+	public static String addWhetstoneName = "Whetstone";
+	public static String addGlowstoneSlabName = "Glowstone Slab";
+	public static String addFluffyFabricName = "Fluffy Fabric";
+	public static String addStoneShearsName = "Stone Shears";
+	public static String addDiamonShardName = "Diamond Shard";
+	public static String addRedstoneScannerName = "Redstone Scanner";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -72,7 +79,14 @@ public class WuestConfiguration
 		enableEnchrichedFarmlandName,
 		enableMiniRedstoneBlockName,
 		enableRedstoneClockName,
-		enableSwiftBladeName
+		addDirtRecipesName,
+		addSnorkelName,
+		addWhetstoneName,
+		addGlowstoneSlabName,
+		addFluffyFabricName,
+		addStoneShearsName,
+		addDiamonShardName,
+		addRedstoneScannerName
 	};
 	
 	// Version Check Message Info

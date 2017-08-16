@@ -22,7 +22,7 @@ import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
 import com.wuest.repurpose.Items.ItemSnorkel;
-import com.wuest.repurpose.Items.ItemSwiftBlade;
+import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWhetStone;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
@@ -53,7 +53,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemEnchantedBook;
@@ -81,7 +80,6 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -137,7 +135,7 @@ public class WuestEventHandler
 	                boolean foundAttribute = false;
 	                boolean foundAttackSpeed = false;
 	                
-	                if (attributemodifier.getID().equals(ItemSwiftBlade.getAttackDamageID()))
+	                if (attributemodifier.getID().equals(ItemStoneShears.getAttackDamageID()))
 	                {
 	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE); 
 	                	
@@ -148,7 +146,7 @@ public class WuestEventHandler
 		                    foundAttribute = true;
 	                	}
 	                }
-	                else if (attributemodifier.getID().equals(ItemSwiftBlade.getAttackSpeedID()))
+	                else if (attributemodifier.getID().equals(ItemStoneShears.getAttackSpeedID()))
 	                {
 	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
 	                	
@@ -196,7 +194,7 @@ public class WuestEventHandler
 						SharedMonsterAttributes.ATTACK_SPEED.getName());
 				
 				modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-						new AttributeModifier(ItemSwiftBlade.getAttackSpeedID(),
+						new AttributeModifier(ItemStoneShears.getAttackSpeedID(),
 								"Weapon modifier", 6, 0));
 
 				// Add the attributes to the item stack's NBT tag. This way when the attributes are received for this item the NBT data is used instead.
@@ -433,27 +431,6 @@ public class WuestEventHandler
 		if(onConfigChangedEvent.getModID().equals(Repurpose.MODID))
 		{
 			WuestConfiguration.syncConfig();
-		}
-	}
-
-	/**
-	 * This method is used to trigger the buildSword vanilla event when making swift blades.
-	 * @param event The event object used for this method.
-	 */
-	@SubscribeEvent
-	public static void onCrafted(ItemCraftedEvent event)
-	{
-		Item craftedItem = event.crafting.getItem();
-		EntityPlayer player = event.player;
-
-		if (craftedItem == ModRegistry.SwiftBlade(ToolMaterial.WOOD) 
-				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.STONE)
-				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.IRON)
-				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.GOLD)
-				|| craftedItem == ModRegistry.SwiftBlade(ToolMaterial.DIAMOND))
-		{
-			// TODO: Fix this when advancements are done.
-			//player.addStat(AchievementList.BUILD_SWORD);
 		}
 	}
 

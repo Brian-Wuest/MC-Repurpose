@@ -1,0 +1,28 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Misc Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Misc Recipes",
+    "ingredients": [
+        {
+            "item": "minecraft:water_bucket"
+        },
+        {
+            "item": "minecraft:sand",
+            "data": 0
+        },
+        {
+            "item": "minecraft:gravel",
+            "data": 0
+        }
+    ],
+    "result": {
+        "item": "minecraft:clay",
+        "data": 0,
+        "count": 1
+    }
+}

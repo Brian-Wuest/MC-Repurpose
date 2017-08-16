@@ -93,19 +93,6 @@ public class ModRegistry
 		return ModRegistry.GetBlock(RedstoneClock.class);
 	}
 
-	public static ItemSwiftBlade SwiftBlade(ToolMaterial toolMaterial)
-	{
-		for (Item item : ModRegistry.ModItems)
-		{
-			if (item instanceof ItemSwiftBlade && ((ItemSwiftBlade) item).getToolMaterial() == toolMaterial)
-			{
-				return (ItemSwiftBlade) item;
-			}
-		}
-
-		return null;
-	}
-
 	public static BlockDirtStairs DirtStairs()
 	{
 		return ModRegistry.GetBlock(BlockDirtStairs.class);
@@ -402,71 +389,6 @@ public class ModRegistry
 				" b ",
 				'a', Items.FLINT,
 				'b', Item.getItemFromBlock(Blocks.COBBLESTONE));
-		
-		for (int i = 0; i < 5; i++)
-		{
-			Object bladeItem = null;
-
-			ToolMaterial material = ToolMaterial.WOOD;
-			switch (i)
-			{
-				case 0:
-				{
-					bladeItem = Blocks.PLANKS;
-					break;
-				}
-
-				case 1:
-				{
-					material = ToolMaterial.STONE;
-					bladeItem = Item.getItemFromBlock(Blocks.COBBLESTONE);
-					break;
-				}
-
-				case 2:
-				{
-					material = ToolMaterial.IRON;
-					bladeItem = Items.IRON_INGOT;
-					break;
-				}
-
-				case 3:
-				{
-					material = ToolMaterial.GOLD;
-					bladeItem = Items.GOLD_INGOT;
-					break;
-				}
-
-				case 4:
-				{
-					material = ToolMaterial.DIAMOND;
-					bladeItem = Items.DIAMOND;
-					break;
-				}
-			}
-
-			if (Repurpose.proxy.proxyConfiguration.addSwiftBladeRecipe)
-			{
-				Item recipeOutput = null;
-				
-				for (Item item : ModRegistry.ModItems)
-				{
-					if (item instanceof ItemSwiftBlade && ((ItemSwiftBlade) item).getToolMaterial() == material)
-					{
-						recipeOutput = item;
-						break;
-					}
-				}
-				
-				if (recipeOutput != null)
-				{
-					// Register recipe.
-					ModRegistry.addShapedRecipe("swift_blade_" + ((Integer)i).toString(), new ItemStack(recipeOutput), "  x", " x ", "y  ", 'x', bladeItem, 'y', Items.STICK);
-	
-					ModRegistry.addShapedRecipe("swift_blade_reverse_" + ((Integer)i).toString(), new ItemStack(recipeOutput), "x  ", " x ", "  y", 'x', bladeItem, 'y', Items.STICK);
-				}
-			}
-		}
 	}
 
 	/**
@@ -557,55 +479,6 @@ public class ModRegistry
 	{
 		block.setRegistryName(blockName);
 		block.setUnlocalizedName(block.getRegistryName().toString());
-	}
-
-	private static void RegisterSwiftBlades()
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			ItemSwiftBlade itemToRegister = null;
-			Object bladeItem = null;
-
-			switch (i)
-			{
-				case 0:
-				{
-					itemToRegister = new ItemSwiftBlade(ToolMaterial.WOOD);
-					bladeItem = Blocks.PLANKS;
-					break;
-				}
-
-				case 1:
-				{
-					itemToRegister = new ItemSwiftBlade(ToolMaterial.STONE);
-					bladeItem = Item.getItemFromBlock(Blocks.COBBLESTONE);
-					break;
-				}
-
-				case 2:
-				{
-					itemToRegister = new ItemSwiftBlade(ToolMaterial.IRON);
-					bladeItem = Items.IRON_INGOT;
-					break;
-				}
-
-				case 3:
-				{
-					itemToRegister = new ItemSwiftBlade(ToolMaterial.GOLD);
-					bladeItem = Items.GOLD_INGOT;
-					break;
-				}
-
-				case 4:
-				{
-					itemToRegister = new ItemSwiftBlade(ToolMaterial.DIAMOND);
-					bladeItem = Items.DIAMOND;
-					break;
-				}
-			}
-
-			ModRegistry.registerItem(itemToRegister);
-		}
 	}
 	
 	/**
