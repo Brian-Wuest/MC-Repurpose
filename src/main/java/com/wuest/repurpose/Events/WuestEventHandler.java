@@ -68,6 +68,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -76,10 +78,12 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -417,7 +421,46 @@ public class WuestEventHandler
 		
 		//this.setPlayerLight(event);
 	}
-	
+
+	@SubscribeEvent
+	public static void BedrockGeneration(PopulateChunkEvent.Pre event)
+	{
+		if (!event.getWorld().isRemote && Repurpose.proxy.getServerConfiguration().enableFlatBedrockGeneration) 
+		{
+			int dimension = event.getWorld().provider.getDimension();
+			
+			// For the overworld make sure the bedrock is flat.
+			if (dimension == 0)
+			{
+				Chunk chunk = event.getWorld().getChunkFromChunkCoords(event.getChunkX(), event.getChunkZ());
+				
+				if (chunk != null)
+				{
+					for (ExtendedBlockStorage storage : chunk
+							.getBlockStorageArray())
+					{
+						if (storage != null)
+						{
+							for (int x = 0; x < 16; x++)
+							{
+								for (int z = 0; z < 16; z++)
+								{
+									for (int y = 1; y < 16; y++)
+									{
+										if (storage.get(x, y, z).equals(Blocks.BEDROCK.getDefaultState()))
+										{
+											storage.set(x, y, z, Blocks.STONE.getDefaultState());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 /*	@SubscribeEvent
 	public void TextureStitch(TextureStitchEvent.Pre preEvent)
 	{
