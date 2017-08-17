@@ -1,7 +1,0 @@
-{
-	"variants": 
-	{
-		"powered=false": { "model": "repurpose:redstoneclockunpowered" },
-		"powered=true": { "model": "repurpose:redstoneclock" }
-	}
-}

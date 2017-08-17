@@ -228,12 +228,10 @@ public class ModRegistry
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 
-		ModRegistry.registerItem(new ItemBedCompass("itembedcompass"));
+		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
 
-		ModRegistry.registerBlock(new RedstoneClock("redstoneclock"));
+		ModRegistry.registerBlock(new RedstoneClock("block_redstone_clock"));
 		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
-
-		ModRegistry.RegisterSwiftBlades();
 
 		ModRegistry.registerBlock(new BlockDirtStairs());
 		ModRegistry.registerBlock(new BlockGrassStairs());
@@ -244,7 +242,7 @@ public class ModRegistry
 
 		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock, registeredDoubleDirtSlab, true);
 
-		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("blockhalfdirtslab");
+		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("block_half_dirt_slab");
 
 		ModRegistry.registerBlock(registeredHalfDirtBlock, itemHalfDirtSlab);
 		ModRegistry.registerBlock(registeredDoubleDirtSlab, false);
@@ -255,7 +253,7 @@ public class ModRegistry
 
 		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock, registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
 
-		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("blockhalfgrassslab");
+		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("block_half_grass_slab");
 
 		ModRegistry.registerBlock(registeredHalfGrassBlock, itemHalfGrassSlab);
 		ModRegistry.registerBlock(registeredDoubleGrassSlab, false);
@@ -267,16 +265,16 @@ public class ModRegistry
 		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
 
 		// Diamond Shard
-		ModRegistry.registerItem(new ItemDiamondShard("itemdiamondshard"));
+		ModRegistry.registerItem(new ItemDiamondShard("item_diamond_shard"));
 
 		// Fluffy Fabric
-		ModRegistry.registerItem(new ItemFluffyFabric("itemfluffyfabric"));
+		ModRegistry.registerItem(new ItemFluffyFabric("item_fluffy_fabric"));
 
 		// Snorkel
-		ModRegistry.registerItem(new ItemSnorkel("itemsnorkel"));
+		ModRegistry.registerItem(new ItemSnorkel("item_snorkel"));
 
 		// Whetstone
-		ModRegistry.registerItem(new ItemWhetStone("itemwhetstone"));
+		ModRegistry.registerItem(new ItemWhetStone("item_whetstone"));
 
 		// Glowstone Slabs.
 		BlockHalfGlowstoneSlab registeredHalfGlowstoneBlock = new BlockHalfGlowstoneSlab();
@@ -285,7 +283,7 @@ public class ModRegistry
 		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(registeredHalfGlowstoneBlock, registeredHalfGlowstoneBlock,
 				registeredDoubleGlowstoneSlab, true);
 
-		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("blockhalfglowstoneslab");
+		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("block_half_glowstone_slab");
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
@@ -305,90 +303,7 @@ public class ModRegistry
 	 */
 	public static void RegisterRecipes()
 	{
-		ModRegistry.addShapedRecipe("dirt_wall", new ItemStack(ModRegistry.DirtWall(), 6, BlockCustomWall.EnumType.DIRT.getMetadata()), "xxx", "xxx", 'x',
-				Item.getItemFromBlock(Blocks.DIRT));
-
-		ModRegistry.addShapedRecipe("dirt_wass_reverse", new ItemStack(Blocks.DIRT, 1), "x", 'x',
-				new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall()), 1, BlockCustomWall.EnumType.DIRT.getMetadata()));
-
-		ModRegistry.addShapedRecipe("grass_wall", new ItemStack(ModRegistry.GrassWall(), 6), "xxx", "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
-
-		ModRegistry.addShapedRecipe("grass_wall_reverse", new ItemStack(Blocks.GRASS, 1), "x", 'x', new ItemStack(Item.getItemFromBlock(ModRegistry.GrassWall()), 1));
-
-		if (Repurpose.proxy.proxyConfiguration.addBedCompassRecipe)
-		{
-			// Register recipe.
-			ModRegistry.addShapelessRecipe("bed_compass", new ItemStack(ModRegistry.BedCompass()), Ingredient.fromItem(Items.BED), Ingredient.fromItem(Items.COMPASS));
-		}
-
-		if (Repurpose.proxy.proxyConfiguration.addRedstoneClockRecipe)
-		{
-			// Register recipe.
-			ModRegistry.addShapedRecipe("redstone_clock", new ItemStack(ModRegistry.RedStoneClock()), "xzx", "xyz", "xxx", 'x', Item.getItemFromBlock(Blocks.STONE), 'y',
-					Items.REPEATER, 'z', Item.getItemFromBlock(Blocks.REDSTONE_TORCH));
-		}
-
 		GeneralRecipes.LoadRecipies();
-
-		// Dirt Stairs.
-		ModRegistry.addShapedRecipe("dirt_stairs", new ItemStack(ModRegistry.DirtStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.DIRT);
-
-		ModRegistry.addShapedRecipe("dirt_stairs_reverse", new ItemStack(Blocks.DIRT, 3), "x", "x", 'x', ModRegistry.DirtStairs());
-
-		// Grass Stairs.
-		ModRegistry.addShapedRecipe("grass_stairs", new ItemStack(ModRegistry.GrassStairs(), 4), "  x", " xx", "xxx", 'x', Blocks.GRASS);
-
-		ModRegistry.addShapedRecipe("grass_stairs_reverse", new ItemStack(Blocks.GRASS, 3), "x", "x", 'x', ModRegistry.GrassStairs());
-
-		// Dirt Slab
-		ModRegistry.addShapedRecipe("dirt_slab", new ItemStack(ModRegistry.DirtSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT));
-
-		ModRegistry.addShapedRecipe("dirt_slab_reverse", new ItemStack(Blocks.DIRT, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.DirtSlab()));
-
-		// Grass Slab
-		ModRegistry.addShapedRecipe("grass_slab", new ItemStack(ModRegistry.GrassSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GRASS));
-
-		ModRegistry.addShapedRecipe("grass_slab_reverse", new ItemStack(Blocks.GRASS, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GrassSlab()));
-
-		// Enriched Farmland
-		if (Repurpose.proxy.proxyConfiguration.addEnrichedFarmlandRecipe)
-		{
-			ModRegistry.addShapedRecipe("enriched_farmland", new ItemStack(ModRegistry.EnrichedFarmland(), 3), "xxx", "aby", "xxx", 'x', Item.getItemFromBlock(Blocks.DIRT), 'a',
-					Items.WHEAT, 'b', Items.WATER_BUCKET, 'y', Items.BONE);
-		}
-
-		// Mini-redstone
-		ModRegistry.addShapedRecipe("mini_redstone", new ItemStack(ModRegistry.MiniRedstone()), "xx", "xx", 'x', Items.REDSTONE);
-
-		// Redstone Scanner
-		ModRegistry.addShapedRecipe("redstone_scanner", new ItemStack(ModRegistry.RedstoneScanner()), "x x", "zyz", "x x", 'x', Items.REPEATER, 'y',
-				Item.getItemFromBlock(Blocks.REDSTONE_BLOCK), 'z', Item.getItemFromBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE));
-
-		// Diamond Shard
-		ModRegistry.addShapedRecipe("diamond_shard", new ItemStack(Items.DIAMOND), "xx", "xx", 'x', ModRegistry.DiamondShard());
-
-		// Fluffy Fabric
-		ModRegistry.addShapedRecipe("fluffy_fabric", new ItemStack(ModRegistry.FluffyFabric()), "xyx", "yyy", "xyx", 'x', Items.STRING, 'y',
-				Item.getItemFromBlock(Blocks.WOOL));
-
-		// Snorkel
-		ModRegistry.addShapedRecipe("snorkel", new ItemStack(ModRegistry.Snorkel()), "  x", "zzx", "yyx", 'x', Items.REEDS, 'y', Item.getItemFromBlock(Blocks.GLASS_PANE),
-				'z', Items.STRING);
-
-		// Whetstone
-		ModRegistry.addShapedRecipe("whetstone", new ItemStack(ModRegistry.WhetStone()), "xxx", "xyx", "xxx", 'x', Items.FLINT, 'y', Item.getItemFromBlock(Blocks.CLAY));
-
-		// Glowstone Slab
-		ModRegistry.addShapedRecipe("glowstone_slab", new ItemStack(ModRegistry.GlowstoneSlab(), 6), "xxx", 'x', Item.getItemFromBlock(Blocks.GLOWSTONE));
-
-		ModRegistry.addShapedRecipe("glowstone_slab_reverse", new ItemStack(Blocks.GLOWSTONE, 1), "x", "x", 'x', Item.getItemFromBlock(ModRegistry.GlowstoneSlab()));
-		
-		// Stone Shears
-		ModRegistry.addShapedRecipe("stone_shears", new ItemStack(ModRegistry.StoneShears()),
-				"a a",
-				" b ",
-				'a', Items.FLINT,
-				'b', Item.getItemFromBlock(Blocks.COBBLESTONE));
 	}
 
 	/**

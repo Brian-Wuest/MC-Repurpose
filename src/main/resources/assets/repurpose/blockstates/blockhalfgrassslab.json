@@ -1,9 +1,0 @@
-{
-    "variants": 
-    {
-        "half=bottom,variant=false": { "model": "repurpose:blockgrassslabhalf" },
-        "half=bottom,variant=true": { "model": "repurpose:blockgrassslabhalf" },
-        "half=top,variant=false": { "model": "repurpose:blockgrassslabupper" },
-        "half=top,variant=true": { "model": "repurpose:blockgrassslabupper" }
-    }
-}

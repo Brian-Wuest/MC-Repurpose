@@ -86,34 +86,6 @@ public class GeneralRecipes
 	{
 		// Rotten Flesh to leather.
 		GameRegistry.addSmelting(Items.ROTTEN_FLESH, new ItemStack(Items.LEATHER), 1f);
-
-		// Make a recipe for Village Eggs.
-		ItemStack eggReturnStack = new ItemStack(Items.SPAWN_EGG, 1);
-
-		EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(EntityList.getKey(EntityVillager.class));
-		ItemStack potionOfWeakness = new ItemStack(Items.POTIONITEM);
-		
-		potionOfWeakness = PotionUtils.addPotionToItemStack(potionOfWeakness, PotionTypes.WEAKNESS);
-		
-		NBTTagCompound nbttagcompound = eggReturnStack.hasTagCompound() ? eggReturnStack.getTagCompound() : new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        nbttagcompound1.setString("id", eggInfo.spawnedID.toString());
-        nbttagcompound.setTag("EntityTag", nbttagcompound1);
-        eggReturnStack.setTagCompound(nbttagcompound);
-        
-        ModRegistry.addShapedRecipe("villager_egg", eggReturnStack,
-        		"abc",
-        		"def",
-        		"ghi",
-        		'a', Items.STRING,
-        		'b', new ItemStack(Items.SKULL, 1, 2),
-        		'c', potionOfWeakness,
-        		'd', Items.ROTTEN_FLESH,
-        		'e', Items.LEATHER_CHESTPLATE,
-        		'f', Items.GOLDEN_APPLE,
-        		'g', Items.BONE,
-        		'h', Items.LEATHER_LEGGINGS,
-        		'i', Items.EMERALD);
         
         // Make mushroom and rabbit stew bowls stack.
         Items.MUSHROOM_STEW.setMaxStackSize(16);

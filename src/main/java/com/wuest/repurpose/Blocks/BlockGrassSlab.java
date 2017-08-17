@@ -56,12 +56,12 @@ public abstract class BlockGrassSlab extends BlockSlab
 		if (!this.isDouble())
 		{
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-			ModRegistry.setBlockName(this, "blockhalfgrassslab");
+			ModRegistry.setBlockName(this, "block_half_grass_slab");
 			this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		}
 		else
 		{
-			ModRegistry.setBlockName(this, "blockgrassslab");
+			ModRegistry.setBlockName(this, "block_grass_slab");
 		}
 		
 		iblockstate = iblockstate.withProperty(VARIANT_PROPERTY, false);

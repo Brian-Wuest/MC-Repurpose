@@ -1,9 +1,0 @@
-{
-    "variants": 
-    {
-        "half=bottom,variant=false": { "model": "repurpose:blockdirtslabhalf" },
-        "half=bottom,variant=true": { "model": "repurpose:blockdirtslabhalf" },
-        "half=top,variant=false": { "model": "repurpose:blockdirtslabupper" },
-        "half=top,variant=true": { "model": "repurpose:blockdirtslabupper" }
-    }
-}

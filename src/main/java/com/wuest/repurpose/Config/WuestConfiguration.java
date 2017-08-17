@@ -36,7 +36,7 @@ public class WuestConfiguration
 	public static String enableRedstoneClockName = "Redstone Clock";
 	public static String enableBedCompassName = "Bed Compass";
 	public static String enableEnchrichedFarmlandName = "Enriched Farmland";
-	public static String enableMiniRedstoneBlockName = "Mini Redstone Block";
+	public static String enableMiniRedstoneBlockName = "Mini Redstone";
 	public static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
 	public static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
 	public static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";

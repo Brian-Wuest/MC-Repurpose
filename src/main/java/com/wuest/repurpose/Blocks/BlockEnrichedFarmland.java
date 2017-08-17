@@ -35,7 +35,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
 		this.setHarvestLevel("shovel", 0);
 		this.setHardness(0.6F);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
-		ModRegistry.setBlockName(this, "blockenrichedfarmland");
+		ModRegistry.setBlockName(this, "block_enriched_farmland");
 	}
 
 	/**

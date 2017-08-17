@@ -33,7 +33,7 @@ public class BlockDirtStairs extends BlockStairs
 		this.useNeighborBrightness = true;
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
-		ModRegistry.setBlockName(this, "blockdirtstairs");
+		ModRegistry.setBlockName(this, "block_dirt_stairs");
 	}
 
 	@Override
