@@ -1,5 +1,5 @@
 {
-	"parent": "repurpose:block/blockredstonescanner",
+	"parent": "repurpose:block/block_redstone_scanner",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

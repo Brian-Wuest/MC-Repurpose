@@ -1,5 +1,5 @@
 {
-	"parent": "repurpose:block/redstoneclock",
+	"parent": "repurpose:block/block_redstone_clock",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

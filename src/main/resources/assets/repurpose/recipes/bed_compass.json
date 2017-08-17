@@ -10,7 +10,7 @@
     "ingredients": [
         {
             "item": "minecraft:bed",
-            "data": 0
+            "data": 32767
         },
         {
             "item": "minecraft:compass"
