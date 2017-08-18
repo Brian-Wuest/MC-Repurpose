@@ -2,11 +2,11 @@
     "conditions": [
         {
             "type": "repurpose:config_recipe",
-            "recipeKey": "Nether Star Recipe"
+            "recipeKey": "Nether Star"
         }
     ],
     "type": "minecraft:crafting_shaped",
-    "group": "Nether Star Recipe",
+    "group": "Nether Star",
     "pattern": [
         "A#A",
         "#B#",
@@ -33,8 +33,7 @@
         ]
     },
     "result": {
-        "item": "minecraft:chainmail_boots",
-        "count": 1,
-        "data": 0
+        "item": "minecraft:nether_star",
+        "count": 1
     }
 }

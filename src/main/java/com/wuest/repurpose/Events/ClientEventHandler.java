@@ -3,11 +3,14 @@ package com.wuest.repurpose.Events;
 import java.awt.Color;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
+import com.google.common.collect.Multimap;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
+import com.wuest.repurpose.Items.ItemStoneShears;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -15,15 +18,22 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,6 +58,90 @@ public class ClientEventHandler
 	private static final int BUFF_ICONS_OFFSET = 8;
 	
 	private static HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
+	
+	@SubscribeEvent
+	public static void itemToolTipEvent(ItemTooltipEvent event)
+	{
+		if (event.getEntityPlayer() != null)
+		{
+			List<String> currentToolTip = event.getToolTip();
+			ItemStack stack = event.getItemStack();
+			
+			Multimap<String, AttributeModifier> modifiers = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
+			
+			if (modifiers.containsKey(
+					SharedMonsterAttributes.ATTACK_SPEED.getName()))
+			{
+				int attackSpeedIndex = 0;
+				int attackDamageIndex = 0;
+				
+				// Find the appropriate index for each of the attributes.
+				for (String value : currentToolTip)
+				{
+					if (value.contains(I18n.translateToLocal("attribute.name." + SharedMonsterAttributes.ATTACK_SPEED.getName())))
+					{
+						attackSpeedIndex = currentToolTip.indexOf(value);
+					}
+					else if (value.contains(I18n.translateToLocal("attribute.name." + SharedMonsterAttributes.ATTACK_DAMAGE.getName()))) 
+					{
+						attackDamageIndex = currentToolTip.indexOf(value);
+					}
+					
+					if (attackSpeedIndex != 0 && attackDamageIndex != 0)
+					{
+						break;
+					}
+				}
+				
+				// Get the appropriate text for the tool tip. This is copied from the ItemStack class except for the equal check below since == doesn't work for UUIDs and .equals is necessary.
+				for (Entry<String, AttributeModifier> entry : modifiers.entries())
+	            {
+	                AttributeModifier attributemodifier = entry.getValue();
+	                double d0 = attributemodifier.getAmount();
+	                boolean foundAttribute = false;
+	                boolean foundAttackSpeed = false;
+	                
+	                if (attributemodifier.getID().equals(ItemStoneShears.getAttackDamageID()))
+	                {
+	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE); 
+	                	
+	                	if (attributeInstance != null)
+	                	{
+		                    d0 = d0 + attributeInstance.getBaseValue();
+		                    d0 = d0 + (double)EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
+		                    foundAttribute = true;
+	                	}
+	                }
+	                else if (attributemodifier.getID().equals(ItemStoneShears.getAttackSpeedID()))
+	                {
+	                	IAttributeInstance attributeInstance = event.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+	                	
+	                	if (attributeInstance != null)
+	                	{
+		                    d0 += attributeInstance.getBaseValue();
+		                    foundAttribute = true;
+		                    foundAttackSpeed = true;
+	                	}
+	                }
+	                
+	                if (foundAttribute)
+	                {
+	                	String value = " " + I18n.translateToLocalFormatted("attribute.modifier.equals." + attributemodifier.getOperation(), ItemStack.DECIMALFORMAT.format(d0), I18n.translateToLocal("attribute.name." + (String)entry.getKey()));
+	                	
+	                	if (foundAttackSpeed)
+	                	{
+	                		currentToolTip.set(attackSpeedIndex, value);
+	                	}
+	                	else
+	                	{
+	                		currentToolTip.set(attackDamageIndex, value);
+	                	}
+	                }
+	            }
+				
+			}
+		}
+	}
 	
 	/**
 	 * This event is called by GuiIngameForge during each frame by GuiIngameForge.pre() and GuiIngameForce.post().
