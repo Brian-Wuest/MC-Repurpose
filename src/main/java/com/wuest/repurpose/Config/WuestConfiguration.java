@@ -49,6 +49,7 @@ public class WuestConfiguration
 	public static String addStoneShearsName = "Stone Shears";
 	public static String addDiamonShardName = "Diamond Shard";
 	public static String addRedstoneScannerName = "Redstone Scanner";
+	public static String sickleRecipeName = "Sickle";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -88,7 +89,8 @@ public class WuestConfiguration
 		addFluffyFabricName,
 		addStoneShearsName,
 		addDiamonShardName,
-		addRedstoneScannerName
+		addRedstoneScannerName,
+		sickleRecipeName
 	};
 	
 	// Version Check Message Info

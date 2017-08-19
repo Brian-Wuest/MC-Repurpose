@@ -4,6 +4,11 @@ item.repurpose:item_whetstone.name=Whetstone
 item.repurpose:item_snorkel.name=Snorkel
 item.repurpose:item_diamond_shard.name=Diamond Shard
 item.repurpose:item_stone_shears.name=Stone Shears
+item.repurpose:item_wood_sickle.name=Wood Sickle
+item.repurpose:item_stone_sickle.name=Stone Sickle
+item.repurpose:item_iron_sickle.name=Iron Sickle
+item.repurpose:item_diamond_sickle.name=Diamond Sickle
+item.repurpose:item_gold_sickle.name=Gold Sickle
 
 tile.repurpose:block_redstone_clock.name=Redstone Clock
 tile.repurpose:block_dirt_stairs.name=Dirt Stairs
