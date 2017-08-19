@@ -297,6 +297,16 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
+		
+		// Swift Blades.
+		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.WOOD));
+		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.STONE));
+		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.IRON));
+		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.DIAMOND));
+		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.GOLD));
+		
+		// Coffers.
+		//ModRegistry.registerBlock(new BlockStoneCoffer("block_coffer"));
 	}
 
 	public static void RegisterEnchantments()

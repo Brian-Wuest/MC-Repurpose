@@ -1,0 +1,32 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Swift Blade"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Sickle",
+    "pattern": [
+        "  a",
+        " a ",
+        "b  "
+    ],
+    "key": {
+        "a": [
+            {
+                "item": "minecraft:cobblestone",
+                "data": 0
+            }
+        ],
+        "b" : [
+            {
+                "item": "minecraft:stick"
+            }
+        ]
+    },
+    "result": {
+        "item": "repurpose:item_swift_blade_wood",
+        "count": 1
+    }
+}

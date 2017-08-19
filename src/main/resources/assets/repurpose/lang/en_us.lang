@@ -9,6 +9,11 @@ item.repurpose:item_stone_sickle.name=Stone Sickle
 item.repurpose:item_iron_sickle.name=Iron Sickle
 item.repurpose:item_diamond_sickle.name=Diamond Sickle
 item.repurpose:item_gold_sickle.name=Gold Sickle
+item.repurpose:item_swift_blade_wood.name=Swift Blade: Wood
+item.repurpose:item_swift_blade_stone.name=Swift Blade: Stone
+item.repurpose:item_swift_blade_iron.name=Swift Blade: Iron
+item.repurpose:item_swift_blade_gold.name=Swift Blade: Gold
+item.repurpose:item_swift_blade_diamond.name=Swift Blade: Diamond
 
 tile.repurpose:block_redstone_clock.name=Redstone Clock
 tile.repurpose:block_dirt_stairs.name=Dirt Stairs
@@ -21,5 +26,6 @@ tile.repurpose:block_enriched_farmland.name=Enriched Farmland
 tile.repurpose:block_mini_redstone.name=Mini Block of Redstone
 tile.repurpose:block_redstone_scanner.name=Redstone Scanner
 tile.repurpose:block_half_glowstone_slab.name=Glowstone Slab
+tile.repurpose:block_coffer.name=Coffer
 
 enchantment.step_assist=Step Assist

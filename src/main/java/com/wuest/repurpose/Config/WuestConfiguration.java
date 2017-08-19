@@ -24,7 +24,6 @@ public class WuestConfiguration
 	public static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
 	public static String enableVersionCheckMessageName = "Enable Version Checking";
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
-	public static String enableSwiftCombatName = "Enable Swift Combat";
 	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
 
 	public static String addMetalRecipesName = "Metal Recipes";
@@ -50,6 +49,7 @@ public class WuestConfiguration
 	public static String addDiamonShardName = "Diamond Shard";
 	public static String addRedstoneScannerName = "Redstone Scanner";
 	public static String sickleRecipeName = "Sickle";
+	public static String swiftBladeName = "Swift Blade";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -90,7 +90,8 @@ public class WuestConfiguration
 		addStoneShearsName,
 		addDiamonShardName,
 		addRedstoneScannerName,
-		sickleRecipeName
+		sickleRecipeName,
+		swiftBladeName
 	};
 	
 	// Version Check Message Info
@@ -126,7 +127,6 @@ public class WuestConfiguration
 		Repurpose.proxy.proxyConfiguration.enableAppleStickExtraDrops = config.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName, WuestConfiguration.OPTIONS, true, "Determines if all types of leaves will drop apples and/or sticks.");
 		Repurpose.proxy.proxyConfiguration.enableExtraDropsFromDirt = config.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName, WuestConfiguration.OPTIONS, true, "Determines if Potatoes, Carrots, Bones, Clay and Beetroots will drop when breaking dirt/grasss blocks.");
 		Repurpose.proxy.proxyConfiguration.enableExtraDropsFromStone = config.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName, WuestConfiguration.OPTIONS, true, "Determines if Coal, Iron Nuggets and Flint will drop when breaking stone");
-		Repurpose.proxy.proxyConfiguration.enableSwiftCombat = config.getBoolean(WuestConfiguration.enableSwiftCombatName, WuestConfiguration.OPTIONS, true, "Determines if all items are updated to have swift combat swings. Similar to attacking in pre-1.9 minecraft. New combat speeds only show in inventories. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.enableFlatBedrockGeneration = config.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName, WuestConfiguration.OPTIONS, true, "Determines if overworld bedrock is flat. Server configuration overrides client.");
 		
 		// This one is special since it requires a minecraft restart.
@@ -173,7 +173,6 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableAppleStickExtraDropsName, this.enableAppleStickExtraDrops);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
-		tag.setBoolean(WuestConfiguration.enableSwiftCombatName, this.enableSwiftCombat);
 		tag.setBoolean(WuestConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
 		
 		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet())
@@ -206,7 +205,6 @@ public class WuestConfiguration
 		config.enableExtraDropsFromDirt = tag.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName);
 		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
 		
-		config.enableSwiftCombat = tag.getBoolean(WuestConfiguration.enableSwiftCombatName);
 		config.enableFlatBedrockGeneration = tag.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName);
 		
 		for (String key : WuestConfiguration.recipeKeys)

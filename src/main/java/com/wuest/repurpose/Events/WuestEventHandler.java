@@ -59,6 +59,7 @@ import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -100,30 +101,13 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public static void equipmentChangeEvent(LivingEquipmentChangeEvent event)
 	{
-		if (event.getEntity() instanceof EntityPlayer && event.getSlot() == EntityEquipmentSlot.MAINHAND
-				&& Repurpose.proxy.getServerConfiguration().enableSwiftCombat)
+		if (event.getEntity() instanceof EntityPlayer && event.getSlot() == EntityEquipmentSlot.MAINHAND)
 		{
-			// Every item the player equips in the main hand which has an attack speed modifier on it will be adjusted to be pre-cooldown combat speed.
+			// This is still here to remove old attack modifiers which were incorrectly added.
 			Multimap<String, AttributeModifier> modifiers = event.getTo()
 					.getAttributeModifiers(event.getSlot());
 
-			if (modifiers.containsKey(
-					SharedMonsterAttributes.ATTACK_SPEED.getName()))
-			{
-				modifiers.removeAll(
-						SharedMonsterAttributes.ATTACK_SPEED.getName());
-				
-				modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-						new AttributeModifier(ItemStoneShears.getAttackSpeedID(),
-								"Weapon modifier", 6, 0));
-
-				// Add the attributes to the item stack's NBT tag. This way when the attributes are received for this item the NBT data is used instead.
-				for (Entry<String, AttributeModifier> entry : modifiers.entries())
-				{
-					event.getTo().addAttributeModifier(entry.getKey(),
-							entry.getValue(), event.getSlot());
-				}
-			}
+				WuestEventHandler.removeAttackModifiers(event.getTo());
 		}
 	}
 	
@@ -135,6 +119,15 @@ public class WuestEventHandler
 			NBTTagCompound tag = Repurpose.proxy.proxyConfiguration.ToNBTTagCompound();
 			Repurpose.network.sendTo(new ConfigSyncMessage(tag), (EntityPlayerMP)event.player);
 			System.out.println("Sent config to '" + event.player.getDisplayNameString() + ".'");		
+			
+			if (!Repurpose.proxy.proxyConfiguration.enableSwiftCombat)
+			{
+				// Go through the player's inventory and remove the NBTTags.
+				for (ItemStack stack : event.player.inventory.mainInventory)
+				{
+			       WuestEventHandler.removeAttackModifiers(stack);
+				}
+			}
 		}
 	}
 	
@@ -679,4 +672,51 @@ public class WuestEventHandler
 		return bigDecimal.doubleValue();
 	}
 
+	private static void removeAttackModifiers(ItemStack stack)
+	{
+		if (stack.getTagCompound() != null
+				&& stack.getTagCompound().hasKey("AttributeModifiers"))
+		{
+			NBTTagList tagList = stack.getTagCompound().getTagList("AttributeModifiers", 10);
+			ArrayList<Integer> indexesToRemove = new ArrayList<Integer>();
+			
+			// When this value is 2 then only this mod added attribute modifiers
+			if (tagList.tagCount() >= 2)
+			{
+				for (int i = 0; i < tagList.tagCount(); i++)
+	            {
+	                NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(i);
+	                AttributeModifier attributeModifier = SharedMonsterAttributes.readAttributeModifierFromNBT(nbttagcompound);
+	                
+	                if (attributeModifier.getID().equals(ItemStoneShears.getAttackDamageID())
+	                		|| attributeModifier.getID().equals(ItemStoneShears.getAttackSpeedID()))
+	                {
+	                	indexesToRemove.add(i);
+	                }
+	                
+	                if (attributeModifier.getID().equals(ItemStoneShears.getAttackSpeedID())
+	                		&& attributeModifier.getAmount() != 6)
+	                {
+	                	// Another mod did some attribute modifiers, don't remove them so I don't break that mod.
+	                	indexesToRemove.clear();
+	                }
+	            }
+				
+				for (int i = 0; i < indexesToRemove.size(); i++)
+				{
+					tagList.removeTag(indexesToRemove.get(i)-i);
+				}
+				
+				if (tagList.tagCount() < 2)
+				{
+					stack.removeSubCompound("AttributeModifiers");
+				}
+				else
+				{
+					stack.setTagInfo("AttributeModifiers", tagList);
+				}
+			}
+		}
+	}
+	
 }
