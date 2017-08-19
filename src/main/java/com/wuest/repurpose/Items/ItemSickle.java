@@ -42,6 +42,11 @@ public class ItemSickle extends Item
     protected Item.ToolMaterial toolMaterial;
     protected int breakRadius = 0;
 
+    /**
+     * Initializes a new instance of the ItemSickle class.
+     * @param material The type of tool material.
+     * @param name The name to register.
+     */
     public ItemSickle(Item.ToolMaterial material, String name)
     {
         this.toolMaterial = material;
@@ -50,6 +55,8 @@ public class ItemSickle extends Item
         this.setCreativeTab(CreativeTabs.TOOLS);
         this.attackDamage = 1.0F + material.getDamageVsEntity();
         this.breakRadius = 1 + material.getHarvestLevel();
+        this.setCreativeTab(CreativeTabs.TOOLS);
+        
         ModRegistry.setItemName(this, name);
     }
 
