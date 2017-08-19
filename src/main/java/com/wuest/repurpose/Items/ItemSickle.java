@@ -92,43 +92,48 @@ public class ItemSickle extends Item
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving)
     {
-        if ((double)state.getBlockHardness(worldIn, pos) != 0.0D
-        		&& !(state.getBlock() instanceof BlockLeaves))
-        {
-            stack.damageItem(2, entityLiving);
-        }
-        else if ((state.getBlock() instanceof BlockBush
-        		|| state.getBlock() instanceof BlockLeaves) 
-        		&& !worldIn.isRemote && entityLiving instanceof EntityPlayer)
-        {
-        	BlockPos corner1 = pos.north(this.breakRadius).east(this.breakRadius).up(this.breakRadius);
-        	BlockPos corner2 = pos.south(this.breakRadius).west(this.breakRadius).down(this.breakRadius);
-        	EntityPlayer player = (EntityPlayer)entityLiving;
-        	
-        	for (BlockPos currentPos : BlockPos.getAllInBox(corner1, corner2))
-        	{
-        		IBlockState currentState = worldIn.getBlockState(currentPos);
-        		
-        		if (currentState != null 
-        				&& (currentState.getBlock() instanceof BlockBush)
-        				|| (currentState.getBlock() instanceof BlockLeaves))
-        		{
-        			boolean canHarvest = currentState.getBlock().canHarvestBlock(worldIn, currentPos, player);
-        			canHarvest = currentState.getBlock().removedByPlayer(currentState, worldIn, currentPos, player, canHarvest);
-        			
-        			if (canHarvest)
-        			{
-        				worldIn.playEvent(2001, currentPos, Block.getStateId(currentState));
-	        			currentState.getBlock().onBlockDestroyedByPlayer(worldIn, currentPos, currentState);
-	        			currentState.getBlock().breakBlock(worldIn, currentPos, currentState);
+    	if (!worldIn.isRemote)
+    	{
+	    	stack.damageItem(1, entityLiving);
+	    	
+	        if ((double)state.getBlockHardness(worldIn, pos) != 0.0D
+	        		&& !(state.getBlock() instanceof BlockLeaves))
+	        {
+	            stack.damageItem(1, entityLiving);
+	        }
+	        else if ((state.getBlock() instanceof BlockBush
+	        		|| state.getBlock() instanceof BlockLeaves) 
+	        		&& entityLiving instanceof EntityPlayer)
+	        {
+	        	BlockPos corner1 = pos.north(this.breakRadius).east(this.breakRadius).up(this.breakRadius);
+	        	BlockPos corner2 = pos.south(this.breakRadius).west(this.breakRadius).down(this.breakRadius);
+	        	EntityPlayer player = (EntityPlayer)entityLiving;
+	        	
+	        	for (BlockPos currentPos : BlockPos.getAllInBox(corner1, corner2))
+	        	{
+	        		IBlockState currentState = worldIn.getBlockState(currentPos);
+	        		
+	        		if (currentState != null 
+	        				&& (currentState.getBlock() instanceof BlockBush)
+	        				|| (currentState.getBlock() instanceof BlockLeaves))
+	        		{
+	        			boolean canHarvest = currentState.getBlock().canHarvestBlock(worldIn, currentPos, player);
+	        			canHarvest = currentState.getBlock().removedByPlayer(currentState, worldIn, currentPos, player, canHarvest);
 	        			
-	        			int fortune = this.toolMaterial == ToolMaterial.GOLD ? 1 : 0;
-	        			
-	        			currentState.getBlock().dropBlockAsItem(worldIn, currentPos, currentState, fortune);
-        			}
-        		}
-        	}
-        }
+	        			if (canHarvest)
+	        			{
+	        				worldIn.playEvent(2001, currentPos, Block.getStateId(currentState));
+		        			currentState.getBlock().onBlockDestroyedByPlayer(worldIn, currentPos, currentState);
+		        			currentState.getBlock().breakBlock(worldIn, currentPos, currentState);
+		        			
+		        			int fortune = this.toolMaterial == ToolMaterial.GOLD ? 1 : 0;
+		        			
+		        			currentState.getBlock().dropBlockAsItem(worldIn, currentPos, currentState, fortune);
+	        			}
+	        		}
+	        	}
+	        }
+    	}
 
         return true;
     }
