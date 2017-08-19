@@ -292,11 +292,11 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
 		
 		// Sickles.
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
+		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
+		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
+		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
+		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
+		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
 		
 		// Swift Blades.
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.WOOD));
