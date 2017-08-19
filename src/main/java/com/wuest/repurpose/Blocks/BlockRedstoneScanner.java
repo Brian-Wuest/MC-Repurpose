@@ -270,7 +270,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
     	}
     	else
     	{
-    		tooltip.add("Can scan in a radius around it to detect entities and generates a redstone signal if it finds one.");
+    		tooltip.add("This configurable machine is able to connect to nearby redstone sensitive devices, and send a signal to them based on nearby entities. Right Click to configure.");
     	}
     }
 }

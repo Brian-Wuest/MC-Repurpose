@@ -136,7 +136,7 @@ public class BlockEnrichedFarmland extends BlockFarmland
     	}
     	else
     	{
-    		tooltip.add("Can grow just about any crop, even sugar cane!");
+    		tooltip.add("This hardy soil always remains hydrated and tilled, no matter the climate!");
     	}
     }
 }

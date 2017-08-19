@@ -48,7 +48,7 @@ public class ItemDiamondShard extends Item
     	}
     	else
     	{
-    		tooltip.add("You'll have to dig for some coal to find this.");
+    		tooltip.add("Found occasionally when mining coal blocks.  Maybe with a few more you could make a whole diamond...");
     	}
     }
 }

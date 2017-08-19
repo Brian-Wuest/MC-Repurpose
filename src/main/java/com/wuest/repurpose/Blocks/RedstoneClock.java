@@ -198,7 +198,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
     	}
     	else
     	{
-    		tooltip.add("Periodically produces a restone signal, can be configured on right-click.");
+    		tooltip.add("This simple clock is able to produce a redstone signal at configurable intervals.  Right Click to configure.");
     	}
     }
 }
