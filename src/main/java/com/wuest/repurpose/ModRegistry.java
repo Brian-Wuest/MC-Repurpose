@@ -291,6 +291,7 @@ public class ModRegistry
 		// Stone shears.
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
 		
+		// Sickles.
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
