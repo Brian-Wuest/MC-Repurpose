@@ -83,7 +83,9 @@ public class ItemSickle extends Item
 	        			currentState.getBlock().onBlockDestroyedByPlayer(worldIn, currentPos, currentState);
 	        			currentState.getBlock().breakBlock(worldIn, currentPos, currentState);
 	        			
-	        			currentState.getBlock().dropBlockAsItem(worldIn, currentPos, currentState, 0);
+	        			int fortune = this.toolMaterial == ToolMaterial.GOLD ? 1 : 0;
+	        			
+	        			currentState.getBlock().dropBlockAsItem(worldIn, currentPos, currentState, fortune);
         			}
         		}
         	}
