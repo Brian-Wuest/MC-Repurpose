@@ -2,7 +2,10 @@ package com.wuest.repurpose.Blocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+
+import javax.annotation.Nullable;
 
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
@@ -24,6 +27,7 @@ import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,10 +41,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 {
@@ -173,4 +180,25 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 		
 		return i == 0 ? tileEntity.getConfig().getUnPoweredTick() : tileEntity.getConfig().getPoweredTick();
 	}
+	
+    /**
+     * allows items to add custom lines of information to the mouseover description
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced)
+    {
+    	super.addInformation(stack, world, tooltip, advanced);
+    	
+    	boolean advancedKeyDown = Minecraft.getMinecraft().currentScreen.isShiftKeyDown();
+    	
+    	if (!advancedKeyDown)
+    	{
+    		tooltip.add("Hold" + TextFormatting.BLUE + " Shift " + TextFormatting.GRAY +  "for advanced information.");
+    	}
+    	else
+    	{
+    		tooltip.add("Periodically produces a restone signal, can be configured on right-click.");
+    	}
+    }
 }

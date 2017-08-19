@@ -22,6 +22,8 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,6 +39,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -250,4 +253,24 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 		worldIn.notifyNeighborsOfStateChange(pos.south(), blockType, true);
 	}
 
+    /**
+     * allows items to add custom lines of information to the mouseover description
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced)
+    {
+    	super.addInformation(stack, world, tooltip, advanced);
+    	
+    	boolean advancedKeyDown = Minecraft.getMinecraft().currentScreen.isShiftKeyDown();
+    	
+    	if (!advancedKeyDown)
+    	{
+    		tooltip.add("Hold" + TextFormatting.BLUE + " Shift " + TextFormatting.GRAY +  "for advanced information.");
+    	}
+    	else
+    	{
+    		tooltip.add("Can scan in a radius around it to detect entities and generates a redstone signal if it finds one.");
+    	}
+    }
 }
