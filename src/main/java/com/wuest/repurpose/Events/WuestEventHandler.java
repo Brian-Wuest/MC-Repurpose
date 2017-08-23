@@ -532,6 +532,8 @@ public class WuestEventHandler
 	{		
 		// Register the ore dictionary blocks.
 		ModRegistry.RegisterRecipes();
+		
+		ModRegistry.RegisterOreDictionaryRecords();
 	}
 	
 	private static void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)

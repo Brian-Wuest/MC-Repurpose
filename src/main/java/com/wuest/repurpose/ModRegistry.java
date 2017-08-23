@@ -37,6 +37,7 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModRegistry
 {
@@ -292,11 +293,11 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
 		
 		// Sickles.
-		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
-		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
-		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
-		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
-		//ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
 		
 		// Swift Blades.
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.WOOD));
@@ -307,12 +308,23 @@ public class ModRegistry
 		
 		// Coffers.
 		//ModRegistry.registerBlock(new BlockStoneCoffer("block_coffer"));
+		
+		// Iron Chunk.
+		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
 	}
 
 	public static void RegisterEnchantments()
 	{
 		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[] {EntityEquipmentSlot.FEET});
 		ForgeRegistries.ENCHANTMENTS.register(ModRegistry.stepAssist);
+	}
+	
+	/**
+	 * Registers records into the ore dictionary.
+	 */
+	public static void RegisterOreDictionaryRecords()
+	{
+		// Register certain blocks into the ore dictionary.
 	}
 	
 	/**

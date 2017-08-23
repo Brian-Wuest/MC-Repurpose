@@ -50,6 +50,7 @@ public class WuestConfiguration
 	public static String addRedstoneScannerName = "Redstone Scanner";
 	public static String sickleRecipeName = "Sickle";
 	public static String swiftBladeName = "Swift Blade";
+	public static String ironLumpName = "Iron Lump";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -91,7 +92,8 @@ public class WuestConfiguration
 		addDiamonShardName,
 		addRedstoneScannerName,
 		sickleRecipeName,
-		swiftBladeName
+		swiftBladeName,
+		ironLumpName
 	};
 	
 	// Version Check Message Info

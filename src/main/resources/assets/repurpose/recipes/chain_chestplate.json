@@ -8,20 +8,14 @@
     "type": "minecraft:crafting_shaped",
     "group": "Armor Recipes",
     "pattern": [
-        "A A",
-        "A#A",
-        "###"
+        "a a",
+        "aaa",
+        "aaa"
     ],
     "key": {
-        "#": [
+        "a": [
             {
-                "item": "minecraft:iron_ingot",
-                "data": 0
-            }
-        ],
-        "A" : [
-            {
-                "item": "minecraft:leather",
+                "item": "repurpose:item_iron_lump",
                 "data": 0
             }
         ]
