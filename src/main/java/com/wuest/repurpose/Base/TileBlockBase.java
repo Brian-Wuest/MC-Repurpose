@@ -42,7 +42,6 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 		super(materialIn, color);
 	}
 	
-    @SuppressWarnings ("unchecked")
     public Class<T> getTypeParameterClass()
     {
         Type type = getClass().getGenericSuperclass();

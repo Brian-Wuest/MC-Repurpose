@@ -99,7 +99,6 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity
 		return stack;
 	}
 	
-    @SuppressWarnings ("unchecked")
     public Class<T> getTypeParameterClass()
     {
         Type type = getClass().getGenericSuperclass();
