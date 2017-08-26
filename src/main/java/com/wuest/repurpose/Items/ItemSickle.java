@@ -1,10 +1,11 @@
 package com.wuest.repurpose.Items;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.wuest.repurpose.ModRegistry;
 
 import net.minecraft.block.Block;
@@ -14,17 +15,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -36,9 +32,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WuestMan
  *
  */
-public class ItemSickle extends Item
+public class ItemSickle extends ItemTool
 {
-	private final float attackDamage;
+	public static Set<Block> effectiveBlocks = Sets.newHashSet(
+			Blocks.LEAVES, 
+			Blocks.LEAVES2, 
+			Blocks.TALLGRASS, 
+			Blocks.DEADBUSH, 
+			Blocks.RED_FLOWER, 
+			Blocks.YELLOW_FLOWER, 
+			Blocks.DOUBLE_PLANT);
+	
     protected Item.ToolMaterial toolMaterial;
     protected int breakRadius = 0;
 
@@ -49,14 +53,9 @@ public class ItemSickle extends Item
      */
     public ItemSickle(Item.ToolMaterial material, String name)
     {
-        this.toolMaterial = material;
-        this.maxStackSize = 1;
-        this.setMaxDamage(material.getMaxUses());
-        this.setCreativeTab(CreativeTabs.TOOLS);
-        this.attackDamage = 1.0F + material.getDamageVsEntity();
+    	super(1.0f, -2.4000000953674316f, material, effectiveBlocks);
         this.breakRadius = 1 + material.getHarvestLevel();
-        this.setCreativeTab(CreativeTabs.TOOLS);
-        
+
         ModRegistry.setItemName(this, name);
     }
 
@@ -84,6 +83,31 @@ public class ItemSickle extends Item
         {
             return 15.0F;
         }
+    }
+    
+    /**
+     * Return the enchantability factor of the item, most of the time is based on material.
+     */
+    @Override
+    public int getItemEnchantability()
+    {
+        return this.toolMaterial.getEnchantability();
+    }
+
+    /**
+     * Return whether this item is repairable in an anvil.
+     */
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+    {
+        ItemStack mat = this.toolMaterial.getRepairItemStack();
+        
+        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) 
+    	{
+    		return true;
+    	}
+        
+        return super.getIsRepairable(toRepair, repair);
     }
     
     /**
@@ -136,23 +160,6 @@ public class ItemSickle extends Item
     	}
 
         return true;
-    }
-    
-    /**
-     * Gets a map of item attribute modifiers, used by ItemSword to increase hit damage.
-     */
-    @Override
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
-    {
-        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
-
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
-        {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
-        }
-
-        return multimap;
     }
     
     /**
