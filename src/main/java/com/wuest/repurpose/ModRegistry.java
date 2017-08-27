@@ -18,7 +18,10 @@ import com.wuest.repurpose.Proxy.Messages.Handlers.*;
 import com.wuest.repurpose.Tiles.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.init.*;
@@ -309,8 +312,13 @@ public class ModRegistry
 		// Coffers.
 		//ModRegistry.registerBlock(new BlockStoneCoffer("block_coffer"));
 		
-		// Iron Chunk.
+		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
+		
+		// Charcoal block.
+		Block block = new BlockCharcoal("block_charcoal");
+		ItemBlock itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
+		ModRegistry.registerBlock(block, itemBlock);
 	}
 
 	public static void RegisterEnchantments()
@@ -325,6 +333,7 @@ public class ModRegistry
 	public static void RegisterOreDictionaryRecords()
 	{
 		// Register certain blocks into the ore dictionary.
+		OreDictionary.registerOre("blockCharcoal", ModRegistry.GetBlock(BlockCharcoal.class));
 	}
 	
 	/**

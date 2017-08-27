@@ -28,5 +28,6 @@ tile.repurpose:block_mini_redstone.name=Mini Block of Redstone
 tile.repurpose:block_redstone_scanner.name=Redstone Scanner
 tile.repurpose:block_half_glowstone_slab.name=Glowstone Slab
 tile.repurpose:block_coffer.name=Coffer
+tile.repurpose:block_charcoal.name=Charcoal Block
 
 enchantment.step_assist=Step Assist
