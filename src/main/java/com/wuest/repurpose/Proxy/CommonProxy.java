@@ -5,18 +5,22 @@ import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.UpdateChecker;
 import com.wuest.repurpose.Blocks.*;
+import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Events.WuestEventHandler;
 import com.wuest.repurpose.Gui.*;
 import com.wuest.repurpose.Items.*;
 import com.wuest.repurpose.Proxy.Messages.*;
 import com.wuest.repurpose.Proxy.Messages.Handlers.*;
+import com.wuest.repurpose.Tiles.TileEntityCoffer;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -101,21 +105,19 @@ public class CommonProxy implements IGuiHandler
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
+		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+		
+		if (ID == GuiCoffer.GUI_ID)
+		{
+			return new ContainerCoffer(player.inventory, (TileEntityCoffer)tileEntity, ((TileEntityCoffer)tileEntity).getType(), 0, 0);
+		}
+		
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		if (ID == GuiRedstoneClock.GUI_ID)
-		{
-			return new GuiRedstoneClock(x, y, z);
-		}
-		else if (ID == GuiRedstoneScanner.GUI_ID)
-		{
-			return new GuiRedstoneScanner(x, y, z);
-		}
-
 		return null;
 	}
 

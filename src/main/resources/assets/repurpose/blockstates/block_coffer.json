@@ -1,0 +1,6 @@
+{
+    "variants": 
+    {
+        "variant=iron": { "model": "repurpose:block_coffer" }
+    }
+}

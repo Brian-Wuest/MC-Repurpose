@@ -177,6 +177,11 @@ public class ModRegistry
 		return ModRegistry.stepAssist;
 	}
 	
+	public static BlockCoffer Coffer()
+	{
+		return ModRegistry.GetBlock(BlockCoffer.class);
+	}
+	
 	/**
 	 * Static constructor for the mod registry.
 	 */
@@ -196,6 +201,19 @@ public class ModRegistry
 		for (Item entry : ModRegistry.ModItems)
 		{
 			if (entry.getClass().isAssignableFrom(genericClass))
+			{
+				return (T) entry;
+			}
+		}
+
+		return null;
+	}
+	
+	public static <T extends Item> T GetItemSpecific(Class<T> genericClass)
+	{
+		for (Item entry : ModRegistry.ModItems)
+		{
+			if (entry.getClass() == genericClass)
 			{
 				return (T) entry;
 			}
@@ -309,9 +327,6 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.DIAMOND));
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.GOLD));
 		
-		// Coffers.
-		//ModRegistry.registerBlock(new BlockStoneCoffer("block_coffer"));
-		
 		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
 		
@@ -319,6 +334,12 @@ public class ModRegistry
 		Block block = new BlockCharcoal("block_charcoal");
 		ItemBlock itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
 		ModRegistry.registerBlock(block, itemBlock);
+		
+		// Coffers.
+		block = new BlockCoffer();
+		itemBlock = new ItemBlockCoffer(block);
+		ModRegistry.registerBlock(block, itemBlock);
+		GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
 	}
 
 	public static void RegisterEnchantments()

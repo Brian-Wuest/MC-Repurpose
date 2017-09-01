@@ -16,6 +16,7 @@ item.repurpose:item_swift_blade_gold.name=Swift Blade: Gold
 item.repurpose:item_swift_blade_diamond.name=Swift Blade: Diamond
 item.repurpose:item_iron_lump.name=Iron Lump
 
+tile.repurpose.chest.iron.name=Iron Coffer
 tile.repurpose:block_redstone_clock.name=Redstone Clock
 tile.repurpose:block_dirt_stairs.name=Dirt Stairs
 tile.repurpose:block_grass_stairs.name=Grass Stairs

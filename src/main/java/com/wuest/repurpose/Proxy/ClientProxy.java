@@ -1,12 +1,21 @@
 package com.wuest.repurpose.Proxy;
 
+import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
+import com.wuest.repurpose.Blocks.BlockCoffer;
+import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
 import com.wuest.repurpose.Events.WuestEventHandler;
+import com.wuest.repurpose.Gui.GuiCoffer;
+import com.wuest.repurpose.Gui.GuiRedstoneClock;
+import com.wuest.repurpose.Gui.GuiRedstoneScanner;
+import com.wuest.repurpose.Items.ItemBlockCoffer;
+import com.wuest.repurpose.Renderer.TileEntityCofferRenderer;
+import com.wuest.repurpose.Tiles.TileEntityCoffer;
 import com.wuest.repurpose.particle.MysteriousParticle;
 
 import net.minecraft.block.Block;
@@ -16,16 +25,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -41,7 +54,7 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
-	{
+	{	 
 		super.preInit(event);
 	}
 
@@ -70,6 +83,11 @@ public class ClientProxy extends CommonProxy
 		BlockGrassSlab.RegisterBlockRenderer();
 
 		BlockCustomWall.RegisterBlockRenderer();
+		
+		for (IronChestType type : IronChestType.values())
+		{
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoffer.class, new TileEntityCofferRenderer());
+		}
 	}
 
 	@Override
@@ -103,6 +121,27 @@ public class ClientProxy extends CommonProxy
 				player.posZ + player.world.rand.nextFloat() * player.width * 2.0F - player.width, motionX, motionY, motionZ);
 		
 		Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);
+	}
+	
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
+		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+		 
+		if (ID == GuiRedstoneClock.GUI_ID)
+		{
+			return new GuiRedstoneClock(x, y, z);
+		}
+		else if (ID == GuiRedstoneScanner.GUI_ID)
+		{
+			return new GuiRedstoneScanner(x, y, z);
+		}
+		else if (tileEntity != null && tileEntity instanceof TileEntityCoffer)
+		{
+			return GuiCoffer.GUI.buildGUI(((TileEntityCoffer)tileEntity).getType(), player.inventory, (TileEntityCoffer) tileEntity);
+		}
+
+		return null;
 	}
 	
 	@Override
