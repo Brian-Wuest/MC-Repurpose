@@ -3,6 +3,11 @@ package com.wuest.repurpose.Gui;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+/**
+ * 
+ * @author WuestMan
+ *
+ */
 public class CustomSlot extends Slot
 {
 	private boolean enabled;

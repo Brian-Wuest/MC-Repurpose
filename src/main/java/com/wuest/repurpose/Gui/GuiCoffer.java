@@ -16,60 +16,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
+/**
+ * 
+ * @author WuestMan
+ *
+ */
 public class GuiCoffer extends InventoryEffectRenderer
 {
-    public enum ResourceList
-    {
-        IRON(new ResourceLocation("repurpose", "textures/gui/iron_container.png")),
-        COPPER(new ResourceLocation("repurpose", "textures/gui/copper_container.png")),
-        SILVER(new ResourceLocation("repurpose", "textures/gui/silver_container.png")),
-        GOLD(new ResourceLocation("repurpose", "textures/gui/gold_container.png")),
-        DIAMOND(new ResourceLocation("repurpose", "textures/gui/diamond_container.png")),
-        DIRT(new ResourceLocation("repurpose", "textures/gui/dirt_container.png"));
-        public final ResourceLocation location;
-
-        ResourceList(ResourceLocation loc)
-        {
-            this.location = loc;
-        }
-    }
-
-    public enum GUI
-    {
-        IRON(184, 202, ResourceList.IRON, IronChestType.IRON);
-
-        private int xSize;
-        private int ySize;
-        private ResourceList guiResourceList;
-        private IronChestType mainType;
-
-        GUI(int xSize, int ySize, ResourceList guiResourceList, IronChestType mainType)
-        {
-            this.xSize = xSize;
-            this.ySize = ySize;
-            this.guiResourceList = guiResourceList;
-            this.mainType = mainType;
-        }
-
-        protected Container makeContainer(IInventory player, IInventory chest)
-        {
-            return new ContainerCoffer(player, chest, this.mainType, this.xSize, this.ySize);
-        }
-
-        public static GuiCoffer buildGUI(IronChestType type, IInventory playerInventory, TileEntityCoffer chestInventory)
-        {
-            return new GuiCoffer(values()[chestInventory.getType().ordinal()], playerInventory, chestInventory);
-        }
-    }
-
     public static final int GUI_ID = 7;
     private GUI type;
     
     /** Amount scrolled in Creative mode inventory (0 = top, 1 = bottom) */
     private float currentScroll;
-    
-    /** True if the scrollbar is being dragged */
-    private boolean isScrolling;
     
     /** True if the left mouse button was held down last time drawScreen was called. */
     private boolean wasClicking;
@@ -91,6 +49,7 @@ public class GuiCoffer extends InventoryEffectRenderer
     {
         super.initGui();
         
+        // Make sure to scroll to the top on opening.
         ((ContainerCoffer)this.inventorySlots).scrollTo(0f);
     }
     
@@ -158,4 +117,57 @@ public class GuiCoffer extends InventoryEffectRenderer
 
         this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
     }
+    
+	/**
+	 * 
+	 * @author WuestMan
+	 * This enum is used to contain the various variants of chests and what their gui looks like.
+	 *
+	 */
+    public enum ResourceList
+    {
+        IRON(new ResourceLocation("repurpose", "textures/gui/coffer_container.png"));
+    	
+        public final ResourceLocation location;
+
+        ResourceList(ResourceLocation loc)
+        {
+            this.location = loc;
+        }
+    }
+
+    /**
+     * 
+     * @author WuestMan
+     * This enum is used to contain various configuration options for each type of chest size.
+     *
+     */
+    public enum GUI
+    {
+        IRON(184, 202, ResourceList.IRON, IronChestType.IRON);
+
+        private int xSize;
+        private int ySize;
+        private ResourceList guiResourceList;
+        private IronChestType mainType;
+
+        GUI(int xSize, int ySize, ResourceList guiResourceList, IronChestType mainType)
+        {
+            this.xSize = xSize;
+            this.ySize = ySize;
+            this.guiResourceList = guiResourceList;
+            this.mainType = mainType;
+        }
+
+        public Container makeContainer(IInventory player, IInventory chest)
+        {
+            return new ContainerCoffer(player, chest, this.mainType, this.xSize, this.ySize);
+        }
+
+        public static GuiCoffer buildGUI(IronChestType type, IInventory playerInventory, TileEntityCoffer chestInventory)
+        {
+            return new GuiCoffer(values()[chestInventory.getType().ordinal()], playerInventory, chestInventory);
+        }
+    }
+
 }

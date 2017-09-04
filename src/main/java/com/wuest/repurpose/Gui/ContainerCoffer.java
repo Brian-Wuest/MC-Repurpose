@@ -17,6 +17,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
+/**
+ * 
+ * @author WuestMan
+ *
+ */
 public class ContainerCoffer extends Container
 {
     private IronChestType type;
