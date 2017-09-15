@@ -336,10 +336,10 @@ public class ModRegistry
 		ModRegistry.registerBlock(block, itemBlock);
 		
 		// Coffers.
-		block = new BlockCoffer();
-		itemBlock = new ItemBlockCoffer(block);
-		ModRegistry.registerBlock(block, itemBlock);
-		GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
+		//block = new BlockCoffer();
+		//itemBlock = new ItemBlockCoffer(block);
+		//ModRegistry.registerBlock(block, itemBlock);
+		//GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
 	}
 
 	public static void RegisterEnchantments()
