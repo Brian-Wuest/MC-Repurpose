@@ -60,11 +60,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -291,6 +294,45 @@ public class WuestEventHandler
 		//this.setPlayerLight(event);
 	}
 	
+	@SubscribeEvent
+	public static void BedrockGeneration(PopulateChunkEvent.Pre event)
+	{
+		if (!event.getWorld().isRemote && WuestUtilities.proxy.getServerConfiguration().enableFlatBedrockGeneration) 
+		{
+			int dimension = event.getWorld().provider.getDimension();
+			
+			// For the overworld make sure the bedrock is flat.
+			if (dimension == 0)
+			{
+				Chunk chunk = event.getWorld().getChunkFromChunkCoords(event.getChunkX(), event.getChunkZ());
+				
+				if (chunk != null)
+				{
+					for (ExtendedBlockStorage storage : chunk
+							.getBlockStorageArray())
+					{
+						if (storage != null)
+						{
+							for (int x = 0; x < 16; x++)
+							{
+								for (int z = 0; z < 16; z++)
+								{
+									for (int y = 1; y < 16; y++)
+									{
+										if (storage.get(x, y, z).equals(Blocks.BEDROCK.getDefaultState()))
+										{
+											storage.set(x, y, z, Blocks.STONE.getDefaultState());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 /*	@SubscribeEvent
 	public void TextureStitch(TextureStitchEvent.Pre preEvent)
 	{
@@ -384,7 +426,7 @@ public class WuestEventHandler
 	{
 		Block block = event.getState().getBlock();
 		
-		if (!event.isCanceled() && !event.isSilkTouching())
+		if (!event.isCanceled() && !event.isSilkTouching() && !event.getWorld().isRemote)
 		{
 			// Get the random chance.
 			double maxPercentage = 0.01;
@@ -392,65 +434,49 @@ public class WuestEventHandler
 			// For coal ore, add a random chance that a diamond shard can drop.
 			if (block == Blocks.COAL_ORE)
 			{ 
-				int fortuneLevel = event.getFortuneLevel();
-				
-				switch (fortuneLevel)
-				{
-					case 1:
-					{
-						maxPercentage = 0.015;
-						break;
-					}
-					
-					case 2:
-					{
-						maxPercentage = 0.02;
-						break;
-					}
-					
-					case 3:
-					{
-						maxPercentage = 0.025;
-						break;
-					}
-					
-					default:
-					{
-						maxPercentage = 0.01;
-					}
-				}
-				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.diamondShardDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, ModRegistry.DiamondShard(), 1);
 			}
 			else if (block instanceof BlockLeaves && WuestUtilities.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
 				// Chance to drop apples.
-				maxPercentage = 0.04;
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.appleDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
 				
 				// Chance to drop sticks.
-				maxPercentage = 0.06;
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.stickDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
 			}
 			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromDirt)
 			{
 				// Check for chance of drop for carrots, potatoes, beetroots and bones.
-				maxPercentage = 0.04;
-				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.carrotDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.potatoDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.beetRootDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BEETROOT, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.boneDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BONE, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.clayBallDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CLAY_BALL, 1);
 			}
 			else if (block instanceof BlockStone && WuestUtilities.proxy.proxyConfiguration.enableExtraDropsFromStone)
 			{
-				maxPercentage = 0.04;
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.coalDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.ironNuggetDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.field_191525_da, 1);
+				
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.flintDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
 				
-				maxPercentage = 0.02;
+				maxPercentage = ((double)WuestUtilities.proxy.proxyConfiguration.goldNuggetDropChance) / 100d;
 				this.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
 			}
 		}
