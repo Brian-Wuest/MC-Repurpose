@@ -443,7 +443,7 @@ public class WuestEventHandler
 	{
 		Block block = event.getState().getBlock();
 		
-		if (!event.isCanceled() && !event.isSilkTouching())
+		if (!event.isCanceled() && !event.isSilkTouching() && !event.getWorld().isRemote)
 		{
 			// Get the random chance.
 			double maxPercentage = 0.01;
@@ -451,65 +451,49 @@ public class WuestEventHandler
 			// For coal ore, add a random chance that a diamond shard can drop.
 			if (block == Blocks.COAL_ORE)
 			{ 
-				int fortuneLevel = event.getFortuneLevel();
-				
-				switch (fortuneLevel)
-				{
-					case 1:
-					{
-						maxPercentage = 0.015;
-						break;
-					}
-					
-					case 2:
-					{
-						maxPercentage = 0.02;
-						break;
-					}
-					
-					case 3:
-					{
-						maxPercentage = 0.025;
-						break;
-					}
-					
-					default:
-					{
-						maxPercentage = 0.01;
-					}
-				}
-				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.diamondShardDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, ModRegistry.DiamondShard(), 1);
 			}
 			else if (block instanceof BlockLeaves && Repurpose.proxy.proxyConfiguration.enableAppleStickExtraDrops)
 			{
 				// Chance to drop apples.
-				maxPercentage = 0.04;
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.appleDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.APPLE, 1);
 				
 				// Chance to drop sticks.
-				maxPercentage = 0.06;
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.stickDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.STICK, 1);
 			}
 			else if ((block instanceof BlockDirt || block instanceof BlockGrass) && Repurpose.proxy.proxyConfiguration.enableExtraDropsFromDirt)
 			{
 				// Check for chance of drop for carrots, potatoes, beetroots and bones.
-				maxPercentage = 0.04;
-				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.carrotDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CARROT, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.potatoDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.POTATO, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.beetRootDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BEETROOT, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.boneDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.BONE, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.clayBallDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.CLAY_BALL, 1);
 			}
 			else if (block instanceof BlockStone && Repurpose.proxy.proxyConfiguration.enableExtraDropsFromStone)
 			{
-				maxPercentage = 0.04;
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.coalDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.COAL, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.ironNuggetDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.IRON_NUGGET, 1);
+				
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.flintDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.FLINT, 1);
 				
-				maxPercentage = 0.02;
+				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.goldNuggetDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
 			}
 		}

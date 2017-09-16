@@ -16,6 +16,7 @@ public class WuestConfiguration
 	public static String RecipeOptions = "general.options.recipes";
 	public static String GuiOptions = "general.options.gui";
 	public static String ChestContentOptions = "general.options.chest contents";
+	public static String ExtraDropOptions = "general.options.extra drops";
 	public static String tagKey = "WuestConfig";
 
 	// Config file option names.
@@ -25,6 +26,19 @@ public class WuestConfiguration
 	public static String enableVersionCheckMessageName = "Enable Version Checking";
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
 	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
+	
+	public static String diamondShardDropChanceName = "Diamond Shard Drop Chance";
+	public static String potatoDropChanceName = "Potato Drop Chance";
+	public static String beetRootDropChanceName = "Beetroot Drop Chance";
+	public static String carrotDropChanceName = "Carrot Drop Chance Name";
+	public static String boneDropChanceName = "Bone Drop Chance";
+	public static String clayBallDropChanceName = "Clay Item Drop Chance";
+	public static String coalDropChanceName = "Coal Drop Chance";
+	public static String flintDropChanceName = "Flint Drop Chance";
+	public static String ironNuggetDropChanceName = "Iron Nugget Drop Chance";
+	public static String goldNuggetDropChanceName = "Gold Nugget Drop Chance";
+	public static String appleDropChanceName = "Apple Drop Chance";
+	public static String stickDropChanceName = "Stick Drop Chance";
 
 	public static String addMetalRecipesName = "Metal Recipes";
 	public static String addWoodRecipesName = "Wood Recipes";
@@ -52,6 +66,8 @@ public class WuestConfiguration
 	public static String swiftBladeName = "Swift Blade";
 	public static String ironLumpName = "Iron Lump";
 	public static String charcoalBlockName = "Charcoal Block";
+	public static String saddleName = "Saddle";
+	public static String stringName = "String";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -95,8 +111,24 @@ public class WuestConfiguration
 		sickleRecipeName,
 		swiftBladeName,
 		ironLumpName,
-		charcoalBlockName
+		charcoalBlockName,
+		saddleName,
+		stringName
 	};
+	
+	// Extra Drop Options.
+	public int diamondShardDropChance;
+	public int potatoDropChance;
+	public int beetRootDropChance;
+	public int carrotDropChance;
+	public int boneDropChance;
+	public int clayBallDropChance;
+	public int coalDropChance;
+	public int flintDropChance;
+	public int ironNuggetDropChance;
+	public int goldNuggetDropChance;
+	public int appleDropChance;
+	public int stickDropChance;
 	
 	// Version Check Message Info
 	public String versionMessage = "";
@@ -144,6 +176,24 @@ public class WuestConfiguration
 		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 
+		config.setCategoryComment(WuestConfiguration.ExtraDropOptions, "This category determines the drop chances for the various extra drop options.");
+		config.setCategoryRequiresMcRestart(WuestConfiguration.ExtraDropOptions, true);
+		
+		// Extra Drop Options.
+		Repurpose.proxy.proxyConfiguration.diamondShardDropChance = config.getInt(WuestConfiguration.diamondShardDropChanceName, WuestConfiguration.ExtraDropOptions, 1, 0, 100, "Defines the drop chance of diamond shards from coal ore blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.potatoDropChance = config.getInt(WuestConfiguration.potatoDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of potatoes from dirt/grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.carrotDropChance = config.getInt(WuestConfiguration.carrotDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of carrots from dirt/grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.beetRootDropChance = config.getInt(WuestConfiguration.beetRootDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of beet roots from dirt/grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.clayBallDropChance = config.getInt(WuestConfiguration.clayBallDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of clay items from dirt/grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.boneDropChance = config.getInt(WuestConfiguration.boneDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of bones from dirt/grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.coalDropChance = config.getInt(WuestConfiguration.coalDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of coal from stone (all vanilla varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.flintDropChance = config.getInt(WuestConfiguration.flintDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of flint from stone (all vanilla varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.ironNuggetDropChance = config.getInt(WuestConfiguration.ironNuggetDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of iron nuggets from stone (all vanilla varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.goldNuggetDropChance = config.getInt(WuestConfiguration.goldNuggetDropChanceName, WuestConfiguration.ExtraDropOptions, 2, 0, 100, "Defines the drop chance of gold nuggets from stone (all vanilla varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.appleDropChance = config.getInt(WuestConfiguration.appleDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of apples from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.stickDropChance = config.getInt(WuestConfiguration.stickDropChanceName, WuestConfiguration.ExtraDropOptions, 6, 0, 100, "Defines the drop chance of sticks from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		
+		
 		// Recipe settings.
 		// Recipe configuration.
 		for (String key : WuestConfiguration.recipeKeys)
@@ -184,6 +234,19 @@ public class WuestConfiguration
 			tag.setBoolean(entry.getKey(), entry.getValue());
 		}
 		
+		tag.setInteger(WuestConfiguration.diamondShardDropChanceName, this.diamondShardDropChance);
+		tag.setInteger(WuestConfiguration.potatoDropChanceName, this.potatoDropChance);
+		tag.setInteger(WuestConfiguration.carrotDropChanceName, this.carrotDropChance);
+		tag.setInteger(WuestConfiguration.beetRootDropChanceName, this.beetRootDropChance);
+		tag.setInteger(WuestConfiguration.clayBallDropChanceName, this.clayBallDropChance);
+		tag.setInteger(WuestConfiguration.boneDropChanceName, this.boneDropChance);
+		tag.setInteger(WuestConfiguration.coalDropChanceName, this.coalDropChance);
+		tag.setInteger(WuestConfiguration.flintDropChanceName, this.flintDropChance);
+		tag.setInteger(WuestConfiguration.ironNuggetDropChanceName, this.ironNuggetDropChance);
+		tag.setInteger(WuestConfiguration.goldNuggetDropChanceName, this.goldNuggetDropChance);
+		tag.setInteger(WuestConfiguration.appleDropChanceName, this.appleDropChance);
+		tag.setInteger(WuestConfiguration.stickDropChanceName, this.stickDropChance);
+		
 		tag.setString(WuestConfiguration.versionMessageName, UpdateChecker.messageToShow);
 		tag.setBoolean(WuestConfiguration.showMessageName, UpdateChecker.showMessage);
 		
@@ -210,6 +273,19 @@ public class WuestConfiguration
 		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
 		
 		config.enableFlatBedrockGeneration = tag.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName);
+		
+		config.diamondShardDropChance = tag.getInteger(WuestConfiguration.diamondShardDropChanceName);
+		config.potatoDropChance = tag.getInteger(WuestConfiguration.potatoDropChanceName);
+		config.carrotDropChance = tag.getInteger(WuestConfiguration.carrotDropChanceName);
+		config.beetRootDropChance = tag.getInteger(WuestConfiguration.beetRootDropChanceName);
+		config.clayBallDropChance = tag.getInteger(WuestConfiguration.clayBallDropChanceName);
+		config.boneDropChance = tag.getInteger(WuestConfiguration.boneDropChanceName);
+		config.coalDropChance = tag.getInteger(WuestConfiguration.coalDropChanceName);
+		config.flintDropChance = tag.getInteger(WuestConfiguration.flintDropChanceName);
+		config.ironNuggetDropChance = tag.getInteger(WuestConfiguration.ironNuggetDropChanceName);
+		config.goldNuggetDropChance = tag.getInteger(WuestConfiguration.goldNuggetDropChanceName);
+		config.appleDropChance = tag.getInteger(WuestConfiguration.appleDropChanceName);
+		config.stickDropChance = tag.getInteger(WuestConfiguration.stickDropChanceName);
 		
 		for (String key : WuestConfiguration.recipeKeys)
 		{
