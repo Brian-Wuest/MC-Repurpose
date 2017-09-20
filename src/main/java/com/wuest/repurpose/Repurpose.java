@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid=Repurpose.MODID, name="Repurpose", version=Repurpose.VERSION, acceptedMinecraftVersions="[1.12, 1.12.1]", 
+@Mod(modid=Repurpose.MODID, name="Repurpose", version=Repurpose.VERSION, acceptedMinecraftVersions="[1.12, 1.12.2]", 
 guiFactory = "com.wuest.repurpose.Gui.ConfigGuiFactory",
 updateJSON = "https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/master/changeLog.json")
 public class Repurpose 
