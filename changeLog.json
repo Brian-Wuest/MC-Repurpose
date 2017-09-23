@@ -1,12 +1,14 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.2",
-	  "1.12-recommended": "1.0.0.2"
+	  "1.12-latest": "1.0.0.4",
+	  "1.12-recommended": "1.0.0.4"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
 	  "1.0.0.1": "Removes Swift Combat, re-adds Swift Blades. Adds tool-tips to blocks/items",
-	  "1.0.0.2": "Adds sickles for clearing brush. Adds Iron Lump for crafting Chainmail Armor."
+	  "1.0.0.2": "Adds sickles for clearing brush. Adds Iron Lump for crafting Chainmail Armor.",
+	  "1.0.0.3": "Added Config options for random drops. Added Saddle, String recipes. Added Charcoal Block",
+	  "1.0.0.4": "Updated to work for MC 1.12.2"
   }
 }
