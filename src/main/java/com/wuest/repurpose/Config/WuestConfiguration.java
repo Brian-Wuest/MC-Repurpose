@@ -39,6 +39,7 @@ public class WuestConfiguration
 	public static String goldNuggetDropChanceName = "Gold Nugget Drop Chance";
 	public static String appleDropChanceName = "Apple Drop Chance";
 	public static String stickDropChanceName = "Stick Drop Chance";
+	public static String monsterHeadDropChanceName = "Monster Head Drop Chance";
 
 	public static String addMetalRecipesName = "Metal Recipes";
 	public static String addWoodRecipesName = "Wood Recipes";
@@ -129,6 +130,7 @@ public class WuestConfiguration
 	public int goldNuggetDropChance;
 	public int appleDropChance;
 	public int stickDropChance;
+	public int monsterHeadDropChance;
 	
 	// Version Check Message Info
 	public String versionMessage = "";
@@ -192,6 +194,7 @@ public class WuestConfiguration
 		Repurpose.proxy.proxyConfiguration.goldNuggetDropChance = config.getInt(WuestConfiguration.goldNuggetDropChanceName, WuestConfiguration.ExtraDropOptions, 2, 0, 100, "Defines the drop chance of gold nuggets from stone (all vanilla varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.appleDropChance = config.getInt(WuestConfiguration.appleDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of apples from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.stickDropChance = config.getInt(WuestConfiguration.stickDropChanceName, WuestConfiguration.ExtraDropOptions, 6, 0, 100, "Defines the drop chance of sticks from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.monsterHeadDropChance = config.getInt(WuestConfiguration.monsterHeadDropChanceName, WuestConfiguration.ExtraDropOptions, 4, 0, 100, "Defines the drop chance of monster heads when zombies or skeletons die. This is percent based so 1 = 1%. Server configuration overrides client.");
 		
 		
 		// Recipe settings.

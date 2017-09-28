@@ -46,6 +46,9 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -75,6 +78,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -370,6 +374,29 @@ public class WuestEventHandler
 		}
 	}
 
+	@SubscribeEvent
+	public static void EntityDied(LivingDeathEvent event)
+	{
+		if (!event.getEntity().world.isRemote)
+		{
+			Entity entity = event.getEntity();
+			
+			if (entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntityCreeper)
+			{
+				double maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.monsterHeadDropChance) / 100d;
+				
+				double randomChance = WuestEventHandler.getRandomChance(entity.world);
+				
+				if (randomChance <= maxPercentage)
+				{
+					int meta = entity instanceof EntityZombie ? 2 : entity instanceof EntitySkeleton ? 0 : 4;
+					ItemStack stack = new ItemStack(Items.SKULL, 1, meta);
+					Block.spawnAsEntity(event.getEntity().world, entity.getPosition(), stack);
+				}
+			}
+		}
+	}
+	
 /*	@SubscribeEvent
 	public void TextureStitch(TextureStitchEvent.Pre preEvent)
 	{
