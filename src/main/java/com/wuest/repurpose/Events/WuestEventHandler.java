@@ -46,6 +46,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -79,6 +80,7 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -375,7 +377,7 @@ public class WuestEventHandler
 	}
 
 	@SubscribeEvent
-	public static void EntityDied(LivingDeathEvent event)
+	public static void EntityDied(LivingDropsEvent event)
 	{
 		if (!event.getEntity().world.isRemote)
 		{
@@ -389,9 +391,19 @@ public class WuestEventHandler
 				
 				if (randomChance <= maxPercentage)
 				{
+					for (EntityItem existingStack : event.getDrops()) 
+					{
+						if (existingStack.getItem().getItem() == Items.SKULL)
+						{
+							return;
+						}
+					}
+					
 					int meta = entity instanceof EntityZombie ? 2 : entity instanceof EntitySkeleton ? 0 : 4;
 					ItemStack stack = new ItemStack(Items.SKULL, 1, meta);
-					Block.spawnAsEntity(event.getEntity().world, entity.getPosition(), stack);
+					
+					EntityItem newItem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+					event.getDrops().add(newItem);
 				}
 			}
 		}
