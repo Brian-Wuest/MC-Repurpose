@@ -41,7 +41,7 @@ public class ItemSwiftBlade extends ItemSword
         this.maxStackSize = 1;
         this.setMaxDamage(material.getMaxUses());
         this.setCreativeTab(CreativeTabs.COMBAT);
-		this.attackDamage = 3.0F + material.getDamageVsEntity();
+		this.attackDamage = 3.0F + material.getAttackDamage();
 		
 		ModRegistry.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(material));
 	}
@@ -85,7 +85,7 @@ public class ItemSwiftBlade extends ItemSword
      */
 	public float getDamageVsEntity()
     {
-        return this.material.getDamageVsEntity();
+        return this.material.getAttackDamage();
     }
 	
     /**
@@ -102,7 +102,7 @@ public class ItemSwiftBlade extends ItemSword
     }
 
 	@Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state)
+    public float getDestroySpeed(ItemStack stack, IBlockState state)
     {
         Block block = state.getBlock();
 

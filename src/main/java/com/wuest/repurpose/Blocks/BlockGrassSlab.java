@@ -113,6 +113,11 @@ public abstract class BlockGrassSlab extends BlockSlab
 				
 				return -1;
 			}
+
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+				return this.getColorFromItemstack(stack, tintIndex);
+			}
 		}, new Block[] { ModRegistry.GrassSlab() });
 	}
 	

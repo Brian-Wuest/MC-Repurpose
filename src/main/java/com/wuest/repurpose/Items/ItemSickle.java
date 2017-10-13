@@ -71,13 +71,13 @@ public class ItemSickle extends ItemTool
     }
     
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state)
+    public float getDestroySpeed(ItemStack stack, IBlockState state)
     {
         Block block = state.getBlock();
 
         if (block != Blocks.WEB && state.getMaterial() != Material.LEAVES)
         {
-            return super.getStrVsBlock(stack, state);
+            return super.getDestroySpeed(stack, state);
         }
         else
         {

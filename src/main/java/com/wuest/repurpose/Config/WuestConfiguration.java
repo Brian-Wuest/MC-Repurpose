@@ -159,7 +159,6 @@ public class WuestConfiguration
 
 		// General settings.
 		Repurpose.proxy.proxyConfiguration.rightClickCropHarvest = config.getBoolean(WuestConfiguration.rightClickCropHarvestName, WuestConfiguration.OPTIONS, false, "Determines if right-clicking crops will harvest them. Server configuration overrides client.");
-		Repurpose.proxy.proxyConfiguration.enableHomeCommand = config.getBoolean(WuestConfiguration.enableHomeCommandName, WuestConfiguration.OPTIONS, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt = config.getBoolean(WuestConfiguration.enableGrassSpreadToCustomDirtName, WuestConfiguration.OPTIONS, true, "Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.enableVersionCheckMessage = config.getBoolean(WuestConfiguration.enableVersionCheckMessageName, WuestConfiguration.OPTIONS, true, "Determines if version checking is enabled when application starts. Also determines if the chat message about old versions is shown when joining a world. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.enableAppleStickExtraDrops = config.getBoolean(WuestConfiguration.enableAppleStickExtraDropsName, WuestConfiguration.OPTIONS, true, "Determines if all types of leaves will drop apples and/or sticks.");
@@ -175,6 +174,10 @@ public class WuestConfiguration
 		prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableStepAssistEnchantmentName, true, "Determines if the Step Assist family of enchantments is enabled. \r\nRequires World Restart. Server Configuration overrides client.");
 		prop.setRequiresWorldRestart(true);
 		Repurpose.proxy.proxyConfiguration.enableStepAssistEnchantment = prop.getBoolean();
+		
+		prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableHomeCommandName, true, "Determines if home command is enabled. This command will allow the player to teleport to the last bed they slept in or where they entered the dimension from. Server configuration overrides client.");
+		prop.setRequiresMcRestart(true);
+		Repurpose.proxy.proxyConfiguration.enableHomeCommand = prop.getBoolean();
 		
 		config.setCategoryComment(WuestConfiguration.RecipeOptions, "This category is to turn on or off the various categories of recipes this mod adds.");
 

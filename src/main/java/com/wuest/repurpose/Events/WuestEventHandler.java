@@ -28,6 +28,7 @@ import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
 import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockBush;
@@ -75,6 +76,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -308,7 +310,20 @@ public class WuestEventHandler
 	
 						if (seeds != null && p.inventory.hasItemStack(seeds))
 						{
-							seeds.onItemUse(p, event.getWorld(), farmlandPosition, null, event.getFace(), 0, 0, 0);
+					        net.minecraft.block.state.IBlockState state = event.getWorld().getBlockState(farmlandPosition);
+					        
+					        EnumFacing facing = EnumFacing.UP;
+					        
+					        if (p.canPlayerEdit(farmlandPosition.offset(facing), facing, seeds) 
+					        		&& state.getBlock().canSustainPlant(state, event.getWorld(), farmlandPosition, EnumFacing.UP, (IPlantable)seeds.getItem()) && event.getWorld().isAirBlock(farmlandPosition.up()))
+					        {
+					            event.getWorld().setBlockState(farmlandPosition.up(), ((IPlantable)seeds.getItem()).getPlant(event.getWorld(), farmlandPosition));
+
+					            if (p instanceof EntityPlayerMP)
+					            {
+					                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)p, farmlandPosition.up(), seeds);
+					            }
+					        }
 	
 							p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
 	
