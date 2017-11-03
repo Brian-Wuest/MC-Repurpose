@@ -80,7 +80,7 @@ public class Repurpose
 		ServerCommandManager manager = (ServerCommandManager)command;
 
 		// Registers the command
-		if (Repurpose.proxy.proxyConfiguration.enableHomeCommand)
+		if (Repurpose.proxy.getServerConfiguration().enableHomeCommand)
 		{		
 			manager.registerCommand(new HomeCommand());
 		}
