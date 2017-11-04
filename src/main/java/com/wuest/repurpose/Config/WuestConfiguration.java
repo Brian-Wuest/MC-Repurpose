@@ -237,6 +237,7 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
 		tag.setBoolean(WuestConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
+		tag.setBoolean(WuestConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
 		
 		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet())
 		{
@@ -282,6 +283,7 @@ public class WuestConfiguration
 		config.enableExtraDropsFromStone = tag.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName);
 		
 		config.enableFlatBedrockGeneration = tag.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName);
+		config.enableVerboseLogging = tag.getBoolean(WuestConfiguration.enableVerboseLogginName);
 		
 		config.diamondShardDropChance = tag.getInteger(WuestConfiguration.diamondShardDropChanceName);
 		config.potatoDropChance = tag.getInteger(WuestConfiguration.potatoDropChanceName);
