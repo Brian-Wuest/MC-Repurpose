@@ -219,14 +219,9 @@ public class WuestEventHandler
 				&& !event.getWorld().isRemote
 				&& !event.isCanceled())
 		{
-			if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
-			{
-				System.out.println("The player right-clicked and it's enabled. This event was also not canceld by another mod.");
-			}
-			
 			EntityPlayer p = event.getEntityPlayer();
 
-			ItemStack currentStack = p.getHeldItem(event.getHand());
+			ItemStack currentStack = p.inventory.getCurrentItem();
 
 			if (currentStack != null)
 			{
@@ -252,6 +247,11 @@ public class WuestEventHandler
 			// Only re-plant when this is a fully grown plant.
 			if (crop instanceof BlockCrops || crop instanceof BlockBush)
 			{
+				if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+				{
+					System.out.println("Found a crop, check to see if it's fully grown.");
+				}
+				
 				boolean cropIsMaxAge = false;
 				
 				// Look for a specific property called "age". All vanilla minecraft crops use this name for their property and most other mods do to.
@@ -275,6 +275,11 @@ public class WuestEventHandler
 				
 				if (cropIsMaxAge)
 				{
+					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+					{
+						System.out.println("The crop is fully grown, get the drops, and try to re-plant.");
+					}
+					
 					// Get the farmland below the crop.
 					BlockPos farmlandPosition = event.getPos().down();
 	
@@ -307,7 +312,7 @@ public class WuestEventHandler
 								
 								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
 								{
-									System.out.println("Found a 'seed' to plant for the crop [" + crop.getRegistryName().toString() + "]. Not including it in the list of drops to be added to the player's inventory.");
+									System.out.println("Found a 'seed' to plant for the crop [" + crop.getRegistryName().toString() + "] from the crop's drops. Not including it in the list of drops to be added to the player's inventory.");
 								}
 								
 								continue;
@@ -380,12 +385,19 @@ public class WuestEventHandler
 					
 					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
 					{
-						System.out.println("Cancelling future player right-clicked events so multiple right-click harvesting mods don't duplicate crops.");
+						System.out.println("Cancelling future player right-clicked events so multiple right-click harvesting mods don't duplicate drops.");
 					}
 				}
 			}
+			else
+			{
+				if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+				{
+					System.out.println("The block right-clicked is not a harvestable block. Right-click harvesting did not occur.");
+				}
+			}
 		}
-		else if (!event.getWorld().isRemote && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest)
+		else if (!event.getWorld().isRemote && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest && event.isCanceled())
 		{
 			if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
 			{
