@@ -216,11 +216,7 @@ public class WuestConfiguration
 		
 		// GUI Options
 		//config.setCategoryComment(WuestConfiguration.GuiOptions, "This category is to configure the various GUI options for this mod.");
-		
-		if (config.hasChanged()) 
-		{
-			config.save();
-		}
+		config.save();
 	}
 
 	public NBTTagCompound ToNBTTagCompound()
