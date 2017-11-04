@@ -69,6 +69,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
@@ -218,9 +219,14 @@ public class WuestEventHandler
 				&& !event.getWorld().isRemote
 				&& !event.isCanceled())
 		{
+			if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+			{
+				System.out.println("The player right-clicked and it's enabled. This event was also not canceld by another mod.");
+			}
+			
 			EntityPlayer p = event.getEntityPlayer();
 
-			ItemStack currentStack = p.inventory.getCurrentItem();
+			ItemStack currentStack = p.getHeldItem(event.getHand());
 
 			if (currentStack != null)
 			{
@@ -230,6 +236,11 @@ public class WuestEventHandler
 
 				if (currentItem != null && currentItem == boneMeal)
 				{
+					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+					{
+						System.out.println("Cannot harvest a crop when bone meal is being used.");
+					}
+					
 					return;
 				}
 			}
@@ -268,7 +279,8 @@ public class WuestEventHandler
 					BlockPos farmlandPosition = event.getPos().down();
 	
 					// Get the drops from this crop and add it to the inventory.
-					List<ItemStack> drops = crop.getDrops(event.getWorld(), event.getPos(), cropState, 1);
+					NonNullList<ItemStack> drops = NonNullList.create();
+					crop.getDrops(drops, event.getWorld(), event.getPos(), cropState, 1);
 	
 					// Break the original crop block.
 					event.getWorld().setBlockToAir(event.getPos());
@@ -292,6 +304,12 @@ public class WuestEventHandler
 									|| replanted == EnumActionResult.PASS)
 							{
 								replanted = EnumActionResult.PASS;
+								
+								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+								{
+									System.out.println("Found a 'seed' to plant for the crop [" + crop.getRegistryName().toString() + "]. Not including it in the list of drops to be added to the player's inventory.");
+								}
+								
 								continue;
 							}	
 						}
@@ -308,8 +326,13 @@ public class WuestEventHandler
 						// Get the seed item and check to see if the player has this in their inventory. If they do we can use it to re-plant.
 						ItemStack seeds = new ItemStack(seed);
 	
-						if (seeds != null && p.inventory.hasItemStack(seeds))
+						if (p.inventory.hasItemStack(seeds))
 						{
+							if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+							{
+								System.out.println("The player has the seed for this crop. Attempting to re-plant.");
+							}
+							
 					        net.minecraft.block.state.IBlockState state = event.getWorld().getBlockState(farmlandPosition);
 					        
 					        EnumFacing facing = EnumFacing.UP;
@@ -317,22 +340,56 @@ public class WuestEventHandler
 					        if (p.canPlayerEdit(farmlandPosition.offset(facing), facing, seeds) 
 					        		&& state.getBlock().canSustainPlant(state, event.getWorld(), farmlandPosition, EnumFacing.UP, (IPlantable)seeds.getItem()) && event.getWorld().isAirBlock(farmlandPosition.up()))
 					        {
+					        	if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+								{
+									System.out.println("The player is able to edit the top of this farmland and the farmland can sustaing this plant and the block above the farmland is air.");
+								}
+					        	
 					            event.getWorld().setBlockState(farmlandPosition.up(), ((IPlantable)seeds.getItem()).getPlant(event.getWorld(), farmlandPosition));
 
 					            if (p instanceof EntityPlayerMP)
 					            {
 					                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)p, farmlandPosition.up(), seeds);
+					                p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
+									p.inventoryContainer.detectAndSendChanges();
+									
+									if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+									{
+										System.out.println("Right-click harvesting succeeded. Removing 1 'seed' item from the player's inventory since a seed was not included in the block drops.");
+									}
 					            }
 					        }
-	
-							p.inventory.clearMatchingItems(seeds.getItem(), -1, 1, null);
-	
-							p.inventoryContainer.detectAndSendChanges();
+					        else
+					        {
+					        	if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+								{
+									System.out.println("Plant not re-planted. The player either cannot edit the block above the farmland or the farmland cannot sustaing this plant or the block above the farmland is not air.");
+								}
+					        }
+						}
+						else
+						{
+							if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+							{
+								System.out.println("Plant not re-planted. The player does not have the seed: [" + seed.getRegistryName().toString() + "] in their inventory.");
+							}
 						}
 					}
 					
 					event.setCanceled(true);
+					
+					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+					{
+						System.out.println("Cancelling future player right-clicked events so multiple right-click harvesting mods don't duplicate crops.");
+					}
 				}
+			}
+		}
+		else if (!event.getWorld().isRemote && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest)
+		{
+			if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging)
+			{
+				System.out.println("This event was previously canceled, right-click harvesting did not happen from this mod.");
 			}
 		}
 	}

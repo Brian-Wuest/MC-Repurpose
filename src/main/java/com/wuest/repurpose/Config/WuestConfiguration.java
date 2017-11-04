@@ -26,6 +26,7 @@ public class WuestConfiguration
 	public static String enableVersionCheckMessageName = "Enable Version Checking";
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
 	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
+	public static String enableVerboseLogginName = "Enable Verbose Logging";
 	
 	public static String diamondShardDropChanceName = "Diamond Shard Drop Chance";
 	public static String potatoDropChanceName = "Potato Drop Chance";
@@ -85,6 +86,7 @@ public class WuestConfiguration
 	public boolean enableExtraDropsFromStone;
 	public boolean enableSwiftCombat;
 	public boolean enableFlatBedrockGeneration;
+	public boolean enableVerboseLogging;
 
 	public HashMap<String, Boolean> recipeConfiguration;
 	
@@ -165,6 +167,7 @@ public class WuestConfiguration
 		Repurpose.proxy.proxyConfiguration.enableExtraDropsFromDirt = config.getBoolean(WuestConfiguration.enableExtraDropsFromDirtName, WuestConfiguration.OPTIONS, true, "Determines if Potatoes, Carrots, Bones, Clay and Beetroots will drop when breaking dirt/grasss blocks.");
 		Repurpose.proxy.proxyConfiguration.enableExtraDropsFromStone = config.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName, WuestConfiguration.OPTIONS, true, "Determines if Coal, Iron Nuggets and Flint will drop when breaking stone");
 		Repurpose.proxy.proxyConfiguration.enableFlatBedrockGeneration = config.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName, WuestConfiguration.OPTIONS, true, "Determines if overworld bedrock is flat. Server configuration overrides client.");
+		Repurpose.proxy.proxyConfiguration.enableVerboseLogging = config.getBoolean(WuestConfiguration.enableVerboseLogginName, WuestConfiguration.OPTIONS, false, "Determines if more events are printed to the minecraft log. Only use this when submitting a log for an issue. Only a few areas will have this functionality enabled.");
 		
 		// This one is special since it requires a minecraft restart.
 		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: melon, pumpkin, cocoa and beetroot seeds. Server configuration overrides client.");
