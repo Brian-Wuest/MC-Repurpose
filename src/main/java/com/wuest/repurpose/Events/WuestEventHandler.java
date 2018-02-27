@@ -417,8 +417,6 @@ public class WuestEventHandler
 		}
 		
 		//this.generatePlayerParticles(event);
-		
-		//this.setPlayerLight(event);
 	}
 
 	@SubscribeEvent
@@ -682,63 +680,6 @@ public class WuestEventHandler
 		}
 	}
 	
-	private static void setPlayerLight(TickEvent.PlayerTickEvent event)
-	{
-		World world = event.player.world;
-		EntityPlayer player = event.player;
-		BlockPos pos = new BlockPos(player.posX, player.posY + 1, player.posZ);
-		BlockPos prevPos = new BlockPos(player.prevPosX, player.prevPosY + 1, player.prevPosZ);
-		
-		
-		if (!event.player.isDead)
-		{
-			world.setLightFor(EnumSkyBlock.BLOCK, pos, 15);
-			//System.out.println("Light Level: " + ((Integer)world.getLightFor(EnumSkyBlock.BLOCK, pos)).toString());
-			
-			world.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), 12, 12, 12);
-			
-			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-
-			if (pos.getX() != prevPos.getX() && pos.getY() != prevPos.getY() && pos.getZ() != prevPos.getZ())
-			{
-				for (BlockPos otherPos : BlockPos.getAllInBox(prevPos, pos))
-				{
-					// Don't update for the current position.
-					if (pos.getX() != otherPos.getX() && pos.getY() != otherPos.getY() && pos.getZ() != otherPos.getZ())
-					{
-						world.checkLightFor(EnumSkyBlock.BLOCK, otherPos);
-					}
-				}
-			}
-				
-			for (int i = 1; i < 2; i++)
-			{
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.up(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.up(i)), 3);
-				
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.down(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.down(i)), 3);
-				
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.east(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.east(i)), 3);
-				
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.south(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.south(i)), 3);
-				
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.north(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.north(i)), 3);
-				
-				world.checkLightFor(EnumSkyBlock.BLOCK, pos.west(i));
-				//world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos.south(i)), 3);
-			}
-			
-		}
-		else
-		{
-			world.setLightFor(EnumSkyBlock.BLOCK, pos, 0);
-		}
-	}
-
 	private static void generatePlayerParticles(TickEvent.PlayerTickEvent event)
 	{
 		EntityPlayer player = event.player;

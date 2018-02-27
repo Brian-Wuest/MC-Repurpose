@@ -27,6 +27,7 @@ public class WuestConfiguration
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
 	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
 	public static String enableVerboseLogginName = "Enable Verbose Logging";
+	public static String enableMobileLightName = "Enable Mobile Light";
 	
 	public static String diamondShardDropChanceName = "Diamond Shard Drop Chance";
 	public static String potatoDropChanceName = "Potato Drop Chance";
@@ -87,6 +88,7 @@ public class WuestConfiguration
 	public boolean enableSwiftCombat;
 	public boolean enableFlatBedrockGeneration;
 	public boolean enableVerboseLogging;
+	public boolean enableMobileLight;
 
 	public HashMap<String, Boolean> recipeConfiguration;
 	
@@ -148,6 +150,7 @@ public class WuestConfiguration
 		this.enableSwiftCombat = true;
 		this.recipeConfiguration = new HashMap<String, Boolean>();
 		this.enableFlatBedrockGeneration = true;
+		this.enableMobileLight = true;
 	}
 
 	public static void syncConfig()
@@ -168,6 +171,7 @@ public class WuestConfiguration
 		Repurpose.proxy.proxyConfiguration.enableExtraDropsFromStone = config.getBoolean(WuestConfiguration.enableExtraDropsFromStoneName, WuestConfiguration.OPTIONS, true, "Determines if Coal, Iron Nuggets and Flint will drop when breaking stone");
 		Repurpose.proxy.proxyConfiguration.enableFlatBedrockGeneration = config.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName, WuestConfiguration.OPTIONS, true, "Determines if overworld bedrock is flat. Server configuration overrides client.");
 		Repurpose.proxy.proxyConfiguration.enableVerboseLogging = config.getBoolean(WuestConfiguration.enableVerboseLogginName, WuestConfiguration.OPTIONS, false, "Determines if more events are printed to the minecraft log. Only use this when submitting a log for an issue. Only a few areas will have this functionality enabled.");
+		Repurpose.proxy.proxyConfiguration.enableMobileLight = config.getBoolean(WuestConfiguration.enableMobileLightName, WuestConfiguration.OPTIONS, false, "Determines if light source blocks will illuminate the player's area when held in either hand. This does not affect monster generation. Server overrides client.");
 		
 		// This one is special since it requires a minecraft restart.
 		Property prop = config.get(WuestConfiguration.OPTIONS, WuestConfiguration.enableExtraGrassDropsName, true, "Determines if tall grass can also drop: melon, pumpkin, cocoa and beetroot seeds. Server configuration overrides client.");
@@ -234,6 +238,7 @@ public class WuestConfiguration
 		tag.setBoolean(WuestConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
 		tag.setBoolean(WuestConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
 		tag.setBoolean(WuestConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
+		tag.setBoolean(WuestConfiguration.enableMobileLightName, this.enableMobileLight);
 		
 		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet())
 		{
@@ -280,6 +285,7 @@ public class WuestConfiguration
 		
 		config.enableFlatBedrockGeneration = tag.getBoolean(WuestConfiguration.enableFlatBedrockGenerationName);
 		config.enableVerboseLogging = tag.getBoolean(WuestConfiguration.enableVerboseLogginName);
+		config.enableMobileLight = tag.getBoolean(WuestConfiguration.enableMobileLightName);
 		
 		config.diamondShardDropChance = tag.getInteger(WuestConfiguration.diamondShardDropChanceName);
 		config.potatoDropChance = tag.getInteger(WuestConfiguration.potatoDropChanceName);
