@@ -167,6 +167,11 @@ public class ModRegistry
 		return ModRegistry.GetItem(ItemStoneShears.class);
 	}
 	
+	public static ItemScroll Scroll()
+	{
+		return ModRegistry.GetItem(ItemScroll.class);
+	}
+	
 	public static BlockHalfGlowstoneSlab GlowstoneSlab()
 	{
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
@@ -334,6 +339,9 @@ public class ModRegistry
 		Block block = new BlockCharcoal("block_charcoal");
 		ItemBlock itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
 		ModRegistry.registerBlock(block, itemBlock);
+		
+		// Scroll
+		ModRegistry.registerItem(new ItemScroll("item_scroll"));
 		
 		// Coffers.
 		//block = new BlockCoffer();

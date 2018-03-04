@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
@@ -21,6 +22,7 @@ import com.wuest.repurpose.Capabilities.DimensionHomeProvider;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
+import com.wuest.repurpose.Items.ItemScroll;
 import com.wuest.repurpose.Items.ItemSnorkel;
 import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWhetStone;
@@ -40,6 +42,7 @@ import net.minecraft.block.BlockStone;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -557,6 +560,11 @@ public class WuestEventHandler
 			
 			event.setOutput(result);
 		}
+		
+		if (rightItem.getItem() instanceof ItemScroll || leftItem.getItem() instanceof ItemScroll)
+		{
+			event = WuestEventHandler.processScrollUpdate(event);
+		}
 	}
 	
 	@SubscribeEvent
@@ -769,4 +777,195 @@ public class WuestEventHandler
 		}
 	}
 	
+	private static AnvilUpdateEvent processScrollUpdate(AnvilUpdateEvent event)
+	{
+		ItemStack leftItemStack = event.getLeft();
+		ItemStack rightItemStack = event.getRight();
+		ItemStack copyOfLeft = leftItemStack.copy();
+		Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(leftItemStack);
+		int i = 0;
+		int initialRepairCost = leftItemStack.getRepairCost() + rightItemStack.getRepairCost();
+		int k = 0;
+		
+		boolean isEnchantedScroll = rightItemStack.getItem() instanceof ItemScroll && !rightItemStack.getEnchantmentTagList().hasNoTags();
+
+        if (leftItemStack.isItemStackDamageable() && leftItemStack.getItem().getIsRepairable(copyOfLeft, rightItemStack))
+        {
+            int l2 = Math.min(leftItemStack.getItemDamage(), leftItemStack.getMaxDamage() / 4);
+
+            if (l2 <= 0)
+            {
+            	event.setOutput(ItemStack.EMPTY);
+            	event.setCost(0);
+            	return event;
+            }
+
+            int i3;
+
+            for (i3 = 0; l2 > 0 && i3 < rightItemStack.getCount(); ++i3)
+            {
+                int j3 = leftItemStack.getItemDamage() - l2;
+                leftItemStack.setItemDamage(j3);
+                ++i;
+                l2 = Math.min(leftItemStack.getItemDamage(), leftItemStack.getMaxDamage() / 4);
+            }
+
+            event.setCost(i3);
+        }
+        else
+        {
+            if ((!isEnchantedScroll && (leftItemStack.getItem() != rightItemStack.getItem() || !leftItemStack.isItemStackDamageable()))
+            		|| (isEnchantedScroll && !leftItemStack.getItem().isBookEnchantable(leftItemStack, rightItemStack)))
+            {
+            	event.setOutput(ItemStack.EMPTY);
+            	event.setCost(0);
+            	return event;
+            }
+
+            if (leftItemStack.isItemStackDamageable() && !isEnchantedScroll)
+            {
+                int l = copyOfLeft.getMaxDamage() - copyOfLeft.getItemDamage();
+                int i1 = rightItemStack.getMaxDamage() - rightItemStack.getItemDamage();
+                int j1 = i1 + leftItemStack.getMaxDamage() * 12 / 100;
+                int k1 = l + j1;
+                int l1 = leftItemStack.getMaxDamage() - k1;
+
+                if (l1 < 0)
+                {
+                    l1 = 0;
+                }
+
+                if (l1 < leftItemStack.getItemDamage()) // vanilla uses metadata here instead of damage.
+                {
+                	leftItemStack.setItemDamage(l1);
+                    i += 2;
+                }
+            }
+
+            Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(rightItemStack);
+            boolean validEnchantments = false;
+            boolean invalidEnchantments = false;
+
+            for (Enchantment enchantment1 : map1.keySet())
+            {
+                if (enchantment1 != null)
+                {
+                    int i2 = map.containsKey(enchantment1) ? ((Integer)map.get(enchantment1)).intValue() : 0;
+                    int j2 = ((Integer)map1.get(enchantment1)).intValue();
+                    j2 = i2 == j2 ? j2 + 1 : Math.max(j2, i2);
+                    boolean canApplyEnchantment = enchantment1.canApply(copyOfLeft);
+
+                    if (copyOfLeft.getItem() == Items.ENCHANTED_BOOK
+                    		|| copyOfLeft.getItem() instanceof ItemScroll)
+                    {
+                    	canApplyEnchantment = true;
+                    }
+
+                    for (Enchantment enchantment : map.keySet())
+                    {
+                        if (enchantment != enchantment1 && !enchantment1.isCompatibleWith(enchantment))
+                        {
+                        	canApplyEnchantment = false;
+                            ++i;
+                        }
+                    }
+
+                    if (!canApplyEnchantment)
+                    {
+                    	invalidEnchantments = true;
+                    }
+                    else
+                    {
+                        validEnchantments = true;
+
+                        if (j2 > enchantment1.getMaxLevel())
+                        {
+                            j2 = enchantment1.getMaxLevel();
+                        }
+
+                        map.put(enchantment1, Integer.valueOf(j2));
+                        int k3 = 0;
+
+                        switch (enchantment1.getRarity())
+                        {
+                            case COMMON:
+                            {
+                                k3 = 1;
+                                break;
+                            }
+                            
+                            case UNCOMMON:
+                            {
+                                k3 = 2;
+                                break;
+                            }
+                            
+                            case RARE:
+                            {
+                                k3 = 4;
+                                break;
+                            }
+                            case VERY_RARE:
+                            {
+                                k3 = 8;
+                            }
+                        }
+
+                        if (isEnchantedScroll)
+                        {
+                            k3 = Math.max(1, k3 / 2);
+                        }
+
+                        i += k3 * j2;
+
+                        if (copyOfLeft.getCount() > 1)
+                        {
+                            i = 40;
+                        }
+                    }
+                }
+            }
+
+            if (invalidEnchantments && !validEnchantments)
+            {
+            	event.setOutput(ItemStack.EMPTY);
+            	event.setCost(0);
+                return event;
+            }
+            
+            int maximumCost = initialRepairCost + i;
+
+            if (i <= 0)
+            {
+            	copyOfLeft = ItemStack.EMPTY;
+            }
+
+            if (k == i && k > 0 && maximumCost >= 40)
+            {
+                maximumCost = 39;
+            }
+
+            if (!leftItemStack.isEmpty())
+            {
+                int totalCost = leftItemStack.getRepairCost();
+
+                if (!rightItemStack.isEmpty() && totalCost < rightItemStack.getRepairCost())
+                {
+                	totalCost = rightItemStack.getRepairCost();
+                }
+
+                if (k != i || k == 0)
+                {
+                	totalCost = totalCost * 2 + 1;
+                }
+
+                copyOfLeft.setRepairCost(totalCost);
+                EnchantmentHelper.setEnchantments(map, copyOfLeft);
+                event.setCost(maximumCost);
+                event.setOutput(copyOfLeft);
+            }
+        }
+        
+		return event;
+	}
 }

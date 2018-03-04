@@ -71,6 +71,7 @@ public class WuestConfiguration
 	public static String charcoalBlockName = "Charcoal Block";
 	public static String saddleName = "Saddle";
 	public static String stringName = "String";
+	public static String scrollName = "Scroll";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -118,7 +119,8 @@ public class WuestConfiguration
 		ironLumpName,
 		charcoalBlockName,
 		saddleName,
-		stringName
+		stringName,
+		scrollName
 	};
 	
 	// Extra Drop Options.
