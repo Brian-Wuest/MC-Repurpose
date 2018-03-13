@@ -15,20 +15,18 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:stick",
-                "data": 0
+                "item": "minecraft:planks",
+                "data": 32767
             }
         ],
-        "b" : [
+        "b": [
             {
-                "item": "minecraft:paper",
-                "data": 0
+                "item": "repurpose:item_scroll"
             }
         ]
     },
     "result": {
-        "item": "repurpose:item_scroll",
-        "count": 1,
-        "data": 0
+        "item": "minecraft:bookshelf",
+        "count": 1
     }
 }
