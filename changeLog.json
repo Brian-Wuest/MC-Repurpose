@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.8",
-	  "1.12-recommended": "1.0.0.8"
+	  "1.12-latest": "1.0.0.9",
+	  "1.12-recommended": "1.0.0.9"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -13,6 +13,7 @@
 	  "1.0.0.5": "Zombies, Skeletons, Creepers can drop their head now.",
 	  "1.0.0.6": "Fixed some issues with /home and right-click harvesting.",
 	  "1.0.0.7": "Adding verbose logging for right-click harvesting.",
-	  "1.0.0.8": "Fixed issue where logging config option wasn't syncing."
+	  "1.0.0.8": "Fixed issue where logging config option wasn't syncing.",
+	  "1.0.0.9": "Added portable lights and enchantable scrolls."
   }
 }
