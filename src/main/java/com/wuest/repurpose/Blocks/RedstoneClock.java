@@ -140,22 +140,19 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 	public void updateNeighbors(World worldIn, BlockPos pos)
 	{
 		this.notifyNeighborsOfStateChange(worldIn, pos, this);
-		this.notifyNeighborsOfStateChange(worldIn, pos.down(), this);
 	}
 
 	public void notifyNeighborsOfStateChange(World worldIn, BlockPos pos, Block blockType)
 	{
-		if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class), true).isCanceled())
+		if (net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, pos, worldIn.getBlockState(pos), java.util.EnumSet.allOf(EnumFacing.class), true).isCanceled())
 		{
 			return;
 		}
 
-		worldIn.notifyNeighborsOfStateChange(pos.west(), blockType, true);
-		worldIn.notifyNeighborsOfStateChange(pos.east(), blockType, true);
-		worldIn.notifyNeighborsOfStateChange(pos.down(), blockType, true);
-		worldIn.notifyNeighborsOfStateChange(pos.up(), blockType, true);
-		worldIn.notifyNeighborsOfStateChange(pos.north(), blockType, true);
-		worldIn.notifyNeighborsOfStateChange(pos.south(), blockType, true);
+		for (EnumFacing enumfacing : EnumFacing.values())
+        {
+            worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, true);
+        }
 	}
 
 	/**
@@ -171,6 +168,26 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock>
 	{
 		// Get the old redstone strength.
 		int i = tileEntity.getRedstoneStrength(state, null) == 0 ? 15 : 0;
+		
+		// If this is going to be powered, check to make sure that it should be powered.
+		if (i != 0)
+		{
+			// Check each side of this block to see if it's powered.
+			for (EnumFacing facing : EnumFacing.values())
+			{
+				if (worldIn.isSidePowered(pos.offset(facing), facing.getOpposite()))
+				{
+					i = 0;
+					tileEntity.setRedstoneStrength(state, i, null);
+					worldIn.setBlockState(pos, state, 3);
+					
+					this.updateNeighbors(worldIn, pos);
+					
+					// Delay a few ticks.
+					return 5;
+				}
+			}
+		}
 		
 		// Set the new redstone strength and provide an updated state.
 		state = tileEntity.setRedstoneStrength(state, i, null);
