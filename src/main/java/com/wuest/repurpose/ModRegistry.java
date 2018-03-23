@@ -187,6 +187,16 @@ public class ModRegistry
 		return ModRegistry.GetBlock(BlockCoffer.class);
 	}
 	
+	public static ItemWoodenCrate WoodenCrate()
+	{
+		return ModRegistry.GetItem(ItemWoodenCrate.class);
+	}
+	
+	public static ItemGardnersPouch GardnersPounch()
+	{
+		return ModRegistry.GetItem(ItemGardnersPouch.class);
+	}
+	
 	/**
 	 * Static constructor for the mod registry.
 	 */
@@ -342,6 +352,13 @@ public class ModRegistry
 		
 		// Scroll
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
+		
+		// Wooden Crate
+		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
+		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
+		
+		// Gardner's Pouch
+		ModRegistry.registerItem(new ItemGardnersPouch("item_gardners_pouch"));
 		
 		// Coffers.
 		//block = new BlockCoffer();

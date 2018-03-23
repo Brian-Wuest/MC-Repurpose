@@ -16,6 +16,16 @@ item.repurpose:item_swift_blade_gold.name=Swift Blade: Gold
 item.repurpose:item_swift_blade_diamond.name=Swift Blade: Diamond
 item.repurpose:item_iron_lump.name=Iron Lump
 item.repurpose:item_scroll.name=Scroll
+item.repurpose:item_wooden_crate.empty.name=Wooden Crate
+item.repurpose:item_wooden_crate.clutch_of_eggs.name=Clutch of Eggs
+item.repurpose:item_wooden_crate.carton_of_eggs.name=Carton of Eggs
+item.repurpose:item_wooden_crate.bunch_of_potatoes.name=Bunch of Potatoes
+item.repurpose:item_wooden_crate.crate_of_potatoes.name=Crate of Potatoes
+item.repurpose:item_wooden_crate.bunch_of_carrots.name=Bunch of Carrots
+item.repurpose:item_wooden_crate.crate_of_carrots.name=Crate of Carrots
+item.repurpose:item_wooden_crate.bunch_of_beets.name=Bunch of Beets
+item.repurpose:item_wooden_crate.crate_of_beets.name=Crate of Beets
+item.repurpose:item_gardners_pouch.name=Gardner's Pouch
 
 tile.repurpose.chest.iron.name=Iron Coffer
 tile.repurpose:block_redstone_clock.name=Redstone Clock

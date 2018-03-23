@@ -14,6 +14,8 @@ import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBlockCoffer;
 import com.wuest.repurpose.Items.ItemStoneShears;
+import com.wuest.repurpose.Items.ItemWoodenCrate;
+import com.wuest.repurpose.Items.ItemWoodenCrate.CrateType;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -212,16 +214,31 @@ public class ClientEventHandler
 		
 		for (Item item : ModRegistry.ModItems)
 		{
-			if (!(item instanceof ItemBlockCoffer))
-			{
-				ClientEventHandler.regItem(item);
-			}
-			else
+			if (item instanceof ItemBlockCoffer)
 			{
 				for (IronChestType type : IronChestType.values())
 	            {
 					ModelLoader.setCustomModelResourceLocation(item, type.ordinal(), new ModelResourceLocation(item.getRegistryName(), "variant=" + type.getName()));
 	            }
+				
+			}
+			else if (item instanceof ItemWoodenCrate)
+			{
+				for (CrateType type : CrateType.values())
+				{
+					if (type == CrateType.Empty)
+					{
+						ModelLoader.setCustomModelResourceLocation(item, type.meta, new ModelResourceLocation(item.getRegistryName() + "_" + type.toString(), "variant=" + type.toString()));
+					}
+					else
+					{
+						ModelLoader.setCustomModelResourceLocation(item, type.meta, new ModelResourceLocation("repurpose:" + type.toString(), "variant=" + type.toString()));
+					}
+				}
+			}
+			else
+			{
+				ClientEventHandler.regItem(item);
 			}
 		}
 	}

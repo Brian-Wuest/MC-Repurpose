@@ -72,6 +72,15 @@ public class WuestConfiguration
 	public static String saddleName = "Saddle";
 	public static String stringName = "String";
 	public static String scrollName = "Scroll";
+	public static String woodenCrateName = "Wooden Crate";
+	public static String Clutch_Of_EggsName = "Clutch of Eggs";
+	public static String Carton_Of_EggsName = "Carton of Eggs";
+	public static String Bunch_Of_PotatoesName = "Bunch of Potatoes";
+	public static String Crate_Of_PotatoesName = "Crate of Potatoes";
+	public static String Bunch_Of_CarrotsName = "Bunch of Carrots";
+	public static String Crate_Of_CarrotsName = "Crate of Carrots";
+	public static String Bunch_Of_BeetsName = "Bunch of Beets";
+	public static String Crate_Of_BeetsName = "Crate of Beets";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -120,7 +129,16 @@ public class WuestConfiguration
 		charcoalBlockName,
 		saddleName,
 		stringName,
-		scrollName
+		scrollName,
+		woodenCrateName,
+		Clutch_Of_EggsName,
+		Carton_Of_EggsName,
+		Bunch_Of_BeetsName,
+		Bunch_Of_CarrotsName,
+		Bunch_Of_PotatoesName,
+		Crate_Of_BeetsName,
+		Crate_Of_CarrotsName,
+		Crate_Of_PotatoesName
 	};
 	
 	// Extra Drop Options.

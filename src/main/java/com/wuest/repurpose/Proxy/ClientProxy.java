@@ -11,6 +11,7 @@ import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
 import com.wuest.repurpose.Events.WuestEventHandler;
 import com.wuest.repurpose.Gui.GuiCoffer;
+import com.wuest.repurpose.Gui.GuiItemGardnersPouch;
 import com.wuest.repurpose.Gui.GuiRedstoneClock;
 import com.wuest.repurpose.Gui.GuiRedstoneScanner;
 import com.wuest.repurpose.Items.ItemBlockCoffer;
@@ -46,6 +47,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class ClientProxy extends CommonProxy
 {
@@ -139,6 +142,10 @@ public class ClientProxy extends CommonProxy
 		else if (tileEntity != null && tileEntity instanceof TileEntityCoffer)
 		{
 			return GuiCoffer.GUI.buildGUI(((TileEntityCoffer)tileEntity).getType(), player.inventory, (TileEntityCoffer) tileEntity);
+		}
+		else if (ID == GuiItemGardnersPouch.GUI_ID)
+		{
+			return new GuiItemGardnersPouch((IItemHandler)player.getHeldItemMainhand().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null ), player);
 		}
 
 		return null;
