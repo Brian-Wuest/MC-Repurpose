@@ -399,6 +399,7 @@ public class ModRegistry
 		Repurpose.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
 		Repurpose.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
 		Repurpose.network.registerMessage(ConfigSyncHandler.class, ConfigSyncMessage.class, 5, Side.CLIENT);
+		Repurpose.network.registerMessage(CurrentSlotUpdateHandler.class, CurrentSlotUpdateMessage.class, 6, Side.SERVER);
 	}
 
 	/**

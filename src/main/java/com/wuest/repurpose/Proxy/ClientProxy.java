@@ -1,5 +1,7 @@
 package com.wuest.repurpose.Proxy;
 
+import org.lwjgl.input.Keyboard;
+
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Blocks.BlockCoffer;
@@ -27,6 +29,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -40,6 +43,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -70,6 +74,8 @@ public class ClientProxy extends CommonProxy
 		// any necessary renderer.
 		Repurpose.proxy.registerRenderers();
 		this.RegisterEventListeners();
+		
+		this.RegisterKeyBindings();
 	}
 
 	@Override
@@ -174,5 +180,16 @@ public class ClientProxy extends CommonProxy
 		System.out.println("Registering event listeners");
 
 		MinecraftForge.EVENT_BUS.register(clientEventHandler);
+	}
+	
+	private void RegisterKeyBindings()
+	{
+		KeyBinding binding = new KeyBinding("Previous Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_A, "Repurpose - Bag of Holding");
+		ClientEventHandler.keyBindings.add(binding);
+		ClientRegistry.registerKeyBinding(binding);
+		
+		binding = new KeyBinding("Next Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_D, "Repurpose - Bag of Holding");
+		ClientEventHandler.keyBindings.add(binding);
+		ClientRegistry.registerKeyBinding(binding);
 	}
 }

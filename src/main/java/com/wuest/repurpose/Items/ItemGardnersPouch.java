@@ -260,6 +260,11 @@ public class ItemGardnersPouch extends Item
 
 			if (handler != null)
 			{
+				if (slot >= handler.getSlots())
+				{
+					slot = 0;
+				}
+				
 				return handler.getStackInSlot(slot);
 			}
 		}

@@ -2,6 +2,7 @@ package com.wuest.repurpose.Events;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -18,6 +19,7 @@ import com.wuest.repurpose.Items.ItemGardnersPouch;
 import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWoodenCrate;
 import com.wuest.repurpose.Items.ItemWoodenCrate.CrateType;
+import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -36,6 +39,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -50,6 +54,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,6 +69,7 @@ import net.minecraftforge.fml.relauncher.Side;
 { Side.CLIENT })
 public class ClientEventHandler
 {
+	public static ArrayList<KeyBinding> keyBindings = new ArrayList<KeyBinding>();
 	public static LocalDateTime bedCompassTime;
 	public static BlockPos bedLocation;
 	protected static final ResourceLocation WIDGETS_TEX_PATH = new ResourceLocation("textures/gui/widgets.png");
@@ -142,6 +148,61 @@ public class ClientEventHandler
 				RenderHelper.disableStandardItemLighting();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.disableBlend();
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	public void KeyInput(KeyInputEvent event)
+	{
+		for (KeyBinding binding : ClientEventHandler.keyBindings)
+		{
+			if (binding.isPressed())
+			{
+				boolean foundModifier = false;
+				int modifier = 0;
+				if (binding.getKeyDescription().equals("Next Item"))
+				{
+					modifier = 1;
+					foundModifier = true;
+				}
+				else if (binding.getKeyDescription().equals("Previous Item"))
+				{
+					modifier = -1;
+					foundModifier = true;
+				}
+				
+				if (foundModifier)
+				{
+					EntityPlayer player = Minecraft.getMinecraft().player;
+					ItemStack stack = player.getHeldItemOffhand();
+					
+					if (stack.getItem() instanceof ItemGardnersPouch)
+					{
+						int currentSlot = ItemGardnersPouch.getCurrentSlotFromStack(stack);
+						
+						if (currentSlot == 53 && modifier > 0)
+						{
+							currentSlot = 0;
+						}
+						else if (currentSlot == 0 && modifier < 0)
+						{
+							currentSlot = 53;
+						}
+						else
+						{
+							currentSlot = currentSlot + modifier;
+						}
+						
+						// Send a message to the server to update the current slot.
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setInteger("slot", currentSlot);
+						CurrentSlotUpdateMessage message = new CurrentSlotUpdateMessage(tag);
+						Repurpose.network.sendToServer(message);
+					}
+				}
+				
+				break;
 			}
 		}
 	}
