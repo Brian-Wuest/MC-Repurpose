@@ -19,9 +19,11 @@ import com.wuest.repurpose.Capabilities.BlockModelCapability;
 import com.wuest.repurpose.Capabilities.BlockModelProvider;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.DimensionHomeProvider;
+import com.wuest.repurpose.Capabilities.GardnersPouchProvider;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
+import com.wuest.repurpose.Items.ItemGardnersPouch;
 import com.wuest.repurpose.Items.ItemScroll;
 import com.wuest.repurpose.Items.ItemSnorkel;
 import com.wuest.repurpose.Items.ItemStoneShears;
@@ -168,6 +170,10 @@ public class WuestEventHandler
 				&& ((ItemBlockCapability)event.getObject().getItem()).getAllowedCapabilities().contains(ModRegistry.BlockModel))
 		{
 			event.addCapability(new ResourceLocation(Repurpose.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
+		}
+		else if (event.getObject().getItem() instanceof ItemGardnersPouch)
+		{
+			event.addCapability(new ResourceLocation(Repurpose.MODID, "GardnersPouch"), new GardnersPouchProvider());
 		}
 	}
 	

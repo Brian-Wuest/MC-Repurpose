@@ -15,7 +15,7 @@ public class GardnersPouchProvider	implements ICapabilityProvider, ICapabilitySe
 
 	public GardnersPouchProvider()
 	{
-		this.inventory = new ItemStackHandler(9);
+		this.inventory = new ItemStackHandler(54);
 	}
 
 	@Override

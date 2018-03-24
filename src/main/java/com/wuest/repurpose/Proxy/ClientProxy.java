@@ -145,7 +145,10 @@ public class ClientProxy extends CommonProxy
 		}
 		else if (ID == GuiItemGardnersPouch.GUI_ID)
 		{
-			return new GuiItemGardnersPouch((IItemHandler)player.getHeldItemMainhand().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null ), player);
+			ItemStack stack = player.getHeldItemOffhand();
+			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			
+			return new GuiItemGardnersPouch(handler, player);
 		}
 
 		return null;
