@@ -48,6 +48,10 @@ import net.minecraftforge.items.IItemHandler;
  */
 public class ItemGardnersPouch extends Item
 {
+	public static final String customValues = "bag_values";
+	public static final String currentSlotName = "current_slot";
+	public static final String bagOpenName = "bag_opened";
+	
 	public ItemGardnersPouch(String name)
 	{
 		setCreativeTab(CreativeTabs.TOOLS);
@@ -100,14 +104,44 @@ public class ItemGardnersPouch extends Item
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 	}
 
-	@Nullable
-	public RayTraceResult rayTrace(EntityPlayer player, double blockReachDistance, float partialTicks)
+	/**
+	 * This used to be 'display damage' but its really just 'aux' data in the ItemStack, usually shares the same
+	 * variable as damage.
+	 * 
+	 * @param stack
+	 * @return
+	 */
+	@Override
+	public int getMetadata(ItemStack stack)
 	{
-		Vec3d vec3d = player.getPositionEyes(partialTicks);
-		Vec3d vec3d1 = player.getLook(partialTicks);
-		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
-			vec3d1.z * blockReachDistance);
-		return player.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+		if (stack.getTagCompound() == null || stack.getTagCompound().hasNoTags())
+		{
+			// Make sure to serialize the NBT for this stack so the information is pushed to the client and the
+			// appropriate Icon is displayed for this stack.
+			stack.setTagCompound(stack.serializeNBT());
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Override this method to change the NBT data being sent to the client. You should ONLY override this when you have
+	 * no other choice, as this might change behavior client side!
+	 *
+	 * @param stack The stack to send the NBT tag for
+	 * @return The NBT tag
+	 */
+	@Override
+	public NBTTagCompound getNBTShareTag(ItemStack stack)
+	{
+		if (stack.getTagCompound() == null || stack.getTagCompound().hasNoTags())
+		{
+			// Make sure to serialize the NBT for this stack so the information is pushed to the client and the
+			// appropriate Icon is displayed for this stack.
+			stack.setTagCompound(stack.serializeNBT());
+		}
+
+		return stack.getTagCompound();
 	}
 
 	public EnumActionResult PlaceBlockFromPouch(EntityPlayer player, World world, ItemBlock itemBlock,
@@ -132,7 +166,8 @@ public class ItemGardnersPouch extends Item
 			if (itemBlock.placeBlockAt(itemStack, player, world, pos, rayTraceResult.sideHit, pos.getX(), pos.getY(),
 				pos.getZ(), placementState))
 			{
-				// After placing, get the block state and the associated sound and play it for the player. Return a success message.
+				// After placing, get the block state and the associated sound and play it for the player. Return a
+				// success message.
 				placementState = world.getBlockState(pos);
 				SoundType soundType = placementState.getBlock().getSoundType(placementState, world, pos, player);
 
@@ -144,5 +179,91 @@ public class ItemGardnersPouch extends Item
 		}
 
 		return EnumActionResult.PASS;
+	}
+
+	@Nullable
+	public static RayTraceResult rayTrace(EntityPlayer player, double blockReachDistance, float partialTicks)
+	{
+		Vec3d vec3d = player.getPositionEyes(partialTicks);
+		Vec3d vec3d1 = player.getLook(partialTicks);
+		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
+			vec3d1.z * blockReachDistance);
+		return player.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+	}
+
+	public static int getCurrentSlotFromStack(ItemStack stack)
+	{
+		if (stack.getItem() instanceof ItemGardnersPouch)
+		{
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			
+			if (sharedTag.hasKey(ItemGardnersPouch.currentSlotName))
+			{
+				return sharedTag.getInteger(ItemGardnersPouch.currentSlotName);
+			}
+			else
+			{
+				sharedTag.setInteger(ItemGardnersPouch.currentSlotName, 0);
+			}
+		}
+		
+		return 0;
+	}
+	
+	public static void setCurrentSlotForStack(ItemStack stack, int slot)
+	{
+		if (stack.getItem() instanceof ItemGardnersPouch)
+		{
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			
+			sharedTag.setInteger(ItemGardnersPouch.currentSlotName, slot);
+		}
+	}
+	
+	public static boolean getBagOpenedFromStack(ItemStack stack)
+	{
+		if (stack.getItem() instanceof ItemGardnersPouch)
+		{
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			
+			if (sharedTag.hasKey(ItemGardnersPouch.currentSlotName))
+			{
+				return sharedTag.getBoolean(ItemGardnersPouch.bagOpenName);
+			}
+			else
+			{
+				sharedTag.setBoolean(ItemGardnersPouch.bagOpenName, false);
+			}
+		}
+		
+		return false;
+	}
+	
+	public static void setBagOpenedStack(ItemStack stack, boolean open)
+	{
+		if (stack.getItem() instanceof ItemGardnersPouch)
+		{
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			
+			sharedTag.setBoolean(ItemGardnersPouch.bagOpenName, open);
+		}
+	}
+	
+	public static ItemStack getItemStackFromInventory(EntityPlayer player)
+	{
+		ItemStack stack = player.getHeldItemOffhand();
+
+		if (stack.getItem() instanceof ItemGardnersPouch)
+		{
+			int slot = ItemGardnersPouch.getCurrentSlotFromStack(stack);
+			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
+			if (handler != null)
+			{
+				return handler.getStackInSlot(slot);
+			}
+		}
+
+		return ItemStack.EMPTY;
 	}
 }
