@@ -14,8 +14,8 @@ import com.wuest.repurpose.Blocks.BlockCoffer;
 import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Gui.BasicGui;
+import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemBlockCoffer;
-import com.wuest.repurpose.Items.ItemGardnersPouch;
 import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWoodenCrate;
 import com.wuest.repurpose.Items.ItemWoodenCrate.CrateType;
@@ -116,7 +116,7 @@ public class ClientEventHandler
 			EntityPlayer player = mc.player;
 			ItemStack itemStack = player.getHeldItemOffhand();
 
-			if (!itemStack.isEmpty() && itemStack.getItem() instanceof ItemGardnersPouch)
+			if (!itemStack.isEmpty() && itemStack.getItem() instanceof ItemBagOfHolding)
 			{
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
@@ -138,7 +138,7 @@ public class ClientEventHandler
 				RenderHelper.enableGUIStandardItemLighting();
 
 				// Draw Item here:
-				ItemStack itemToDraw = ItemGardnersPouch.getItemStackFromInventory(player);
+				ItemStack itemToDraw = ItemBagOfHolding.getItemStackFromInventory(player);
 				
 				if (!itemToDraw.isEmpty())
 				{
@@ -177,9 +177,9 @@ public class ClientEventHandler
 					EntityPlayer player = Minecraft.getMinecraft().player;
 					ItemStack stack = player.getHeldItemOffhand();
 					
-					if (stack.getItem() instanceof ItemGardnersPouch)
+					if (stack.getItem() instanceof ItemBagOfHolding)
 					{
-						int currentSlot = ItemGardnersPouch.getCurrentSlotFromStack(stack);
+						int currentSlot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
 						
 						if (currentSlot == 53 && modifier > 0)
 						{
@@ -373,6 +373,14 @@ public class ClientEventHandler
 					}
 				}
 			}
+			else if (item instanceof ItemBagOfHolding)
+			{
+				ModelLoader.setCustomModelResourceLocation(item, 0,
+					new ModelResourceLocation("repurpose:" + item.getRegistryName().getResourcePath() + "_closed", "variant=closed"));
+				
+				ModelLoader.setCustomModelResourceLocation(item, 1,
+					new ModelResourceLocation("repurpose:" + item.getRegistryName().getResourcePath() + "_opened", "variant=opened"));
+			}
 			else
 			{
 				ClientEventHandler.regItem(item);
@@ -387,7 +395,7 @@ public class ClientEventHandler
 	 */
 	public static void regItem(Item item)
 	{
-		ClientEventHandler.regItem(item, 0, item.getUnlocalizedName().substring(5));
+		ClientEventHandler.regItem(item, 0, item.getRegistryName().toString());
 	}
 
 	/**

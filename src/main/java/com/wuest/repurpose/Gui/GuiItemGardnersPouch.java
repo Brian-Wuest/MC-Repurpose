@@ -1,7 +1,7 @@
 package com.wuest.repurpose.Gui;
 
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Items.Containers.ItemGardnersPouchContainer;
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,7 +18,7 @@ public class GuiItemGardnersPouch extends GuiContainer
 
 	public GuiItemGardnersPouch(IItemHandler i, EntityPlayer p)
 	{
-		super(new ItemGardnersPouchContainer(i, p));
+		super(new BagOfHoldingContainer(i, p));
 
 		this.xSize = 175;
 		this.ySize = 221;

@@ -1,7 +1,7 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Items.ItemGardnersPouch;
+import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
 
@@ -52,9 +52,9 @@ IMessageHandler<CurrentSlotUpdateMessage, IMessage>
 						int currentSlot = tag.getInteger("slot");
 						ItemStack stack = player.getHeldItemOffhand();
 						
-						if (!stack.isEmpty() && stack.getItem() instanceof ItemGardnersPouch)
+						if (!stack.isEmpty() && stack.getItem() instanceof ItemBagOfHolding)
 						{
-							ItemGardnersPouch.setCurrentSlotForStack(stack, currentSlot);
+							ItemBagOfHolding.setCurrentSlotForStack(stack, currentSlot);
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 package com.wuest.repurpose.Items.Containers;
 
-import com.wuest.repurpose.Capabilities.GardnersPouchProvider;
-import com.wuest.repurpose.Items.ItemGardnersPouch;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
+import com.wuest.repurpose.Items.ItemBagOfHolding;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -17,11 +17,11 @@ import net.minecraftforge.items.SlotItemHandler;
  * @author WuestMan
  *
  */
-public class ItemGardnersPouchContainer extends Container
+public class BagOfHoldingContainer extends Container
 {
 	private IItemHandler handler;
 	
-	public ItemGardnersPouchContainer(IItemHandler itemHandler, EntityPlayer p)
+	public BagOfHoldingContainer(IItemHandler itemHandler, EntityPlayer p)
 	{
 		int xPos = 8;
 		int yPos = 18;

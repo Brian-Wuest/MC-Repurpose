@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import com.mojang.authlib.GameProfile;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Capabilities.GardnersPouchProvider;
 import com.wuest.repurpose.Gui.GuiCoffer;
 import com.wuest.repurpose.Gui.GuiItemGardnersPouch;
 
@@ -40,19 +39,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * 
  * @author WuestMan
  *
  */
-public class ItemGardnersPouch extends Item
+public class ItemBagOfHolding extends Item
 {
 	public static final String customValues = "bag_values";
 	public static final String currentSlotName = "current_slot";
 	public static final String bagOpenName = "bag_opened";
-	
-	public ItemGardnersPouch(String name)
+
+	public ItemBagOfHolding(String name)
 	{
 		setCreativeTab(CreativeTabs.TOOLS);
 		this.setMaxStackSize(1);
@@ -63,6 +63,19 @@ public class ItemGardnersPouch extends Item
 	{
 		if (!world.isRemote && hand == EnumHand.OFF_HAND)
 		{
+			if (player.isSneaking())
+			{
+				ItemStack stack = player.getHeldItem(hand);
+				
+				// Open and close the bag. 
+				// This is important for auto-pickup.
+				ItemBagOfHolding.setBagOpenedStack(stack, !ItemBagOfHolding.getBagOpenedFromStack(stack));
+				
+				player.inventoryContainer.detectAndSendChanges();
+				int test = stack.getMetadata();
+				return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
+			}
+			
 			RayTraceResult result = this.rayTrace(player, 5.0, 1.0f);
 
 			if (result.typeOfHit == Type.MISS)
@@ -73,7 +86,7 @@ public class ItemGardnersPouch extends Item
 			else if (result.typeOfHit == Type.BLOCK)
 			{
 				ItemStack stack = player.getHeldItem(hand);
-				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				ItemStackHandler handler = (ItemStackHandler)stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
 				if (handler != null)
 				{
@@ -81,19 +94,26 @@ public class ItemGardnersPouch extends Item
 
 					if (world.isAirBlock(newBlockPos))
 					{
-						ItemStack firstStack = handler.getStackInSlot(0);
+						int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
+						ItemStack stackInSlot = handler.extractItem(slot, 1, false);
 
-						if (firstStack.getItem() instanceof ItemBlock)
+						if (stackInSlot.getItem() instanceof ItemBlock)
 						{
 							// This is an item block so it can be set in the
 							// world.
-							ItemBlock itemBlock = (ItemBlock) firstStack.getItem();
+							ItemBlock itemBlock = (ItemBlock) stackInSlot.getItem();
 							EnumActionResult placementResult = this.PlaceBlockFromPouch(player, world, itemBlock,
-								result, newBlockPos, firstStack);
+								result, newBlockPos, stackInSlot);
 
 							if (placementResult == EnumActionResult.SUCCESS)
 							{
-								firstStack.shrink(1);
+								stackInSlot.shrink(1);
+								
+								ItemBagOfHolding.RefreshItemStack(player, stack);
+							}
+							else
+							{
+								handler.insertItem(slot, stackInSlot, false);
 							}
 						}
 					}
@@ -121,9 +141,23 @@ public class ItemGardnersPouch extends Item
 			stack.setTagCompound(stack.serializeNBT());
 		}
 
-		return 0;
+		return stack.getItemDamage();
 	}
 
+    /**
+     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
+     * different names based on their damage or NBT.
+     */
+    @Override
+	public String getUnlocalizedName(ItemStack stack)
+    {
+    	String returnValue = super.getUnlocalizedName();
+    	
+    	boolean bagIsOpen = ItemBagOfHolding.getBagOpenedFromStack(stack);
+    	
+        return returnValue + (bagIsOpen ? "_opened" : "_closed");
+    }
+	
 	/**
 	 * Override this method to change the NBT data being sent to the client. You should ONLY override this when you have
 	 * no other choice, as this might change behavior client side!
@@ -181,6 +215,25 @@ public class ItemGardnersPouch extends Item
 		return EnumActionResult.PASS;
 	}
 
+	public static void RefreshItemStack(EntityPlayer player, ItemStack stack)
+	{
+		if (stack.getItem() instanceof ItemBagOfHolding)
+		{
+			ItemBagOfHolding item = (ItemBagOfHolding)stack.getItem();
+			
+			NBTTagCompound compound = item.getNBTShareTag(stack);
+			boolean refreshValue = true;
+			
+			if (compound.hasKey("refreshValue"))
+			{
+				refreshValue = !compound.getBoolean("refreshValue");
+			}
+			
+			compound.setBoolean("refreshValue", refreshValue);
+			player.inventoryContainer.detectAndSendChanges();
+		}
+	}
+	
 	@Nullable
 	public static RayTraceResult rayTrace(EntityPlayer player, double blockReachDistance, float partialTicks)
 	{
@@ -193,69 +246,94 @@ public class ItemGardnersPouch extends Item
 
 	public static int getCurrentSlotFromStack(ItemStack stack)
 	{
-		if (stack.getItem() instanceof ItemGardnersPouch)
+		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			NBTTagCompound sharedTag = stack.getItem().getNBTShareTag(stack);
 			
-			if (sharedTag.hasKey(ItemGardnersPouch.currentSlotName))
+			if (!sharedTag.hasKey(ItemBagOfHolding.customValues))
 			{
-				return sharedTag.getInteger(ItemGardnersPouch.currentSlotName);
+				NBTTagCompound customValues = new NBTTagCompound();
+				sharedTag.setTag(ItemBagOfHolding.customValues, customValues);
+				sharedTag = customValues;
 			}
 			else
 			{
-				sharedTag.setInteger(ItemGardnersPouch.currentSlotName, 0);
+				sharedTag = sharedTag.getCompoundTag(ItemBagOfHolding.customValues);
+			}
+
+			if (sharedTag.hasKey(ItemBagOfHolding.currentSlotName))
+			{
+				return sharedTag.getInteger(ItemBagOfHolding.currentSlotName);
+			}
+			else
+			{
+				sharedTag.setInteger(ItemBagOfHolding.currentSlotName, 0);
 			}
 		}
-		
+
 		return 0;
 	}
-	
+
 	public static void setCurrentSlotForStack(ItemStack stack, int slot)
 	{
-		if (stack.getItem() instanceof ItemGardnersPouch)
+		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
-			
-			sharedTag.setInteger(ItemGardnersPouch.currentSlotName, slot);
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemBagOfHolding.customValues);
+
+			sharedTag.setInteger(ItemBagOfHolding.currentSlotName, slot);
 		}
 	}
-	
+
 	public static boolean getBagOpenedFromStack(ItemStack stack)
 	{
-		if (stack.getItem() instanceof ItemGardnersPouch)
+		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			NBTTagCompound sharedTag = stack.getItem().getNBTShareTag(stack);
 			
-			if (sharedTag.hasKey(ItemGardnersPouch.currentSlotName))
+			if (!sharedTag.hasKey(ItemBagOfHolding.customValues))
 			{
-				return sharedTag.getBoolean(ItemGardnersPouch.bagOpenName);
+				NBTTagCompound customValues = new NBTTagCompound();
+				sharedTag.setTag(ItemBagOfHolding.customValues, customValues);
+				sharedTag = customValues;
 			}
 			else
 			{
-				sharedTag.setBoolean(ItemGardnersPouch.bagOpenName, false);
+				sharedTag = sharedTag.getCompoundTag(ItemBagOfHolding.customValues);
+			}
+
+			if (sharedTag.hasKey(ItemBagOfHolding.bagOpenName))
+			{
+				return sharedTag.getBoolean(ItemBagOfHolding.bagOpenName);
+			}
+			else
+			{
+				sharedTag.setBoolean(ItemBagOfHolding.bagOpenName, false);
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public static void setBagOpenedStack(ItemStack stack, boolean open)
 	{
-		if (stack.getItem() instanceof ItemGardnersPouch)
+		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemGardnersPouch.customValues);
+			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemBagOfHolding.customValues);
+
+			sharedTag.setBoolean(ItemBagOfHolding.bagOpenName, open);
 			
-			sharedTag.setBoolean(ItemGardnersPouch.bagOpenName, open);
+			int metaValue = open ? 1 : 0;
+			stack.setItemDamage(metaValue);
 		}
 	}
-	
+
 	public static ItemStack getItemStackFromInventory(EntityPlayer player)
 	{
 		ItemStack stack = player.getHeldItemOffhand();
 
-		if (stack.getItem() instanceof ItemGardnersPouch)
+		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			int slot = ItemGardnersPouch.getCurrentSlotFromStack(stack);
+			int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
 			if (handler != null)
@@ -264,7 +342,7 @@ public class ItemGardnersPouch extends Item
 				{
 					slot = 0;
 				}
-				
+
 				return handler.getStackInSlot(slot);
 			}
 		}

@@ -25,7 +25,9 @@ item.repurpose:item_wooden_crate.bunch_of_carrots.name=Bunch of Carrots
 item.repurpose:item_wooden_crate.crate_of_carrots.name=Crate of Carrots
 item.repurpose:item_wooden_crate.bunch_of_beets.name=Bunch of Beets
 item.repurpose:item_wooden_crate.crate_of_beets.name=Crate of Beets
-item.repurpose:item_gardners_pouch.name=Gardner's Pouch
+item.repurpose:item_bag_of_holding.name=Bag of Holding
+item.repurpose:item_bag_of_holding_opened.name=Bag of Holding (Opened)
+item.repurpose:item_bag_of_holding_closed.name=Bag of Holding
 
 tile.repurpose.chest.iron.name=Iron Coffer
 tile.repurpose:block_redstone_clock.name=Redstone Clock

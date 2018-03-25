@@ -19,11 +19,11 @@ import com.wuest.repurpose.Capabilities.BlockModelCapability;
 import com.wuest.repurpose.Capabilities.BlockModelProvider;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.DimensionHomeProvider;
-import com.wuest.repurpose.Capabilities.GardnersPouchProvider;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Config.WuestConfiguration;
+import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
-import com.wuest.repurpose.Items.ItemGardnersPouch;
 import com.wuest.repurpose.Items.ItemScroll;
 import com.wuest.repurpose.Items.ItemSnorkel;
 import com.wuest.repurpose.Items.ItemStoneShears;
@@ -70,6 +70,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -90,6 +91,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -97,13 +99,17 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 @EventBusSubscriber(value = {Side.SERVER, Side.CLIENT })
 public class WuestEventHandler
@@ -171,9 +177,9 @@ public class WuestEventHandler
 		{
 			event.addCapability(new ResourceLocation(Repurpose.MODID, "BlockModel"), new BlockModelProvider(new BlockModelCapability()));
 		}
-		else if (event.getObject().getItem() instanceof ItemGardnersPouch)
+		else if (event.getObject().getItem() instanceof ItemBagOfHolding)
 		{
-			event.addCapability(new ResourceLocation(Repurpose.MODID, "GardnersPouch"), new GardnersPouchProvider());
+			event.addCapability(new ResourceLocation(Repurpose.MODID, "BagOfHolding"), new ItemBagOfHoldingProvider());
 		}
 	}
 	
@@ -630,6 +636,80 @@ public class WuestEventHandler
 				
 				maxPercentage = ((double)Repurpose.proxy.proxyConfiguration.goldNuggetDropChance) / 100d;
 				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage, Items.GOLD_NUGGET, 1);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onPickUp(EntityItemPickupEvent event)
+	{		
+		if (!event.isCanceled())
+		{
+			boolean setSlot = false;
+			EntityPlayer player = event.getEntityPlayer();
+			ItemStack eventStack = event.getItem().getItem();
+			
+			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
+			{
+				ItemStack stack = player.inventory.getStackInSlot(i);
+				
+				if (stack.getItem() instanceof ItemBagOfHolding)
+				{
+					// Only auto-pickup if this bag is set to open.
+					if (ItemBagOfHolding.getBagOpenedFromStack(stack))
+					{
+						ItemStackHandler handler = (ItemStackHandler)stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);		
+						int firstEmptySlot = -1;
+						
+						for (int j = 0; j < handler.getSlots(); j++)
+						{
+							ItemStack pouchStack = handler.getStackInSlot(j);
+							
+							if (pouchStack.isEmpty() && firstEmptySlot == -1)
+							{
+								// Found an empty slot, maybe use this later.
+								firstEmptySlot = j;
+							}
+							
+							if (!pouchStack.isEmpty())
+							{
+								// This has an item in it of some kind, determine if they are the same.
+								if (pouchStack.areItemsEqual(pouchStack, eventStack))
+								{
+									int updatedSize = pouchStack.getCount() + eventStack.getCount();
+									
+									// Make sure we don't go above the stack limit for this slot.
+									// If there is too much, just move onto the next slot.
+									if (updatedSize <= handler.getSlotLimit(j))
+									{
+										setSlot = true;
+										pouchStack.setCount(updatedSize);
+										handler.setStackInSlot(j, pouchStack);
+										break;
+									}
+								}
+							}
+						}
+						
+						if (!setSlot && firstEmptySlot != -1)
+						{
+							// There was not a matching stack, place it in the first empty slot.
+							handler.setStackInSlot(firstEmptySlot, eventStack);
+							setSlot = true;
+						}
+						
+						if (setSlot)
+						{
+							// We set an inventory slot, set this event to canceled and break out of the loop.
+							player.onItemPickup(event.getItem(), event.getItem().getItem().getCount());
+							player.addStat(StatList.getObjectsPickedUpStats(event.getItem().getItem().getItem()), event.getItem().getItem().getCount());
+							event.getItem().setDead();
+							event.setCanceled(true);
+							ItemBagOfHolding.RefreshItemStack(player, stack);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}

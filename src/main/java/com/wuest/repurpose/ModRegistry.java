@@ -192,9 +192,9 @@ public class ModRegistry
 		return ModRegistry.GetItem(ItemWoodenCrate.class);
 	}
 	
-	public static ItemGardnersPouch GardnersPounch()
+	public static ItemBagOfHolding BagofHolding()
 	{
-		return ModRegistry.GetItem(ItemGardnersPouch.class);
+		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
 	
 	/**
@@ -357,8 +357,8 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
 		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
 		
-		// Gardner's Pouch
-		ModRegistry.registerItem(new ItemGardnersPouch("item_gardners_pouch"));
+		// Bag of Holding
+		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
 		
 		// Coffers.
 		//block = new BlockCoffer();

@@ -184,11 +184,11 @@ public class ClientProxy extends CommonProxy
 	
 	private void RegisterKeyBindings()
 	{
-		KeyBinding binding = new KeyBinding("Previous Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_A, "Repurpose - Bag of Holding");
+		KeyBinding binding = new KeyBinding("Previous Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_Z, "Repurpose - Bag of Holding");
 		ClientEventHandler.keyBindings.add(binding);
 		ClientRegistry.registerKeyBinding(binding);
 		
-		binding = new KeyBinding("Next Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_D, "Repurpose - Bag of Holding");
+		binding = new KeyBinding("Next Item", net.minecraftforge.client.settings.KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_X, "Repurpose - Bag of Holding");
 		ClientEventHandler.keyBindings.add(binding);
 		ClientRegistry.registerKeyBinding(binding);
 	}

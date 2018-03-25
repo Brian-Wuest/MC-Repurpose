@@ -6,12 +6,12 @@ import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.UpdateChecker;
 import com.wuest.repurpose.Blocks.*;
 import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
-import com.wuest.repurpose.Capabilities.GardnersPouchProvider;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Events.WuestEventHandler;
 import com.wuest.repurpose.Gui.*;
 import com.wuest.repurpose.Items.*;
-import com.wuest.repurpose.Items.Containers.ItemGardnersPouchContainer;
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.Proxy.Messages.*;
 import com.wuest.repurpose.Proxy.Messages.Handlers.*;
 import com.wuest.repurpose.Tiles.TileEntityCoffer;
@@ -121,7 +121,7 @@ public class CommonProxy implements IGuiHandler
 			ItemStack stack = player.getHeldItemOffhand();
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			
-			return new ItemGardnersPouchContainer(handler, player);
+			return new BagOfHoldingContainer(handler, player);
 		}
 		
 		return null;

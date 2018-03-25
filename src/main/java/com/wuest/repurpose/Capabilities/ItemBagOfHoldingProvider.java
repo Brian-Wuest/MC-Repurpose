@@ -9,11 +9,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class GardnersPouchProvider	implements ICapabilityProvider, ICapabilitySerializable
+public class ItemBagOfHoldingProvider implements ICapabilityProvider, ICapabilitySerializable
 {
 	private final ItemStackHandler inventory;
 
-	public GardnersPouchProvider()
+	public ItemBagOfHoldingProvider()
 	{
 		this.inventory = new ItemStackHandler(54);
 	}
@@ -37,7 +37,7 @@ public class GardnersPouchProvider	implements ICapabilityProvider, ICapabilitySe
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -48,7 +48,7 @@ public class GardnersPouchProvider	implements ICapabilityProvider, ICapabilitySe
 		{
 			return (T) inventory;
 		}
-		
+
 		return null;
 	}
 }
