@@ -81,6 +81,7 @@ public class WuestConfiguration
 	public static String Crate_Of_CarrotsName = "Crate of Carrots";
 	public static String Bunch_Of_BeetsName = "Bunch of Beets";
 	public static String Crate_Of_BeetsName = "Crate of Beets";
+	public static String Bag_Of_Holding_Name = "Bag of Holding";
 	
 	public static String versionMessageName = "Version Message";
 	public static String showMessageName = "Show Message";
@@ -138,7 +139,8 @@ public class WuestConfiguration
 		Bunch_Of_PotatoesName,
 		Crate_Of_BeetsName,
 		Crate_Of_CarrotsName,
-		Crate_Of_PotatoesName
+		Crate_Of_PotatoesName,
+		Bag_Of_Holding_Name
 	};
 	
 	// Extra Drop Options.
