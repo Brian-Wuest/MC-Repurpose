@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "repurpose:items/item_gold_sickle"
+		"layer0": "repurpose:items/item_bag_of_holding_opened"
 	}
 }
