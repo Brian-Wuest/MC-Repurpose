@@ -717,11 +717,11 @@ public class WuestEventHandler
 
 				if (stack.getItem() instanceof ItemBagOfHolding)
 				{
+					ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+					
 					// Only auto-pickup if this bag is set to open and the stack is valid for the bag of holding.
-					if (ItemBagOfHolding.getBagOpenedFromStack(stack)
-						&& BagOfHoldingContainer.validForContainer(stack))
+					if (handler.opened && BagOfHoldingContainer.validForContainer(eventStack))
 					{
-						ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 						int firstEmptySlot = -1;
 
 						for (int j = 0; j < handler.getSlots(); j++)
@@ -769,6 +769,8 @@ public class WuestEventHandler
 								event.getItem().getItem().getCount());
 							event.getItem().setDead();
 							event.setCanceled(true);
+							
+							handler.UpdateStack(stack);
 							ItemBagOfHolding.RefreshItemStack(player, stack);
 							break;
 						}

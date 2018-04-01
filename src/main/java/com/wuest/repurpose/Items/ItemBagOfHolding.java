@@ -116,12 +116,12 @@ public class ItemBagOfHolding extends Item
 							if (placementResult == EnumActionResult.SUCCESS)
 							{
 								stackInSlot.shrink(1);
-
-								ItemBagOfHolding.RefreshItemStack(player, stack);
+								handler.UpdateStack(stack);
 							}
 							else
 							{
 								handler.insertItem(slot, stackInSlot, false);
+								handler.UpdateStack(stack);
 							}
 						}
 					}
