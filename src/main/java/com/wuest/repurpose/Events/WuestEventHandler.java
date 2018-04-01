@@ -31,6 +31,7 @@ import com.wuest.repurpose.Items.ItemScroll;
 import com.wuest.repurpose.Items.ItemSnorkel;
 import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWhetStone;
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
@@ -716,8 +717,9 @@ public class WuestEventHandler
 
 				if (stack.getItem() instanceof ItemBagOfHolding)
 				{
-					// Only auto-pickup if this bag is set to open.
-					if (ItemBagOfHolding.getBagOpenedFromStack(stack))
+					// Only auto-pickup if this bag is set to open and the stack is valid for the bag of holding.
+					if (ItemBagOfHolding.getBagOpenedFromStack(stack)
+						&& BagOfHoldingContainer.validForContainer(stack))
 					{
 						ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 						int firstEmptySlot = -1;

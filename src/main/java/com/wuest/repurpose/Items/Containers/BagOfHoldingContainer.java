@@ -5,6 +5,8 @@ import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,6 +15,7 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -59,6 +62,29 @@ public class BagOfHoldingContainer extends Container
 		
 		this.handler = itemHandler;
 		this.player = player;
+	}
+	
+	/**
+	 * Determines if the stack is valid for this container.
+	 * @param stack - The stack to check.
+	 * @return True if the stack is valid for the bag of holding, otherwise false.
+	 */
+	public static boolean validForContainer(ItemStack stack)
+	{
+    	if (Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer
+    		|| stack.getItem() instanceof ItemBagOfHolding
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.EAST)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.SOUTH)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP)
+    		|| stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.WEST))
+    	{
+    		return false;
+    	}
+    	
+    	return true;
 	}
 	
     /**

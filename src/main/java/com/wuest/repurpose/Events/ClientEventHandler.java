@@ -78,6 +78,7 @@ public class ClientEventHandler
 	private static final int BUFF_ICON_BASE_U_OFFSET = 0;
 	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
 	private static final int BUFF_ICONS_OFFSET = 8;
+	private static final int GREEN_TEXT = Color.GREEN.getRGB();
 
 	private static HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
 
@@ -118,12 +119,18 @@ public class ClientEventHandler
 
 			if (!itemStack.isEmpty() && itemStack.getItem() instanceof ItemBagOfHolding)
 			{
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
+				int currentSlot = ItemBagOfHolding.getCurrentSlotFromStack(itemStack) + 1;
+				
 				ScaledResolution scaledResolution = new ScaledResolution(mc);
 				int offHandSlotLocationX = (scaledResolution.getScaledWidth() / 2) - 91 - 29;
 				int offHandSlotLocationY = scaledResolution.getScaledHeight() - 23;
 				int selectedSlotLocationY = offHandSlotLocationY - 23;
+				
+				mc.fontRenderer.drawString(((Integer)currentSlot).toString(), offHandSlotLocationX - 12, selectedSlotLocationY + 8,
+					ClientEventHandler.GREEN_TEXT, true);
+				
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
 
 				GlStateManager.enableBlend();
 				BasicGui guiClass = new BasicGui();
@@ -139,20 +146,21 @@ public class ClientEventHandler
 
 				// Draw Item here:
 				ItemStack itemToDraw = ItemBagOfHolding.getItemStackFromInventory(player);
-				
+
 				if (!itemToDraw.isEmpty())
 				{
-					ClientEventHandler.renderHotbarItem(mc, offHandSlotLocationX + 3, selectedSlotLocationY + 3, 1, player, itemToDraw);
+					ClientEventHandler.renderHotbarItem(mc, offHandSlotLocationX + 3, selectedSlotLocationY + 3, 1,
+						player, itemToDraw);
 				}
-				
+
 				RenderHelper.disableStandardItemLighting();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.disableBlend();
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 	public void KeyInput(KeyInputEvent event)
 	{
 		for (KeyBinding binding : ClientEventHandler.keyBindings)
@@ -171,16 +179,16 @@ public class ClientEventHandler
 					modifier = -1;
 					foundModifier = true;
 				}
-				
+
 				if (foundModifier)
 				{
 					EntityPlayer player = Minecraft.getMinecraft().player;
 					ItemStack stack = player.getHeldItemOffhand();
-					
+
 					if (stack.getItem() instanceof ItemBagOfHolding)
 					{
 						int currentSlot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
-						
+
 						if (currentSlot == 53 && modifier > 0)
 						{
 							currentSlot = 0;
@@ -193,7 +201,7 @@ public class ClientEventHandler
 						{
 							currentSlot = currentSlot + modifier;
 						}
-						
+
 						// Send a message to the server to update the current slot.
 						NBTTagCompound tag = new NBTTagCompound();
 						tag.setInteger("slot", currentSlot);
@@ -201,7 +209,7 @@ public class ClientEventHandler
 						Repurpose.network.sendToServer(message);
 					}
 				}
-				
+
 				break;
 			}
 		}
@@ -375,11 +383,11 @@ public class ClientEventHandler
 			}
 			else if (item instanceof ItemBagOfHolding)
 			{
-				ModelLoader.setCustomModelResourceLocation(item, 0,
-					new ModelResourceLocation("repurpose:" + item.getRegistryName().getResourcePath() + "_closed", "variant=closed"));
-				
-				ModelLoader.setCustomModelResourceLocation(item, 1,
-					new ModelResourceLocation("repurpose:" + item.getRegistryName().getResourcePath() + "_opened", "variant=opened"));
+				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(
+					"repurpose:" + item.getRegistryName().getResourcePath() + "_closed", "variant=closed"));
+
+				ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(
+					"repurpose:" + item.getRegistryName().getResourcePath() + "_opened", "variant=opened"));
 			}
 			else
 			{
@@ -657,33 +665,32 @@ public class ClientEventHandler
 		}
 	}
 
-	
-    private static void renderHotbarItem(Minecraft mc, int x, int y, float z, EntityPlayer player, ItemStack stack)
-    {
-        if (!stack.isEmpty())
-        {
-            float f = (float)stack.getAnimationsToGo() - z;
+	private static void renderHotbarItem(Minecraft mc, int x, int y, float z, EntityPlayer player, ItemStack stack)
+	{
+		if (!stack.isEmpty())
+		{
+			float f = (float) stack.getAnimationsToGo() - z;
 
-            if (f > 0.0F)
-            {
-                GlStateManager.pushMatrix();
-                float f1 = 1.0F + f / 5.0F;
-                GlStateManager.translate((float)(x + 8), (float)(y + 12), 0.0F);
-                GlStateManager.scale(1.0F / f1, (f1 + 1.0F) / 2.0F, 1.0F);
-                GlStateManager.translate((float)(-(x + 8)), (float)(-(y + 12)), 0.0F);
-            }
+			if (f > 0.0F)
+			{
+				GlStateManager.pushMatrix();
+				float f1 = 1.0F + f / 5.0F;
+				GlStateManager.translate((float) (x + 8), (float) (y + 12), 0.0F);
+				GlStateManager.scale(1.0F / f1, (f1 + 1.0F) / 2.0F, 1.0F);
+				GlStateManager.translate((float) (-(x + 8)), (float) (-(y + 12)), 0.0F);
+			}
 
-            mc.getRenderItem().renderItemAndEffectIntoGUI(player, stack, x, y);
+			mc.getRenderItem().renderItemAndEffectIntoGUI(player, stack, x, y);
 
-            if (f > 0.0F)
-            {
-                GlStateManager.popMatrix();
-            }
+			if (f > 0.0F)
+			{
+				GlStateManager.popMatrix();
+			}
 
-            mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, x, y);
-        }
-    }
-    
+			mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, x, y);
+		}
+	}
+
 	/**
 	 * This class is used to hold information stored about a player's step assist.
 	 * 
