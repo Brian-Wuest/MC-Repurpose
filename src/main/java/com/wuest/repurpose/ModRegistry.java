@@ -11,6 +11,7 @@ import com.wuest.repurpose.Capabilities.*;
 import com.wuest.repurpose.Capabilities.Storage.BlockModelStorage;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
+import com.wuest.repurpose.Events.WuestEventHandler;
 import com.wuest.repurpose.Items.*;
 import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Proxy.Messages.*;
@@ -354,8 +355,8 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
 		
 		// Wooden Crate
-		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
-		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
+		//ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
+		//ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
 		
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
@@ -400,6 +401,7 @@ public class ModRegistry
 		Repurpose.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
 		Repurpose.network.registerMessage(ConfigSyncHandler.class, ConfigSyncMessage.class, 5, Side.CLIENT);
 		Repurpose.network.registerMessage(CurrentSlotUpdateHandler.class, CurrentSlotUpdateMessage.class, 6, Side.SERVER);
+		Repurpose.network.registerMessage(BagOfHoldingUpdateMessageHandler.class, BagOfHoldingUpdateMessage.class, 7, Side.CLIENT);
 	}
 
 	/**

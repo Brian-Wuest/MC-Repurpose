@@ -1,27 +1,25 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import com.wuest.repurpose.Repurpose;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
-import com.wuest.repurpose.Proxy.ClientProxy;
-import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
+import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class CurrentSlotUpdateHandler implements
-IMessageHandler<CurrentSlotUpdateMessage, IMessage>
+public class BagOfHoldingUpdateMessageHandler implements
+IMessageHandler<BagOfHoldingUpdateMessage, IMessage>
 {
 	@Override
-	public IMessage onMessage(final CurrentSlotUpdateMessage message,
+	public IMessage onMessage(final BagOfHoldingUpdateMessage message,
 			final MessageContext ctx) 
 	{
 		// Or Minecraft.getMinecraft() on the client.
@@ -41,20 +39,19 @@ IMessageHandler<CurrentSlotUpdateMessage, IMessage>
 			@Override
 			public void run() 
 			{
-				if (ctx.side.isServer())
+				if (ctx.side.isClient())
 				{
 					// This is server side.
 					NBTTagCompound tag = message.getMessageTag();
-					EntityPlayerMP player = ctx.getServerHandler().player;
+					EntityPlayerSP player = Minecraft.getMinecraft().player;
 					
-					if (tag != null && tag.hasKey("slot"))
+					if (tag != null)
 					{
-						int currentSlot = tag.getInteger("slot");
 						ItemStack stack = player.getHeldItemOffhand();
 						
 						if (!stack.isEmpty() && stack.getItem() instanceof ItemBagOfHolding)
 						{
-							ItemBagOfHolding.setCurrentSlotForStack(player, stack, currentSlot);
+							ItemBagOfHoldingProvider.UpdateStackFromNbt(stack, tag);
 						}
 					}
 				}

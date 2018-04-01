@@ -116,11 +116,11 @@ public class CommonProxy implements IGuiHandler
 		{
 			return new ContainerCoffer(player.inventory, (TileEntityCoffer)tileEntity, ((TileEntityCoffer)tileEntity).getType(), 0, 0);
 		}
-		else if (ID == GuiItemGardnersPouch.GUI_ID)
+		else if (ID == GuiItemBagOfHolding.GUI_ID)
 		{
 			ItemStack stack = player.getHeldItemOffhand();
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-			
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			((ItemBagOfHolding)stack.getItem()).RefreshItemStack(player, stack);
 			return new BagOfHoldingContainer(handler, player);
 		}
 		

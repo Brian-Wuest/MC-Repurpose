@@ -1,24 +1,32 @@
 package com.wuest.repurpose.Items;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Gui.GuiCoffer;
-import com.wuest.repurpose.Gui.GuiItemGardnersPouch;
+import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
+import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ActionResult;
@@ -29,6 +37,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -63,30 +72,29 @@ public class ItemBagOfHolding extends Item
 	{
 		if (!world.isRemote && hand == EnumHand.OFF_HAND)
 		{
+			ItemStack stack = player.getHeldItem(hand);
+
 			if (player.isSneaking())
 			{
-				ItemStack stack = player.getHeldItem(hand);
-				
-				// Open and close the bag. 
+				// Open and close the bag.
 				// This is important for auto-pickup.
 				ItemBagOfHolding.setBagOpenedStack(stack, !ItemBagOfHolding.getBagOpenedFromStack(stack));
-				
+
 				player.inventoryContainer.detectAndSendChanges();
 				int test = stack.getMetadata();
 				return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 			}
-			
+
 			RayTraceResult result = this.rayTrace(player, 5.0, 1.0f);
 
 			if (result.typeOfHit == Type.MISS)
 			{
-				player.openGui(Repurpose.instance, GuiItemGardnersPouch.GUI_ID, world, player.getPosition().getX(),
+				player.openGui(Repurpose.instance, GuiItemBagOfHolding.GUI_ID, world, player.getPosition().getX(),
 					player.getPosition().getY(), player.getPosition().getZ());
 			}
 			else if (result.typeOfHit == Type.BLOCK)
 			{
-				ItemStack stack = player.getHeldItem(hand);
-				ItemStackHandler handler = (ItemStackHandler)stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 
 				if (handler != null)
 				{
@@ -108,7 +116,7 @@ public class ItemBagOfHolding extends Item
 							if (placementResult == EnumActionResult.SUCCESS)
 							{
 								stackInSlot.shrink(1);
-								
+
 								ItemBagOfHolding.RefreshItemStack(player, stack);
 							}
 							else
@@ -144,20 +152,20 @@ public class ItemBagOfHolding extends Item
 		return stack.getItemDamage();
 	}
 
-    /**
-     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
-     * different names based on their damage or NBT.
-     */
-    @Override
+	/**
+	 * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
+	 * different names based on their damage or NBT.
+	 */
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
-    {
-    	String returnValue = super.getUnlocalizedName();
-    	
-    	boolean bagIsOpen = ItemBagOfHolding.getBagOpenedFromStack(stack);
-    	
-        return returnValue + (bagIsOpen ? "_opened" : "_closed");
-    }
-	
+	{
+		String returnValue = super.getUnlocalizedName();
+
+		boolean bagIsOpen = ItemBagOfHolding.getBagOpenedFromStack(stack);
+
+		return returnValue + (bagIsOpen ? "_opened" : "_closed");
+	}
+
 	/**
 	 * Override this method to change the NBT data being sent to the client. You should ONLY override this when you have
 	 * no other choice, as this might change behavior client side!
@@ -215,25 +223,36 @@ public class ItemBagOfHolding extends Item
 		return EnumActionResult.PASS;
 	}
 
-	public static void RefreshItemStack(EntityPlayer player, ItemStack stack)
+	/**
+	 * allows items to add custom lines of information to the mouseover description
+	 */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced)
 	{
-		if (stack.getItem() instanceof ItemBagOfHolding)
+		super.addInformation(stack, world, tooltip, advanced);
+
+		boolean advancedKeyDown = Minecraft.getMinecraft().currentScreen.isShiftKeyDown();
+
+		if (!advancedKeyDown)
 		{
-			ItemBagOfHolding item = (ItemBagOfHolding)stack.getItem();
-			
-			NBTTagCompound compound = item.getNBTShareTag(stack);
-			boolean refreshValue = true;
-			
-			if (compound.hasKey("refreshValue"))
-			{
-				refreshValue = !compound.getBoolean("refreshValue");
-			}
-			
-			compound.setBoolean("refreshValue", refreshValue);
-			player.inventoryContainer.detectAndSendChanges();
+			tooltip.add("Hold" + TextFormatting.BLUE + " Shift " + TextFormatting.GRAY + "for advanced information.");
+		}
+		else
+		{
+			tooltip.add(
+				"Place in off-hand and right-click to open inventory or place block. Sneak and right-click when in off-hand to open/close bag.");
 		}
 	}
-	
+
+	public static void RefreshItemStack(EntityPlayer player, ItemStack stack)
+	{
+		if (stack.getItem() instanceof ItemBagOfHolding && !player.world.isRemote)
+		{
+			ItemBagOfHoldingProvider.UpdateRefreshValue(stack);
+		}
+	}
+
 	@Nullable
 	public static RayTraceResult rayTrace(EntityPlayer player, double blockReachDistance, float partialTicks)
 	{
@@ -248,39 +267,22 @@ public class ItemBagOfHolding extends Item
 	{
 		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getItem().getNBTShareTag(stack);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 			
-			if (!sharedTag.hasKey(ItemBagOfHolding.customValues))
-			{
-				NBTTagCompound customValues = new NBTTagCompound();
-				sharedTag.setTag(ItemBagOfHolding.customValues, customValues);
-				sharedTag = customValues;
-			}
-			else
-			{
-				sharedTag = sharedTag.getCompoundTag(ItemBagOfHolding.customValues);
-			}
-
-			if (sharedTag.hasKey(ItemBagOfHolding.currentSlotName))
-			{
-				return sharedTag.getInteger(ItemBagOfHolding.currentSlotName);
-			}
-			else
-			{
-				sharedTag.setInteger(ItemBagOfHolding.currentSlotName, 0);
-			}
+			return handler.slotIndex;
 		}
 
 		return 0;
 	}
 
-	public static void setCurrentSlotForStack(ItemStack stack, int slot)
+	public static void setCurrentSlotForStack(EntityPlayer player, ItemStack stack, int slot)
 	{
 		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemBagOfHolding.customValues);
-
-			sharedTag.setInteger(ItemBagOfHolding.currentSlotName, slot);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.slotIndex = slot;
+			
+			handler.UpdateStack(stack);
 		}
 	}
 
@@ -288,27 +290,9 @@ public class ItemBagOfHolding extends Item
 	{
 		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getItem().getNBTShareTag(stack);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 			
-			if (!sharedTag.hasKey(ItemBagOfHolding.customValues))
-			{
-				NBTTagCompound customValues = new NBTTagCompound();
-				sharedTag.setTag(ItemBagOfHolding.customValues, customValues);
-				sharedTag = customValues;
-			}
-			else
-			{
-				sharedTag = sharedTag.getCompoundTag(ItemBagOfHolding.customValues);
-			}
-
-			if (sharedTag.hasKey(ItemBagOfHolding.bagOpenName))
-			{
-				return sharedTag.getBoolean(ItemBagOfHolding.bagOpenName);
-			}
-			else
-			{
-				sharedTag.setBoolean(ItemBagOfHolding.bagOpenName, false);
-			}
+			return handler.opened;
 		}
 
 		return false;
@@ -318,10 +302,11 @@ public class ItemBagOfHolding extends Item
 	{
 		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
-			NBTTagCompound sharedTag = stack.getOrCreateSubCompound(ItemBagOfHolding.customValues);
-
-			sharedTag.setBoolean(ItemBagOfHolding.bagOpenName, open);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.opened = open;
 			
+			handler.UpdateStack(stack);
+
 			int metaValue = open ? 1 : 0;
 			stack.setItemDamage(metaValue);
 		}
@@ -334,7 +319,7 @@ public class ItemBagOfHolding extends Item
 		if (stack.getItem() instanceof ItemBagOfHolding)
 		{
 			int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 
 			if (handler != null)
 			{

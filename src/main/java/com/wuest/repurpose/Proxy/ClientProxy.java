@@ -6,6 +6,7 @@ import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Blocks.BlockCoffer;
 import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
@@ -13,7 +14,7 @@ import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
 import com.wuest.repurpose.Events.WuestEventHandler;
 import com.wuest.repurpose.Gui.GuiCoffer;
-import com.wuest.repurpose.Gui.GuiItemGardnersPouch;
+import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Gui.GuiRedstoneClock;
 import com.wuest.repurpose.Gui.GuiRedstoneScanner;
 import com.wuest.repurpose.Items.ItemBlockCoffer;
@@ -149,12 +150,12 @@ public class ClientProxy extends CommonProxy
 		{
 			return GuiCoffer.GUI.buildGUI(((TileEntityCoffer)tileEntity).getType(), player.inventory, (TileEntityCoffer) tileEntity);
 		}
-		else if (ID == GuiItemGardnersPouch.GUI_ID)
+		else if (ID == GuiItemBagOfHolding.GUI_ID)
 		{
 			ItemStack stack = player.getHeldItemOffhand();
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 			
-			return new GuiItemGardnersPouch(handler, player);
+			return new GuiItemBagOfHolding(handler, player);
 		}
 
 		return null;
