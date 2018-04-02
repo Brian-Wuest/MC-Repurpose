@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.9",
-	  "1.12-recommended": "1.0.0.9"
+	  "1.12-latest": "1.0.0.11",
+	  "1.12-recommended": "1.0.0.11"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -14,6 +14,8 @@
 	  "1.0.0.6": "Fixed some issues with /home and right-click harvesting.",
 	  "1.0.0.7": "Adding verbose logging for right-click harvesting.",
 	  "1.0.0.8": "Fixed issue where logging config option wasn't syncing.",
-	  "1.0.0.9": "Added portable lights and enchantable scrolls."
+	  "1.0.0.9": "Added portable lights and enchantable scrolls.",
+	  "1.0.0.10": "Redstone clock turns off when receiving redstone signal.", 
+	  "1.0.0.11": "Added Bag of Holding, a portable inventory expansion."
   }
 }
