@@ -355,8 +355,8 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
 		
 		// Wooden Crate
-		//ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
-		//ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
+		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
+		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
 		
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));

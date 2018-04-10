@@ -1,9 +1,9 @@
 {
 	"parent": "block/cube_bottom_top",
    "textures": {
-        "side": "repurpose:blocks/block_charcoal",
-        "bottom": "repurpose:blocks/block_charcoal",
-        "top": "blocks/dirt"
+        "side": "repurpose:items/item_crate_side",
+        "bottom": "repurpose:items/item_crate_potato",
+        "top": "repurpose:items/item_crate_potato"
     },
 	"display": {
 		"thirdperson": {

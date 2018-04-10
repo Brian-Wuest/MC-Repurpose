@@ -1,9 +1,7 @@
 {
-	"parent": "block/cube_bottom_top",
-   "textures": {
-        "side": "repurpose:blocks/block_charcoal",
-        "bottom": "repurpose:blocks/block_charcoal",
-        "top": "repurpose:blocks/block_charcoal"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "repurpose:items/item_bunch_of_beets"
     },
 	"display": {
 		"thirdperson": {

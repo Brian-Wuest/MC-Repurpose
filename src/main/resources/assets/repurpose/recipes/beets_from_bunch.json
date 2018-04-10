@@ -6,7 +6,7 @@
         }
     ],
     "type": "minecraft:crafting_shapeless",
-    "group": "Clutch of Eggs",
+    "group": "Bunch of Beets",
     "ingredients": [
         {
             "item": "repurpose:item_wooden_crate",

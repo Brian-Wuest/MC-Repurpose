@@ -22,7 +22,9 @@ public class ItemWoodenCrate extends Item
 	 */
 	public ItemWoodenCrate(String name)
 	{
-		this.setCreativeTab(CreativeTabs.FOOD);
+		this.setCreativeTab(CreativeTabs.FOOD)
+		.setHasSubtypes(true);
+		
 		ModRegistry.setItemName(this, name);
 	}
 	

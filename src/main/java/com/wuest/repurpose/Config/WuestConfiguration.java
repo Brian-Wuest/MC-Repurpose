@@ -72,7 +72,7 @@ public class WuestConfiguration
 	public static String saddleName = "Saddle";
 	public static String stringName = "String";
 	public static String scrollName = "Scroll";
-/*	public static String woodenCrateName = "Wooden Crate";
+	public static String woodenCrateName = "Wooden Crate";
 	public static String Clutch_Of_EggsName = "Clutch of Eggs";
 	public static String Carton_Of_EggsName = "Carton of Eggs";
 	public static String Bunch_Of_PotatoesName = "Bunch of Potatoes";
@@ -80,7 +80,7 @@ public class WuestConfiguration
 	public static String Bunch_Of_CarrotsName = "Bunch of Carrots";
 	public static String Crate_Of_CarrotsName = "Crate of Carrots";
 	public static String Bunch_Of_BeetsName = "Bunch of Beets";
-	public static String Crate_Of_BeetsName = "Crate of Beets";*/
+	public static String Crate_Of_BeetsName = "Crate of Beets";
 	public static String Bag_Of_Holding_Name = "Bag of Holding";
 	
 	public static String versionMessageName = "Version Message";
@@ -131,7 +131,7 @@ public class WuestConfiguration
 		saddleName,
 		stringName,
 		scrollName,
-/*		woodenCrateName,
+		woodenCrateName,
 		Clutch_Of_EggsName,
 		Carton_Of_EggsName,
 		Bunch_Of_BeetsName,
@@ -139,7 +139,7 @@ public class WuestConfiguration
 		Bunch_Of_PotatoesName,
 		Crate_Of_BeetsName,
 		Crate_Of_CarrotsName,
-		Crate_Of_PotatoesName,*/
+		Crate_Of_PotatoesName,
 		Bag_Of_Holding_Name
 	};
 	

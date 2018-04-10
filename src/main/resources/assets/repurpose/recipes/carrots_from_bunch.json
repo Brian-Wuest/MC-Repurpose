@@ -6,7 +6,7 @@
         }
     ],
     "type": "minecraft:crafting_shapeless",
-    "group": "Clutch of Carrots",
+    "group": "Bunch of Carrots",
     "ingredients": [
         {
             "item": "repurpose:item_wooden_crate",

@@ -1,15 +1,15 @@
 {
-	"parent": "block/cube_bottom_top",
-   "textures": {
-        "side": "repurpose:blocks/block_charcoal",
-        "bottom": "repurpose:blocks/block_charcoal",
-        "top": "repurpose:blocks/block_charcoal"
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "side": "repurpose:items/item_crate_side",
+        "bottom": "repurpose:items/item_crate_empty_top",
+        "top": "repurpose:items/item_crate_empty_top"
     },
-	"display": {
-		"thirdperson": {
-			"rotation": [ 10, -45, 170 ],
-			"translation": [ 0, 1.5, -2.75 ],
-			"scale": [ 0.375, 0.375, 0.375 ]
-		}
-	}
+    "display": {
+        "thirdperson": {
+            "rotation": [10, -45, 170],
+            "translation": [0, 1.5, -2.75],
+            "scale": [0.375, 0.375, 0.375]
+        }
+    }
 }

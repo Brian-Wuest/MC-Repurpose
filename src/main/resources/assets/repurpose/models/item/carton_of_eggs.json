@@ -1,9 +1,9 @@
 {
 	"parent": "block/cube_bottom_top",
    "textures": {
-        "side": "repurpose:blocks/block_charcoal",
-        "bottom": "repurpose:blocks/block_charcoal",
-        "top": "repurpose:blocks/block_charcoal"
+        "side": "repurpose:items/item_crate_side",
+        "bottom": "repurpose:items/item_carton_of_eggs",
+        "top": "repurpose:items/item_carton_of_eggs"
     },
 	"display": {
 		"thirdperson": {
