@@ -66,7 +66,8 @@ public class ItemWoodenCrate extends Item
         
         return meta == CrateType.Crate_Of_Beets.meta 
         		|| meta == CrateType.Crate_Of_Carrots.meta
-        		|| meta == CrateType.Crate_Of_Potatoes.meta;
+        		|| meta == CrateType.Crate_Of_Potatoes.meta
+        		|| meta == CrateType.Carton_Of_Eggs.meta;
     }
 	
 	/**
