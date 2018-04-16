@@ -15,8 +15,8 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:planks",
-                "data": 32767
+                "type": "forge:ore_dict",
+                "ore": "ingotBronze"
             }
         ],
         "b" : [
@@ -26,7 +26,7 @@
         ]
     },
     "result": {
-        "item": "repurpose:item_swift_blade_wood",
+        "item": "repurpose:item_swift_blade_bronze",
         "count": 1
     }
 }

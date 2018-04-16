@@ -91,6 +91,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -109,6 +110,7 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
@@ -116,10 +118,13 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensio
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 @EventBusSubscriber(value =
 { Side.SERVER, Side.CLIENT })
@@ -788,17 +793,22 @@ public class WuestEventHandler
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
-	{
+	{		
 		event.getRegistry().registerAll(ModRegistry.ModItems.toArray(new Item[ModRegistry.ModItems.size()]));
 	}
-
+	
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{
-		// Register the ore dictionary blocks.
 		ModRegistry.RegisterRecipes();
 
 		ModRegistry.RegisterOreDictionaryRecords();
+	}
+	
+	@SubscribeEvent
+	public static void oreRegistration(OreRegisterEvent event)
+	{
+		ModRegistry.RegisterRepairableMaterials(event.getName(), event.getOre());
 	}
 
 	private static void sendPlayerBedLocation(TickEvent.PlayerTickEvent event)

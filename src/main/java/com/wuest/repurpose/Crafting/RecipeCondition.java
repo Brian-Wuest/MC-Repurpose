@@ -15,7 +15,7 @@ import net.minecraftforge.common.crafting.JsonContext;
  */
 public class RecipeCondition implements IConditionFactory
 {
-	private String recipeKeyName = "recipeKey";
+	protected String recipeKeyName = "recipeKey";
 	public String recipeKey;
 	
 	/**
@@ -28,9 +28,19 @@ public class RecipeCondition implements IConditionFactory
 	@Override
 	public BooleanSupplier parse(JsonContext context, JsonObject json)
 	{	
-		this.recipeKey = json.get(recipeKeyName).getAsString();
+		this.parseCustomValues(context, json);
 		
 		return () -> this.determineActiveRecipe();
+	}
+	
+	/**
+	 * Used to parse custom values out of the json.
+	 * @param context The json context.
+	 * @param json The json object being parsed.
+	 */
+	protected void parseCustomValues(JsonContext context, JsonObject json)
+	{
+		this.recipeKey = json.get(recipeKeyName).getAsString();
 	}
 	
 	/**

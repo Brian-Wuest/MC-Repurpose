@@ -82,6 +82,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void postinit(FMLPostInitializationEvent event)
 	{
+		super.postinit(event);
 	}
 
 	@Override

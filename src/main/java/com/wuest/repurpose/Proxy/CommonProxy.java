@@ -23,6 +23,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CommonProxy implements IGuiHandler
 {
@@ -74,7 +76,7 @@ public class CommonProxy implements IGuiHandler
 	}
 
 	public void init(FMLInitializationEvent event)
-	{
+	{	
 		ModRegistry.RegisterEnchantments();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(Repurpose.instance, Repurpose.proxy);
@@ -83,6 +85,8 @@ public class CommonProxy implements IGuiHandler
 
 	public void postinit(FMLPostInitializationEvent event)
 	{
+		// This removed invalid ore material registrations.
+		ModRegistry.RemoveInvalidEntries();
 	}
 
 	private void RegisterEventListeners()

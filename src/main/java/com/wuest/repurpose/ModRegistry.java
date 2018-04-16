@@ -1,47 +1,86 @@
 package com.wuest.repurpose;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.wuest.repurpose.Blocks.*;
-import com.wuest.repurpose.Capabilities.*;
+import com.wuest.repurpose.Blocks.BlockCharcoal;
+import com.wuest.repurpose.Blocks.BlockCoffer;
+import com.wuest.repurpose.Blocks.BlockCustomWall;
+import com.wuest.repurpose.Blocks.BlockDirtStairs;
+import com.wuest.repurpose.Blocks.BlockDoubleDirtSlab;
+import com.wuest.repurpose.Blocks.BlockDoubleGlowstoneSlab;
+import com.wuest.repurpose.Blocks.BlockDoubleGrassSlab;
+import com.wuest.repurpose.Blocks.BlockEnrichedFarmland;
+import com.wuest.repurpose.Blocks.BlockGrassStairs;
+import com.wuest.repurpose.Blocks.BlockHalfDirtSlab;
+import com.wuest.repurpose.Blocks.BlockHalfGlowstoneSlab;
+import com.wuest.repurpose.Blocks.BlockHalfGrassSlab;
+import com.wuest.repurpose.Blocks.BlockMiniRedstone;
+import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
+import com.wuest.repurpose.Blocks.RedstoneClock;
+import com.wuest.repurpose.Capabilities.BlockModelCapability;
+import com.wuest.repurpose.Capabilities.DimensionHome;
+import com.wuest.repurpose.Capabilities.IBlockModelCapability;
+import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.Storage.BlockModelStorage;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
-import com.wuest.repurpose.Events.WuestEventHandler;
-import com.wuest.repurpose.Items.*;
-import com.wuest.repurpose.Proxy.CommonProxy;
-import com.wuest.repurpose.Proxy.Messages.*;
-import com.wuest.repurpose.Proxy.Messages.Handlers.*;
-import com.wuest.repurpose.Tiles.*;
+import com.wuest.repurpose.Items.ItemBagOfHolding;
+import com.wuest.repurpose.Items.ItemBedCompass;
+import com.wuest.repurpose.Items.ItemBlockBurnable;
+import com.wuest.repurpose.Items.ItemBlockDirtSlab;
+import com.wuest.repurpose.Items.ItemBlockGlowstoneSlab;
+import com.wuest.repurpose.Items.ItemBlockGrassSlab;
+import com.wuest.repurpose.Items.ItemDiamondShard;
+import com.wuest.repurpose.Items.ItemFluffyFabric;
+import com.wuest.repurpose.Items.ItemIronLump;
+import com.wuest.repurpose.Items.ItemScroll;
+import com.wuest.repurpose.Items.ItemSickle;
+import com.wuest.repurpose.Items.ItemSnorkel;
+import com.wuest.repurpose.Items.ItemStoneShears;
+import com.wuest.repurpose.Items.ItemSwiftBlade;
+import com.wuest.repurpose.Items.ItemWhetStone;
+import com.wuest.repurpose.Items.ItemWoodenCrate;
+import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
+import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
+import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
+import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
+import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
+import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
+import com.wuest.repurpose.Proxy.Messages.Handlers.BagOfHoldingUpdateMessageHandler;
+import com.wuest.repurpose.Proxy.Messages.Handlers.BedLocationHandler;
+import com.wuest.repurpose.Proxy.Messages.Handlers.ConfigSyncHandler;
+import com.wuest.repurpose.Proxy.Messages.Handlers.CurrentSlotUpdateHandler;
+import com.wuest.repurpose.Proxy.Messages.Handlers.RedstoneClockHandler;
+import com.wuest.repurpose.Proxy.Messages.Handlers.RedstoneScannerHandler;
+import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
+import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.client.util.RecipeBookClient;
 import net.minecraft.enchantment.Enchantment.Rarity;
-import net.minecraft.init.*;
+import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 public class ModRegistry
 {
@@ -60,13 +99,17 @@ public class ModRegistry
 	public static ArrayList<Item> ModItems = new ArrayList<Item>();
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
 
+	public static Map<String, ToolMaterial> CustomMaterials = new HashMap<String, ToolMaterial>();
+	public static Map<String, Boolean> FoundMaterials = new HashMap<String, Boolean>();
+
 	private static EnchantmentStepAssist stepAssist;
-	
+
 	public static BlockCustomWall DirtWall()
 	{
 		for (Block entry : ModRegistry.ModBlocks)
 		{
-			if (entry instanceof BlockCustomWall && ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.DIRT)
+			if (entry instanceof BlockCustomWall
+				&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.DIRT)
 			{
 				return (BlockCustomWall) entry;
 			}
@@ -79,7 +122,8 @@ public class ModRegistry
 	{
 		for (Block entry : ModRegistry.ModBlocks)
 		{
-			if (entry instanceof BlockCustomWall && ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.GRASS)
+			if (entry instanceof BlockCustomWall
+				&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.GRASS)
 			{
 				return (BlockCustomWall) entry;
 			}
@@ -167,37 +211,85 @@ public class ModRegistry
 	{
 		return ModRegistry.GetItem(ItemStoneShears.class);
 	}
-	
+
 	public static ItemScroll Scroll()
 	{
 		return ModRegistry.GetItem(ItemScroll.class);
 	}
-	
+
 	public static BlockHalfGlowstoneSlab GlowstoneSlab()
 	{
 		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
 	}
-	
+
 	public static EnchantmentStepAssist StepAssist()
 	{
 		return ModRegistry.stepAssist;
 	}
-	
+
 	public static BlockCoffer Coffer()
 	{
 		return ModRegistry.GetBlock(BlockCoffer.class);
 	}
-	
+
 	public static ItemWoodenCrate WoodenCrate()
 	{
 		return ModRegistry.GetItem(ItemWoodenCrate.class);
 	}
-	
+
 	public static ItemBagOfHolding BagofHolding()
 	{
 		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
-	
+
+	public static ItemSwiftBlade CopperBlade()
+	{
+		ToolMaterial material = ModRegistry.CustomMaterials.get("Copper");
+
+		for (Item item : ModRegistry.ModItems)
+		{
+			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
+				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
+			{
+				return ((ItemSwiftBlade) item);
+			}
+		}
+
+		return null;
+	}
+
+	public static ItemSwiftBlade OsmiumBlade()
+	{
+		ToolMaterial material = ModRegistry.CustomMaterials.get("Osmium");
+
+		for (Item item : ModRegistry.ModItems)
+		{
+			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
+				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
+			{
+				return ((ItemSwiftBlade) item);
+			}
+		}
+
+		return null;
+	}
+
+	public static ItemSwiftBlade BronzeBlade()
+	{
+		ToolMaterial material = ModRegistry.CustomMaterials.get("Bronze");
+
+		for (Item item : ModRegistry.ModItems)
+		{
+			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
+				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
+			{
+				return ((ItemSwiftBlade) item);
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Static constructor for the mod registry.
 	 */
@@ -205,7 +297,7 @@ public class ModRegistry
 	{
 		ModRegistry.RegisterModComponents();
 	}
-	
+
 	/**
 	 * Gets the item from the ModItems collections.
 	 * 
@@ -224,7 +316,7 @@ public class ModRegistry
 
 		return null;
 	}
-	
+
 	public static <T extends Item> T GetItemSpecific(Class<T> genericClass)
 	{
 		for (Item entry : ModRegistry.ModItems)
@@ -258,11 +350,12 @@ public class ModRegistry
 	}
 
 	/**
-	 * This is where all in-game mod components (Items, Blocks) will be
-	 * registered.
+	 * This is where all in-game mod components (Items, Blocks) will be registered.
 	 */
 	public static void RegisterModComponents()
 	{
+		ModRegistry.RegisterToolMaterials();
+		
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 
@@ -278,7 +371,8 @@ public class ModRegistry
 		BlockHalfDirtSlab registeredHalfDirtBlock = new BlockHalfDirtSlab();
 		BlockDoubleDirtSlab registeredDoubleDirtSlab = new BlockDoubleDirtSlab();
 
-		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock, registeredDoubleDirtSlab, true);
+		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock,
+			registeredDoubleDirtSlab, true);
 
 		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("block_half_dirt_slab");
 
@@ -289,7 +383,8 @@ public class ModRegistry
 		BlockHalfGrassSlab registeredHalfGrassBlock = new BlockHalfGrassSlab();
 		BlockDoubleGrassSlab registeredDoubleGrassSlab = new BlockDoubleGrassSlab();
 
-		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock, registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
+		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock,
+			registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
 
 		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("block_half_grass_slab");
 
@@ -318,62 +413,222 @@ public class ModRegistry
 		BlockHalfGlowstoneSlab registeredHalfGlowstoneBlock = new BlockHalfGlowstoneSlab();
 		BlockDoubleGlowstoneSlab registeredDoubleGlowstoneSlab = new BlockDoubleGlowstoneSlab();
 
-		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(registeredHalfGlowstoneBlock, registeredHalfGlowstoneBlock,
-				registeredDoubleGlowstoneSlab, true);
+		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(registeredHalfGlowstoneBlock,
+			registeredHalfGlowstoneBlock, registeredDoubleGlowstoneSlab, true);
 
-		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab.setRegistryName("block_half_glowstone_slab");
+		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab
+			.setRegistryName("block_half_glowstone_slab");
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
-		
+
 		// Stone shears.
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
-		
+
 		// Sickles.
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
 		ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
-		
+
 		// Swift Blades.
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.WOOD));
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.STONE));
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.IRON));
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.DIAMOND));
 		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.GOLD));
+
+		Item item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Copper"));
+		ModRegistry.registerItem(item);
+		
+		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Osmium"));
+		ModRegistry.registerItem(item);
+		
+		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Bronze"));
+		ModRegistry.registerItem(item);
 		
 		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
-		
+
 		// Charcoal block.
 		Block block = new BlockCharcoal("block_charcoal");
 		ItemBlock itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
 		ModRegistry.registerBlock(block, itemBlock);
-		
+
 		// Scroll
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
-		
+
 		// Wooden Crate
 		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
 		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
-		
+
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
-		
+
 		// Coffers.
-		//block = new BlockCoffer();
-		//itemBlock = new ItemBlockCoffer(block);
-		//ModRegistry.registerBlock(block, itemBlock);
-		//GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
+		// block = new BlockCoffer();
+		// itemBlock = new ItemBlockCoffer(block);
+		// ModRegistry.registerBlock(block, itemBlock);
+		// GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
 	}
 
 	public static void RegisterEnchantments()
 	{
-		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[] {EntityEquipmentSlot.FEET});
+		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET,
+			new EntityEquipmentSlot[]
+			{ EntityEquipmentSlot.FEET });
+
 		ForgeRegistries.ENCHANTMENTS.register(ModRegistry.stepAssist);
 	}
+
+	/**
+	 * Registers tool materials if certain materials are available.
+	 */
+	public static void RegisterToolMaterials()
+	{
+		// Copper
+		ModRegistry.CustomMaterials.put("Copper",
+			EnumHelper.addToolMaterial("Copper", ToolMaterial.STONE.getHarvestLevel(), ToolMaterial.STONE.getMaxUses(),
+				ToolMaterial.STONE.getEfficiency(), ToolMaterial.STONE.getAttackDamage() + .5f,
+				ToolMaterial.STONE.getEnchantability()));
+
+		// Osmium
+		ModRegistry.CustomMaterials.put("Osmium",
+			EnumHelper.addToolMaterial("Osmium", ToolMaterial.IRON.getHarvestLevel(), 500,
+				ToolMaterial.IRON.getEfficiency(), ToolMaterial.IRON.getAttackDamage() + .5f,
+				ToolMaterial.IRON.getEnchantability()));
+
+		// Bronze
+		ModRegistry.CustomMaterials.put("Bronze",
+			EnumHelper.addToolMaterial("Bronze", ToolMaterial.IRON.getHarvestLevel(), 500,
+				ToolMaterial.IRON.getEfficiency(), ToolMaterial.IRON.getAttackDamage(),
+				ToolMaterial.IRON.getEnchantability()));
+	}
 	
+	/**
+	 * This is called during the Ore Dictionary add event. This will make sure that we mark certain material types as found to enable/disable items later. 
+	 * @param oreName The ore dictionary name.
+	 * @param stack The item stack being registered.
+	 */
+	public static void RegisterRepairableMaterials(String oreName, ItemStack stack)
+	{
+		if (oreName.equals("ingotCopper")
+			&& ModRegistry.CustomMaterials.get("Copper").getRepairItemStack() == ItemStack.EMPTY)
+		{
+			if (OreDictionary.doesOreNameExist("ingotCopper"))
+			{
+				ModRegistry.CustomMaterials.get("Copper")
+					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
+
+				ModRegistry.FoundMaterials.put("ingotCopper", true);
+			}
+			else
+			{
+				ModRegistry.FoundMaterials.put("ingotCopper", false);
+			}
+		}
+
+		if (oreName.equals("ingotOsmium")
+			&& ModRegistry.CustomMaterials.get("Osmium").getRepairItemStack() == ItemStack.EMPTY)
+		{
+			if (OreDictionary.doesOreNameExist("ingotOsmium"))
+			{
+				ModRegistry.CustomMaterials.get("Osmium")
+					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
+
+				ModRegistry.FoundMaterials.put("ingotOsmium", true);
+			}
+			else
+			{
+				ModRegistry.FoundMaterials.put("ingotOsmium", false);
+			}
+		}
+
+		if (oreName.equals("ingotBronze")
+			&& ModRegistry.CustomMaterials.get("Bronze").getRepairItemStack() == ItemStack.EMPTY)
+		{
+			if (OreDictionary.doesOreNameExist("ingotBronze"))
+			{
+				ModRegistry.CustomMaterials.get("Bronze")
+					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
+
+				ModRegistry.FoundMaterials.put("ingotBronze", true);
+			}
+			else
+			{
+				ModRegistry.FoundMaterials.put("ingotBronze", false);
+
+			}
+		}
+	}
+
+	/**
+	 * Removes invalid tool registrations if certain ore dictionary records were not found.
+	 */
+	public static void RemoveInvalidEntries()
+	{
+		boolean recipesUpdated = false;
+		
+		if (ModRegistry.FoundMaterials.containsKey("ingotCopper") && !ModRegistry.FoundMaterials.get("ingotCopper"))
+		{
+			// Remove Items
+			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
+			items.remove(ModRegistry.CopperBlade().getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.CopperBlade());
+			
+			// Remove Recipes
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
+			
+			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_copper")))
+			{
+				recipes.remove(new ResourceLocation("repurpose:swift_blade_copper"));
+				recipesUpdated = true;
+			}
+		}
+
+		if (ModRegistry.FoundMaterials.containsKey("ingotOsmium") && !ModRegistry.FoundMaterials.get("ingotOsmium"))
+		{
+			// Remove Items
+			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
+			items.remove(ModRegistry.OsmiumBlade().getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.OsmiumBlade());
+			
+			// Remove Recipes
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
+			
+			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_osmium")))
+			{
+				recipes.remove(new ResourceLocation("repurpose:swift_blade_osmium"));
+			}
+			
+			recipesUpdated = true;
+		}
+
+		if (ModRegistry.FoundMaterials.containsKey("ingotBronze") && !ModRegistry.FoundMaterials.get("ingotBronze"))
+		{
+			// Remove Items
+			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
+			items.remove(ModRegistry.BronzeBlade().getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.BronzeBlade());
+			
+			// Remove Recipes
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
+			
+			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_bronze")))
+			{
+				recipes.remove(new ResourceLocation("repurpose:swift_blade_bronze"));
+			}
+			
+			recipesUpdated = true;
+		}
+		
+		if (recipesUpdated)
+		{
+			RecipeBookClient.rebuildTable();
+		}
+	}
+
 	/**
 	 * Registers records into the ore dictionary.
 	 */
@@ -382,7 +637,7 @@ public class ModRegistry
 		// Register certain blocks into the ore dictionary.
 		OreDictionary.registerOre("blockCharcoal", ModRegistry.GetBlock(BlockCharcoal.class));
 	}
-	
+
 	/**
 	 * This is where the mod recipes are registered.
 	 */
@@ -400,8 +655,10 @@ public class ModRegistry
 		Repurpose.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
 		Repurpose.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
 		Repurpose.network.registerMessage(ConfigSyncHandler.class, ConfigSyncMessage.class, 5, Side.CLIENT);
-		Repurpose.network.registerMessage(CurrentSlotUpdateHandler.class, CurrentSlotUpdateMessage.class, 6, Side.SERVER);
-		Repurpose.network.registerMessage(BagOfHoldingUpdateMessageHandler.class, BagOfHoldingUpdateMessage.class, 7, Side.CLIENT);
+		Repurpose.network.registerMessage(CurrentSlotUpdateHandler.class, CurrentSlotUpdateMessage.class, 6,
+			Side.SERVER);
+		Repurpose.network.registerMessage(BagOfHoldingUpdateMessageHandler.class, BagOfHoldingUpdateMessage.class, 7,
+			Side.CLIENT);
 	}
 
 	/**
@@ -411,7 +668,8 @@ public class ModRegistry
 	{
 		// Register the dimension home capability.
 		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(), DimensionHome.class);
-		CapabilityManager.INSTANCE.register(IBlockModelCapability.class, new BlockModelStorage(), BlockModelCapability.class);
+		CapabilityManager.INSTANCE.register(IBlockModelCapability.class, new BlockModelStorage(),
+			BlockModelCapability.class);
 	}
 
 	/**
@@ -423,7 +681,7 @@ public class ModRegistry
 	 */
 	public static <T extends Item> T registerItem(T item)
 	{
-		//ForgeRegistries.ITEMS.register(item);
+		// ForgeRegistries.ITEMS.register(item);
 		ModRegistry.ModItems.add(item);
 
 		return item;
@@ -458,8 +716,7 @@ public class ModRegistry
 	}
 
 	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the
-	 * un-localised name to the full registry name.
+	 * Set the registry name of {@code item} to {@code itemName} and the un-localised name to the full registry name.
 	 *
 	 * @param item The item
 	 * @param itemName The item's name
@@ -471,8 +728,7 @@ public class ModRegistry
 	}
 
 	/**
-	 * Set the registry name of {@code block} to {@code blockName} and the
-	 * un-localised name to the full registry name.
+	 * Set the registry name of {@code block} to {@code blockName} and the un-localised name to the full registry name.
 	 *
 	 * @param block The block
 	 * @param blockName The block's name
@@ -482,30 +738,32 @@ public class ModRegistry
 		block.setRegistryName(blockName);
 		block.setUnlocalizedName(block.getRegistryName().toString());
 	}
-	
+
 	/**
 	 * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
+	 * 
 	 * @param name The name of the recipe. ModID is pre-pended to it.
 	 * @param stack The output of the recipe.
 	 * @param recipeComponents The recipe components.
 	 */
 	public static void addShapedRecipe(String name, ItemStack stack, Object... recipeComponents)
-	{	
+	{
 		ResourceLocation resourceLocation = new ResourceLocation(Repurpose.MODID.toLowerCase(), name);
-		
+
 		GameRegistry.addShapedRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
 	}
-	
-    /**
-     * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
-     * @param name The name of the recipe.
-     * @param stack The output stack.
-     * @param recipeComponents The recipe components.
-     */
-    public static void addShapelessRecipe(String name, ItemStack stack, Ingredient... recipeComponents)
-    {
-    	ResourceLocation resourceLocation = new ResourceLocation(Repurpose.MODID.toLowerCase(), name);
+
+	/**
+	 * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
+	 * 
+	 * @param name The name of the recipe.
+	 * @param stack The output stack.
+	 * @param recipeComponents The recipe components.
+	 */
+	public static void addShapelessRecipe(String name, ItemStack stack, Ingredient... recipeComponents)
+	{
+		ResourceLocation resourceLocation = new ResourceLocation(Repurpose.MODID.toLowerCase(), name);
 
 		GameRegistry.addShapelessRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
-    }
+	}
 }
