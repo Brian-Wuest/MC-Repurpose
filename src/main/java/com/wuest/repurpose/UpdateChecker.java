@@ -58,7 +58,7 @@ public class UpdateChecker
 			if (result != null && result.status == Status.OUTDATED)
 			{
 				// Current version is out dated, show the message when the user is logged in.
-				UpdateChecker.messageToShow = "[Prefab] There is a new version available! New Version: [" + result.target.toString() + "] Your Version: ["
+				UpdateChecker.messageToShow = "[Repurpose] There is a new version available! New Version: [" + result.target.toString() + "] Your Version: ["
 						+ Repurpose.VERSION + "]";
 				
 				UpdateChecker.showMessage = true;

@@ -19,11 +19,8 @@ import com.wuest.repurpose.Blocks.BlockHalfGrassSlab;
 import com.wuest.repurpose.Blocks.BlockMiniRedstone;
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Blocks.RedstoneClock;
-import com.wuest.repurpose.Capabilities.BlockModelCapability;
 import com.wuest.repurpose.Capabilities.DimensionHome;
-import com.wuest.repurpose.Capabilities.IBlockModelCapability;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
-import com.wuest.repurpose.Capabilities.Storage.BlockModelStorage;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
@@ -69,7 +66,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -79,17 +75,10 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 public class ModRegistry
 {
-	/**
-	 * This capability is used to store the block model resource location for the redstone infusion feature.
-	 */
-	@CapabilityInject(IBlockModelCapability.class)
-	public static Capability<IBlockModelCapability> BlockModel = null;
-
 	/**
 	 * This capability is used to save the locations where a player spawns when transferring dimensions.
 	 */
@@ -355,7 +344,7 @@ public class ModRegistry
 	public static void RegisterModComponents()
 	{
 		ModRegistry.RegisterToolMaterials();
-		
+
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 
@@ -441,13 +430,13 @@ public class ModRegistry
 
 		Item item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Copper"));
 		ModRegistry.registerItem(item);
-		
+
 		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Osmium"));
 		ModRegistry.registerItem(item);
-		
+
 		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Bronze"));
 		ModRegistry.registerItem(item);
-		
+
 		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
 
@@ -505,9 +494,11 @@ public class ModRegistry
 				ToolMaterial.IRON.getEfficiency(), ToolMaterial.IRON.getAttackDamage(),
 				ToolMaterial.IRON.getEnchantability()));
 	}
-	
+
 	/**
-	 * This is called during the Ore Dictionary add event. This will make sure that we mark certain material types as found to enable/disable items later. 
+	 * This is called during the Ore Dictionary add event. This will make sure that we mark certain material types as
+	 * found to enable/disable items later.
+	 * 
 	 * @param oreName The ore dictionary name.
 	 * @param stack The item stack being registered.
 	 */
@@ -569,17 +560,17 @@ public class ModRegistry
 	public static void RemoveInvalidEntries()
 	{
 		boolean recipesUpdated = false;
-		
+
 		if (ModRegistry.FoundMaterials.containsKey("ingotCopper") && !ModRegistry.FoundMaterials.get("ingotCopper"))
 		{
 			// Remove Items
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
 			items.remove(ModRegistry.CopperBlade().getRegistryName());
 			ModRegistry.ModItems.remove(ModRegistry.CopperBlade());
-			
+
 			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
-			
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+
 			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_copper")))
 			{
 				recipes.remove(new ResourceLocation("repurpose:swift_blade_copper"));
@@ -593,15 +584,15 @@ public class ModRegistry
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
 			items.remove(ModRegistry.OsmiumBlade().getRegistryName());
 			ModRegistry.ModItems.remove(ModRegistry.OsmiumBlade());
-			
+
 			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
-			
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+
 			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_osmium")))
 			{
 				recipes.remove(new ResourceLocation("repurpose:swift_blade_osmium"));
 			}
-			
+
 			recipesUpdated = true;
 		}
 
@@ -611,18 +602,18 @@ public class ModRegistry
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
 			items.remove(ModRegistry.BronzeBlade().getRegistryName());
 			ModRegistry.ModItems.remove(ModRegistry.BronzeBlade());
-			
+
 			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>)ForgeRegistries.RECIPES;
-			
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+
 			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_bronze")))
 			{
 				recipes.remove(new ResourceLocation("repurpose:swift_blade_bronze"));
 			}
-			
+
 			recipesUpdated = true;
 		}
-		
+
 		if (recipesUpdated)
 		{
 			RecipeBookClient.rebuildTable();
@@ -668,8 +659,6 @@ public class ModRegistry
 	{
 		// Register the dimension home capability.
 		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(), DimensionHome.class);
-		CapabilityManager.INSTANCE.register(IBlockModelCapability.class, new BlockModelStorage(),
-			BlockModelCapability.class);
 	}
 
 	/**

@@ -4,26 +4,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
 
 import com.google.common.collect.Multimap;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Base.ItemBlockCapability;
 import com.wuest.repurpose.Base.TileEntityBase;
-import com.wuest.repurpose.Capabilities.BlockModelCapability;
-import com.wuest.repurpose.Capabilities.BlockModelProvider;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.DimensionHomeProvider;
-import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Config.WuestConfiguration;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
@@ -33,7 +26,6 @@ import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWhetStone;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.Proxy.ClientProxy;
-import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
 import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
 
@@ -53,10 +45,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -66,9 +56,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBook;
@@ -77,7 +65,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -86,44 +73,29 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 @EventBusSubscriber(value =
@@ -199,14 +171,7 @@ public class WuestEventHandler
 	@SubscribeEvent
 	public static void AttachItemStackCapabilities(AttachCapabilitiesEvent<ItemStack> event)
 	{
-		if (event.getObject().getItem() instanceof ItemBlockCapability
-			&& ((ItemBlockCapability) event.getObject().getItem()).getAllowedCapabilities()
-				.contains(ModRegistry.BlockModel))
-		{
-			event.addCapability(new ResourceLocation(Repurpose.MODID, "BlockModel"),
-				new BlockModelProvider(new BlockModelCapability()));
-		}
-		else if (event.getObject().getItem() instanceof ItemBagOfHolding)
+		if (event.getObject().getItem() instanceof ItemBagOfHolding)
 		{
 			ItemBagOfHoldingProvider.AttachNewStackHandlerToStack(event.getObject());
 		}
@@ -218,12 +183,6 @@ public class WuestEventHandler
 		if (event.getObject() instanceof TileEntityBase)
 		{
 			ArrayList<Capability> allowedCapabilities = ((TileEntityBase) event.getObject()).getAllowedCapabilities();
-
-			if (allowedCapabilities.contains(ModRegistry.BlockModel))
-			{
-				event.addCapability(new ResourceLocation(Repurpose.MODID, "BlockModel"),
-					new BlockModelProvider(new BlockModelCapability()));
-			}
 		}
 	}
 
