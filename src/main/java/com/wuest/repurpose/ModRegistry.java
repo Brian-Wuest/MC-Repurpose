@@ -231,41 +231,9 @@ public class ModRegistry
 		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
 
-	public static ItemSwiftBlade CopperBlade()
+	public static ItemSwiftBlade CustomMaterialBlade(String materialName)
 	{
-		ToolMaterial material = ModRegistry.CustomMaterials.get("Copper");
-
-		for (Item item : ModRegistry.ModItems)
-		{
-			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
-				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
-			{
-				return ((ItemSwiftBlade) item);
-			}
-		}
-
-		return null;
-	}
-
-	public static ItemSwiftBlade OsmiumBlade()
-	{
-		ToolMaterial material = ModRegistry.CustomMaterials.get("Osmium");
-
-		for (Item item : ModRegistry.ModItems)
-		{
-			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
-				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
-			{
-				return ((ItemSwiftBlade) item);
-			}
-		}
-
-		return null;
-	}
-
-	public static ItemSwiftBlade BronzeBlade()
-	{
-		ToolMaterial material = ModRegistry.CustomMaterials.get("Bronze");
+		ToolMaterial material = ModRegistry.CustomMaterials.get(materialName);
 
 		for (Item item : ModRegistry.ModItems)
 		{
@@ -436,6 +404,12 @@ public class ModRegistry
 
 		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Bronze"));
 		ModRegistry.registerItem(item);
+		
+		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Steel"));
+		ModRegistry.registerItem(item);
+		
+		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Obsidian"));
+		ModRegistry.registerItem(item);
 
 		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
@@ -478,21 +452,50 @@ public class ModRegistry
 	{
 		// Copper
 		ModRegistry.CustomMaterials.put("Copper",
-			EnumHelper.addToolMaterial("Copper", ToolMaterial.STONE.getHarvestLevel(), ToolMaterial.STONE.getMaxUses(),
-				ToolMaterial.STONE.getEfficiency(), ToolMaterial.STONE.getAttackDamage() + .5f,
+			EnumHelper.addToolMaterial("Copper", 
+				ToolMaterial.STONE.getHarvestLevel(), 
+				ToolMaterial.STONE.getMaxUses(),
+				ToolMaterial.STONE.getEfficiency(), 
+				ToolMaterial.STONE.getAttackDamage(),
 				ToolMaterial.STONE.getEnchantability()));
 
 		// Osmium
 		ModRegistry.CustomMaterials.put("Osmium",
-			EnumHelper.addToolMaterial("Osmium", ToolMaterial.IRON.getHarvestLevel(), 500,
-				ToolMaterial.IRON.getEfficiency(), ToolMaterial.IRON.getAttackDamage() + .5f,
+			EnumHelper.addToolMaterial("Osmium", ToolMaterial.IRON.getHarvestLevel(), 
+				500,
+				ToolMaterial.IRON.getEfficiency(), 
+				ToolMaterial.IRON.getAttackDamage() + .5f,
 				ToolMaterial.IRON.getEnchantability()));
 
 		// Bronze
 		ModRegistry.CustomMaterials.put("Bronze",
-			EnumHelper.addToolMaterial("Bronze", ToolMaterial.IRON.getHarvestLevel(), 500,
-				ToolMaterial.IRON.getEfficiency(), ToolMaterial.IRON.getAttackDamage(),
+			EnumHelper.addToolMaterial("Bronze", 
+				ToolMaterial.IRON.getHarvestLevel(), 
+				ToolMaterial.IRON.getMaxUses(),
+				ToolMaterial.IRON.getEfficiency(), 
+				ToolMaterial.IRON.getAttackDamage(),
 				ToolMaterial.IRON.getEnchantability()));
+		
+		// Steel
+		ModRegistry.CustomMaterials.put("Steel",
+			EnumHelper.addToolMaterial("Steel", 
+				ToolMaterial.DIAMOND.getHarvestLevel(), 
+				(int)(ToolMaterial.IRON.getMaxUses() * 1.5),
+				ToolMaterial.DIAMOND.getEfficiency(), 
+				ToolMaterial.DIAMOND.getAttackDamage(),
+				ToolMaterial.DIAMOND.getEnchantability()));
+		
+		// Obsidian
+		ModRegistry.CustomMaterials.put("Obsidian",
+			EnumHelper.addToolMaterial("Obsidian", 
+				ToolMaterial.DIAMOND.getHarvestLevel() + 1, 
+				(int)(ToolMaterial.DIAMOND.getMaxUses() * 1.5),
+				ToolMaterial.DIAMOND.getEfficiency(), 
+				ToolMaterial.DIAMOND.getAttackDamage() + 1,
+				ToolMaterial.DIAMOND.getEnchantability()));
+		
+		ModRegistry.CustomMaterials.get("Obsidian")
+			.setRepairItem(new ItemStack(Item.getItemFromBlock(Blocks.OBSIDIAN)));
 	}
 
 	/**
@@ -552,6 +555,23 @@ public class ModRegistry
 
 			}
 		}
+		
+		if (oreName.equals("ingotSteel")
+			&& ModRegistry.CustomMaterials.get("Steel").getRepairItemStack() == ItemStack.EMPTY)
+		{
+			if (OreDictionary.doesOreNameExist("ingotSteel"))
+			{
+				ModRegistry.CustomMaterials.get("Steel")
+					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
+
+				ModRegistry.FoundMaterials.put("ingotSteel", true);
+			}
+			else
+			{
+				ModRegistry.FoundMaterials.put("ingotSteel", false);
+
+			}
+		}
 	}
 
 	/**
@@ -565,8 +585,8 @@ public class ModRegistry
 		{
 			// Remove Items
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.CopperBlade().getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.CopperBlade());
+			items.remove(ModRegistry.CustomMaterialBlade("Copper").getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Copper"));
 
 			// Remove Recipes
 			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
@@ -582,8 +602,8 @@ public class ModRegistry
 		{
 			// Remove Items
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.OsmiumBlade().getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.OsmiumBlade());
+			items.remove(ModRegistry.CustomMaterialBlade("Osmium").getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Osmium"));
 
 			// Remove Recipes
 			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
@@ -600,8 +620,8 @@ public class ModRegistry
 		{
 			// Remove Items
 			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.BronzeBlade().getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.BronzeBlade());
+			items.remove(ModRegistry.CustomMaterialBlade("Bronze").getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Bronze"));
 
 			// Remove Recipes
 			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
@@ -609,6 +629,24 @@ public class ModRegistry
 			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_bronze")))
 			{
 				recipes.remove(new ResourceLocation("repurpose:swift_blade_bronze"));
+			}
+
+			recipesUpdated = true;
+		}
+		
+		if (ModRegistry.FoundMaterials.containsKey("ingotSteel") && !ModRegistry.FoundMaterials.get("ingotSteel"))
+		{
+			// Remove Items
+			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
+			items.remove(ModRegistry.CustomMaterialBlade("Steel").getRegistryName());
+			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Steel"));
+
+			// Remove Recipes
+			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+
+			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_steel")))
+			{
+				recipes.remove(new ResourceLocation("repurpose:swift_blade_steel"));
 			}
 
 			recipesUpdated = true;
