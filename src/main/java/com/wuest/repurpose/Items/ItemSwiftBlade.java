@@ -56,6 +56,11 @@ public class ItemSwiftBlade extends ItemSword
 	{
 		String itemName = material.name().toLowerCase();
 
+		if (itemName.contains("repurpose"))
+		{
+			itemName = itemName.replace("repurpose", "");
+		}
+		
 		return "item_swift_blade_" + itemName;
 	}
 

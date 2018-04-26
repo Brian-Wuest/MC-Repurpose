@@ -319,7 +319,7 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
 
 		ModRegistry.registerBlock(new RedstoneClock("block_redstone_clock"));
-		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "RedstoneClock");
+		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "repurpose:RedstoneClock");
 
 		ModRegistry.registerBlock(new BlockDirtStairs());
 		ModRegistry.registerBlock(new BlockGrassStairs());
@@ -331,7 +331,7 @@ public class ModRegistry
 		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock,
 			registeredDoubleDirtSlab, true);
 
-		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("block_half_dirt_slab");
+		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("repurpose:block_half_dirt_slab");
 
 		ModRegistry.registerBlock(registeredHalfDirtBlock, itemHalfDirtSlab);
 		ModRegistry.registerBlock(registeredDoubleDirtSlab, false);
@@ -343,7 +343,7 @@ public class ModRegistry
 		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock,
 			registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
 
-		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("block_half_grass_slab");
+		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("repurpose:block_half_grass_slab");
 
 		ModRegistry.registerBlock(registeredHalfGrassBlock, itemHalfGrassSlab);
 		ModRegistry.registerBlock(registeredDoubleGrassSlab, false);
@@ -352,7 +352,7 @@ public class ModRegistry
 		ModRegistry.registerBlock(new BlockMiniRedstone());
 
 		ModRegistry.registerBlock(new BlockRedstoneScanner());
-		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "RedstoneScanner");
+		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "repurpose:RedstoneScanner");
 
 		// Diamond Shard
 		ModRegistry.registerItem(new ItemDiamondShard("item_diamond_shard"));
@@ -374,7 +374,7 @@ public class ModRegistry
 			registeredHalfGlowstoneBlock, registeredDoubleGlowstoneSlab, true);
 
 		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab
-			.setRegistryName("block_half_glowstone_slab");
+			.setRegistryName("repurpose:block_half_glowstone_slab");
 
 		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
 		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
@@ -452,7 +452,7 @@ public class ModRegistry
 	{
 		// Copper
 		ModRegistry.CustomMaterials.put("Copper",
-			EnumHelper.addToolMaterial("Copper", 
+			EnumHelper.addToolMaterial("RepurposeCopper", 
 				ToolMaterial.STONE.getHarvestLevel(), 
 				ToolMaterial.STONE.getMaxUses(),
 				ToolMaterial.STONE.getEfficiency(), 
@@ -461,7 +461,7 @@ public class ModRegistry
 
 		// Osmium
 		ModRegistry.CustomMaterials.put("Osmium",
-			EnumHelper.addToolMaterial("Osmium", ToolMaterial.IRON.getHarvestLevel(), 
+			EnumHelper.addToolMaterial("RepurposeOsmium", ToolMaterial.IRON.getHarvestLevel(), 
 				500,
 				ToolMaterial.IRON.getEfficiency(), 
 				ToolMaterial.IRON.getAttackDamage() + .5f,
@@ -469,7 +469,7 @@ public class ModRegistry
 
 		// Bronze
 		ModRegistry.CustomMaterials.put("Bronze",
-			EnumHelper.addToolMaterial("Bronze", 
+			EnumHelper.addToolMaterial("RepurposeBronze", 
 				ToolMaterial.IRON.getHarvestLevel(), 
 				ToolMaterial.IRON.getMaxUses(),
 				ToolMaterial.IRON.getEfficiency(), 
@@ -478,7 +478,7 @@ public class ModRegistry
 		
 		// Steel
 		ModRegistry.CustomMaterials.put("Steel",
-			EnumHelper.addToolMaterial("Steel", 
+			EnumHelper.addToolMaterial("RepurposeSteel", 
 				ToolMaterial.DIAMOND.getHarvestLevel(), 
 				(int)(ToolMaterial.IRON.getMaxUses() * 1.5),
 				ToolMaterial.DIAMOND.getEfficiency(), 
@@ -487,7 +487,7 @@ public class ModRegistry
 		
 		// Obsidian
 		ModRegistry.CustomMaterials.put("Obsidian",
-			EnumHelper.addToolMaterial("Obsidian", 
+			EnumHelper.addToolMaterial("RepurposeObsidian", 
 				ToolMaterial.DIAMOND.getHarvestLevel() + 1, 
 				(int)(ToolMaterial.DIAMOND.getMaxUses() * 1.5),
 				ToolMaterial.DIAMOND.getEfficiency(), 
@@ -581,74 +581,39 @@ public class ModRegistry
 	{
 		boolean recipesUpdated = false;
 
-		if (ModRegistry.FoundMaterials.containsKey("ingotCopper") && !ModRegistry.FoundMaterials.get("ingotCopper"))
+		if ((ModRegistry.FoundMaterials.containsKey("ingotCopper") && !ModRegistry.FoundMaterials.get("ingotCopper"))
+			|| !ModRegistry.FoundMaterials.containsKey("ingotCopper"))
 		{
-			// Remove Items
-			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.CustomMaterialBlade("Copper").getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Copper"));
-
-			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
-
-			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_copper")))
-			{
-				recipes.remove(new ResourceLocation("repurpose:swift_blade_copper"));
-				recipesUpdated = true;
-			}
-		}
-
-		if (ModRegistry.FoundMaterials.containsKey("ingotOsmium") && !ModRegistry.FoundMaterials.get("ingotOsmium"))
-		{
-			// Remove Items
-			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.CustomMaterialBlade("Osmium").getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Osmium"));
-
-			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
-
-			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_osmium")))
-			{
-				recipes.remove(new ResourceLocation("repurpose:swift_blade_osmium"));
-			}
-
+			// Remove Item
+			Item item = ModRegistry.CustomMaterialBlade("Copper");
+			item.setCreativeTab(null);
 			recipesUpdated = true;
 		}
 
-		if (ModRegistry.FoundMaterials.containsKey("ingotBronze") && !ModRegistry.FoundMaterials.get("ingotBronze"))
+		if ((ModRegistry.FoundMaterials.containsKey("ingotOsmium") && !ModRegistry.FoundMaterials.get("ingotOsmium"))
+			|| !ModRegistry.FoundMaterials.containsKey("ingotOsmium"))
 		{
-			// Remove Items
-			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.CustomMaterialBlade("Bronze").getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Bronze"));
+			// Remove Item
+			Item item = ModRegistry.CustomMaterialBlade("Osmium");
+			item.setCreativeTab(null);
+			recipesUpdated = true;
+		}
 
-			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
-
-			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_bronze")))
-			{
-				recipes.remove(new ResourceLocation("repurpose:swift_blade_bronze"));
-			}
-
+		if ((ModRegistry.FoundMaterials.containsKey("ingotBronze") && !ModRegistry.FoundMaterials.get("ingotBronze"))
+			|| !ModRegistry.FoundMaterials.containsKey("ingotBronze"))
+		{
+			// Remove Item
+			Item item = ModRegistry.CustomMaterialBlade("Bronze");
+			item.setCreativeTab(null);
 			recipesUpdated = true;
 		}
 		
-		if (ModRegistry.FoundMaterials.containsKey("ingotSteel") && !ModRegistry.FoundMaterials.get("ingotSteel"))
+		if ((ModRegistry.FoundMaterials.containsKey("ingotSteel") && !ModRegistry.FoundMaterials.get("ingotSteel"))
+			|| !ModRegistry.FoundMaterials.containsKey("ingotSteel"))
 		{
-			// Remove Items
-			IForgeRegistryModifiable<Item> items = (IForgeRegistryModifiable<Item>) ForgeRegistries.ITEMS;
-			items.remove(ModRegistry.CustomMaterialBlade("Steel").getRegistryName());
-			ModRegistry.ModItems.remove(ModRegistry.CustomMaterialBlade("Steel"));
-
-			// Remove Recipes
-			IForgeRegistryModifiable<IRecipe> recipes = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
-
-			if (recipes.containsKey(new ResourceLocation("repurpose:swift_blade_steel")))
-			{
-				recipes.remove(new ResourceLocation("repurpose:swift_blade_steel"));
-			}
-
+			// Remove Item
+			Item item = ModRegistry.CustomMaterialBlade("Steel");
+			item.setCreativeTab(null);
 			recipesUpdated = true;
 		}
 
@@ -750,7 +715,7 @@ public class ModRegistry
 	 */
 	public static void setItemName(Item item, String itemName)
 	{
-		item.setRegistryName(itemName);
+		item.setRegistryName(Repurpose.MODID.toLowerCase() + ":" + itemName);
 		item.setUnlocalizedName(item.getRegistryName().toString());
 	}
 
@@ -762,7 +727,7 @@ public class ModRegistry
 	 */
 	public static void setBlockName(Block block, String blockName)
 	{
-		block.setRegistryName(blockName);
+		block.setRegistryName(Repurpose.MODID.toLowerCase() + ":" + blockName);
 		block.setUnlocalizedName(block.getRegistryName().toString());
 	}
 
