@@ -57,6 +57,8 @@ public class CommonProxy implements IGuiHandler
 
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		ModRegistry.RegisterModComponents();
+		
 		Repurpose.config = new Configuration(event.getSuggestedConfigurationFile());
 		Repurpose.config.load();
 		WuestConfiguration.syncConfig();

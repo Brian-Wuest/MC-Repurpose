@@ -71,6 +71,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.FMLContainer;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.InjectedModContainer;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -245,14 +250,6 @@ public class ModRegistry
 		}
 
 		return null;
-	}
-
-	/**
-	 * Static constructor for the mod registry.
-	 */
-	static
-	{
-		ModRegistry.RegisterModComponents();
 	}
 
 	/**
@@ -715,6 +712,14 @@ public class ModRegistry
 	 */
 	public static void setItemName(Item item, String itemName)
 	{
+        ModContainer mc = Loader.instance().activeModContainer();
+        String prefix = mc == null || (mc instanceof InjectedModContainer && ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
+        
+        if (!prefix.equals(Repurpose.MODID.toLowerCase()))
+        {
+        	FMLLog.log.error("While attempting to set the registry name for item: {}, it appears that the active mod container is no longer `repurpose` but is instead {}", itemName, prefix);
+        }
+        
 		item.setRegistryName(Repurpose.MODID.toLowerCase() + ":" + itemName);
 		item.setUnlocalizedName(item.getRegistryName().toString());
 	}
