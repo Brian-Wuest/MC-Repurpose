@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.14",
-	  "1.12-recommended": "1.0.0.14"
+	  "1.12-latest": "1.0.0.15",
+	  "1.12-recommended": "1.0.0.15"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -19,6 +19,7 @@
 	  "1.0.0.11": "Added Bag of Holding, a portable inventory expansion.",
 	  "1.0.0.12": "Added bunches of foodstuffs and crates of foodstuffs",
 	  "1.0.0.13": "Added options for new types of Swift Blades such as Copper, Bronze, Osmium, Steel and Obsidian",
-	  "1.0.0.14": "Fixed issues with registering items/blocks."
+	  "1.0.0.14": "Fixed issues with registering items/blocks.",
+	  "1.0.0.15": "Fixed another issue with registering items/blocks."
   }
 }
