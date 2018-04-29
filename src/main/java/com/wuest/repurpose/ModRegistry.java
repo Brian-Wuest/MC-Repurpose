@@ -504,7 +504,12 @@ public class ModRegistry
 	 */
 	public static void RegisterRepairableMaterials(String oreName, ItemStack stack)
 	{
-		if (oreName.equals("ingotCopper")
+		if (ModRegistry.CustomMaterials.size() == 0)
+		{
+			ModRegistry.RegisterToolMaterials();
+		}
+		
+		if (oreName.equals("ingotCopper") && ModRegistry.CustomMaterials.get("Copper") != null
 			&& ModRegistry.CustomMaterials.get("Copper").getRepairItemStack() == ItemStack.EMPTY)
 		{
 			if (OreDictionary.doesOreNameExist("ingotCopper"))
@@ -520,7 +525,7 @@ public class ModRegistry
 			}
 		}
 
-		if (oreName.equals("ingotOsmium")
+		if (oreName.equals("ingotOsmium") && ModRegistry.CustomMaterials.get("Osmium") != null
 			&& ModRegistry.CustomMaterials.get("Osmium").getRepairItemStack() == ItemStack.EMPTY)
 		{
 			if (OreDictionary.doesOreNameExist("ingotOsmium"))
@@ -536,7 +541,7 @@ public class ModRegistry
 			}
 		}
 
-		if (oreName.equals("ingotBronze")
+		if (oreName.equals("ingotBronze") && ModRegistry.CustomMaterials.get("Bronze") != null
 			&& ModRegistry.CustomMaterials.get("Bronze").getRepairItemStack() == ItemStack.EMPTY)
 		{
 			if (OreDictionary.doesOreNameExist("ingotBronze"))
@@ -549,11 +554,10 @@ public class ModRegistry
 			else
 			{
 				ModRegistry.FoundMaterials.put("ingotBronze", false);
-
 			}
 		}
 		
-		if (oreName.equals("ingotSteel")
+		if (oreName.equals("ingotSteel") && ModRegistry.CustomMaterials.get("Steel") != null
 			&& ModRegistry.CustomMaterials.get("Steel").getRepairItemStack() == ItemStack.EMPTY)
 		{
 			if (OreDictionary.doesOreNameExist("ingotSteel"))
@@ -566,7 +570,6 @@ public class ModRegistry
 			else
 			{
 				ModRegistry.FoundMaterials.put("ingotSteel", false);
-
 			}
 		}
 	}
