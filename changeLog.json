@@ -21,6 +21,7 @@
 	  "1.0.0.13": "Added options for new types of Swift Blades such as Copper, Bronze, Osmium, Steel and Obsidian",
 	  "1.0.0.14": "Fixed issues with registering items/blocks.",
 	  "1.0.0.15": "Fixed another issue with registering items/blocks.",
-	  "1.0.0.16": "Fixed an issue with loading repairable materials."
+	  "1.0.0.16": "Fixed an issue with loading repairable materials.",
+	  "1.0.0.17": "Fixed an issue with compatibility with Croparia."
   }
 }
