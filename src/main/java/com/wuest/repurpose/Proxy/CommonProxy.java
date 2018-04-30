@@ -87,8 +87,6 @@ public class CommonProxy implements IGuiHandler
 
 	public void postinit(FMLPostInitializationEvent event)
 	{
-		// This removed invalid ore material registrations.
-		ModRegistry.RemoveInvalidEntries();
 	}
 
 	private void RegisterEventListeners()

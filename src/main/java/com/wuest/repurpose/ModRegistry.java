@@ -575,55 +575,6 @@ public class ModRegistry
 	}
 
 	/**
-	 * Removes invalid tool registrations if certain ore dictionary records were not found.
-	 */
-	public static void RemoveInvalidEntries()
-	{
-		boolean recipesUpdated = false;
-
-		if ((ModRegistry.FoundMaterials.containsKey("ingotCopper") && !ModRegistry.FoundMaterials.get("ingotCopper"))
-			|| !ModRegistry.FoundMaterials.containsKey("ingotCopper"))
-		{
-			// Remove Item
-			Item item = ModRegistry.CustomMaterialBlade("Copper");
-			item.setCreativeTab(null);
-			recipesUpdated = true;
-		}
-
-		if ((ModRegistry.FoundMaterials.containsKey("ingotOsmium") && !ModRegistry.FoundMaterials.get("ingotOsmium"))
-			|| !ModRegistry.FoundMaterials.containsKey("ingotOsmium"))
-		{
-			// Remove Item
-			Item item = ModRegistry.CustomMaterialBlade("Osmium");
-			item.setCreativeTab(null);
-			recipesUpdated = true;
-		}
-
-		if ((ModRegistry.FoundMaterials.containsKey("ingotBronze") && !ModRegistry.FoundMaterials.get("ingotBronze"))
-			|| !ModRegistry.FoundMaterials.containsKey("ingotBronze"))
-		{
-			// Remove Item
-			Item item = ModRegistry.CustomMaterialBlade("Bronze");
-			item.setCreativeTab(null);
-			recipesUpdated = true;
-		}
-		
-		if ((ModRegistry.FoundMaterials.containsKey("ingotSteel") && !ModRegistry.FoundMaterials.get("ingotSteel"))
-			|| !ModRegistry.FoundMaterials.containsKey("ingotSteel"))
-		{
-			// Remove Item
-			Item item = ModRegistry.CustomMaterialBlade("Steel");
-			item.setCreativeTab(null);
-			recipesUpdated = true;
-		}
-
-		if (recipesUpdated)
-		{
-			RecipeBookClient.rebuildTable();
-		}
-	}
-
-	/**
 	 * Registers records into the ore dictionary.
 	 */
 	public static void RegisterOreDictionaryRecords()
