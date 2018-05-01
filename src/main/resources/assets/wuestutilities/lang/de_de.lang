@@ -1,0 +1,8 @@
+item.itemStartHouse.name=Starthaus
+item.itemBedCompass.name=Bett-Kompass
+item.itemSwiftBladeWood.name=Schnelles Schwert: Holz
+item.itemSwiftBladeStone.name=Schnelles Schwert: Stein
+item.itemSwiftBladeIron.name=Schnelles Schwert: Eisen
+item.itemSwiftBladeGold.name=Schnelles Schwert: Gold
+item.itemSwiftBladeDiamond.name=Schnelles Schwert: Diamant
+tile.redstoneClock.name=Redstone-Uhr
