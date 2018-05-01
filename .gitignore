@@ -1,10 +1,8 @@
 # eclipse
 bin
 *.launch
-.settings
 .metadata
 .classpath
-.project
 
 # idea
 out
@@ -21,6 +19,8 @@ build
 eclipse
 run
 
+.settings
+.project
 CREDITS-fml.txt
 MinecraftForge-Credits.txt
 ForgeREADME.txt

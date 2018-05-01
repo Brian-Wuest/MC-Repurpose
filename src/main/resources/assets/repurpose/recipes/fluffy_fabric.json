@@ -1,0 +1,32 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Fluffy Fabric"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Fluffy Fabric",
+    "pattern": [
+        "xyx",
+        "yyy",
+        "xyx"
+    ],
+    "key": {
+        "x": [
+            {
+                "item": "minecraft:string"
+            }
+        ],
+        "y": [
+            {
+                "item": "minecraft:wool",
+                "data": 32767
+            }
+        ]
+    },
+    "result": {
+        "item": "repurpose:item_fluffy_fabric",
+        "count": 1
+    }
+}

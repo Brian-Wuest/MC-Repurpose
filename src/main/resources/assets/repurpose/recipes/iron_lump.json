@@ -1,0 +1,26 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Iron Lump"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Iron Lump",
+    "ingredients": [
+        {
+            "item": "minecraft:iron_nugget"
+        },
+        {
+            "item": "minecraft:iron_nugget"
+        },
+        {
+            "item": "minecraft:iron_nugget"
+        }
+    ],
+    "result": {
+        "item": "repurpose:item_iron_lump",
+        "data": 0,
+        "count": 1
+    }
+}

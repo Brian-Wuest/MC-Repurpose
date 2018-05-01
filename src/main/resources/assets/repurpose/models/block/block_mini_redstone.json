@@ -1,0 +1,22 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"all": "blocks/redstone_block",
+		"particle": "blocks/redstone_block"
+	},
+	"elements": [
+        {   "from": [ 4, 0, 4 ],
+            "to": [ 12, 8, 12 ],
+            "shade": false,
+            "faces": {
+                "down":  { "texture": "#all", "tintindex": 0},
+                "up":    { "texture": "#all", "tintindex": 0},
+                "north": { "texture": "#all", "tintindex": 0},
+                "south": { "texture": "#all", "tintindex": 0},
+                "west":  { "texture": "#all", "tintindex": 0},
+                "east":  { "texture": "#all", "tintindex": 0}
+            }
+        }
+    ]
+}

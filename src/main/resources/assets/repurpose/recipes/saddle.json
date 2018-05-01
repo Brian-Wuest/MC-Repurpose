@@ -1,0 +1,34 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Saddle"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Saddle",
+    "pattern": [
+        "   ",
+        "aaa",
+        "b b"
+    ],
+    "key": {
+        "a": [
+            {
+                "item": "minecraft:leather",
+                "data": 0
+            }
+        ],
+        "b" : [
+            {
+                "item": "minecraft:string",
+                "data": 0
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:saddle",
+        "count": 1,
+        "data": 0
+    }
+}

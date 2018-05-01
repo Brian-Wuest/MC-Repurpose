@@ -1,0 +1,27 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Wood Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Wood Recipes",
+    "pattern": [
+        "##",
+        "##"
+    ],
+    "key": {
+        "#": [
+            {
+                "item": "minecraft:wooden_slab",
+                "data": 2
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:stick",
+        "count": 4,
+        "data": 0
+    }
+}

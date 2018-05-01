@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "variant=false": [
+            { "model": "dirt" },
+            { "model": "dirt", "y": 90 },
+            { "model": "dirt", "y": 180 },
+            { "model": "dirt", "y": 270 }
+        ],
+        "variant=true": [
+            { "model": "dirt" },
+            { "model": "dirt", "y": 90 },
+            { "model": "dirt", "y": 180 },
+            { "model": "dirt", "y": 270 }
+        ]
+    }
+}
