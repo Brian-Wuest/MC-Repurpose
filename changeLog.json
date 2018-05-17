@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.17",
-	  "1.12-recommended": "1.0.0.17"
+	  "1.12-latest": "1.0.0.18",
+	  "1.12-recommended": "1.0.0.18"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -22,6 +22,7 @@
 	  "1.0.0.14": "Fixed issues with registering items/blocks.",
 	  "1.0.0.15": "Fixed another issue with registering items/blocks.",
 	  "1.0.0.16": "Fixed an issue with loading repairable materials.",
-	  "1.0.0.17": "Fixed an issue with compatibility with Croparia."
+	  "1.0.0.17": "Fixed an issue with compatibility with Croparia.",
+	  "1.0.0.18": "Updated all textures to be 16x16."
   }
 }
