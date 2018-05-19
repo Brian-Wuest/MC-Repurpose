@@ -15,9 +15,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -42,8 +44,7 @@ public class ItemSickle extends ItemTool
 			Blocks.RED_FLOWER, 
 			Blocks.YELLOW_FLOWER, 
 			Blocks.DOUBLE_PLANT);
-	
-    protected Item.ToolMaterial toolMaterial;
+
     protected int breakRadius = 0;
 
     /**
@@ -59,17 +60,6 @@ public class ItemSickle extends ItemTool
         ModRegistry.setItemName(this, name);
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
-    {
-        stack.damageItem(1, attacker);
-        return true;
-    }
-    
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state)
     {
@@ -84,32 +74,7 @@ public class ItemSickle extends ItemTool
             return 15.0F;
         }
     }
-    
-    /**
-     * Return the enchantability factor of the item, most of the time is based on material.
-     */
-    @Override
-    public int getItemEnchantability()
-    {
-        return this.toolMaterial.getEnchantability();
-    }
 
-    /**
-     * Return whether this item is repairable in an anvil.
-     */
-    @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
-    {
-        ItemStack mat = this.toolMaterial.getRepairItemStack();
-        
-        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) 
-    	{
-    		return true;
-    	}
-        
-        return super.getIsRepairable(toRepair, repair);
-    }
-    
     /**
      * Called when a Block is destroyed using this Item. Return true to trigger the "Use Item" statistic.
      */
@@ -150,8 +115,7 @@ public class ItemSickle extends ItemTool
 		        			currentState.getBlock().onBlockDestroyedByPlayer(worldIn, currentPos, currentState);
 		        			currentState.getBlock().breakBlock(worldIn, currentPos, currentState);
 		        			
-		        			int fortune = this.toolMaterial == ToolMaterial.GOLD ? 1 : 0;
-		        			
+		        			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack) + (this.toolMaterial == ToolMaterial.GOLD ? 1 : 0);
 		        			currentState.getBlock().dropBlockAsItem(worldIn, currentPos, currentState, fortune);
 	        			}
 	        		}
