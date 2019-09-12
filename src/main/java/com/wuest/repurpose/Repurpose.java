@@ -1,46 +1,36 @@
 package com.wuest.repurpose;
 
-import java.util.ArrayList;
-
 import com.wuest.repurpose.Events.HomeCommand;
+import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.CommonProxy;
 
-import net.minecraft.block.Block;
-import net.minecraft.command.ICommandManager;
-import net.minecraft.command.ServerCommandManager;
-import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid=Repurpose.MODID, name="Repurpose", version=Repurpose.VERSION, acceptedMinecraftVersions="[1.12.2]", 
-guiFactory = "com.wuest.repurpose.Gui.ConfigGuiFactory",
-updateJSON = "https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/master/changeLog.json")
+import net.minecraft.command.Commands;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
+
+@Mod(Repurpose.MODID)
 public class Repurpose 
 {
 	public static final String MODID = "repurpose";
-	public static final String VERSION = "@VERSION@";
+
+	public static final Logger LOGGER = LogManager.getLogger();
+    public static final String PROTOCOL_VERSION = Integer.toString(1);
 	
 	// compilation flag used for debugging purposes.
 	public static boolean isDebug = false;
 
-	@Instance(value = Repurpose.MODID)
-	public static Repurpose instance;
-
 	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide = "com.wuest.repurpose.Proxy.ClientProxy", serverSide = "com.wuest.repurpose.Proxy.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static SimpleNetworkWrapper network;
-	public static Configuration config;
+	public static SimpleChannel network;
 	
 	static
 	{
@@ -48,41 +38,34 @@ public class Repurpose
 			    getInputArguments().toString().contains("-agentlib:jdwp");
 	}
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		Repurpose.proxy.preInit(event);
-	}
+	public Repurpose() {
+        // Register the setup method for mod-loading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{
-		Repurpose.proxy.init(event);
-	}
+        Repurpose.proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
-	@EventHandler
-	public void postinit(FMLPostInitializationEvent event)
-	{
-		Repurpose.proxy.postinit(event);
-	}
+        ModRegistry.RegisterModComponents();
+    }
+
+	private void setup(final FMLCommonSetupEvent event) {
+        Repurpose.proxy.preInit(event);
+        Repurpose.proxy.init(event);
+        Repurpose.proxy.postinit(event);
+    }
 
 	// The method that gets called when a server starts up(Singleplayer and multiplayer are both affected)
-	@EventHandler
 	public void serverStart(FMLServerStartingEvent event)
 	{
 		// Get's the current server instance.
 		MinecraftServer server = event.getServer();
 
-		// Get's the Command manager for the server, but it's in a form we cannot use.
-		ICommandManager command = server.getCommandManager();
-
-		// Turns the useless to us ICommandManager into a now useful ServerCommandManager.
-		ServerCommandManager manager = (ServerCommandManager)command;
+		// Get's the Command manager for the server.
+		Commands command = server.getCommandManager();
 
 		// Registers the command
 		if (Repurpose.proxy.getServerConfiguration().enableHomeCommand)
-		{		
-			manager.registerCommand(new HomeCommand());
+		{	
+			HomeCommand.register(command.getDispatcher());
 		}
 	}
 }

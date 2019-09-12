@@ -1,7 +1,7 @@
 package com.wuest.repurpose.Gui;
 
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Config.WuestConfiguration;
+import com.wuest.repurpose.Config.ModConfiguration;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -18,10 +18,10 @@ public class GuiWuest extends GuiConfig
 	public GuiWuest(GuiScreen parent)
 	{
 		super(parent,
-				new ConfigElement(Repurpose.config.getCategory(WuestConfiguration.OPTIONS)).getChildElements(),
+				new ConfigElement(Repurpose.config.getCategory(ModConfiguration.OPTIONS)).getChildElements(),
 				Repurpose.MODID, null, false, false, GuiConfig.getAbridgedConfigPath(Repurpose.config.toString()), null);
 
-		ConfigCategory category = Repurpose.config.getCategory(WuestConfiguration.OPTIONS);
+		ConfigCategory category = Repurpose.config.getCategory(ModConfiguration.OPTIONS);
 		String abridgedConfigPath = GuiConfig.getAbridgedConfigPath(Repurpose.config.toString());
 	}
 

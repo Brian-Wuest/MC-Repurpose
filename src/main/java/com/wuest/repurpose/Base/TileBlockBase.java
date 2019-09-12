@@ -1,257 +1,234 @@
 package com.wuest.repurpose.Base;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.ToolType;
 
 /**
  * The base block for any block associated with a tile entity.
+ * 
  * @author WuestMan
  */
-public abstract class TileBlockBase<T extends TileEntityBase> extends Block implements ITileEntityProvider
-{
+public abstract class TileBlockBase<T extends TileEntityBase> extends Block implements ITickableTileEntity {
+	public final TileEntityType<?> entityType;
+
 	/**
 	 * Initializes a new instance of the TileBlockBase class.
+	 * 
 	 * @param materialIn The material associated with this block.
 	 */
-	public TileBlockBase(Material materialIn)
-	{
-		super(materialIn);
+	public TileBlockBase(Block.Properties properties, TileEntityType<?> entityType) {
+		super(properties);
+
+		this.entityType = entityType;
 	}
-	
-	public TileBlockBase(Material materialIn, MapColor color)
-	{
-		super(materialIn, color);
+
+	public Class<T> getTypeParameterClass() {
+		Type type = getClass().getGenericSuperclass();
+		ParameterizedType paramType = (ParameterizedType) type;
+		return (Class<T>) paramType.getActualTypeArguments()[0];
 	}
-	
-    public Class<T> getTypeParameterClass()
-    {
-        Type type = getClass().getGenericSuperclass();
-        ParameterizedType paramType = (ParameterizedType) type;
-        return (Class<T>) paramType.getActualTypeArguments()[0];
-    }
-    
+
 	/**
 	 * Determine if this block can make a redstone connection on the side provided,
 	 * Useful to control which sides are inputs and outputs for redstone wires.
 	 *
 	 * @param world The current world
-	 * @param pos Block position in world
-	 * @param side The side that is trying to make the connection, CAN BE NULL
+	 * @param pos   Block position in world
+	 * @param side  The side that is trying to make the connection, CAN BE NULL
 	 * @return True to make the connection
 	 */
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
-	{
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
 		/**
-		 * Can this block provide power. Only wire currently seems to have this change based on its state.
+		 * Can this block provide power. Only wire currently seems to have this change
+		 * based on its state.
 		 */
 		return this.canProvidePower(state) && side != null;
 	}
-	
+
 	@Override
-	public boolean canProvidePower(IBlockState state)
-	{
+	public boolean canProvidePower(BlockState state) {
 		return true;
 	}
-	
-	/**
-     * Determines if the player can harvest this block, obtaining it's drops when the block is destroyed.
-     *
-     * @param player The player damaging the block, may be null
-     * @param meta The block's current metadata
-     * @return True to spawn the drops
-     */
-    @Override
-	public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
-    {
-        return true;
-    }
-    
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) 
-	{
-		//System.out.println("Creating new tile entity.");
-		return this.createNewTileEntity();
-	}
-	
-    /**
-     * Spawns this Block's drops into the World as EntityItems.
-     */
-    @Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
-    {
-    	// Do not drop items while restoring blockstates, prevents item dupe.
-        if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) 
-        {
-            List<ItemStack> items = this.getDrops(worldIn, pos, state, fortune);
-            chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, chance, false, harvesters.get());
 
-            T tileEntity = this.getLocalTileEntity(worldIn, pos);
-            
-            for (ItemStack item : items)
-            {
-                if (worldIn.rand.nextFloat() <= chance)
-                {
-                	if (tileEntity != null)
-                	{
-                		item = tileEntity.transferCapabilities(item);
-                	}
-                	
-                    this.spawnAsEntity(worldIn, pos, item);
-                }
-            }
-        }
-    }
-	
-	public T createNewTileEntity()
-	{
-		try
-		{
-			return this.getTypeParameterClass().newInstance();
-		}
-		catch (InstantiationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e)
-		{
-			e.printStackTrace();
-		}
-		
+	/**
+	 * Queries the class of tool required to harvest this block, if null is returned
+	 * we assume that anything can harvest this block.
+	 */
+	public ToolType getHarvestTool(BlockState state) {
 		return null;
 	}
-	
+
+	@Nonnull
 	@Override
-	public boolean hasTileEntity(IBlockState state)
-	{
+	public TileEntity createTileEntity(@Nonnull BlockState state, @Nonnull IBlockReader world) {
+		// System.out.println("Creating new tile entity.");
+		return this.createNewTileEntity();
+	}
+
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		List<ItemStack> items = super.getDrops(state, builder);
+		BlockPos pos = builder.get(LootParameters.POSITION);
+		World world = builder.getWorld();
+
+		T tileEntity = this.getLocalTileEntity(world, pos);
+
+		for (ItemStack item : items) {
+			if (tileEntity != null) {
+				item = tileEntity.transferCapabilities(item);
+			}
+		}
+
+		return items;
+	}
+
+	public T createNewTileEntity() {
+		try {
+			return this.getTypeParameterClass().getConstructor(this.entityType.getClass()).newInstance(this.entityType);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
-	
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		T tileEntity = this.getLocalTileEntity(worldIn, pos);
-		
-		this.customBreakBlock(tileEntity, worldIn, pos, state);
 
-		super.breakBlock(worldIn, pos, state);
-		worldIn.removeTileEntity(pos);
-	}
-	
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-	{
-		for (EnumFacing enumfacing : EnumFacing.values())
-		{
-			worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), state.getBlock(), true);
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (state.hasTileEntity() && state.getBlock() != newState.getBlock()) {
+			worldIn.removeTileEntity(pos);
+		}
+	}
+
+	@Override
+	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+		T tileEntity = this.getLocalTileEntity((World) worldIn, pos);
+
+		this.customBreakBlock(tileEntity, (World) worldIn, pos, state);
+
+		super.onPlayerDestroy(worldIn, pos, state);
+		((World) worldIn).removeTileEntity(pos);
+	}
+
+	@Override
+	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world,
+			BlockPos pos1, BlockPos pos2, Hand hand) {
+		World world1 = (World) world;
+
+		for (Direction enumfacing : Direction.values()) {
+			world1.notifyNeighborsOfStateChange(pos1.offset(enumfacing), state.getBlock());
 		}
 
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		world1.getPendingBlockTicks().scheduleTick(pos1, this, this.tickRate(world));
 
-		if (worldIn.getTileEntity(pos) == null)
-		{
+		if (world.getTileEntity(pos1) == null) {
 			T tile = this.createNewTileEntity();
-			
-			worldIn.setTileEntity(pos, tile);
+
+			world1.setTileEntity(pos1, tile);
 		}
+
+		return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand);
 	}
-	
+
 	@Override
-	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) 
-	{
+	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
 		super.eventReceived(state, worldIn, pos, eventID, eventParam);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
 	}
-	
+
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-	{
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		this.updateState(worldIn, pos, state);
 	}
-	
-    /**
-     * Gets the {@link IBlockState} to place
-     * @param world The world the block is being placed in
-     * @param pos The position the block is being placed at
-     * @param facing The side the block is being placed on
-     * @param hitX The X coordinate of the hit vector
-     * @param hitY The Y coordinate of the hit vector
-     * @param hitZ The Z coordinate of the hit vector
-     * @param meta The metadata of {@link ItemStack} as processed by {@link Item#getMetadata(int)}
-     * @param placer The entity placing the block
-     * @param hand The player hand used to place this block
-     * @return The state to be placed in the world
-     */
-    @Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
-    {
-    	return this.getDefaultState();
-    }
-	
-	public void updateState(World worldIn, BlockPos pos, IBlockState state)
-	{
+
+	public void updateState(World worldIn, BlockPos pos, BlockState state) {
 		T tileEntity = this.getLocalTileEntity(worldIn, pos);
-		
+
 		int tickDelay = this.customUpdateState(worldIn, pos, state, tileEntity);
-		
-		worldIn.markBlockRangeForRenderUpdate(pos, pos);
-		worldIn.scheduleUpdate(pos, this, tickDelay);
+
+		if (worldIn.isRemote) {
+			ClientWorld clientWorld = (ClientWorld) worldIn;
+			clientWorld.markSurroundingsForRerender(pos.getX(), pos.getY(), pos.getZ());
+		}
+
+		worldIn.getPendingBlockTicks().scheduleTick(pos, this, tickDelay);
 	}
-	
+
 	/**
 	 * Gets the tile entity at the current position.
+	 * 
 	 * @param worldIn The world to the entity for.
-	 * @param pos The position in the world to get the entity for.
-	 * @return Null if the tile was not found or if one was found and is not a proper tile entity. Otherwise the tile entity instance.
+	 * @param pos     The position in the world to get the entity for.
+	 * @return Null if the tile was not found or if one was found and is not a
+	 *         proper tile entity. Otherwise the tile entity instance.
 	 */
-	public T getLocalTileEntity(World worldIn, BlockPos pos)
-	{
+	public T getLocalTileEntity(World worldIn, BlockPos pos) {
 		TileEntity entity = worldIn.getTileEntity(pos);
 
-		if (entity != null && entity.getClass() == this.getTypeParameterClass())
-		{
+		if (entity != null && entity.getClass() == this.getTypeParameterClass()) {
 			return (T) entity;
-		}
-		else
-		{
+		} else {
 			T tileEntity = this.createNewTileEntity();
-			
+
 			worldIn.setTileEntity(pos, tileEntity);
 			tileEntity.setPos(pos);
 
 			return tileEntity;
 		}
 	}
-	
+
 	/**
 	 * Processes custom update state.
-	 * @param worldIn The world this state is being updated in.
-	 * @param pos The block position.
-	 * @param state The block state.
+	 * 
+	 * @param worldIn    The world this state is being updated in.
+	 * @param pos        The block position.
+	 * @param state      The block state.
 	 * @param tileEntity The tile entity associated with this class.
 	 * @return The number of ticks to delay until the next update.
 	 */
-	public abstract int customUpdateState(World worldIn, BlockPos pos, IBlockState state, T tileEntity);
-	
-	public abstract void customBreakBlock(T tileEntity, World worldIn, BlockPos pos, IBlockState state);
+	public abstract int customUpdateState(World worldIn, BlockPos pos, BlockState state, T tileEntity);
+
+	public abstract void customBreakBlock(T tileEntity, World worldIn, BlockPos pos, BlockState state);
 }

@@ -1,0 +1,28 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Misc Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Misc Recipes",
+    "ingredients": [
+        {
+            "item": "minecraft:redstone"
+        },
+        {
+            "item": "minecraft:gunpowder",
+            "data": 0
+        },
+        {
+            "item": "minecraft:dye",
+            "data": 11
+        }
+    ],
+    "result": {
+        "item": "minecraft:glowstone_dust",
+        "data": 0,
+        "count": 2
+    }
+}

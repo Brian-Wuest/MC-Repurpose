@@ -1,0 +1,32 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Sickle"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Sickle",
+    "pattern": [
+        " a ",
+        "  a",
+        "ba "
+    ],
+    "key": {
+        "a": [
+            {
+                "item": "minecraft:iron_ingot",
+                "data": 0
+            }
+        ],
+        "b" : [
+            {
+                "item": "minecraft:stick"
+            }
+        ]
+    },
+    "result": {
+        "item": "repurpose:item_iron_sickle",
+        "count": 1
+    }
+}

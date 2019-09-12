@@ -1,7 +1,7 @@
 package com.wuest.repurpose.Gui;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 
 /**
  * 

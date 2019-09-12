@@ -1,0 +1,20 @@
+modLoader="javafml" #mandatory
+loaderVersion="[24,)" #mandatory
+issueTrackerURL="https://github.com/Brian-Wuest/MC-Repurpose/issues" #optional
+
+[[mods]] #mandatory
+    modId="repurpose" #mandatory
+    version="1.1.0.0" #mandatory
+    displayName="Repurpose" #mandatory
+    #logoFile="" #optional
+    updateJSONURL="https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/master/changeLog.json" #optional
+    displayURL="https://minecraft.curseforge.com/projects/repurpose" #optional
+    credits="Kaojinn" #optional
+    authors="WuestMan" #optional
+    description='''This mod provides a number of different ways to enhance the vanilla experience of Minecraft and provide easier or alternative ways to obtaining materials or blocks. This is to allow you to focus on what you really want to do, BUILD!'''
+[[dependencies.repurpose]]
+    modId="forge" #mandatory
+    mandatory=false #mandatory
+    versionRange="[28.0.92,)" #mandatory
+    ordering="NONE"
+    side="BOTH"

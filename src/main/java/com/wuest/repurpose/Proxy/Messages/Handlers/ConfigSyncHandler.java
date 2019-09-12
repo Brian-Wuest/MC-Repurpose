@@ -2,7 +2,7 @@ package com.wuest.repurpose.Proxy.Messages.Handlers;
 
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.UpdateChecker;
-import com.wuest.repurpose.Config.WuestConfiguration;
+import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
 
@@ -38,9 +38,9 @@ IMessageHandler<ConfigSyncMessage, IMessage>
 			public void run() 
 			{
 				// This is client side. Update the configuration.
-				((ClientProxy)Repurpose.proxy).serverConfiguration =  WuestConfiguration.getFromNBTTagCompound(message.getMessageTag());
+				((ClientProxy)Repurpose.proxy).serverConfiguration =  ModConfiguration.getFromNBTTagCompound(message.getMessageTag());
 				
-				WuestConfiguration config = ((ClientProxy)Repurpose.proxy).getServerConfiguration();
+				ModConfiguration config = ((ClientProxy)Repurpose.proxy).getServerConfiguration();
 				
 				// Show a message to this player if their version is old.
 				if (config.showMessage && config.enableVersionCheckMessage)

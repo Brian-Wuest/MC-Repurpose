@@ -1,35 +1,33 @@
 package com.wuest.repurpose.Base;
 
-import java.lang.reflect.ParameterizedType;
-
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
- * This abstract class is used as the base for NBTTagCompound configurations.
+ * This abstract class is used as the base for CompoundNBT configurations.
  * @author WuestMan
  */
 public abstract class BaseConfig
 {
 	/**
-	 * Writes to an NBTTagCombound given an existing NBTTagCompound.
+	 * Writes to an NBTTagCombound given an existing CompoundNBT.
 	 * @param compound The existing tag to add custom values too.
 	 */
-	public abstract void WriteToNBTCompound(NBTTagCompound compound);
+	public abstract void WriteToNBTCompound(CompoundNBT compound);
 
 	/**
-	 * Reads data from an NBTTagCompound and creates an instance of the configuration class.
+	 * Reads data from an CompoundNBT and creates an instance of the configuration class.
 	 * @param compound The compound containing the data to create the configuration class.
-	 * @return An instance containing the data held within the NBTTagCompound
+	 * @return An instance containing the data held within the CompoundNBT
 	 */
-	public abstract <T extends BaseConfig> T ReadFromNBTTagCompound(NBTTagCompound compound);
+	public abstract <T extends BaseConfig> T ReadFromCompoundNBT(CompoundNBT compound);
 	
 	/**
-	 * Gets an NBTTagCompound which has this classes information in it.
-	 * @return A {@link NBTTagCompound} with this classes values.
+	 * Gets an CompoundNBT which has this classes information in it.
+	 * @return A {@link CompoundNBT} with this classes values.
 	 */
-	public NBTTagCompound GetNBTTagCompound()
+	public CompoundNBT GetCompoundNBT()
 	{
-		NBTTagCompound compound = new NBTTagCompound();
+		CompoundNBT compound = new CompoundNBT();
 		this.WriteToNBTCompound(compound);
 		return compound;
 	}

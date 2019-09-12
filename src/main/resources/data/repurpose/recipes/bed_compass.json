@@ -1,0 +1,24 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Bed Compass"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Bed Compass",
+    "ingredients": [
+        {
+            "item": "minecraft:bed",
+            "data": 32767
+        },
+        {
+            "item": "minecraft:compass"
+        }
+    ],
+    "result": {
+        "item": "repurpose:item_bed_compass",
+        "data": 0,
+        "count": 1
+    }
+}

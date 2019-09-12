@@ -2,20 +2,19 @@ package com.wuest.repurpose.Gui;
 
 import java.io.IOException;
 
-import org.lwjgl.input.Mouse;
-
-import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
+import com.wuest.repurpose.Blocks.BlockCoffer.CofferType;
 import com.wuest.repurpose.Tiles.TileEntityCoffer;
 
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 
 /**
  * 
@@ -24,32 +23,44 @@ import net.minecraft.util.math.MathHelper;
  */
 public class ContainerCoffer extends Container
 {
-    private IronChestType type;
+	public static final ContainerType<ContainerCoffer> Coffer = ContainerCoffer.register("coffer", ContainerCoffer::new);
 
-    private EntityPlayer player;
+    private CofferType type;
+
+    private PlayerEntity player;
 
     private IInventory chest;
     
-    private InventoryBasic basicInventory;
+	private Inventory basicInventory;
+	
+	public static <T extends Container> ContainerType<T> register(String key, ContainerType.IFactory<T> factory)
+	{
+		return Registry.register(Registry.MENU, key, new ContainerType<>(factory));
+	}
 
-    public ContainerCoffer(IInventory playerInventory, IInventory chestInventory, IronChestType type, int xSize, int ySize)
+	public ContainerCoffer(int id, PlayerInventory playerInventory) {
+		this(id, playerInventory, new Inventory(CofferType.IRON.size), CofferType.IRON, CofferType.IRON.xSize, CofferType.IRON.ySize);
+	}
+
+    public ContainerCoffer(int id, IInventory playerInventory, IInventory chestInventory, CofferType type, int xSize, int ySize)
     {
+		super(ContainerCoffer.Coffer, id);
         this.chest = chestInventory;
-        this.player = ((InventoryPlayer) playerInventory).player;
+        this.player = ((PlayerInventory) playerInventory).player;
         this.type = type;
         chestInventory.openInventory(this.player);
         this.layoutContainer(playerInventory, chestInventory, type, xSize, ySize);
-        this.basicInventory = new InventoryBasic("tmp", true, 54);
+        this.basicInventory = new Inventory(54);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn)
+    public boolean canInteractWith(PlayerEntity playerIn)
     {
         return this.chest.isUsableByPlayer(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
     {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
@@ -89,20 +100,20 @@ public class ContainerCoffer extends Container
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer playerIn)
+    public void onContainerClosed(PlayerEntity playerIn)
     {
         super.onContainerClosed(playerIn);
 
         this.chest.closeInventory(playerIn);
     }
 
-    protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, IronChestType type, int xSize, int ySize)
+    protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, CofferType type, int xSize, int ySize)
     {
         for (int chestRow = 0; chestRow < type.getRowCount(); chestRow++)
         {
             for (int chestCol = 0; chestCol < type.rowLength; chestCol++)
             {
-                this.addSlotToContainer(type.makeSlot(chestInventory, chestCol + chestRow * type.rowLength, 12 + chestCol * 18, 8 + chestRow * 18));
+                this.addSlot(type.makeSlot(chestInventory, chestCol + chestRow * type.rowLength, 12 + chestCol * 18, 8 + chestRow * 18));
             }
         }
 
@@ -112,7 +123,7 @@ public class ContainerCoffer extends Container
         {
             for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++)
             {
-                this.addSlotToContainer(
+                this.addSlot(
                         new CustomSlot(playerInventory, playerInvCol + playerInvRow * 9 + 9, leftCol + playerInvCol * 18, ySize - (4 - playerInvRow) * 18 - 10));
             }
 
@@ -120,7 +131,7 @@ public class ContainerCoffer extends Container
 
         for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++)
         {
-            this.addSlotToContainer(new CustomSlot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, ySize - 24));
+            this.addSlot(new CustomSlot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, ySize - 24));
         }
     }
     
@@ -162,7 +173,7 @@ public class ContainerCoffer extends Container
                 
                 if (i1 >= 0 && i1 < this.type.size)
                 {
-                    this.basicInventory.setInventorySlotContents(l + k * 9, this.inventoryItemStacks.get(i1));
+                    this.basicInventory.setInventorySlotContents(l + k * 9, this.inventorySlots.get(i1).getStack());
                 }
                 else
                 {
@@ -172,7 +183,7 @@ public class ContainerCoffer extends Container
         }
     }
 
-    public EntityPlayer getPlayer()
+    public PlayerEntity getPlayer()
     {
         return this.player;
     }

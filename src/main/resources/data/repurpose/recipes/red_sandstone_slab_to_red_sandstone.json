@@ -1,0 +1,27 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Stone Recipes"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Stone Recipes",
+    "pattern": [
+        "##",
+        "##"
+    ],
+    "key": {
+        "#": [
+            {
+                "item": "minecraft:stone_slab2",
+                "data": 0
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:red_sandstone",
+        "count": 2,
+        "data": 0
+    }
+}

@@ -3,24 +3,22 @@ package com.wuest.repurpose.Renderer;
 import java.util.Random;
 
 import com.google.common.primitives.SignedBytes;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Blocks.BlockCoffer;
-import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
+import com.wuest.repurpose.Blocks.BlockCoffer.CofferType;
 import com.wuest.repurpose.Tiles.TileEntityCoffer;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelChest;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.model.ChestModel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-public class TileEntityCofferRenderer extends TileEntitySpecialRenderer<TileEntityCoffer>
+public class TileEntityCofferRenderer extends TileEntityRenderer<TileEntityCoffer>
 {
-    private ModelChest model;
+    private ChestModel model;
 
     private static float[][] shifts = { { 0.3F, 0.45F, 0.3F }, { 0.7F, 0.45F, 0.3F }, { 0.3F, 0.45F, 0.7F }, { 0.7F, 0.45F, 0.7F }, { 0.3F, 0.1F, 0.3F }, { 0.7F, 0.1F, 0.3F }, { 0.3F, 0.1F, 0.7F }, { 0.7F, 0.1F, 0.7F }, { 0.5F, 0.32F, 0.5F } };
 
@@ -28,27 +26,27 @@ public class TileEntityCofferRenderer extends TileEntitySpecialRenderer<TileEnti
 
     public TileEntityCofferRenderer()
     {
-        this.model = new ModelChest();
+        this.model = new ChestModel();
     }
 
     @Override
-    public void render(TileEntityCoffer te, double x, double y, double z, float partialTicks, int destroyStage, float partial)
+    public void render(TileEntityCoffer te, double x, double y, double z, float partialTicks, int destroyStage)
     {
-    	IronChestType type = IronChestType.IRON;
+    	CofferType type = CofferType.IRON;
     	
-        if (te == null || te.isInvalid())
+        if (te == null || te.isRemoved())
         {
         	return;
         }
 
-        EnumFacing facing = EnumFacing.SOUTH;
+        Direction facing = Direction.SOUTH;
 
         if (te.hasWorld() && te.getWorld().getBlockState(te.getPos()).getBlock() == ModRegistry.Coffer())
         {
-        	type = te.getType();
+        	type = te.getCofferType();
             facing = te.getFacing();
-            IBlockState state = te.getWorld().getBlockState(te.getPos());
-            type = state.getValue(BlockCoffer.VARIANT_PROP);
+            BlockState state = te.getWorld().getBlockState(te.getPos());
+            type = state.with(BlockCoffer.VARIANT_PROP);
         }
 
         if (destroyStage >= 0)
@@ -56,8 +54,8 @@ public class TileEntityCofferRenderer extends TileEntitySpecialRenderer<TileEnti
             this.bindTexture(DESTROY_STAGES[destroyStage]);
             GlStateManager.matrixMode(5890);
             GlStateManager.pushMatrix();
-            GlStateManager.scale(4F, 4F, 1F);
-            GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+            GlStateManager.scalef(4F, 4F, 1F);
+            GlStateManager.translatef(0.0625F, 0.0625F, 0.0625F);
             GlStateManager.matrixMode(5888);
         }
         else
@@ -68,59 +66,59 @@ public class TileEntityCofferRenderer extends TileEntitySpecialRenderer<TileEnti
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
 
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.translate((float) x, (float) y + 1F, (float) z + 1F);
-        GlStateManager.scale(1F, -1F, -1F);
-        GlStateManager.translate(0.5F, 0.5F, 0.5F);
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        GlStateManager.translatef((float) x, (float) y + 1F, (float) z + 1F);
+        GlStateManager.scalef(1F, -1F, -1F);
+        GlStateManager.translatef(0.5F, 0.5F, 0.5F);
 
         switch (facing)
         {
 	        case NORTH:
 	        {
-	            GlStateManager.rotate(180F, 0F, 1F, 0F);
+	            GlStateManager.rotatef(180F, 0F, 1F, 0F);
 	            break;
 	        }
 	        
 	        case SOUTH:
 	        {
-	            GlStateManager.rotate(0F, 0F, 1F, 0F);
+	            GlStateManager.rotatef(0F, 0F, 1F, 0F);
 	            break;
 	        }
 	        
 	        case WEST:
 	        {
-	            GlStateManager.rotate(90F, 0F, 1F, 0F);
+	            GlStateManager.rotatef(90F, 0F, 1F, 0F);
 	            break;
 	        }
 	        
 	        case EAST:
 	        {
-	            GlStateManager.rotate(270F, 0F, 1F, 0F);
+	            GlStateManager.rotatef(270F, 0F, 1F, 0F);
 	            break;
 	        }
 	        
 	        default:
 	        {
-	            GlStateManager.rotate(0F, 0F, 1F, 0F);
+	            GlStateManager.rotatef(0F, 0F, 1F, 0F);
 	            break;
 	        }
         }
 
-        GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+        GlStateManager.translatef(-0.5F, -0.5F, -0.5F);
 
         float lidangle = te.prevLidAngle + (te.lidAngle - te.prevLidAngle) * partialTicks;
 
         lidangle = 1F - lidangle;
         lidangle = 1F - lidangle * lidangle * lidangle;
 
-        this.model.chestLid.rotateAngleX = -(lidangle * halfPI);
+        this.model.getLid().rotateAngleX = -(lidangle * halfPI);
         
         // Render the chest itself
         this.model.renderAll();
         
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (destroyStage >= 0)
         {

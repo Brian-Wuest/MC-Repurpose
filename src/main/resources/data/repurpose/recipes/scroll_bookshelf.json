@@ -1,0 +1,32 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Scroll"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Scroll",
+    "pattern": [
+        "aaa",
+        "bbb",
+        "aaa"
+    ],
+    "key": {
+        "a": [
+            {
+                "item": "minecraft:planks",
+                "data": 32767
+            }
+        ],
+        "b": [
+            {
+                "item": "repurpose:item_scroll"
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:bookshelf",
+        "count": 1
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Diamond Shard"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "Diamond Shard",
+    "pattern": [
+        "##",
+        "##"
+    ],
+    "key": {
+        "#": [
+            {
+                "item": "repurpose:item_diamond_shard"
+            }
+        ]
+    },
+    "result": {
+        "item": "minecraft:diamond",
+        "count": 1
+    }
+}
