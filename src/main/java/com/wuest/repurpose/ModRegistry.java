@@ -7,11 +7,14 @@ import java.util.Map;
 import com.wuest.repurpose.Blocks.BlockCharcoal;
 import com.wuest.repurpose.Blocks.BlockCoffer;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
+import com.wuest.repurpose.Blocks.BlockDirtSlab;
 import com.wuest.repurpose.Blocks.BlockDirtStairs;
 import com.wuest.repurpose.Blocks.BlockDoubleDirtSlab;
 import com.wuest.repurpose.Blocks.BlockDoubleGlowstoneSlab;
 import com.wuest.repurpose.Blocks.BlockDoubleGrassSlab;
 import com.wuest.repurpose.Blocks.BlockEnrichedFarmland;
+import com.wuest.repurpose.Blocks.BlockGlowstoneSlab;
+import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
 import com.wuest.repurpose.Blocks.BlockHalfDirtSlab;
 import com.wuest.repurpose.Blocks.BlockHalfGlowstoneSlab;
@@ -146,24 +149,14 @@ public class ModRegistry
 		return ModRegistry.GetBlock(BlockGrassStairs.class);
 	}
 
-	public static BlockHalfDirtSlab DirtSlab()
+	public static BlockDirtSlab DirtSlab()
 	{
-		return ModRegistry.GetBlock(BlockHalfDirtSlab.class);
+		return ModRegistry.GetBlock(BlockDirtSlab.class);
 	}
 
-	public static BlockDoubleDirtSlab DoubleDirtSlab()
+	public static BlockGrassSlab GrassSlab()
 	{
-		return ModRegistry.GetBlock(BlockDoubleDirtSlab.class);
-	}
-
-	public static BlockHalfGrassSlab GrassSlab()
-	{
-		return ModRegistry.GetBlock(BlockHalfGrassSlab.class);
-	}
-
-	public static BlockDoubleGrassSlab DoubleGrassSlab()
-	{
-		return ModRegistry.GetBlock(BlockDoubleGrassSlab.class);
+		return ModRegistry.GetBlock(BlockGrassSlab.class);
 	}
 
 	public static BlockEnrichedFarmland EnrichedFarmland()
@@ -211,9 +204,9 @@ public class ModRegistry
 		return ModRegistry.GetItem(ItemScroll.class);
 	}
 
-	public static BlockHalfGlowstoneSlab GlowstoneSlab()
+	public static BlockGlowstoneSlab GlowstoneSlab()
 	{
-		return ModRegistry.GetBlock(BlockHalfGlowstoneSlab.class);
+		return ModRegistry.GetBlock(BlockGlowstoneSlab.class);
 	}
 
 	public static EnchantmentStepAssist StepAssist()

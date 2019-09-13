@@ -4,65 +4,63 @@ import java.util.Random;
 
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Proxy.CommonProxy;
 
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is used to define a set of dirt stairs.
+ * 
  * @author WuestMan
  *
  */
-public class BlockDirtStairs extends BlockStairs
-{
+public class BlockDirtStairs extends StairsBlock implements IModBlock {
 	/**
 	 * Initializes a new instance of the BlockDirtStairs class.
+	 * 
 	 * @param modelState
 	 */
-	public BlockDirtStairs()
-	{
-		super(Blocks.DIRT.getDefaultState());
-		this.setTickRandomly(true);
-		this.useNeighborBrightness = true;
-		this.setHardness(0.5F);
-		this.setHarvestLevel("shovel", 0);
+	public BlockDirtStairs() {
+		super(Blocks.DIRT.getDefaultState(), Block.Properties.from(Blocks.GRASS_BLOCK));
 		ModRegistry.setBlockName(this, "block_dirt_stairs");
 	}
 
+	/**
+	 * Returns whether or not this block is of a type that needs random ticking.
+	 * Called for ref-counting purposes by ExtendedBlockStorage in order to broadly
+	 * cull a chunk from the random chunk update list for efficiency's sake.
+	 */
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-	{
-		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt)
-		{
-			if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					BlockPos blockpos = pos.add(rand.nextInt(3) - 1, rand.nextInt(5) - 3, rand.nextInt(3) - 1);
+	public boolean ticksRandomly(BlockState state) {
+		return true;
+	}
 
-					if (blockpos.getY() >= 0 && blockpos.getY() < 256 && !worldIn.isBlockLoaded(blockpos))
-					{
+	@Override
+	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
+			if (worldIn.getLight(pos.up()) >= 9) {
+				for (int i = 0; i < 4; ++i) {
+					BlockPos blockpos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+
+					if (blockpos.getY() >= 0 && blockpos.getY() < 256 && !worldIn.isBlockLoaded(blockpos)) {
 						return;
 					}
 
-					IBlockState iblockstate = worldIn.getBlockState(blockpos.up());
-					IBlockState iblockstate1 = worldIn.getBlockState(blockpos);
+					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
-					if ((iblockstate1.getBlock() == Blocks.GRASS
+					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
 							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
 							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab()
-							|| iblockstate1.getBlock() == ModRegistry.DoubleGrassSlab())
-							&& worldIn.getLightFromNeighbors(blockpos.up()) >= 4)
-					{
-						IBlockState grassStairsState = ModRegistry.GrassStairs().getStateFromMeta(this.getMetaFromState(state));
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							&& worldIn.getLight(blockpos.up()) >= 4) {
+						BlockState grassStairsState = ModRegistry.GrassStairs().getDefaultState()
+								.with(StairsBlock.FACING, state.get(StairsBlock.FACING))
+								.with(StairsBlock.HALF, state.get(StairsBlock.HALF))
+								.with(StairsBlock.SHAPE, state.get(StairsBlock.SHAPE));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}
