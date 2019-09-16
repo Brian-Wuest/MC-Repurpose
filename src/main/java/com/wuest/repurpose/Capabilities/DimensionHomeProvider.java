@@ -1,58 +1,50 @@
 package com.wuest.repurpose.Capabilities;
 
 import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Capabilities.*;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.*;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 /**
- * The capability provider for the DimensionHome capability.
- * This class MUST implement INBTSerializable in order for the capability to be saved when the world is saved.
+ * The capability provider for the DimensionHome capability. This class MUST
+ * implement INBTSerializable in order for the capability to be saved when the
+ * world is saved.
+ * 
  * @author WuestMan
  */
-public class DimensionHomeProvider implements ICapabilitySerializable<NBTTagCompound>
-{
-	private Entity entity;
+public class DimensionHomeProvider implements ICapabilitySerializable<CompoundNBT> {
 	private IDimensionHome dimensionHome;
 
 	/**
 	 * Initializes a new instance of the DimensionHomeProvider class.
 	 * 
-	 * @param entity The entity to associated with the capability.
+	 * @param entity        The entity to associated with the capability.
 	 * @param dimensionHome The capability associated with the entity.
 	 */
-	public DimensionHomeProvider(Entity entity, IDimensionHome dimensionHome)
-	{
-		this.entity = entity;
+	public DimensionHomeProvider(IDimensionHome dimensionHome) {
 		this.dimensionHome = dimensionHome;
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
-	{
-		return capability == ModRegistry.DimensionHomes;
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+		return ModRegistry.DimensionHomes.orEmpty(capability, LazyOptional.of(this::getDimensionHome));
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
-	{
-		return capability == ModRegistry.DimensionHomes ? ModRegistry.DimensionHomes.cast(this.dimensionHome) : null;
+	public CompoundNBT serializeNBT() {
+		return (CompoundNBT) ModRegistry.DimensionHomes.getStorage().writeNBT(ModRegistry.DimensionHomes,
+				this.dimensionHome, null);
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT()
-	{
-		return (NBTTagCompound)ModRegistry.DimensionHomes.getStorage().writeNBT(ModRegistry.DimensionHomes, this.dimensionHome, null);
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt)
-	{
+	public void deserializeNBT(CompoundNBT nbt) {
 		ModRegistry.DimensionHomes.getStorage().readNBT(ModRegistry.DimensionHomes, this.dimensionHome, null, nbt);
+	}
+
+	private IDimensionHome getDimensionHome() {
+		return this.dimensionHome;
 	}
 }

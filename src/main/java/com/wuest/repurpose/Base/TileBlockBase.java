@@ -30,7 +30,7 @@ import net.minecraftforge.common.ToolType;
  * 
  * @author WuestMan
  */
-public abstract class TileBlockBase<T extends TileEntityBase> extends Block implements ITickableTileEntity {
+public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	public final TileEntityType<?> entityType;
 
 	/**
@@ -39,7 +39,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 	 * @param materialIn The material associated with this block.
 	 */
 	public TileBlockBase(Block.Properties properties, TileEntityType<?> entityType) {
-		super(properties);
+		super(properties.tickRandomly());
 
 		this.entityType = entityType;
 	}
@@ -176,6 +176,11 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block impl
 		super.eventReceived(state, worldIn, pos, eventID, eventParam);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
+	}
+
+	@Override
+	public void tick() {
+
 	}
 
 	@Override

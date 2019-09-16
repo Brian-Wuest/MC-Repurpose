@@ -6,8 +6,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Blocks.BlockCoffer.CofferType;
-import com.wuest.repurpose.Blocks.BlockCustomWall.EnumType;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
+import com.wuest.repurpose.Blocks.BlockCustomWall.EnumType;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
 import com.wuest.repurpose.Config.ModConfiguration;
@@ -27,12 +27,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -66,8 +67,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerRenderers() {
 		// Register block colors.
-		BlockGrassStairs.RegisterBlockRenderer();
-
 		ClientProxy.RegisterBlockRenderer();
 
 		for (CofferType type : CofferType.values()) {
@@ -77,6 +76,16 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void generateParticles(PlayerEntity player) {
+	}
+
+	@Override
+	public void openGuiForItem(ItemUseContext itemUseContext)
+    {
+	}
+	
+	@Override
+	public void openGuiForBlock(int guiId, int x, int y, int z)
+	{
 	}
 
 	/*
@@ -117,8 +126,7 @@ public class ClientProxy extends CommonProxy {
 				return worldIn != null && pos != null ? BiomeColors.getGrassColor(worldIn, pos)
 						: GrassColors.get(0.5D, 1.0D);
 			}
-		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs(),
-				ModRegistry.DoubleGrassSlab(), ModRegistry.GrassStairs() });
+		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs() });
 
 		// Register the item renderer.
 		Minecraft.getInstance().getItemColors().register(new IItemColor() {
@@ -152,8 +160,7 @@ public class ClientProxy extends CommonProxy {
 
 				return -1;
 			}
-		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs(),
-				ModRegistry.DoubleGrassSlab(), ModRegistry.GrassStairs() });
+		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs() });
 	}
 
 	private void RegisterEventListeners() {

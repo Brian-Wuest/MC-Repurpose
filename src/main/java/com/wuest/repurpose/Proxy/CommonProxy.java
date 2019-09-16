@@ -7,6 +7,7 @@ import com.wuest.repurpose.Config.ModConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -58,6 +59,14 @@ public class CommonProxy
 	}
 
 	public void postinit(FMLCommonSetupEvent event)
+	{
+	}
+
+	public void openGuiForItem(ItemUseContext itemUseContext)
+    {
+	}
+	
+	public void openGuiForBlock(int guiId, int x, int y, int z)
 	{
 	}
 

@@ -5,7 +5,7 @@ package com.wuest.repurpose.Capabilities;
  * @author WuestMan
  *
  */
-public interface ITransferable<T extends ITransferable>
+public interface ITransferable<T>
 {
 	/**
 	 * Transfers properties from one transferable to another.

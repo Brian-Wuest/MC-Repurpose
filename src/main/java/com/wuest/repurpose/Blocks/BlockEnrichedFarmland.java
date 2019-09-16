@@ -37,7 +37,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 
 		// Make sure that this block is always wet.
 		this.setDefaultState(this.stateContainer.getBaseState().with(MOISTURE, Integer.valueOf(7)));
-		
+
 		ModRegistry.setBlockName(this, "block_enriched_farmland");
 	}
 

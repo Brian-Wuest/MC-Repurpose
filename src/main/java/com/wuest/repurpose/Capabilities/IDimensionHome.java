@@ -11,8 +11,7 @@ import net.minecraft.util.math.BlockPos;
  * @author WuestMan
  *
  */
-public interface IDimensionHome extends ITransferable<IDimensionHome>
-{
+public interface IDimensionHome extends ITransferable<IDimensionHome> {
 	/**
 	 * Gets the hashMap of dimensions and their spawn points.
 	 * 
@@ -40,7 +39,7 @@ public interface IDimensionHome extends ITransferable<IDimensionHome>
 	 * Sets the home position for this dimension.
 	 * 
 	 * @param dimensionID the dimension to set the home position for.
-	 * @param pos The home position for this dimension.
+	 * @param pos         The home position for this dimension.
 	 * @return This instance for easy setting.
 	 */
 	IDimensionHome setHomePosition(int dimensionID, BlockPos pos);

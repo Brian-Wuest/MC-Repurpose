@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.wuest.repurpose.Base.BaseConfig;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -14,8 +14,7 @@ import net.minecraft.util.math.BlockPos;
  * 
  * @author WuestMan
  */
-public class RedstoneScannerConfig extends BaseConfig 
-{
+public class RedstoneScannerConfig extends BaseConfig {
 	private ArrayList<FacingConfig> facingConfigs;
 	private int tickDelay;
 	private BlockPos pos;
@@ -27,16 +26,14 @@ public class RedstoneScannerConfig extends BaseConfig
 	/**
 	 * Initializes a new instance of the RedstoneScannerConfig class.
 	 */
-	public RedstoneScannerConfig()
-	{
+	public RedstoneScannerConfig() {
 		this.Initialize();
 	}
 
 	/**
 	 * @return Gets the facing configs associated with this class.
 	 */
-	public ArrayList<FacingConfig> getFacingConfigs()
-	{
+	public ArrayList<FacingConfig> getFacingConfigs() {
 		return this.facingConfigs;
 	}
 
@@ -46,42 +43,36 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * @param name The name of the facing to get.
 	 * @return Null if the facing wasn't found or the facing found.
 	 */
-	public FacingConfig getFacingConfig(String name)
-	{
-		for (FacingConfig config : this.facingConfigs)
-		{
-			if (config.getFacing().getName2().equals(name))
-			{
+	public FacingConfig getFacingConfig(String name) {
+		for (FacingConfig config : this.facingConfigs) {
+			if (config.getFacing().getName2().equals(name)) {
 				return config;
 			}
 		}
 
 		return null;
 	}
-	
+
 	/**
 	 * Gets a facing based off of a facing enum value.
-	 * @param facing The EnumFacing value to get the Facing config for.
+	 * 
+	 * @param facing The Direction value to get the Facing config for.
 	 * @return Null if the facing wasn't found or the facing found.
 	 */
-	public FacingConfig getFacingConfig(EnumFacing facing)
-	{
-		for (FacingConfig config : this.facingConfigs)
-		{
-			if (config.getFacing() == facing)
-			{
+	public FacingConfig getFacingConfig(Direction facing) {
+		for (FacingConfig config : this.facingConfigs) {
+			if (config.getFacing() == facing) {
 				return config;
 			}
 		}
-		
+
 		return null;
 	}
 
 	/**
 	 * @return The tick delay for this class.
 	 */
-	public int getTickDelay()
-	{
+	public int getTickDelay() {
 		return this.tickDelay;
 	}
 
@@ -90,10 +81,8 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new tick delay.
 	 */
-	public void setTickDelay(int value)
-	{
-		if (value < 1)
-		{
+	public void setTickDelay(int value) {
+		if (value < 1) {
 			value = 1;
 		}
 
@@ -105,8 +94,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @return The block pos saved in this class.
 	 */
-	public BlockPos getBlockPos()
-	{
+	public BlockPos getBlockPos() {
 		return this.pos;
 	}
 
@@ -115,8 +103,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new block pos for this class.
 	 */
-	public void setBlockPos(BlockPos value)
-	{
+	public void setBlockPos(BlockPos value) {
 		this.pos = value;
 	}
 
@@ -127,8 +114,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * @param y The Y-Coordinate for this block.
 	 * @param z The Z=Coordinate for this block.
 	 */
-	public void setBlockPos(int x, int y, int z)
-	{
+	public void setBlockPos(int x, int y, int z) {
 		this.pos = new BlockPos(x, y, z);
 	}
 
@@ -137,8 +123,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @return A value indicating whether animals are a detected during a scan.
 	 */
-	public boolean getAnimalsDetected()
-	{
+	public boolean getAnimalsDetected() {
 		return this.animalsDetected;
 	}
 
@@ -147,42 +132,40 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new value of the boolean.
 	 */
-	public void setAnimalsDetected(boolean value)
-	{
+	public void setAnimalsDetected(boolean value) {
 		this.animalsDetected = value;
 	}
 
 	/**
 	 * Determines if the facing is active.
+	 * 
 	 * @param facing The facing to check.
 	 * @return True if the facing is active otherwise false.
 	 */
-	public boolean IsFacingActive(EnumFacing facing)
-	{
+	public boolean IsFacingActive(Direction facing) {
 		FacingConfig config = this.getFacingConfig(facing);
-		
+
 		return config.active;
 	}
-	
+
 	/**
 	 * Gets the scan length for a particular facing.
+	 * 
 	 * @param facing The facing to get the scanning range for.
 	 * @return The scanning range for this facing.
 	 */
-	public int GetFacingScanLength(EnumFacing facing)
-	{
+	public int GetFacingScanLength(Direction facing) {
 		FacingConfig config = this.getFacingConfig(facing);
-		
+
 		return config.scanLength;
 	}
-	
+
 	/**
 	 * Determines if non-players are detected as part of the scan.
 	 * 
 	 * @return A value indicating whether non-players are detected.
 	 */
-	public boolean getNonPlayersDetected()
-	{
+	public boolean getNonPlayersDetected() {
 		return this.nonPlayersDetected;
 	}
 
@@ -191,8 +174,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new value of the boolean.
 	 */
-	public void setNonPlayersDetected(boolean value)
-	{
+	public void setNonPlayersDetected(boolean value) {
 		this.nonPlayersDetected = value;
 	}
 
@@ -201,8 +183,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @return A value indicating whether monsters are detected.
 	 */
-	public boolean getMonstersDetected()
-	{
+	public boolean getMonstersDetected() {
 		return this.monstersDetected;
 	}
 
@@ -211,8 +192,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new value of the boolean.
 	 */
-	public void setMonstersDetected(boolean value)
-	{
+	public void setMonstersDetected(boolean value) {
 		this.monstersDetected = value;
 	}
 
@@ -221,8 +201,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @return A value indicating whether players are detected.
 	 */
-	public boolean getPlayersDetected()
-	{
+	public boolean getPlayersDetected() {
 		return this.playersDetected;
 	}
 
@@ -231,8 +210,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value The new value of the boolean.
 	 */
-	public void setPlayersDetected(boolean value)
-	{
+	public void setPlayersDetected(boolean value) {
 		this.playersDetected = value;
 	}
 
@@ -241,20 +219,18 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * 
 	 * @param value the pre-configured value to add.
 	 */
-	public void AddFacingConfig(FacingConfig value)
-	{
+	public void AddFacingConfig(FacingConfig value) {
 		this.facingConfigs.add(value);
 	}
 
 	/**
 	 * Adds a facing to the arraylist.
 	 * 
-	 * @param facing The facing to add.
-	 * @param active Determines if the facing is active.
+	 * @param facing     The facing to add.
+	 * @param active     Determines if the facing is active.
 	 * @param scanLength The distance for the scan for this facing.
 	 */
-	public void AddFacingConfig(EnumFacing facing, boolean active, int scanLength)
-	{
+	public void AddFacingConfig(Direction facing, boolean active, int scanLength) {
 		FacingConfig config = new FacingConfig();
 		this.AddFacingConfig(config.setFacing(facing).setActive(active).setScanLength(scanLength));
 	}
@@ -265,23 +241,19 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * @param facing The facing to look for in the facing config.
 	 * @param active The new value of the active flag.
 	 */
-	public void SetFacingConfig(EnumFacing facing, boolean active)
-	{
+	public void SetFacingConfig(Direction facing, boolean active) {
 		this.SetFacingConfig(facing, active, -1);
 	}
 
 	/**
 	 * Sets the scan length flag for the facing's config.
 	 * 
-	 * @param facing The facing to look for in the facing config.
+	 * @param facing     The facing to look for in the facing config.
 	 * @param scanLength The distance for the scan for this facing.
 	 */
-	public void SetFacingConfig(EnumFacing facing, int scanLength)
-	{
-		for (FacingConfig config : this.facingConfigs)
-		{
-			if (config.facing == facing)
-			{
+	public void SetFacingConfig(Direction facing, int scanLength) {
+		for (FacingConfig config : this.facingConfigs) {
+			if (config.facing == facing) {
 				config.setScanLength(scanLength);
 				break;
 			}
@@ -291,20 +263,16 @@ public class RedstoneScannerConfig extends BaseConfig
 	/**
 	 * Sets the active and scan length properties of the facing's config.
 	 * 
-	 * @param facing The facing to look for in the facing config.
-	 * @param active The new value of the active flag.
+	 * @param facing     The facing to look for in the facing config.
+	 * @param active     The new value of the active flag.
 	 * @param scanLength The distance for the scan for this facing.
 	 */
-	public void SetFacingConfig(EnumFacing facing, boolean active, int scanLength)
-	{
-		for (FacingConfig config : this.facingConfigs)
-		{
-			if (config.facing == facing)
-			{
+	public void SetFacingConfig(Direction facing, boolean active, int scanLength) {
+		for (FacingConfig config : this.facingConfigs) {
+			if (config.facing == facing) {
 				config.active = active;
 
-				if (scanLength >= 0)
-				{
+				if (scanLength >= 0) {
 					config.scanLength = scanLength;
 				}
 
@@ -316,8 +284,7 @@ public class RedstoneScannerConfig extends BaseConfig
 	/**
 	 * Initializes the properties of this class.
 	 */
-	public void Initialize()
-	{
+	public void Initialize() {
 		this.facingConfigs = new ArrayList<FacingConfig>();
 		this.tickDelay = 5;
 		this.animalsDetected = false;
@@ -325,8 +292,7 @@ public class RedstoneScannerConfig extends BaseConfig
 		this.playersDetected = false;
 		this.monstersDetected = false;
 
-		for (EnumFacing facing : EnumFacing.VALUES)
-		{
+		for (Direction facing : Direction.values()) {
 			FacingConfig config = new FacingConfig();
 			config.setFacing(facing);
 			config.setScanLength(1);
@@ -337,108 +303,92 @@ public class RedstoneScannerConfig extends BaseConfig
 	}
 
 	/**
-	 * Writes the values of this class to an NBTTagCompound.
+	 * Writes the values of this class to an CompoundNBT.
 	 * 
 	 * @param compound The compound to write the tag values too.
 	 */
 	@Override
-	public void WriteToNBTCompound(NBTTagCompound compound)
-	{
-		NBTTagCompound configCompound = new NBTTagCompound();
-		configCompound.setInteger("tickDelay", this.tickDelay);
+	public void WriteToNBTCompound(CompoundNBT compound) {
+		CompoundNBT configCompound = new CompoundNBT();
+		configCompound.putInt("tickDelay", this.tickDelay);
 
-		if (this.pos != null)
-		{
-			compound.setInteger("x", this.pos.getX());
-			compound.setInteger("y", this.pos.getY());
-			compound.setInteger("z", this.pos.getZ());
-		}
-		
-		configCompound.setBoolean("detectAnimals", this.animalsDetected);
-		configCompound.setBoolean("detectNonPlayers", this.nonPlayersDetected);
-		configCompound.setBoolean("detectMonsters", this.monstersDetected);
-		configCompound.setBoolean("detectPlayers", this.playersDetected);
-
-		for (FacingConfig config : this.facingConfigs)
-		{
-			NBTTagCompound facing = new NBTTagCompound();
-			facing.setString("facing", config.facing.getName2());
-			facing.setBoolean("active", config.active);
-			facing.setInteger("scanLength", config.scanLength);
-
-			configCompound.setTag(config.facing.getName2(), facing);
+		if (this.pos != null) {
+			compound.putInt("x", this.pos.getX());
+			compound.putInt("y", this.pos.getY());
+			compound.putInt("z", this.pos.getZ());
 		}
 
-		compound.setTag("configCompound", configCompound);
+		configCompound.putBoolean("detectAnimals", this.animalsDetected);
+		configCompound.putBoolean("detectNonPlayers", this.nonPlayersDetected);
+		configCompound.putBoolean("detectMonsters", this.monstersDetected);
+		configCompound.putBoolean("detectPlayers", this.playersDetected);
+
+		for (FacingConfig config : this.facingConfigs) {
+			CompoundNBT facing = new CompoundNBT();
+			facing.putString("facing", config.facing.getName2());
+			facing.putBoolean("active", config.active);
+			facing.putInt("scanLength", config.scanLength);
+
+			configCompound.put(config.facing.getName2(), facing);
+		}
+
+		compound.put("configCompound", configCompound);
 	}
 
 	/**
-	 * Builds a RedstoneScannerConfig from an NBTTagCompound.
+	 * Builds a RedstoneScannerConfig from an CompoundNBT.
 	 * 
 	 * @param compound The compound to build the class from.
 	 * @return A new instance of the RedstoneScannerConfig build with all of the
 	 *         values loaded from the tag (if any).
 	 */
-	public RedstoneScannerConfig ReadFromNBTTagCompound(NBTTagCompound compound)
-	{
+	public RedstoneScannerConfig ReadFromCompoundNBT(CompoundNBT compound) {
 		RedstoneScannerConfig config = new RedstoneScannerConfig();
 
-		if (compound.hasKey("configCompound"))
-		{
-			NBTTagCompound configCompound = compound.getCompoundTag("configCompound");
-			
-			if (configCompound.hasKey("tickDelay"))
-			{
-				config.tickDelay = configCompound.getInteger("tickDelay");
+		if (compound.contains("configCompound")) {
+			CompoundNBT configCompound = compound.getCompound("configCompound");
+
+			if (configCompound.contains("tickDelay")) {
+				config.tickDelay = configCompound.getInt("tickDelay");
 			}
-			
-			if (configCompound.hasKey("detectAnimals"))
-			{
+
+			if (configCompound.contains("detectAnimals")) {
 				config.animalsDetected = configCompound.getBoolean("detectAnimals");
 			}
-			
-			if (configCompound.hasKey("detectNonPlayers"))
-			{
+
+			if (configCompound.contains("detectNonPlayers")) {
 				config.nonPlayersDetected = configCompound.getBoolean("detectNonPlayers");
 			}
-			
-			if (configCompound.hasKey("detectMonsters"))
-			{
+
+			if (configCompound.contains("detectMonsters")) {
 				config.monstersDetected = configCompound.getBoolean("detectMonsters");
 			}
 
-			if (configCompound.hasKey("detectPlayers"))
-			{
+			if (configCompound.contains("detectPlayers")) {
 				config.playersDetected = configCompound.getBoolean("detectPlayers");
 			}
-			
-			if (compound.hasKey("x") && compound.hasKey("y") && compound.hasKey("z"))
-			{
-				config.pos = new BlockPos(compound.getInteger("x"), compound.getInteger("y"), compound.getInteger("z"));
+
+			if (compound.contains("x") && compound.contains("y") && compound.contains("z")) {
+				config.pos = new BlockPos(compound.getInt("x"), compound.getInt("y"), compound.getInt("z"));
 			}
 
-			for (EnumFacing facing : EnumFacing.VALUES)
-			{
-				if (configCompound.hasKey(facing.getName2()))
-				{
-					NBTTagCompound tag = configCompound.getCompoundTag(facing.getName2());
+			for (Direction facing : Direction.values()) {
+				if (configCompound.contains(facing.getName2())) {
+					CompoundNBT tag = configCompound.getCompound(facing.getName2());
 					FacingConfig facingConfig = new FacingConfig();
 
-					if (tag.hasKey("facing"))
-					{
-						facingConfig.facing = EnumFacing.byName(tag.getString("facing"));
+					if (tag.contains("facing")) {
+						facingConfig.facing = Direction.byName(tag.getString("facing"));
 					}
 
-					if (tag.hasKey("active"))
-					{
+					if (tag.contains("active")) {
 						facingConfig.active = tag.getBoolean("active");
 					}
 
-					if (tag.hasKey("scanLength"))
-					{
-						facingConfig.scanLength = tag.getInteger("scanLength");
+					if (tag.contains("scanLength")) {
+						facingConfig.scanLength = tag.getInt("scanLength");
 					}
-					
+
 					config.SetFacingConfig(facingConfig.facing, facingConfig.active, facingConfig.scanLength);
 				}
 			}
@@ -454,27 +404,24 @@ public class RedstoneScannerConfig extends BaseConfig
 	 * @author WuestMan
 	 *
 	 */
-	public static class FacingConfig
-	{
-		private EnumFacing facing;
+	public static class FacingConfig {
+		private Direction facing;
 		private boolean active;
 		private int scanLength;
 
 		/**
 		 * Initializes a new instance of the FacingConfig class.
 		 */
-		public FacingConfig()
-		{
+		public FacingConfig() {
 			this.Initialize();
 		}
 
 		/**
 		 * Gets the facing value.
 		 * 
-		 * @return Gets the EnumFacing value of this class.
+		 * @return Gets the Direction value of this class.
 		 */
-		public EnumFacing getFacing()
-		{
+		public Direction getFacing() {
 			return this.facing;
 		}
 
@@ -484,8 +431,7 @@ public class RedstoneScannerConfig extends BaseConfig
 		 * @param value The new value of the facing.
 		 * @return The updated facing config for ease of setup.
 		 */
-		public FacingConfig setFacing(EnumFacing value)
-		{
+		public FacingConfig setFacing(Direction value) {
 			this.facing = value;
 			return this;
 		}
@@ -495,8 +441,7 @@ public class RedstoneScannerConfig extends BaseConfig
 		 * 
 		 * @return A bool representing the status of this facing.
 		 */
-		public boolean getActive()
-		{
+		public boolean getActive() {
 			return this.active;
 		}
 
@@ -506,8 +451,7 @@ public class RedstoneScannerConfig extends BaseConfig
 		 * @param value The new status of this facing.
 		 * @return The updated facing config for ease of setup.
 		 */
-		public FacingConfig setActive(boolean value)
-		{
+		public FacingConfig setActive(boolean value) {
 			this.active = value;
 			return this;
 		}
@@ -517,27 +461,21 @@ public class RedstoneScannerConfig extends BaseConfig
 		 * 
 		 * @return The number of blocks to scan.
 		 */
-		public int getScanLength()
-		{
+		public int getScanLength() {
 			return this.scanLength;
 		}
 
 		/**
 		 * Sets the number of blocks to scan.
 		 * 
-		 * @param value The number of blocks to scan for this facing when
-		 *            active.
+		 * @param value The number of blocks to scan for this facing when active.
 		 * @return The updated facing config for ease of setup.
 		 */
-		public FacingConfig setScanLength(int value)
-		{
-			if (value <= 0)
-			{
+		public FacingConfig setScanLength(int value) {
+			if (value <= 0) {
 				value = 0;
 				this.active = false;
-			}
-			else if (this.scanLength == 0 && value >= 1)
-			{
+			} else if (this.scanLength == 0 && value >= 1) {
 				this.active = true;
 			}
 
@@ -548,9 +486,8 @@ public class RedstoneScannerConfig extends BaseConfig
 		/**
 		 * Initializes the properties of this class.
 		 */
-		public void Initialize()
-		{
-			this.facing = EnumFacing.NORTH;
+		public void Initialize() {
+			this.facing = Direction.NORTH;
 			this.active = false;
 			this.scanLength = 1;
 		}

@@ -1,46 +1,53 @@
 package com.wuest.repurpose.Tiles;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.RedstoneClock;
-import com.wuest.repurpose.Config.*;
+import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
 /**
- * This is the tile entity which controls the redstone strength and holds the configuration data for the redstone clock.
+ * This is the tile entity which controls the redstone strength and holds the
+ * configuration data for the redstone clock.
+ * 
  * @author WuestMan
  */
-public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration>
-{
+public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration> {
+	public static TileEntityType<TileEntityRedstoneClock> TileType = new TileEntityType<TileEntityRedstoneClock>(
+			TileEntityRedstoneClock::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedStoneClock())), null);
+
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneClock class.
 	 */
-	public TileEntityRedstoneClock()
-	{
-		super();
+	public TileEntityRedstoneClock() {
+		this(TileEntityRedstoneClock.TileType);
+	}
+
+	public TileEntityRedstoneClock(TileEntityType<?> tileEntityType) {
+		super(tileEntityType);
 		this.config = new RedstoneClockPowerConfiguration();
 	}
 
 	/**
 	 * Gets the redstone strength for this state and side.
+	 * 
 	 * @param state The current state of the block.
-	 * @param side The facing to get the power from.
+	 * @param side  The facing to get the power from.
 	 * @return 15 if the side and block are powered, otherwise 0;
 	 */
-	public int getRedstoneStrength(IBlockState state, EnumFacing side)
-	{
-		boolean powered = ((Boolean)state.getValue(RedstoneClock.POWERED)).booleanValue();
+	public int getRedstoneStrength(BlockState state, Direction side) {
+		boolean powered = state.get(RedstoneClock.POWERED);
 
-		// If the block is set to powered and this side is powered or the side doesn't matter.
-		if (powered && (side == null || this.getConfig().getSidePower(side.getOpposite())))
-		{
+		// If the block is set to powered and this side is powered or the side doesn't
+		// matter.
+		if (powered && (side == null || this.getConfig().getSidePower(side.getOpposite()))) {
 			return 15;
 		}
 
@@ -48,19 +55,19 @@ public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerCo
 	}
 
 	/**
-	 * Sets the redstone strength for a particular side and returns a powered or unpowered state.
-	 * @param state The state to return as powered or unpowered.
+	 * Sets the redstone strength for a particular side and returns a powered or
+	 * unpowered state.
+	 * 
+	 * @param state    The state to return as powered or unpowered.
 	 * @param strength The new strength of the side.
-	 * @param side The side to update.
+	 * @param side     The side to update.
 	 * @return An updated state.
 	 */
-	public IBlockState setRedstoneStrength(IBlockState state, int strength, EnumFacing side)
-	{
-		if (side != null)
-		{
+	public BlockState setRedstoneStrength(BlockState state, int strength, Direction side) {
+		if (side != null) {
 			this.config.setSidePower(side, strength > 0);
 		}
 
-		return state.withProperty(RedstoneClock.POWERED, Boolean.valueOf(strength > 0));
+		return state.with(RedstoneClock.POWERED, Boolean.valueOf(strength > 0));
 	}
 }
