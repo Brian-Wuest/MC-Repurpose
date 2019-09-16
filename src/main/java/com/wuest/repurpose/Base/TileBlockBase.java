@@ -179,11 +179,6 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	}
 
 	@Override
-	public void tick() {
-
-	}
-
-	@Override
 	public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		this.updateState(worldIn, pos, state);
 	}
