@@ -58,14 +58,8 @@ import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.util.RecipeBookClient;
 import net.minecraft.enchantment.Enchantment.Rarity;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -73,17 +67,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.FMLContainer;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.InjectedModContainer;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 public class ModRegistry
 {
@@ -418,12 +401,6 @@ public class ModRegistry
 
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
-
-		// Coffers.
-		// block = new BlockCoffer();
-		// itemBlock = new ItemBlockCoffer(block);
-		// ModRegistry.registerBlock(block, itemBlock);
-		// GameRegistry.registerTileEntity(TileEntityCoffer.class, "Coffer");
 	}
 
 	public static void RegisterEnchantments()

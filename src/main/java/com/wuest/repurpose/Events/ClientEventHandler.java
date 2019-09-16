@@ -10,12 +10,9 @@ import java.util.Map.Entry;
 import com.google.common.collect.Multimap;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Blocks.BlockCoffer;
-import com.wuest.repurpose.Blocks.BlockCoffer.IronChestType;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Gui.BasicGui;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
-import com.wuest.repurpose.Items.ItemBlockCoffer;
 import com.wuest.repurpose.Items.ItemStoneShears;
 import com.wuest.repurpose.Items.ItemWoodenCrate;
 import com.wuest.repurpose.Items.ItemWoodenCrate.CrateType;
@@ -348,24 +345,12 @@ public class ClientEventHandler
 	{
 		for (Block block : ModRegistry.ModBlocks)
 		{
-			if (!(block instanceof BlockCoffer))
-			{
-				ClientEventHandler.regBlock(block);
-			}
+			ClientEventHandler.regBlock(block);
 		}
 
 		for (Item item : ModRegistry.ModItems)
 		{
-			if (item instanceof ItemBlockCoffer)
-			{
-				for (IronChestType type : IronChestType.values())
-				{
-					ModelLoader.setCustomModelResourceLocation(item, type.ordinal(),
-						new ModelResourceLocation(item.getRegistryName(), "variant=" + type.getName()));
-				}
-
-			}
-			else if (item instanceof ItemWoodenCrate)
+			if (item instanceof ItemWoodenCrate)
 			{
 				for (CrateType type : CrateType.values())
 				{
