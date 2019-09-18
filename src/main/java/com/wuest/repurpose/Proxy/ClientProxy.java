@@ -5,15 +5,12 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Blocks.BlockCoffer.CofferType;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockCustomWall.EnumType;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
 import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
-import com.wuest.repurpose.Renderer.TileEntityCofferRenderer;
-import com.wuest.repurpose.Tiles.TileEntityCoffer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -68,10 +65,6 @@ public class ClientProxy extends CommonProxy {
 	public void registerRenderers() {
 		// Register block colors.
 		ClientProxy.RegisterBlockRenderer();
-
-		for (CofferType type : CofferType.values()) {
-			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoffer.class, new TileEntityCofferRenderer());
-		}
 	}
 
 	@Override
@@ -95,10 +88,7 @@ public class ClientProxy extends CommonProxy {
 	 * 
 	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
 	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
-	 * y, z); } else if (tileEntity != null && tileEntity instanceof
-	 * TileEntityCoffer) { return
-	 * GuiCoffer.GUI.buildGUI(((TileEntityCoffer)tileEntity).getType(),
-	 * player.inventory, (TileEntityCoffer) tileEntity); } else if (ID ==
+	 * y, z); } else if (ID ==
 	 * GuiItemBagOfHolding.GUI_ID) { ItemStack stack = player.getHeldItemOffhand();
 	 * ItemBagOfHoldingProvider handler =
 	 * ItemBagOfHoldingProvider.GetFromStack(stack);

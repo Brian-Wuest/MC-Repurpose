@@ -8,7 +8,6 @@ import com.mojang.authlib.GameProfile;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
-import com.wuest.repurpose.Gui.GuiCoffer;
 import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 

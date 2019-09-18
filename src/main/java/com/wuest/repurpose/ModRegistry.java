@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.wuest.repurpose.Blocks.BlockCharcoal;
-import com.wuest.repurpose.Blocks.BlockCoffer;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockDirtSlab;
 import com.wuest.repurpose.Blocks.BlockDirtStairs;
@@ -195,11 +194,6 @@ public class ModRegistry
 	public static EnchantmentStepAssist StepAssist()
 	{
 		return ModRegistry.stepAssist;
-	}
-
-	public static BlockCoffer Coffer()
-	{
-		return ModRegistry.GetBlock(BlockCoffer.class);
 	}
 
 	public static ItemWoodenCrate WoodenCrate()

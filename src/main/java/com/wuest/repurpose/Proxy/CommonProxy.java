@@ -75,11 +75,7 @@ public class CommonProxy
 	{
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 		
-		if (ID == GuiCoffer.GUI_ID)
-		{
-			return new ContainerCoffer(player.inventory, (TileEntityCoffer)tileEntity, ((TileEntityCoffer)tileEntity).getType(), 0, 0);
-		}
-		else if (ID == GuiItemBagOfHolding.GUI_ID)
+		if (ID == GuiItemBagOfHolding.GUI_ID)
 		{
 			ItemStack stack = player.getHeldItemOffhand();
 			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
