@@ -117,4 +117,26 @@ public class ItemBagOfHoldingProvider extends ItemStackHandler {
 
 		return new ItemBagOfHoldingProvider();
 	}
+
+	/**
+	 * The difference between this one and the GetFromStack method is that this will return null when the provider doesn't exist.
+	 * This is to check to see if it's in the player's current main hand or off-hand.
+	 * @param stack
+	 * @return
+	 */
+	public static ItemBagOfHoldingProvider HasProvider(ItemStack stack)
+	{
+		if (stack.hasTag()) {
+			CompoundNBT stackTag = stack.getChildTag(ItemBagOfHoldingProvider.handlerKey);
+
+			if (stackTag != null) {
+				ItemBagOfHoldingProvider handler = new ItemBagOfHoldingProvider();
+				handler.deserializeNBT(stackTag);
+
+				return handler;
+			}
+		}
+
+		return null;
+	}
 }

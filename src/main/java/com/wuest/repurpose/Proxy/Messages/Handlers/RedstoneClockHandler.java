@@ -1,71 +1,53 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
+import java.util.function.Supplier;
+
+import javax.xml.ws.handler.MessageContext;
+
 import com.wuest.repurpose.Blocks.RedstoneClock;
-import com.wuest.repurpose.Config.*;
+import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class RedstoneClockHandler implements
-IMessageHandler<RedstoneClockMessage, IMessage> 
-{
-	@Override
-	public IMessage onMessage(final RedstoneClockMessage message,
-			final MessageContext ctx) 
-	{
-		// Or Minecraft.getMinecraft() on the client.
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; 
+public class RedstoneClockHandler {
+	public static void handle(final RedstoneClockMessage message, Supplier<NetworkEvent.Context> ctx) {
+		NetworkEvent.Context context = ctx.get();
 
-		mainThread.addScheduledTask(new Runnable() 
-		{
-			@Override
-			public void run() 
-			{
-				// This is server side. Build the house.
-				RedstoneClockPowerConfiguration configuration = null;
-				
-				try
-				{
-					configuration = RedstoneClockPowerConfiguration.class.newInstance().ReadFromNBTTagCompound(message.getMessageTag());
-				}
-				catch (InstantiationException e)
-				{
-					e.printStackTrace();
-				}
-				catch (IllegalAccessException e)
-				{
-					e.printStackTrace();
+		context.enqueueWork(() -> {
+			// This is server side. Build the house.
+			RedstoneClockPowerConfiguration configuration = null;
+
+			try {
+				configuration = RedstoneClockPowerConfiguration.class.newInstance()
+						.ReadFromCompoundNBT(message.getMessageTag());
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			World world = context.getSender().getEntityWorld();
+			BlockState state = world.getBlockState(configuration.getPos());
+			Block block = state.getBlock();
+
+			if (block.getClass() == RedstoneClock.class) {
+				TileEntity tileEntity = world.getTileEntity(configuration.getPos());
+
+				if (tileEntity != null && tileEntity.getClass() == TileEntityRedstoneClock.class) {
+					((TileEntityRedstoneClock) tileEntity).setConfig(configuration);
 				}
 
-				World world = ctx.getServerHandler().player.world;
-				IBlockState state = world.getBlockState(configuration.getPos());
-				Block block = state.getBlock();
-
-				if (block.getClass() == RedstoneClock.class)
-				{
-					TileEntity tileEntity = world.getTileEntity(configuration.getPos());
-
-					if (tileEntity != null && tileEntity.getClass() == TileEntityRedstoneClock.class)
-					{
-						((TileEntityRedstoneClock)tileEntity).setConfig(configuration);
-					}
-
-					// Make sure the block updates.
-					world.scheduleUpdate(configuration.getPos(), block, 2);
-				}
+				// Make sure the block updates.
+				world.getPendingBlockTicks().scheduleTick(configuration.getPos(), block, 2);
 			}
 		});
 
-		// no response in this case
-		return null;
+		context.setPacketHandled(true);
 	}
 }
