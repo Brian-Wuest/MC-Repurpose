@@ -3,8 +3,8 @@ package com.wuest.repurpose.Enchantment;
 import com.wuest.repurpose.Repurpose;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
 
 /**
  * This enchantment is used to change the step height of a player.
@@ -14,11 +14,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 public class EnchantmentStepAssist extends Enchantment
 {
 
-	public EnchantmentStepAssist(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots)
+	public EnchantmentStepAssist(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots)
 	{
 		super(rarityIn, typeIn, slots);
 		
-		this.setName("step_assist");
 		this.setRegistryName(Repurpose.MODID, "step_assist");
 	}
 	

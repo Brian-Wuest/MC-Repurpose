@@ -1,9 +1,11 @@
 package com.wuest.repurpose.Crafting;
 
+import com.google.gson.JsonObject;
 import com.wuest.repurpose.Repurpose;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 /**
  * 
@@ -12,7 +14,6 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
  */
 public class RecipeCondition implements ICondition {
 	public static final ResourceLocation NAME = new ResourceLocation(Repurpose.MODID, "config_recipe");
-	protected String recipeKeyName = "recipeKey";
 	public String recipeKey;
 
 	/**
@@ -47,6 +48,28 @@ public class RecipeCondition implements ICondition {
 		}
 
 		return result;
+	}
+
+	@SuppressWarnings("unused")
+	public static class Serializer implements IConditionSerializer<RecipeCondition> {
+		public static final RecipeCondition.Serializer INSTANCE = new RecipeCondition.Serializer();
+
+		@Override
+		public void write(JsonObject json, RecipeCondition value) {
+			json.addProperty("recipeKey", value.recipeKey);
+		}
+
+		@Override
+		public RecipeCondition read(JsonObject json) {
+			String recipeKeyName = "recipeKey";
+
+			return new RecipeCondition(json.get(recipeKeyName).getAsString());
+		}
+
+		@Override
+		public ResourceLocation getID() {
+			return RecipeCondition.NAME;
+		}
 	}
 
 }

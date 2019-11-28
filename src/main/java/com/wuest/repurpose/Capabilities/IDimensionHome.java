@@ -3,6 +3,7 @@ package com.wuest.repurpose.Capabilities;
 import java.util.HashMap;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 
 /**
  * This is the DimensionHome capability. This is used to save the spawn
@@ -17,7 +18,7 @@ public interface IDimensionHome extends ITransferable<IDimensionHome> {
 	 * 
 	 * @return The map of all saved dimensions and their home points.
 	 */
-	HashMap<Integer, BlockPos> getDimensionHomes();
+	HashMap<DimensionType, BlockPos> getDimensionHomes();
 
 	/**
 	 * Set the hashmap of dimensions and their home positions.
@@ -25,7 +26,7 @@ public interface IDimensionHome extends ITransferable<IDimensionHome> {
 	 * @param dimensionHomeMap
 	 * @return This instance for easy setting.
 	 */
-	IDimensionHome setDimensionHomes(HashMap<Integer, BlockPos> dimensionHomeMap);
+	IDimensionHome setDimensionHomes(HashMap<DimensionType, BlockPos> dimensionHomeMap);
 
 	/**
 	 * Gets the home position for this dimension.
@@ -33,7 +34,7 @@ public interface IDimensionHome extends ITransferable<IDimensionHome> {
 	 * @param dimensionID The dimension to get the home position for.
 	 * @return The home position for this dimension.
 	 */
-	BlockPos getHomePosition(int dimensionID);
+	BlockPos getHomePosition(DimensionType dimensionID);
 
 	/**
 	 * Sets the home position for this dimension.
@@ -42,5 +43,5 @@ public interface IDimensionHome extends ITransferable<IDimensionHome> {
 	 * @param pos         The home position for this dimension.
 	 * @return This instance for easy setting.
 	 */
-	IDimensionHome setHomePosition(int dimensionID, BlockPos pos);
+	IDimensionHome setHomePosition(DimensionType dimensionID, BlockPos pos);
 }

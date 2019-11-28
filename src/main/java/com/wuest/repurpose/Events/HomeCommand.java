@@ -51,7 +51,7 @@ public class HomeCommand {
 				IDimensionHome dimensionHome = player.getCapability(ModRegistry.DimensionHomes).orElse(null);
 
 				if (dimensionHome != null) {
-					bedLocation = dimensionHome.getHomePosition(player.dimension.getId());
+					bedLocation = dimensionHome.getHomePosition(player.dimension);
 				}
 			}
 

@@ -1,18 +1,10 @@
 package com.wuest.repurpose.Gui;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.StringTextComponent;
 
-public class BasicGui extends Gui
-{
-
-	public float getZLevel()
-	{
-		return this.zLevel;
-	}
-	
-	public BasicGui setZLevel(float value)
-	{
-		this.zLevel = value;
-		return this;
+public class BasicGui extends Screen {
+	public BasicGui() {
+		super(new StringTextComponent(""));
 	}
 }

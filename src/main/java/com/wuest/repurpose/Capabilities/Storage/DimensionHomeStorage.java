@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
@@ -26,16 +27,16 @@ public class DimensionHomeStorage implements Capability.IStorage<IDimensionHome>
 	public INBT writeNBT(Capability<IDimensionHome> capability, IDimensionHome instance, Direction side) {
 		CompoundNBT tag = new CompoundNBT();
 
-		HashMap<Integer, BlockPos> dimensionHomes = instance.getDimensionHomes();
+		HashMap<DimensionType, BlockPos> dimensionHomes = instance.getDimensionHomes();
 
 		// Write each dimension to the tag.
-		for (Entry<Integer, BlockPos> entry : dimensionHomes.entrySet()) {
+		for (Entry<DimensionType, BlockPos> entry : dimensionHomes.entrySet()) {
 			CompoundNBT dimensionTag = new CompoundNBT();
 			dimensionTag.putInt(posXTag, entry.getValue().getX());
 			dimensionTag.putInt(posYTag, entry.getValue().getY());
 			dimensionTag.putInt(posZTag, entry.getValue().getZ());
 
-			dimensionTag.putInt(dimensionIDTag, entry.getKey());
+			dimensionTag.putInt(dimensionIDTag, entry.getKey().getId());
 
 			tag.put(entry.getKey().toString(), dimensionTag);
 		}
@@ -53,7 +54,8 @@ public class DimensionHomeStorage implements Capability.IStorage<IDimensionHome>
 			BlockPos pos = new BlockPos(dimensionTag.getInt(posXTag), dimensionTag.getInt(posYTag),
 					dimensionTag.getInt(posZTag));
 
-			instance.setHomePosition(dimensionID, pos);
+			DimensionType dimensionType = DimensionType.getById(dimensionID);
+			instance.setHomePosition(dimensionType, pos);
 		}
 	}
 }
