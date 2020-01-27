@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/repurpose",
   "promos": {
-	  "1.12-latest": "1.0.0.18",
-	  "1.12-recommended": "1.0.0.18"
+	  "1.12-latest": "1.0.0.20",
+	  "1.12-recommended": "1.0.0.20"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
