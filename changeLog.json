@@ -24,6 +24,7 @@
 	  "1.0.0.16": "Fixed an issue with loading repairable materials.",
 	  "1.0.0.17": "Fixed an issue with compatibility with Croparia.",
 	  "1.0.0.18": "Updated all textures to be 16x16.",
-	  "1.0.0.19": "Fixing various issues with sickles."
+	  "1.0.0.19": "Fixing various issues with sickles.",
+	  "1.0.0.20": "Fixing issue with Restone Scanner and Clock where block data was being duplicated"
   }
 }
