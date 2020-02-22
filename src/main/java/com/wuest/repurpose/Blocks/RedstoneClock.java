@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Base.TileBlockBase;
-import com.wuest.repurpose.Gui.GuiRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 
 import net.minecraft.block.Block;
@@ -55,7 +54,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
 			BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
-			Repurpose.proxy.openGuiForBlock(GuiRedstoneClock.GUI_ID, pos.getX(), pos.getY(), pos.getZ());
+			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
 
 		return true;

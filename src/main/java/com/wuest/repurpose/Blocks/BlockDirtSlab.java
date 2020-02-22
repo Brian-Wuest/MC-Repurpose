@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
-public abstract class BlockDirtSlab extends SlabBlock implements IModBlock {
+public class BlockDirtSlab extends SlabBlock implements IModBlock {
 	public BlockDirtSlab() {
 		super(Block.Properties.create(Material.EARTH, MaterialColor.DIRT).sound(SoundType.GROUND)
 				.hardnessAndResistance(0.5f, 0.5f).harvestTool(ToolType.SHOVEL).harvestLevel(0));

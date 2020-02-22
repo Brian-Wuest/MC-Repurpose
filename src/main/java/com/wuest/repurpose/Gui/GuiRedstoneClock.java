@@ -1,31 +1,20 @@
 package com.wuest.repurpose.Gui;
 
-import java.awt.Color;
-import java.io.IOException;
-
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Config.*;
+import com.wuest.repurpose.Tuple;
+import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.client.config.HoverChecker;
 
-public class GuiRedstoneClock extends GuiScreen
-{
-	public static final int GUI_ID = 5;
-	public BlockPos pos;
-	private static final ResourceLocation backgroundTextures = new ResourceLocation("repurpose", "textures/gui/default_background.png");
+public class GuiRedstoneClock extends BasicGui {
 	public RedstoneClockPowerConfiguration powerConfiguration;
 	protected GuiButtonExt btnCancel;
 	protected GuiButtonExt btnDone;
@@ -47,25 +36,20 @@ public class GuiRedstoneClock extends GuiScreen
 
 	protected TileEntityRedstoneClock tileEntity;
 
-	public GuiRedstoneClock(int x, int y, int z)
-	{
-		this.pos = new BlockPos(x, y, z);
+	public GuiRedstoneClock() {
 	}
 
-	public void Initialize()
-	{
+	@Override
+	public void Initialize() {
 		// Get the power configuration settings.
-		TileEntity entity = this.mc.world.getTileEntity(this.pos);
+		TileEntity entity = this.minecraft.world.getTileEntity(this.pos);
 
-		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class)
-		{
-			this.powerConfiguration = ((TileEntityRedstoneClock)entity).getConfig();
-			this.tileEntity = (TileEntityRedstoneClock)entity;
-		}
-		else
-		{
+		if (entity != null && entity.getClass() == TileEntityRedstoneClock.class) {
+			this.powerConfiguration = ((TileEntityRedstoneClock) entity).getConfig();
+			this.tileEntity = (TileEntityRedstoneClock) entity;
+		} else {
 			this.tileEntity = new TileEntityRedstoneClock();
-			this.mc.world.setTileEntity(pos, this.tileEntity);
+			this.minecraft.world.setTileEntity(pos, this.tileEntity);
 
 			this.powerConfiguration = this.tileEntity.getConfig();
 		}
@@ -77,155 +61,115 @@ public class GuiRedstoneClock extends GuiScreen
 		int grayBoxY = (this.height / 2) - 83;
 
 		// Create the buttons.
-		this.btnUp = new GuiCheckBox(3, grayBoxX + 190, grayBoxY + 25, "", this.powerConfiguration.getSidePower(EnumFacing.UP));
-		this.buttonList.add(this.btnUp);
+		this.btnUp = new GuiCheckBox(grayBoxX + 190, grayBoxY + 25, "",
+				this.powerConfiguration.getSidePower(Direction.UP), this::buttonClicked);
+		this.addButton(this.btnUp);
 		this.upChecker = new HoverChecker(this.btnUp, 800);
 
-		this.btnNorth = new GuiCheckBox(4, grayBoxX + 190, grayBoxY + 37, "", this.powerConfiguration.getSidePower(EnumFacing.NORTH));
-		this.buttonList.add(this.btnNorth);
+		this.btnNorth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 37, "",
+				this.powerConfiguration.getSidePower(Direction.NORTH), this::buttonClicked);
+		this.addButton(this.btnNorth);
 		this.northChecker = new HoverChecker(this.btnNorth, 800);
 
-		this.btnDown = new GuiCheckBox(5, grayBoxX + 190, grayBoxY + 49, "", this.powerConfiguration.getSidePower(EnumFacing.DOWN));
-		this.buttonList.add(this.btnDown);
+		this.btnDown = new GuiCheckBox(grayBoxX + 190, grayBoxY + 49, "",
+				this.powerConfiguration.getSidePower(Direction.DOWN), this::buttonClicked);
+		this.addButton(this.btnDown);
 		this.downChecker = new HoverChecker(this.btnDown, 800);
 
-		this.btnEast = new GuiCheckBox(6, grayBoxX + 202, grayBoxY + 49, "", this.powerConfiguration.getSidePower(EnumFacing.EAST));
-		this.buttonList.add(this.btnEast);
+		this.btnEast = new GuiCheckBox(grayBoxX + 202, grayBoxY + 49, "",
+				this.powerConfiguration.getSidePower(Direction.EAST), this::buttonClicked);
+		this.addButton(this.btnEast);
 		this.eastChecker = new HoverChecker(this.btnEast, 800);
 
-		this.btnWest = new GuiCheckBox(7, grayBoxX + 178, grayBoxY + 49, "", this.powerConfiguration.getSidePower(EnumFacing.WEST));
-		this.buttonList.add(this.btnWest);
+		this.btnWest = new GuiCheckBox(grayBoxX + 178, grayBoxY + 49, "",
+				this.powerConfiguration.getSidePower(Direction.WEST), this::buttonClicked);
+		this.addButton(this.btnWest);
 		this.westChecker = new HoverChecker(this.btnWest, 800);
 
-		this.btnSouth = new GuiCheckBox(8, grayBoxX + 190, grayBoxY + 61, "", this.powerConfiguration.getSidePower(EnumFacing.SOUTH));
-		this.buttonList.add(this.btnSouth);
+		this.btnSouth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 61, "",
+				this.powerConfiguration.getSidePower(Direction.SOUTH), this::buttonClicked);
+		this.addButton(this.btnSouth);
 		this.southChecker = new HoverChecker(this.btnSouth, 800);
 
-		this.btnPowered = new GuiSlider(9, grayBoxX + 10, grayBoxY + 30, 100, 20, "", "", 1, 30, this.powerConfiguration.getPoweredTick() / 20, false, true);
-		this.buttonList.add(this.btnPowered);
+		this.btnPowered = new GuiSlider(grayBoxX + 10, grayBoxY + 30, 100, 20, "", "", 1, 30,
+				this.powerConfiguration.getPoweredTick() / 20, false, true, this::buttonClicked);
+		this.addButton(this.btnPowered);
 
-		this.btnUnPowered = new GuiSlider(10, grayBoxX + 10, grayBoxY + 80, 100, 20, "", "", 1, 30, this.powerConfiguration.getUnPoweredTick() / 20, false, true);
-		this.buttonList.add(this.btnUnPowered);
+		this.btnUnPowered = new GuiSlider(grayBoxX + 10, grayBoxY + 80, 100, 20, "", "", 1, 30,
+				this.powerConfiguration.getUnPoweredTick() / 20, false, true, this::buttonClicked);
+		this.addButton(this.btnUnPowered);
 
 		// Create the done and cancel buttons.
-		this.btnDone = new GuiButtonExt(1, grayBoxX + 10, grayBoxY + 136, 90, 20, "Done");
-		this.buttonList.add(this.btnDone);
+		this.btnDone = this.createAndAddButton(grayBoxX + 10, grayBoxY + 136, 90, 20, "Done");
 
-		this.btnCancel = new GuiButtonExt(2, grayBoxX + 147, grayBoxY + 136, 90, 20, "Cancel");
-		this.buttonList.add(this.btnCancel);
+		this.btnCancel = this.createAndAddButton(grayBoxX + 147, grayBoxY + 136, 90, 20, "Cancel");
 	}
 
 	@Override
-	public void initGui()
-	{
-		this.Initialize();
+	protected void preButtonRender(int x, int y) {
+		this.drawControlBackground(x, y);
 	}
 
-	/**
-	 * Returns true if this GUI should pause the game when it is displayed in single-player
-	 */
 	@Override
-	public boolean doesGuiPauseGame()
-	{
-		return false;
-	}
+	protected void postButtonRender(int x, int y) {
+		this.font.drawString("Powered Sides", x + 150, y + 10, this.textColor);
+		this.font.drawString("Powered Duration", x + 10, y + 10, this.textColor);
+		this.font.drawString("(In Seconds)", x + 10, y + 20, this.textColor);
 
-	/**
-	 * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
-	 */
-	@Override
-	public void drawScreen(int x, int y, float f) 
-	{
-		this.drawDefaultBackground();
+		this.font.drawString("Un-Powered Duration", x + 10, y + 60, this.textColor);
+		this.font.drawString("(In Seconds)", x + 10, y + 70, this.textColor);
 
-		// Draw the control background.
-		this.mc.getTextureManager().bindTexture(backgroundTextures);
+		this.font.drawString("Changes reflected after current state", x + 10, y + 116, this.textColor);
+		this.font.drawString("is complete.", x + 10, y + 126, this.textColor);
 
-		int grayBoxX = (this.width / 2) - 128;
-		int grayBoxY = (this.height / 2) - 83;
-		this.drawTexturedModalRect(grayBoxX, grayBoxY, 0, 0, 256,256);
-
-		for (int i = 0; i < this.buttonList.size(); ++i)
-		{
-			((GuiButton)this.buttonList.get(i)).drawButton(this.mc, x, y, f);
-		}
-
-		for (int j = 0; j < this.labelList.size(); ++j)
-		{
-			((GuiLabel)this.labelList.get(j)).drawLabel(this.mc, x, y);
-		}
-
-		// Draw the text here.
-		int color = Color.DARK_GRAY.getRGB();
-
-		this.mc.fontRenderer.drawString("Powered Sides", grayBoxX + 150, grayBoxY + 10, color);
-
-		this.mc.fontRenderer.drawString("Powered Duration", grayBoxX + 10, grayBoxY + 10, color);
-		this.mc.fontRenderer.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 20, color);
-
-		this.mc.fontRenderer.drawString("Un-Powered Duration", grayBoxX + 10, grayBoxY + 60, color);
-		this.mc.fontRenderer.drawString("(In Seconds)", grayBoxX + 10, grayBoxY + 70, color);
-
-		this.mc.fontRenderer.drawString("Changes reflected after current state", grayBoxX + 10, grayBoxY + 116, color);
-		this.mc.fontRenderer.drawString("is complete.", grayBoxX + 10, grayBoxY + 126, color);
-
-		if (this.upChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
-		}
-		else if (this.northChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), x, y);
-		}
-		else if (this.downChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
-		}
-		else if (this.eastChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), x, y);
-		}
-		else if (this.westChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), x, y);
-		}
-		else if (this.southChecker.checkHover(x, y))
-		{
-			this.drawHoveringText(this.mc.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), x, y);
+		if (this.upChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
+		} else if (this.northChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'North' side.", 300), x, y);
+		} else if (this.downChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
+		} else if (this.eastChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'East' side.", 300), x, y);
+		} else if (this.westChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'West' side.", 300), x, y);
+		} else if (this.southChecker.checkHover(x, y)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'South' side.", 300), x, y);
 		}
 	}
 
 	/**
-	 * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+	 * Called by the controls from the buttonList when activated. (Mouse pressed for
+	 * buttons)
 	 */
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException
-	{
-		if (button == this.btnCancel)
-		{
-			this.mc.displayGuiScreen(null);
-		}
-		else if (button == this.btnDone)
-		{
+	public void buttonClicked(Button button) {
+		if (button == this.btnCancel) {
+			this.minecraft.displayGuiScreen(null);
+		} else if (button == this.btnDone) {
 			// Close this screen when this is done.
-			this.powerConfiguration.setSidePower(EnumFacing.UP, this.btnUp.isChecked());
-			this.powerConfiguration.setSidePower(EnumFacing.NORTH, this.btnNorth.isChecked());
-			this.powerConfiguration.setSidePower(EnumFacing.DOWN, this.btnDown.isChecked());
-			this.powerConfiguration.setSidePower(EnumFacing.EAST, this.btnEast.isChecked());
-			this.powerConfiguration.setSidePower(EnumFacing.WEST, this.btnWest.isChecked());
-			this.powerConfiguration.setSidePower(EnumFacing.SOUTH, this.btnSouth.isChecked());
+			this.powerConfiguration.setSidePower(Direction.UP, this.btnUp.isChecked());
+			this.powerConfiguration.setSidePower(Direction.NORTH, this.btnNorth.isChecked());
+			this.powerConfiguration.setSidePower(Direction.DOWN, this.btnDown.isChecked());
+			this.powerConfiguration.setSidePower(Direction.EAST, this.btnEast.isChecked());
+			this.powerConfiguration.setSidePower(Direction.WEST, this.btnWest.isChecked());
+			this.powerConfiguration.setSidePower(Direction.SOUTH, this.btnSouth.isChecked());
 			this.powerConfiguration.setPoweredTick(this.btnPowered.getValueInt() * 20);
 			this.powerConfiguration.setUnPoweredTick(this.btnUnPowered.getValueInt() * 20);
 			this.powerConfiguration.setPos(this.pos);
 
-			Repurpose.network.sendToServer(new RedstoneClockMessage(this.powerConfiguration.GetNBTTagCompound()));
+			Repurpose.network.sendToServer(new RedstoneClockMessage(this.powerConfiguration.GetCompoundNBT()));
 
 			// After sending the info to the server, make sure the client is updated.
 			this.tileEntity.setConfig(this.powerConfiguration);
-			Block block = this.mc.world.getBlockState(this.tileEntity.getPos()).getBlock();
-			this.mc.world.scheduleUpdate(this.tileEntity.getPos(), block, 2);
+			Block block = this.minecraft.world.getBlockState(this.tileEntity.getPos()).getBlock();
+			this.minecraft.world.getPendingBlockTicks().scheduleTick(this.tileEntity.getPos(), block, 2);
 
-			this.mc.displayGuiScreen(null);
+			this.minecraft.displayGuiScreen(null);
 		}
+	}
+
+	@Override
+	protected Tuple<Integer, Integer> getAdjustedXYValue() {
+		return new Tuple<>(this.getCenteredXAxis() - 128, this.getCenteredYAxis() - 83);
 	}
 }

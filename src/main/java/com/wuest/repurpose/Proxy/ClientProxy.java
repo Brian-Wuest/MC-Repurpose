@@ -3,18 +3,27 @@ package com.wuest.repurpose.Proxy;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockCustomWall.EnumType;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
 import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
+import com.wuest.repurpose.Gui.BasicGui;
+import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
+import com.wuest.repurpose.Gui.GuiRedstoneClock;
+import com.wuest.repurpose.Gui.GuiRedstoneScanner;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.settings.KeyBinding;
@@ -25,9 +34,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,6 +49,27 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ClientProxy extends CommonProxy {
 	public ModConfiguration serverConfiguration = null;
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
+	/**
+	 * The hashmap of mod item guis.
+	 */
+	public static HashMap<Item, BasicGui> ModItemGuis = new HashMap<>();
+
+	/**
+	 * The hashmap of mod block guis.
+	 */
+	public static HashMap<Block, BasicGui> ModBlockGuis = new HashMap<>();
+
+	public ClientProxy() {
+		super();
+	}
+
+		/**
+	 * Adds all of the Mod Guis to the HasMap.
+	 */
+	public static void AddGuis() {
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock(), new GuiRedstoneClock());
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner(), new GuiRedstoneScanner());
+	}
 
 	@Override
 	public void preInit(FMLCommonSetupEvent event) {
@@ -72,13 +104,29 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void openGuiForItem(ItemUseContext itemUseContext)
-    {
+	public void openGuiForItem(ItemUseContext itemUseContext) {
+		ItemStack stack = itemUseContext.getPlayer().getHeldItemOffhand();
+		Screen screenToShow = null;
+
+		if (stack.getItem() == ModRegistry.BagofHolding())
+		{
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			screenToShow = new GuiItemBagOfHolding(handler, itemUseContext.getPlayer());
+		}
+		
+		Minecraft.getInstance().displayGuiScreen(screenToShow);
 	}
-	
+
 	@Override
-	public void openGuiForBlock(int guiId, int x, int y, int z)
-	{
+	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
+		for (Map.Entry<Block, BasicGui> entry : ClientProxy.ModBlockGuis.entrySet()) {
+			if (entry.getKey() == state.getBlock()) {
+				BasicGui screen = entry.getValue();
+				screen.pos = pos;
+
+				Minecraft.getInstance().displayGuiScreen(screen);
+			}
+		}
 	}
 
 	/*
@@ -88,9 +136,8 @@ public class ClientProxy extends CommonProxy {
 	 * 
 	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
 	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
-	 * y, z); } else if (ID ==
-	 * GuiItemBagOfHolding.GUI_ID) { ItemStack stack = player.getHeldItemOffhand();
-	 * ItemBagOfHoldingProvider handler =
+	 * y, z); } else if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
+	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
 	 * ItemBagOfHoldingProvider.GetFromStack(stack);
 	 * 
 	 * return new GuiItemBagOfHolding(handler, player); }

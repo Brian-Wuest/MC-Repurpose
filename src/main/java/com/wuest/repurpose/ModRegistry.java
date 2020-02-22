@@ -3,21 +3,17 @@ package com.wuest.repurpose;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import com.wuest.repurpose.Blocks.BlockCharcoal;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockDirtSlab;
 import com.wuest.repurpose.Blocks.BlockDirtStairs;
-import com.wuest.repurpose.Blocks.BlockDoubleDirtSlab;
-import com.wuest.repurpose.Blocks.BlockDoubleGlowstoneSlab;
-import com.wuest.repurpose.Blocks.BlockDoubleGrassSlab;
 import com.wuest.repurpose.Blocks.BlockEnrichedFarmland;
 import com.wuest.repurpose.Blocks.BlockGlowstoneSlab;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
-import com.wuest.repurpose.Blocks.BlockHalfDirtSlab;
-import com.wuest.repurpose.Blocks.BlockHalfGlowstoneSlab;
-import com.wuest.repurpose.Blocks.BlockHalfGrassSlab;
 import com.wuest.repurpose.Blocks.BlockMiniRedstone;
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Blocks.RedstoneClock;
@@ -28,9 +24,6 @@ import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemBedCompass;
 import com.wuest.repurpose.Items.ItemBlockBurnable;
-import com.wuest.repurpose.Items.ItemBlockDirtSlab;
-import com.wuest.repurpose.Items.ItemBlockGlowstoneSlab;
-import com.wuest.repurpose.Items.ItemBlockGrassSlab;
 import com.wuest.repurpose.Items.ItemDiamondShard;
 import com.wuest.repurpose.Items.ItemFluffyFabric;
 import com.wuest.repurpose.Items.ItemIronLump;
@@ -57,39 +50,42 @@ import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.LazyLoadBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class ModRegistry
-{
+public class ModRegistry {
 	/**
-	 * This capability is used to save the locations where a player spawns when transferring dimensions.
+	 * This capability is used to save the locations where a player spawns when
+	 * transferring dimensions.
 	 */
 	@CapabilityInject(IDimensionHome.class)
 	public static Capability<IDimensionHome> DimensionHomes = null;
 
 	public static ArrayList<Item> ModItems = new ArrayList<Item>();
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
-
-	public static Map<String, ToolMaterial> CustomMaterials = new HashMap<String, ToolMaterial>();
 	public static Map<String, Boolean> FoundMaterials = new HashMap<String, Boolean>();
 
 	private static EnchantmentStepAssist stepAssist;
 
-	public static BlockCustomWall DirtWall()
-	{
-		for (Block entry : ModRegistry.ModBlocks)
-		{
+	public static BlockCustomWall DirtWall() {
+		for (Block entry : ModRegistry.ModBlocks) {
 			if (entry instanceof BlockCustomWall
-				&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.DIRT)
-			{
+					&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.DIRT) {
 				return (BlockCustomWall) entry;
 			}
 		}
@@ -97,13 +93,10 @@ public class ModRegistry
 		return null;
 	}
 
-	public static BlockCustomWall GrassWall()
-	{
-		for (Block entry : ModRegistry.ModBlocks)
-		{
+	public static BlockCustomWall GrassWall() {
+		for (Block entry : ModRegistry.ModBlocks) {
 			if (entry instanceof BlockCustomWall
-				&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.GRASS)
-			{
+					&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.GRASS) {
 				return (BlockCustomWall) entry;
 			}
 		}
@@ -111,110 +104,92 @@ public class ModRegistry
 		return null;
 	}
 
-	public static ItemBedCompass BedCompass()
-	{
+	public static ItemBedCompass BedCompass() {
 		return ModRegistry.GetItem(ItemBedCompass.class);
 	}
 
-	public static RedstoneClock RedStoneClock()
-	{
+	public static RedstoneClock RedStoneClock() {
 		return ModRegistry.GetBlock(RedstoneClock.class);
 	}
 
-	public static BlockDirtStairs DirtStairs()
-	{
+	public static BlockDirtStairs DirtStairs() {
 		return ModRegistry.GetBlock(BlockDirtStairs.class);
 	}
 
-	public static BlockGrassStairs GrassStairs()
-	{
+	public static BlockGrassStairs GrassStairs() {
 		return ModRegistry.GetBlock(BlockGrassStairs.class);
 	}
 
-	public static BlockDirtSlab DirtSlab()
-	{
+	public static BlockDirtSlab DirtSlab() {
 		return ModRegistry.GetBlock(BlockDirtSlab.class);
 	}
 
-	public static BlockGrassSlab GrassSlab()
-	{
+	public static BlockGrassSlab GrassSlab() {
 		return ModRegistry.GetBlock(BlockGrassSlab.class);
 	}
 
-	public static BlockEnrichedFarmland EnrichedFarmland()
-	{
+	public static BlockEnrichedFarmland EnrichedFarmland() {
 		return ModRegistry.GetBlock(BlockEnrichedFarmland.class);
 	}
 
-	public static BlockMiniRedstone MiniRedstone()
-	{
+	public static BlockMiniRedstone MiniRedstone() {
 		return ModRegistry.GetBlock(BlockMiniRedstone.class);
 	}
 
-	public static BlockRedstoneScanner RedstoneScanner()
-	{
+	public static BlockRedstoneScanner RedstoneScanner() {
 		return ModRegistry.GetBlock(BlockRedstoneScanner.class);
 	}
 
-	public static ItemDiamondShard DiamondShard()
-	{
+	public static ItemDiamondShard DiamondShard() {
 		return ModRegistry.GetItem(ItemDiamondShard.class);
 	}
 
-	public static ItemFluffyFabric FluffyFabric()
-	{
+	public static ItemFluffyFabric FluffyFabric() {
 		return ModRegistry.GetItem(ItemFluffyFabric.class);
 	}
 
-	public static ItemSnorkel Snorkel()
-	{
+	public static ItemSnorkel Snorkel() {
 		return ModRegistry.GetItem(ItemSnorkel.class);
 	}
 
-	public static ItemWhetStone WhetStone()
-	{
+	public static ItemWhetStone WhetStone() {
 		return ModRegistry.GetItem(ItemWhetStone.class);
 	}
 
-	public static ItemStoneShears StoneShears()
-	{
+	public static ItemStoneShears StoneShears() {
 		return ModRegistry.GetItem(ItemStoneShears.class);
 	}
 
-	public static ItemScroll Scroll()
-	{
+	public static ItemScroll Scroll() {
 		return ModRegistry.GetItem(ItemScroll.class);
 	}
 
-	public static BlockGlowstoneSlab GlowstoneSlab()
-	{
+	public static BlockGlowstoneSlab GlowstoneSlab() {
 		return ModRegistry.GetBlock(BlockGlowstoneSlab.class);
 	}
 
-	public static EnchantmentStepAssist StepAssist()
-	{
+	public static EnchantmentStepAssist StepAssist() {
 		return ModRegistry.stepAssist;
 	}
 
-	public static ItemWoodenCrate WoodenCrate()
-	{
+	public static ItemWoodenCrate WoodenCrate() {
 		return ModRegistry.GetItem(ItemWoodenCrate.class);
 	}
 
-	public static ItemBagOfHolding BagofHolding()
-	{
+	public static ItemBagOfHolding BagofHolding() {
 		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
 
-	public static ItemSwiftBlade CustomMaterialBlade(String materialName)
-	{
-		ToolMaterial material = ModRegistry.CustomMaterials.get(materialName);
+	public static ItemSwiftBlade CustomMaterialBlade(String materialName) {
+		IItemTier material = CustomItemTier.getByName(materialName);
 
-		for (Item item : ModRegistry.ModItems)
-		{
+		if (material == null) {
+			return null;
+		}
+
+		for (Item item : ModRegistry.ModItems) {
 			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
-				&& ((ItemSwiftBlade) item).getToolMaterial() == material)
-			{
+					&& ((ItemSwiftBlade) item).getTier() == material) {
 				return ((ItemSwiftBlade) item);
 			}
 		}
@@ -228,12 +203,9 @@ public class ModRegistry
 	 * @param genericClass The class of item to get from the collection.
 	 * @return Null if the item could not be found otherwise the item found.
 	 */
-	public static <T extends Item> T GetItem(Class<T> genericClass)
-	{
-		for (Item entry : ModRegistry.ModItems)
-		{
-			if (entry.getClass().isAssignableFrom(genericClass))
-			{
+	public static <T extends Item> T GetItem(Class<T> genericClass) {
+		for (Item entry : ModRegistry.ModItems) {
+			if (entry.getClass().isAssignableFrom(genericClass)) {
 				return (T) entry;
 			}
 		}
@@ -241,12 +213,9 @@ public class ModRegistry
 		return null;
 	}
 
-	public static <T extends Item> T GetItemSpecific(Class<T> genericClass)
-	{
-		for (Item entry : ModRegistry.ModItems)
-		{
-			if (entry.getClass() == genericClass)
-			{
+	public static <T extends Item> T GetItemSpecific(Class<T> genericClass) {
+		for (Item entry : ModRegistry.ModItems) {
+			if (entry.getClass() == genericClass) {
 				return (T) entry;
 			}
 		}
@@ -260,12 +229,9 @@ public class ModRegistry
 	 * @param genericClass The class of block to get from the collection.
 	 * @return Null if the block could not be found otherwise the block found.
 	 */
-	public static <T extends Block> T GetBlock(Class<T> genericClass)
-	{
-		for (Block entry : ModRegistry.ModBlocks)
-		{
-			if (entry.getClass().isAssignableFrom(genericClass))
-			{
+	public static <T extends Block> T GetBlock(Class<T> genericClass) {
+		for (Block entry : ModRegistry.ModBlocks) {
+			if (entry.getClass().isAssignableFrom(genericClass)) {
 				return (T) entry;
 			}
 		}
@@ -276,50 +242,29 @@ public class ModRegistry
 	/**
 	 * This is where all in-game mod components (Items, Blocks) will be registered.
 	 */
-	public static void RegisterModComponents()
-	{
-		ModRegistry.RegisterToolMaterials();
-
+	public static void RegisterModComponents() {
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
 		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 
 		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
 
 		ModRegistry.registerBlock(new RedstoneClock("block_redstone_clock"));
-		GameRegistry.registerTileEntity(TileEntityRedstoneClock.class, "repurpose:RedstoneClock");
+		ForgeRegistries.TILE_ENTITIES.register(TileEntityRedstoneClock.TileType);
 
 		ModRegistry.registerBlock(new BlockDirtStairs());
 		ModRegistry.registerBlock(new BlockGrassStairs());
 
 		// Dirt Slab.
-		BlockHalfDirtSlab registeredHalfDirtBlock = new BlockHalfDirtSlab();
-		BlockDoubleDirtSlab registeredDoubleDirtSlab = new BlockDoubleDirtSlab();
-
-		ItemBlockDirtSlab itemHalfDirtSlab = new ItemBlockDirtSlab(registeredHalfDirtBlock, registeredHalfDirtBlock,
-			registeredDoubleDirtSlab, true);
-
-		itemHalfDirtSlab = (ItemBlockDirtSlab) itemHalfDirtSlab.setRegistryName("repurpose:block_half_dirt_slab");
-
-		ModRegistry.registerBlock(registeredHalfDirtBlock, itemHalfDirtSlab);
-		ModRegistry.registerBlock(registeredDoubleDirtSlab, false);
+		ModRegistry.registerBlock(new BlockDirtSlab(), "block_dirt_slab");
 
 		// Grass Slab
-		BlockHalfGrassSlab registeredHalfGrassBlock = new BlockHalfGrassSlab();
-		BlockDoubleGrassSlab registeredDoubleGrassSlab = new BlockDoubleGrassSlab();
-
-		ItemBlockGrassSlab itemHalfGrassSlab = new ItemBlockGrassSlab(registeredHalfGrassBlock,
-			registeredHalfGrassBlock, registeredDoubleGrassSlab, true);
-
-		itemHalfGrassSlab = (ItemBlockGrassSlab) itemHalfGrassSlab.setRegistryName("repurpose:block_half_grass_slab");
-
-		ModRegistry.registerBlock(registeredHalfGrassBlock, itemHalfGrassSlab);
-		ModRegistry.registerBlock(registeredDoubleGrassSlab, false);
+		ModRegistry.registerBlock(new BlockGrassSlab(), "block_grass_slab");
 
 		ModRegistry.registerBlock(new BlockEnrichedFarmland());
 		ModRegistry.registerBlock(new BlockMiniRedstone());
 
 		ModRegistry.registerBlock(new BlockRedstoneScanner());
-		GameRegistry.registerTileEntity(TileEntityRedstoneScanner.class, "repurpose:RedstoneScanner");
+		ForgeRegistries.TILE_ENTITIES.register(TileEntityRedstoneScanner.TileType);
 
 		// Diamond Shard
 		ModRegistry.registerItem(new ItemDiamondShard("item_diamond_shard"));
@@ -334,48 +279,38 @@ public class ModRegistry
 		ModRegistry.registerItem(new ItemWhetStone("item_whetstone"));
 
 		// Glowstone Slabs.
-		BlockHalfGlowstoneSlab registeredHalfGlowstoneBlock = new BlockHalfGlowstoneSlab();
-		BlockDoubleGlowstoneSlab registeredDoubleGlowstoneSlab = new BlockDoubleGlowstoneSlab();
-
-		ItemBlockGlowstoneSlab itemHalfGlowstoneSlab = new ItemBlockGlowstoneSlab(registeredHalfGlowstoneBlock,
-			registeredHalfGlowstoneBlock, registeredDoubleGlowstoneSlab, true);
-
-		itemHalfGlowstoneSlab = (ItemBlockGlowstoneSlab) itemHalfGlowstoneSlab
-			.setRegistryName("repurpose:block_half_glowstone_slab");
-
-		ModRegistry.registerBlock(registeredHalfGlowstoneBlock, itemHalfGlowstoneSlab);
-		ModRegistry.registerBlock(registeredDoubleGlowstoneSlab, false);
+		ModRegistry.registerBlock(new BlockGlowstoneSlab(), "block_grass_slab");
 
 		// Stone shears.
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
 
 		// Sickles.
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.WOOD, "item_wood_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.STONE, "item_stone_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.IRON, "item_iron_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.DIAMOND, "item_diamond_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ToolMaterial.GOLD, "item_gold_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ItemTier.WOOD, "item_wood_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ItemTier.STONE, "item_stone_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ItemTier.IRON, "item_iron_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ItemTier.DIAMOND, "item_diamond_sickle"));
+		ModRegistry.registerItem(new ItemSickle(ItemTier.GOLD, "item_gold_sickle"));
 
 		// Swift Blades.
-		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.WOOD));
-		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.STONE));
-		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.IRON));
-		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.DIAMOND));
-		ModRegistry.registerItem(new ItemSwiftBlade(ToolMaterial.GOLD));
+		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.WOOD, 3, 10, "wood"));
+		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.STONE, 3, 10, "stone"));
+		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.IRON, 3, 10, "iron"));
+		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.DIAMOND, 3, 10, "diamond"));
+		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.GOLD, 3, 10, "gold"));
 
-		Item item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Copper"));
-		ModRegistry.registerItem(item);
-
-		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Osmium"));
+		Item item = new ItemSwiftBlade(CustomItemTier.COPPER, 3, 10, "copper");
 		ModRegistry.registerItem(item);
 
-		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Bronze"));
+		item = new ItemSwiftBlade(CustomItemTier.OSMIUM, 3, 10, "osmium");
 		ModRegistry.registerItem(item);
-		
-		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Steel"));
+
+		item = new ItemSwiftBlade(CustomItemTier.BRONZE, 3, 10, "bronze");
 		ModRegistry.registerItem(item);
-		
-		item = new ItemSwiftBlade(ModRegistry.CustomMaterials.get("Obsidian"));
+
+		item = new ItemSwiftBlade(CustomItemTier.STEEL, 3, 10, "steel");
+		ModRegistry.registerItem(item);
+
+		item = new ItemSwiftBlade(CustomItemTier.OBSIDIAN, 3, 10, "obsidian");
 		ModRegistry.registerItem(item);
 
 		// Iron lump.
@@ -383,239 +318,121 @@ public class ModRegistry
 
 		// Charcoal block.
 		Block block = new BlockCharcoal("block_charcoal");
-		ItemBlock itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
+		BlockItem itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
 		ModRegistry.registerBlock(block, itemBlock);
 
 		// Scroll
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
 
 		// Wooden Crate
-		ModRegistry.registerItem(new ItemWoodenCrate("item_wooden_crate"));
-		ModRegistry.WoodenCrate().setContainerItem(ModRegistry.WoodenCrate());
+		for (ItemWoodenCrate.CrateType crateType : ItemWoodenCrate.CrateType.values()) {
+			String name = crateType.toString();
+
+			if (crateType == ItemWoodenCrate.CrateType.Empty) {
+				name = "item_wooden_crate";
+			}
+
+			ModRegistry.registerItem(new ItemWoodenCrate(name, crateType));
+		}
 
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
 	}
 
-	public static void RegisterEnchantments()
-	{
-		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnumEnchantmentType.ARMOR_FEET,
-			new EntityEquipmentSlot[]
-			{ EntityEquipmentSlot.FEET });
+	public static void RegisterEnchantments() {
+		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnchantmentType.ARMOR_FEET,
+				new EquipmentSlotType[] { EquipmentSlotType.FEET });
 
 		ForgeRegistries.ENCHANTMENTS.register(ModRegistry.stepAssist);
 	}
 
 	/**
-	 * Registers tool materials if certain materials are available.
-	 */
-	public static void RegisterToolMaterials()
-	{
-		// Copper
-		ModRegistry.CustomMaterials.put("Copper",
-			EnumHelper.addToolMaterial("RepurposeCopper", 
-				ToolMaterial.STONE.getHarvestLevel(), 
-				ToolMaterial.STONE.getMaxUses(),
-				ToolMaterial.STONE.getEfficiency(), 
-				ToolMaterial.STONE.getAttackDamage(),
-				ToolMaterial.STONE.getEnchantability()));
-
-		// Osmium
-		ModRegistry.CustomMaterials.put("Osmium",
-			EnumHelper.addToolMaterial("RepurposeOsmium", ToolMaterial.IRON.getHarvestLevel(), 
-				500,
-				ToolMaterial.IRON.getEfficiency(), 
-				ToolMaterial.IRON.getAttackDamage() + .5f,
-				ToolMaterial.IRON.getEnchantability()));
-
-		// Bronze
-		ModRegistry.CustomMaterials.put("Bronze",
-			EnumHelper.addToolMaterial("RepurposeBronze", 
-				ToolMaterial.IRON.getHarvestLevel(), 
-				ToolMaterial.IRON.getMaxUses(),
-				ToolMaterial.IRON.getEfficiency(), 
-				ToolMaterial.IRON.getAttackDamage(),
-				ToolMaterial.IRON.getEnchantability()));
-		
-		// Steel
-		ModRegistry.CustomMaterials.put("Steel",
-			EnumHelper.addToolMaterial("RepurposeSteel", 
-				ToolMaterial.DIAMOND.getHarvestLevel(), 
-				(int)(ToolMaterial.IRON.getMaxUses() * 1.5),
-				ToolMaterial.DIAMOND.getEfficiency(), 
-				ToolMaterial.DIAMOND.getAttackDamage(),
-				ToolMaterial.DIAMOND.getEnchantability()));
-		
-		// Obsidian
-		ModRegistry.CustomMaterials.put("Obsidian",
-			EnumHelper.addToolMaterial("RepurposeObsidian", 
-				ToolMaterial.DIAMOND.getHarvestLevel() + 1, 
-				(int)(ToolMaterial.DIAMOND.getMaxUses() * 1.5),
-				ToolMaterial.DIAMOND.getEfficiency(), 
-				ToolMaterial.DIAMOND.getAttackDamage() + 1,
-				ToolMaterial.DIAMOND.getEnchantability()));
-		
-		ModRegistry.CustomMaterials.get("Obsidian")
-			.setRepairItem(new ItemStack(Item.getItemFromBlock(Blocks.OBSIDIAN)));
-	}
-
-	/**
-	 * This is called during the Ore Dictionary add event. This will make sure that we mark certain material types as
-	 * found to enable/disable items later.
-	 * 
-	 * @param oreName The ore dictionary name.
-	 * @param stack The item stack being registered.
-	 */
-	public static void RegisterRepairableMaterials(String oreName, ItemStack stack)
-	{
-		if (ModRegistry.CustomMaterials.size() == 0)
-		{
-			ModRegistry.RegisterToolMaterials();
-		}
-		
-		if (oreName.equals("ingotCopper") && ModRegistry.CustomMaterials.get("Copper") != null
-			&& ModRegistry.CustomMaterials.get("Copper").getRepairItemStack() == ItemStack.EMPTY)
-		{
-			if (OreDictionary.doesOreNameExist("ingotCopper"))
-			{
-				ModRegistry.CustomMaterials.get("Copper")
-					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
-
-				ModRegistry.FoundMaterials.put("ingotCopper", true);
-			}
-			else
-			{
-				ModRegistry.FoundMaterials.put("ingotCopper", false);
-			}
-		}
-
-		if (oreName.equals("ingotOsmium") && ModRegistry.CustomMaterials.get("Osmium") != null
-			&& ModRegistry.CustomMaterials.get("Osmium").getRepairItemStack() == ItemStack.EMPTY)
-		{
-			if (OreDictionary.doesOreNameExist("ingotOsmium"))
-			{
-				ModRegistry.CustomMaterials.get("Osmium")
-					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
-
-				ModRegistry.FoundMaterials.put("ingotOsmium", true);
-			}
-			else
-			{
-				ModRegistry.FoundMaterials.put("ingotOsmium", false);
-			}
-		}
-
-		if (oreName.equals("ingotBronze") && ModRegistry.CustomMaterials.get("Bronze") != null
-			&& ModRegistry.CustomMaterials.get("Bronze").getRepairItemStack() == ItemStack.EMPTY)
-		{
-			if (OreDictionary.doesOreNameExist("ingotBronze"))
-			{
-				ModRegistry.CustomMaterials.get("Bronze")
-					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
-
-				ModRegistry.FoundMaterials.put("ingotBronze", true);
-			}
-			else
-			{
-				ModRegistry.FoundMaterials.put("ingotBronze", false);
-			}
-		}
-		
-		if (oreName.equals("ingotSteel") && ModRegistry.CustomMaterials.get("Steel") != null
-			&& ModRegistry.CustomMaterials.get("Steel").getRepairItemStack() == ItemStack.EMPTY)
-		{
-			if (OreDictionary.doesOreNameExist("ingotSteel"))
-			{
-				ModRegistry.CustomMaterials.get("Steel")
-					.setRepairItem(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE));
-
-				ModRegistry.FoundMaterials.put("ingotSteel", true);
-			}
-			else
-			{
-				ModRegistry.FoundMaterials.put("ingotSteel", false);
-			}
-		}
-	}
-
-	/**
-	 * Registers records into the ore dictionary.
-	 */
-	public static void RegisterOreDictionaryRecords()
-	{
-		// Register certain blocks into the ore dictionary.
-		OreDictionary.registerOre("blockCharcoal", ModRegistry.GetBlock(BlockCharcoal.class));
-	}
-
-	/**
-	 * This is where the mod recipes are registered.
-	 */
-	public static void RegisterRecipes()
-	{
-		GeneralRecipes.LoadRecipies();
-	}
-
-	/**
 	 * This is where the mod messages are registered.
 	 */
-	public static void RegisterMessages()
-	{
-		Repurpose.network.registerMessage(RedstoneClockHandler.class, RedstoneClockMessage.class, 2, Side.SERVER);
-		Repurpose.network.registerMessage(BedLocationHandler.class, BedLocationMessage.class, 3, Side.CLIENT);
-		Repurpose.network.registerMessage(RedstoneScannerHandler.class, RedstoneScannerMessage.class, 4, Side.SERVER);
-		Repurpose.network.registerMessage(ConfigSyncHandler.class, ConfigSyncMessage.class, 5, Side.CLIENT);
-		Repurpose.network.registerMessage(CurrentSlotUpdateHandler.class, CurrentSlotUpdateMessage.class, 6,
-			Side.SERVER);
-		Repurpose.network.registerMessage(BagOfHoldingUpdateMessageHandler.class, BagOfHoldingUpdateMessage.class, 7,
-			Side.CLIENT);
+	public static void RegisterMessages() {
+		AtomicInteger index = new AtomicInteger();
+		Repurpose.network.messageBuilder(RedstoneClockMessage.class, index.getAndIncrement())
+				.encoder(RedstoneClockMessage::encode).decoder(RedstoneClockMessage::decode)
+				.consumer(RedstoneClockHandler::handle).add();
+
+		Repurpose.network.messageBuilder(BedLocationMessage.class, index.getAndIncrement())
+				.encoder(BedLocationMessage::encode).decoder(BedLocationMessage::decode)
+				.consumer(BedLocationHandler::handle).add();
+
+		Repurpose.network.messageBuilder(RedstoneScannerMessage.class, index.getAndIncrement())
+				.encoder(RedstoneScannerMessage::encode).decoder(RedstoneScannerMessage::decode)
+				.consumer(RedstoneScannerHandler::handle).add();
+
+		Repurpose.network.messageBuilder(ConfigSyncMessage.class, index.getAndIncrement())
+				.encoder(ConfigSyncMessage::encode).decoder(ConfigSyncMessage::decode)
+				.consumer(ConfigSyncHandler::handle).add();
+
+		Repurpose.network.messageBuilder(CurrentSlotUpdateMessage.class, index.getAndIncrement())
+				.encoder(CurrentSlotUpdateMessage::encode).decoder(CurrentSlotUpdateMessage::decode)
+				.consumer(CurrentSlotUpdateHandler::handle).add();
+
+		Repurpose.network.messageBuilder(BagOfHoldingUpdateMessage.class, index.getAndIncrement())
+				.encoder(BagOfHoldingUpdateMessage::encode).decoder(BagOfHoldingUpdateMessage::decode)
+				.consumer(BagOfHoldingUpdateMessageHandler::handle).add();
 	}
 
 	/**
 	 * This is where mod capabilities are registered.
 	 */
-	public static void RegisterCapabilities()
-	{
+	public static void RegisterCapabilities() {
 		// Register the dimension home capability.
-		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(), DimensionHome.class);
+		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(),
+				() -> new DimensionHome());
 	}
 
 	/**
 	 * Register an Item
 	 *
 	 * @param item The Item instance
-	 * @param <T> The Item type
+	 * @param <T>  The Item type
 	 * @return The Item instance
 	 */
-	public static <T extends Item> T registerItem(T item)
-	{
+	public static <T extends Item> T registerItem(T item) {
 		// ForgeRegistries.ITEMS.register(item);
 		ModRegistry.ModItems.add(item);
 
 		return item;
 	}
 
-	public static <T extends Block> T registerBlock(T block)
-	{
+	public static <T extends Block> T registerBlock(T block) {
 		return ModRegistry.registerBlock(block, true);
 	}
 
-	public static <T extends Block> T registerBlock(T block, boolean includeItemBlock)
-	{
-		if (includeItemBlock)
-		{
-			ModRegistry.ModItems.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+	public static <T extends Block> T registerBlock(T block, boolean includeItemBlock) {
+		if (includeItemBlock) {
+			ModRegistry.ModItems.add(new BlockItem(block, (new Item.Properties()).group(ItemGroup.BUILDING_BLOCKS))
+					.setRegistryName(block.getRegistryName()));
 		}
 
 		ModRegistry.ModBlocks.add(block);
 		return block;
 	}
 
-	public static <T extends Block, I extends ItemBlock> T registerBlock(T block, I itemBlock)
-	{
+	/**
+	 * Registers a block in the game registry.
+	 *
+	 * @param <T>   The type of block to register.
+	 * @param block The block to register.
+	 * @return The block which was registered.
+	 */
+	private static <T extends Block> T registerBlock(T block, String name) {
+		ModItems.add(
+				new BlockItem(block, (new Item.Properties()).group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(name));
+
 		ModRegistry.ModBlocks.add(block);
 
-		if (itemBlock != null)
-		{
+		return block;
+	}
+
+	public static <T extends Block, I extends BlockItem> T registerBlock(T block, I itemBlock) {
+		ModRegistry.ModBlocks.add(block);
+
+		if (itemBlock != null) {
 			ModRegistry.ModItems.add(itemBlock);
 		}
 
@@ -623,62 +440,112 @@ public class ModRegistry
 	}
 
 	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the un-localised name to the full registry name.
+	 * Set the registry name of {@code item} to {@code itemName} and the
+	 * un-localised name to the full registry name.
 	 *
-	 * @param item The item
+	 * @param item     The item
 	 * @param itemName The item's name
 	 */
-	public static void setItemName(Item item, String itemName)
-	{
-        ModContainer mc = Loader.instance().activeModContainer();
-        String prefix = mc == null || (mc instanceof InjectedModContainer && ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
-        
-        if (!prefix.equals(Repurpose.MODID.toLowerCase()))
-        {
-        	FMLLog.log.error("While attempting to set the registry name for item: {}, it appears that the active mod container is no longer `repurpose` but is instead {}", itemName, prefix);
-        }
-        
-		item.setRegistryName(Repurpose.MODID.toLowerCase() + ":" + itemName);
-		item.setUnlocalizedName(item.getRegistryName().toString());
+	public static void setItemName(Item item, String itemName) {
+		if (itemName != null) {
+			item.setRegistryName(itemName);
+		}
 	}
 
 	/**
-	 * Set the registry name of {@code block} to {@code blockName} and the un-localised name to the full registry name.
+	 * Set the registry name of {@code block} to {@code blockName} and the
+	 * un-localised name to the full registry name.
 	 *
-	 * @param block The block
+	 * @param block     The block
 	 * @param blockName The block's name
 	 */
-	public static void setBlockName(Block block, String blockName)
-	{
-		block.setRegistryName(Repurpose.MODID.toLowerCase() + ":" + blockName);
-		block.setUnlocalizedName(block.getRegistryName().toString());
+	public static void setBlockName(Block block, String blockName) {
+		block.setRegistryName(blockName);
 	}
 
-	/**
-	 * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
-	 * 
-	 * @param name The name of the recipe. ModID is pre-pended to it.
-	 * @param stack The output of the recipe.
-	 * @param recipeComponents The recipe components.
-	 */
-	public static void addShapedRecipe(String name, ItemStack stack, Object... recipeComponents)
-	{
-		ResourceLocation resourceLocation = new ResourceLocation(Repurpose.MODID.toLowerCase(), name);
+	public enum CustomItemTier implements IItemTier {
+		COPPER("Copper", ItemTier.STONE.getHarvestLevel(), ItemTier.STONE.getMaxUses(), ItemTier.STONE.getEfficiency(),
+				ItemTier.STONE.getAttackDamage(), ItemTier.STONE.getEnchantability(), () -> {
+					return Ingredient
+							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/copper")));
+				}),
+		OSMIUM("Osmium", ItemTier.IRON.getHarvestLevel(), 500, ItemTier.IRON.getEfficiency(),
+				ItemTier.IRON.getAttackDamage() + .5f, ItemTier.IRON.getEnchantability(), () -> {
+					return Ingredient
+							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/osmium")));
+				}),
+		BRONZE("Bronze", ItemTier.IRON.getHarvestLevel(), ItemTier.IRON.getMaxUses(), ItemTier.IRON.getEfficiency(),
+				ItemTier.IRON.getAttackDamage(), ItemTier.IRON.getEnchantability(), () -> {
+					return Ingredient
+							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/bronze")));
+				}),
+		STEEL("Steel", ItemTier.DIAMOND.getHarvestLevel(), (int) (ItemTier.IRON.getMaxUses() * 1.5),
+				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage(),
+				ItemTier.DIAMOND.getEnchantability(), () -> {
+					return Ingredient
+							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/steel")));
+				}),
+		OBSIDIAN("Obsidian", ItemTier.DIAMOND.getHarvestLevel() + 1, (int) (ItemTier.DIAMOND.getMaxUses() * 1.5),
+				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage(),
+				ItemTier.DIAMOND.getEnchantability(), () -> {
+					return Ingredient.fromItems(Item.getItemFromBlock(Blocks.OBSIDIAN));
+				});
 
-		GameRegistry.addShapedRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
-	}
+		private final String name;
+		private final int harvestLevel;
+		private final int maxUses;
+		private final float efficiency;
+		private final float attackDamage;
+		private final int enchantability;
+		private final LazyLoadBase<Ingredient> repairMaterial;
 
-	/**
-	 * This should only be used for registering recipes for vanilla objects and not mod-specific objects.
-	 * 
-	 * @param name The name of the recipe.
-	 * @param stack The output stack.
-	 * @param recipeComponents The recipe components.
-	 */
-	public static void addShapelessRecipe(String name, ItemStack stack, Ingredient... recipeComponents)
-	{
-		ResourceLocation resourceLocation = new ResourceLocation(Repurpose.MODID.toLowerCase(), name);
+		private CustomItemTier(String name, int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
+				int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+			this.name = name;
+			this.harvestLevel = harvestLevelIn;
+			this.maxUses = maxUsesIn;
+			this.efficiency = efficiencyIn;
+			this.attackDamage = attackDamageIn;
+			this.enchantability = enchantabilityIn;
+			this.repairMaterial = new LazyLoadBase<>(repairMaterialIn);
+		}
 
-		GameRegistry.addShapelessRecipe(resourceLocation, resourceLocation, stack, recipeComponents);
+		public String getName() {
+			return this.name;
+		}
+
+		public int getMaxUses() {
+			return this.maxUses;
+		}
+
+		public float getEfficiency() {
+			return this.efficiency;
+		}
+
+		public float getAttackDamage() {
+			return this.attackDamage;
+		}
+
+		public int getHarvestLevel() {
+			return this.harvestLevel;
+		}
+
+		public int getEnchantability() {
+			return this.enchantability;
+		}
+
+		public Ingredient getRepairMaterial() {
+			return this.repairMaterial.getValue();
+		}
+
+		public static CustomItemTier getByName(String name) {
+			for (CustomItemTier item : CustomItemTier.values()) {
+				if (item.getName().equals(name)) {
+					return item;
+				}
+			}
+
+			return null;
+		}
 	}
 }

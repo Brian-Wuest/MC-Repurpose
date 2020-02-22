@@ -17,7 +17,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
 
-public abstract class BlockGrassSlab extends SlabBlock implements IModBlock {
+public class BlockGrassSlab extends SlabBlock implements IModBlock {
 	public BlockGrassSlab() {
 		super(Block.Properties.create(Material.EARTH, MaterialColor.GRASS).sound(SoundType.GROUND)
 				.hardnessAndResistance(0.5f, 0.5f).harvestTool(ToolType.SHOVEL).harvestLevel(0));

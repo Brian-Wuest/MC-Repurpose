@@ -9,9 +9,13 @@ import com.wuest.repurpose.Crafting.SmeltingCondition;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -72,7 +76,7 @@ public class CommonProxy {
 	public void openGuiForItem(ItemUseContext itemUseContext) {
 	}
 
-	public void openGuiForBlock(int guiId, int x, int y, int z) {
+	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
 	}
 
 	/*

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Base.TileBlockBase;
-import com.wuest.repurpose.Gui.GuiRedstoneScanner;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 
 import net.minecraft.block.Block;
@@ -120,7 +119,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
 			BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
-			Repurpose.proxy.openGuiForBlock(GuiRedstoneScanner.GUI_ID, pos.getX(), pos.getY(), pos.getZ());
+			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
 
 		return true;

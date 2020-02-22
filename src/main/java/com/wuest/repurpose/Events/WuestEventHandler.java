@@ -623,18 +623,6 @@ public class WuestEventHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-		ModRegistry.RegisterRecipes();
-
-		ModRegistry.RegisterOreDictionaryRecords();
-	}
-
-	@SubscribeEvent
-	public static void oreRegistration(OreRegisterEvent event) {
-		ModRegistry.RegisterRepairableMaterials(event.getName(), event.getOre());
-	}
-
 	private static void sendPlayerBedLocation(TickEvent.PlayerTickEvent event) {
 		if (WuestEventHandler.playerBedLocation == null) {
 			WuestEventHandler.playerBedLocation = new HashMap<String, BlockPos>();

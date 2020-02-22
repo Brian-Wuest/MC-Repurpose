@@ -9,12 +9,12 @@ import java.util.Map.Entry;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
-import com.wuest.repurpose.Gui.BasicGui;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
@@ -25,6 +25,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.SectionPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.NibbleArray;
@@ -112,8 +113,10 @@ public class ClientEventHandler {
 				mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
 
 				GlStateManager.enableBlend();
-				BasicGui guiClass = new BasicGui();
-				guiClass.blit(offHandSlotLocationX, selectedSlotLocationY, 24, 23, 22, 23);
+				Screen screen = new Screen(new StringTextComponent("some title")) {
+				};
+
+				screen.blit(offHandSlotLocationX, selectedSlotLocationY, 24, 23, 22, 23);
 
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.enableBlend();
