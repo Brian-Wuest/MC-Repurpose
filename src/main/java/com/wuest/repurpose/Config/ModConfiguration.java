@@ -15,8 +15,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
-public class ModConfiguration 
-{
+public class ModConfiguration {
 	public static String OPTIONS = "general.";
 	public static String RecipeOptions = "general.recipes.";
 	public static String GuiOptions = "general.gui.";
@@ -27,23 +26,30 @@ public class ModConfiguration
 	// Config file option names.
 	public static String rightClickCropHarvestName = "Right Click Crop Harvest";
 	public static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
-	public static String enableExtraGrassDropsName = "Enable Extra Grass Drops";
 	public static String enableVersionCheckMessageName = "Enable Version Checking";
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
 	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
 	public static String enableVerboseLogginName = "Enable Verbose Logging";
 	public static String enableMobileLightName = "Enable Mobile Light";
-	
+
 	public static String diamondShardDropChanceName = "Diamond Shard Drop Chance";
-	public static String potatoDropChanceName = "Potato Drop Chance";
+
+	public static String beetRootSeedDropChanceName = "Beetroot Seed Drop Chance";
+	public static String melonSeedDropChanceName = "Melon Seed Drop Chance";
+	public static String pumpkinSeedDropChanceName = "Pumpkin Seed Drop Chance";
+	public static String cocoaSeedDropChanceName = "Cocoa Seed Drop Chance";
+
 	public static String beetRootDropChanceName = "Beetroot Drop Chance";
+	public static String potatoDropChanceName = "Potato Drop Chance";
 	public static String carrotDropChanceName = "Carrot Drop Chance Name";
 	public static String boneDropChanceName = "Bone Drop Chance";
 	public static String clayBallDropChanceName = "Clay Item Drop Chance";
+
 	public static String coalDropChanceName = "Coal Drop Chance";
 	public static String flintDropChanceName = "Flint Drop Chance";
 	public static String ironNuggetDropChanceName = "Iron Nugget Drop Chance";
 	public static String goldNuggetDropChanceName = "Gold Nugget Drop Chance";
+
 	public static String appleDropChanceName = "Apple Drop Chance";
 	public static String stickDropChanceName = "Stick Drop Chance";
 	public static String monsterHeadDropChanceName = "Monster Head Drop Chance";
@@ -59,9 +65,6 @@ public class ModConfiguration
 	public static String enableBedCompassName = "Bed Compass";
 	public static String enableEnchrichedFarmlandName = "Enriched Farmland";
 	public static String enableMiniRedstoneBlockName = "Mini Redstone";
-	public static String enableAppleStickExtraDropsName = "Enable Extra Leaf Drops";
-	public static String enableExtraDropsFromDirtName = "Enable Extra Dirt Drops";
-	public static String enableExtraDropsFromStoneName = "Enable Extra Stone Drops";
 	public static String addDirtRecipesName = "Dirt Recipes";
 	public static String addSnorkelName = "Snorkel";
 	public static String addWhetstoneName = "Whetstone";
@@ -87,46 +90,16 @@ public class ModConfiguration
 	public static String Bunch_Of_BeetsName = "Bunch of Beets";
 	public static String Crate_Of_BeetsName = "Crate of Beets";
 	public static String Bag_Of_Holding_Name = "Bag of Holding";
-	
+
 	// Recipe options.
-	public static String[] recipeKeys = new String[] 
-	{ 
-		addMetalRecipesName,
-		addArmorRecipesName,
-		addMiscRecipesName,
-		addNetherStarRecipeName,
-		addStoneRecipesName,
-		addWoodRecipesName,
-		enableBedCompassName,
-		enableEnchrichedFarmlandName,
-		enableMiniRedstoneBlockName,
-		enableRedstoneClockName,
-		addDirtRecipesName,
-		addSnorkelName,
-		addWhetstoneName,
-		addGlowstoneSlabName,
-		addFluffyFabricName,
-		addStoneShearsName,
-		addDiamonShardName,
-		addRedstoneScannerName,
-		sickleRecipeName,
-		swiftBladeName,
-		ironLumpName,
-		charcoalBlockName,
-		saddleName,
-		stringName,
-		scrollName,
-		woodenCrateName,
-		Clutch_Of_EggsName,
-		Carton_Of_EggsName,
-		Bunch_Of_BeetsName,
-		Bunch_Of_CarrotsName,
-		Bunch_Of_PotatoesName,
-		Crate_Of_BeetsName,
-		Crate_Of_CarrotsName,
-		Crate_Of_PotatoesName,
-		Bag_Of_Holding_Name
-	};
+	public static String[] recipeKeys = new String[] { addMetalRecipesName, addArmorRecipesName, addMiscRecipesName,
+			addNetherStarRecipeName, addStoneRecipesName, addWoodRecipesName, enableBedCompassName,
+			enableEnchrichedFarmlandName, enableMiniRedstoneBlockName, enableRedstoneClockName, addDirtRecipesName,
+			addSnorkelName, addWhetstoneName, addGlowstoneSlabName, addFluffyFabricName, addStoneShearsName,
+			addDiamonShardName, addRedstoneScannerName, sickleRecipeName, swiftBladeName, ironLumpName,
+			charcoalBlockName, saddleName, stringName, scrollName, woodenCrateName, Clutch_Of_EggsName,
+			Carton_Of_EggsName, Bunch_Of_BeetsName, Bunch_Of_CarrotsName, Bunch_Of_PotatoesName, Crate_Of_BeetsName,
+			Crate_Of_CarrotsName, Crate_Of_PotatoesName, Bag_Of_Holding_Name };
 
 	private ConfigFileSettings configFileSettings;
 
@@ -134,25 +107,28 @@ public class ModConfiguration
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
-	public boolean enableExtraGrassDrops;
 	public boolean enableStepAssistEnchantment;
-	public boolean enableAppleStickExtraDrops;
-	public boolean enableExtraDropsFromDirt;
-	public boolean enableExtraDropsFromStone;
 	public boolean enableSwiftCombat;
 	public boolean enableFlatBedrockGeneration;
 	public boolean enableVerboseLogging;
 	public boolean enableMobileLight;
 
 	public HashMap<String, Boolean> recipeConfiguration;
-	
+
 	// Extra Drop Options.
 	public int diamondShardDropChance;
+
+	public int beetRootSeedDropChance;
+	public int melonSeedDropChance;
+	public int pumpkinSeedDropChance;
+	public int cocoaSeedDropChance;
+
 	public int potatoDropChance;
 	public int beetRootDropChance;
 	public int carrotDropChance;
 	public int boneDropChance;
 	public int clayBallDropChance;
+
 	public int coalDropChance;
 	public int flintDropChance;
 	public int ironNuggetDropChance;
@@ -160,29 +136,25 @@ public class ModConfiguration
 	public int appleDropChance;
 	public int stickDropChance;
 	public int monsterHeadDropChance;
-	
-	private ModConfiguration()
-	{
+
+	private ModConfiguration() {
 		this.rightClickCropHarvest = false;
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
-		this.enableExtraGrassDrops = true;
 		this.enableSwiftCombat = true;
 		this.recipeConfiguration = new HashMap<String, Boolean>();
 		this.enableFlatBedrockGeneration = true;
 		this.enableMobileLight = true;
 	}
 
-	public ModConfiguration(ForgeConfigSpec.Builder builder)
-	{
+	public ModConfiguration(ForgeConfigSpec.Builder builder) {
 		this();
 
 		this.configFileSettings = new ConfigFileSettings();
 		ModConfiguration.buildOptions(this, builder);
 	}
 
-	public static void buildOptions(ModConfiguration config, ForgeConfigSpec.Builder builder)
-	{
+	public static void buildOptions(ModConfiguration config, ForgeConfigSpec.Builder builder) {
 		proxyConfiguration = config;
 
 		builder.comment("General");
@@ -196,18 +168,6 @@ public class ModConfiguration
 				"Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.")
 				.define(ModConfiguration.OPTIONS + ModConfiguration.enableGrassSpreadToCustomDirtName, true);
 
-		proxyConfiguration.configFileSettings.enableAppleStickExtraDrops = builder
-				.comment("Determines if all types of leaves will drop apples and/or sticks.")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableAppleStickExtraDropsName, true);
-
-		proxyConfiguration.configFileSettings.enableExtraDropsFromDirt = builder.comment(
-				"Determines if Potatoes, Carrots, Bones, Clay and Beetroots will drop when breaking dirt/grasss blocks.")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableExtraDropsFromDirtName, true);
-
-		proxyConfiguration.configFileSettings.enableExtraDropsFromStone = builder
-				.comment("Determines if Coal, Iron Nuggets and Flint will drop when breaking stone")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableExtraDropsFromStoneName, true);
-
 		proxyConfiguration.configFileSettings.enableFlatBedrockGeneration = builder
 				.comment("Determines if overworld bedrock is flat. Server configuration overrides client.")
 				.define(ModConfiguration.OPTIONS + ModConfiguration.enableFlatBedrockGenerationName, true);
@@ -219,10 +179,6 @@ public class ModConfiguration
 		proxyConfiguration.configFileSettings.enableMobileLight = builder.comment(
 				"Determines if light source blocks will illuminate the player's area when held in either hand. This does not affect monster generation. Server overrides client.")
 				.define(ModConfiguration.OPTIONS + ModConfiguration.enableMobileLightName, false);
-
-		proxyConfiguration.configFileSettings.enableExtraGrassDrops = builder.comment(
-				"Determines if tall grass can also drop: melon, pumpkin, cocoa and beetroot seeds. Server configuration overrides client.")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableExtraGrassDropsName, true);
 
 		proxyConfiguration.configFileSettings.enableStepAssistEnchantment = builder.comment(
 				"Determines if the Step Assist family of enchantments is enabled. \r\nRequires World Restart. Server Configuration overrides client.")
@@ -238,6 +194,25 @@ public class ModConfiguration
 		proxyConfiguration.configFileSettings.diamondShardDropChance = builder.comment(
 				"Defines the drop chance of diamond shards from coal ore blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
 				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.diamondShardDropChanceName, 1, 0,
+						100);
+
+		proxyConfiguration.configFileSettings.beetRootSeedDropChance = builder.comment(
+				"Defines the drop chance of beet root seeds from tall grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
+				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.beetRootSeedDropChanceName, 4, 0,
+						100);
+
+		proxyConfiguration.configFileSettings.melonSeedDropChance = builder.comment(
+				"Defines the drop chance of melon seeds from tall grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
+				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.melonSeedDropChanceName, 4, 0, 100);
+
+		proxyConfiguration.configFileSettings.pumpkinSeedDropChance = builder.comment(
+				"Defines the drop chance of pumpkin seeds from tall grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
+				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.pumpkinSeedDropChanceName, 4, 0,
+						100);
+
+		proxyConfiguration.configFileSettings.cocoaSeedDropChance = builder.comment(
+				"Defines the drop chance of cocoa seeds from tall grass blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
+				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.cocoaSeedDropChanceName, 4, 0,
 						100);
 
 		proxyConfiguration.configFileSettings.potatoDropChance = builder.comment(
@@ -322,14 +297,7 @@ public class ModConfiguration
 		proxyConfiguration.enableHomeCommand = proxyConfiguration.configFileSettings.enableHomeCommand.get();
 		proxyConfiguration.enableGrassSpreadToCustomDirt = proxyConfiguration.configFileSettings.enableGrassSpreadToCustomDirt
 				.get();
-		proxyConfiguration.enableExtraGrassDrops = proxyConfiguration.configFileSettings.enableExtraGrassDrops.get();
 		proxyConfiguration.enableStepAssistEnchantment = proxyConfiguration.configFileSettings.enableStepAssistEnchantment
-				.get();
-		proxyConfiguration.enableAppleStickExtraDrops = proxyConfiguration.configFileSettings.enableAppleStickExtraDrops
-				.get();
-		proxyConfiguration.enableExtraDropsFromDirt = proxyConfiguration.configFileSettings.enableExtraDropsFromDirt
-				.get();
-		proxyConfiguration.enableExtraDropsFromStone = proxyConfiguration.configFileSettings.enableExtraDropsFromStone
 				.get();
 		proxyConfiguration.enableSwiftCombat = proxyConfiguration.configFileSettings.enableSwiftCombat.get();
 		proxyConfiguration.enableFlatBedrockGeneration = proxyConfiguration.configFileSettings.enableFlatBedrockGeneration
@@ -338,10 +306,17 @@ public class ModConfiguration
 		proxyConfiguration.enableMobileLight = proxyConfiguration.configFileSettings.enableMobileLight.get();
 
 		proxyConfiguration.diamondShardDropChance = proxyConfiguration.configFileSettings.diamondShardDropChance.get();
+
+		proxyConfiguration.beetRootSeedDropChance = proxyConfiguration.configFileSettings.beetRootSeedDropChance.get();
+		proxyConfiguration.melonSeedDropChance = proxyConfiguration.configFileSettings.melonSeedDropChance.get();
+		proxyConfiguration.pumpkinSeedDropChance = proxyConfiguration.configFileSettings.pumpkinSeedDropChance.get();
+		proxyConfiguration.cocoaSeedDropChance = proxyConfiguration.configFileSettings.cocoaSeedDropChance.get();
+
 		proxyConfiguration.potatoDropChance = proxyConfiguration.configFileSettings.potatoDropChance.get();
 		proxyConfiguration.beetRootDropChance = proxyConfiguration.configFileSettings.beetRootDropChance.get();
 		proxyConfiguration.carrotDropChance = proxyConfiguration.configFileSettings.carrotDropChance.get();
 		proxyConfiguration.boneDropChance = proxyConfiguration.configFileSettings.boneDropChance.get();
+
 		proxyConfiguration.clayBallDropChance = proxyConfiguration.configFileSettings.clayBallDropChance.get();
 		proxyConfiguration.coalDropChance = proxyConfiguration.configFileSettings.coalDropChance.get();
 		proxyConfiguration.flintDropChance = proxyConfiguration.configFileSettings.flintDropChance.get();
@@ -352,108 +327,111 @@ public class ModConfiguration
 		proxyConfiguration.monsterHeadDropChance = proxyConfiguration.configFileSettings.monsterHeadDropChance.get();
 	}
 
-	public CompoundNBT ToNBTTagCompound()
-	{
+	public CompoundNBT ToNBTTagCompound() {
 		CompoundNBT tag = new CompoundNBT();
-		
+
 		tag.putBoolean(ModConfiguration.rightClickCropHarvestName, this.rightClickCropHarvest);
 		tag.putBoolean(ModConfiguration.enableHomeCommandName, this.enableHomeCommand);
 		tag.putBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
-		tag.putBoolean(ModConfiguration.enableExtraGrassDropsName, this.enableExtraGrassDrops);
 		tag.putBoolean(ModConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
-		tag.putBoolean(ModConfiguration.enableAppleStickExtraDropsName, this.enableAppleStickExtraDrops);
-		tag.putBoolean(ModConfiguration.enableExtraDropsFromDirtName, this.enableExtraDropsFromDirt);
-		tag.putBoolean(ModConfiguration.enableExtraDropsFromStoneName, this.enableExtraDropsFromStone);
 		tag.putBoolean(ModConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
 		tag.putBoolean(ModConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
 		tag.putBoolean(ModConfiguration.enableMobileLightName, this.enableMobileLight);
-		
-		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet())
-		{
+
+		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet()) {
 			tag.putBoolean(entry.getKey(), entry.getValue());
 		}
-		
+
 		tag.putInt(ModConfiguration.diamondShardDropChanceName, this.diamondShardDropChance);
+
+		tag.putInt(ModConfiguration.beetRootSeedDropChanceName, this.beetRootSeedDropChance);
+		tag.putInt(ModConfiguration.melonSeedDropChanceName, this.melonSeedDropChance);
+		tag.putInt(ModConfiguration.pumpkinSeedDropChanceName, this.pumpkinSeedDropChance);
+		tag.putInt(ModConfiguration.cocoaSeedDropChanceName, this.cocoaSeedDropChance);
+
 		tag.putInt(ModConfiguration.potatoDropChanceName, this.potatoDropChance);
 		tag.putInt(ModConfiguration.carrotDropChanceName, this.carrotDropChance);
 		tag.putInt(ModConfiguration.beetRootDropChanceName, this.beetRootDropChance);
 		tag.putInt(ModConfiguration.clayBallDropChanceName, this.clayBallDropChance);
 		tag.putInt(ModConfiguration.boneDropChanceName, this.boneDropChance);
+
 		tag.putInt(ModConfiguration.coalDropChanceName, this.coalDropChance);
 		tag.putInt(ModConfiguration.flintDropChanceName, this.flintDropChance);
 		tag.putInt(ModConfiguration.ironNuggetDropChanceName, this.ironNuggetDropChance);
 		tag.putInt(ModConfiguration.goldNuggetDropChanceName, this.goldNuggetDropChance);
 		tag.putInt(ModConfiguration.appleDropChanceName, this.appleDropChance);
 		tag.putInt(ModConfiguration.stickDropChanceName, this.stickDropChance);
-		
+
 		return tag;
 	}
-	
-	public static ModConfiguration getFromNBTTagCompound(CompoundNBT tag)
-	{
+
+	public static ModConfiguration getFromNBTTagCompound(CompoundNBT tag) {
 		ModConfiguration config = new ModConfiguration();
-		
+
 		config.rightClickCropHarvest = tag.getBoolean(ModConfiguration.rightClickCropHarvestName);
-		
+
 		config.enableHomeCommand = tag.getBoolean(ModConfiguration.enableHomeCommandName);
 		config.enableGrassSpreadToCustomDirt = tag.getBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName);
-		config.enableExtraGrassDrops = tag.getBoolean(ModConfiguration.enableExtraGrassDropsName);
 		config.enableStepAssistEnchantment = tag.getBoolean(ModConfiguration.enableStepAssistEnchantmentName);
-		
-		config.enableAppleStickExtraDrops = tag.getBoolean(ModConfiguration.enableAppleStickExtraDropsName);
-		config.enableExtraDropsFromDirt = tag.getBoolean(ModConfiguration.enableExtraDropsFromDirtName);
-		config.enableExtraDropsFromStone = tag.getBoolean(ModConfiguration.enableExtraDropsFromStoneName);
-		
+
 		config.enableFlatBedrockGeneration = tag.getBoolean(ModConfiguration.enableFlatBedrockGenerationName);
 		config.enableVerboseLogging = tag.getBoolean(ModConfiguration.enableVerboseLogginName);
 		config.enableMobileLight = tag.getBoolean(ModConfiguration.enableMobileLightName);
-		
+
 		config.diamondShardDropChance = tag.getInt(ModConfiguration.diamondShardDropChanceName);
+
+		config.beetRootSeedDropChance = tag.getInt(ModConfiguration.beetRootSeedDropChanceName);
+		config.melonSeedDropChance = tag.getInt(ModConfiguration.melonSeedDropChanceName);
+		config.pumpkinSeedDropChance = tag.getInt(ModConfiguration.pumpkinSeedDropChanceName);
+		config.cocoaSeedDropChance = tag.getInt(ModConfiguration.cocoaSeedDropChanceName);
+
 		config.potatoDropChance = tag.getInt(ModConfiguration.potatoDropChanceName);
 		config.carrotDropChance = tag.getInt(ModConfiguration.carrotDropChanceName);
 		config.beetRootDropChance = tag.getInt(ModConfiguration.beetRootDropChanceName);
 		config.clayBallDropChance = tag.getInt(ModConfiguration.clayBallDropChanceName);
 		config.boneDropChance = tag.getInt(ModConfiguration.boneDropChanceName);
+
 		config.coalDropChance = tag.getInt(ModConfiguration.coalDropChanceName);
 		config.flintDropChance = tag.getInt(ModConfiguration.flintDropChanceName);
 		config.ironNuggetDropChance = tag.getInt(ModConfiguration.ironNuggetDropChanceName);
 		config.goldNuggetDropChance = tag.getInt(ModConfiguration.goldNuggetDropChanceName);
 		config.appleDropChance = tag.getInt(ModConfiguration.appleDropChanceName);
 		config.stickDropChance = tag.getInt(ModConfiguration.stickDropChanceName);
-		
-		for (String key : ModConfiguration.recipeKeys)
-		{
+
+		for (String key : ModConfiguration.recipeKeys) {
 			config.recipeConfiguration.put(key, tag.getBoolean(key));
 		}
-		
+
 		return config;
 	}
 
-	private class ConfigFileSettings
-	{
+	private class ConfigFileSettings {
 		// Configuration Options.
 		public BooleanValue rightClickCropHarvest;
 		public BooleanValue enableHomeCommand;
 		public BooleanValue enableGrassSpreadToCustomDirt;
-		public BooleanValue enableExtraGrassDrops;
 		public BooleanValue enableStepAssistEnchantment;
-		public BooleanValue enableAppleStickExtraDrops;
-		public BooleanValue enableExtraDropsFromDirt;
-		public BooleanValue enableExtraDropsFromStone;
 		public BooleanValue enableSwiftCombat;
 		public BooleanValue enableFlatBedrockGeneration;
 		public BooleanValue enableVerboseLogging;
 		public BooleanValue enableMobileLight;
 
 		public HashMap<String, BooleanValue> recipeConfiguration;
-		
+
 		// Extra Drop Options.
 		public IntValue diamondShardDropChance;
+
+		public IntValue beetRootSeedDropChance;
+		public IntValue melonSeedDropChance;
+		public IntValue pumpkinSeedDropChance;
+		public IntValue cocoaSeedDropChance;
+
 		public IntValue potatoDropChance;
 		public IntValue beetRootDropChance;
 		public IntValue carrotDropChance;
 		public IntValue boneDropChance;
 		public IntValue clayBallDropChance;
+
 		public IntValue coalDropChance;
 		public IntValue flintDropChance;
 		public IntValue ironNuggetDropChance;
@@ -462,8 +440,7 @@ public class ModConfiguration
 		public IntValue stickDropChance;
 		public IntValue monsterHeadDropChance;
 
-		public ConfigFileSettings()
-		{
+		public ConfigFileSettings() {
 			this.recipeConfiguration = new HashMap<>();
 		}
 	}

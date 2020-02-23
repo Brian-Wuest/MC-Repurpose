@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Flint Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:flint"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Iron Nugget Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:iron_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Gold Nugget Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:gold_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Coal Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:coal"
+        }
+      ]
+    }
+  ]
+}

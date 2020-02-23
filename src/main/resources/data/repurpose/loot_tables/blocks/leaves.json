@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Apple Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "repurpose:apple"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Stick Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "repurpose:stick"
+        }
+      ]
+    }
+  ]
+}

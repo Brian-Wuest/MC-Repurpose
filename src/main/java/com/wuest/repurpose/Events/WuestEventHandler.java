@@ -39,11 +39,9 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -54,12 +52,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -70,21 +68,21 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -404,35 +402,6 @@ public class WuestEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void EntityDied(LivingDropsEvent event) {
-		// TODO: Add to loot tables.
-		if (!event.getEntity().world.isRemote) {
-			Entity entity = event.getEntity();
-
-			if (entity instanceof ZombieEntity || entity instanceof SkeletonEntity || entity instanceof CreeperEntity) {
-				double maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.monsterHeadDropChance) / 100d;
-
-				double randomChance = WuestEventHandler.getRandomChance(entity.world);
-
-				if (randomChance <= maxPercentage) {
-					for (EntityItem existingStack : event.getDrops()) {
-						if (existingStack.getItem().getItem() == Items.SKULL) {
-							return;
-						}
-					}
-
-					int meta = entity instanceof EntityZombie ? 2 : entity instanceof EntitySkeleton ? 0 : 4;
-					ItemStack stack = new ItemStack(Items.SKULL, 1, meta);
-
-					EntityItem newItem = new EntityItem(event.getEntity().world, event.getEntity().posX,
-							event.getEntity().posY, event.getEntity().posZ, stack);
-					event.getDrops().add(newItem);
-				}
-			}
-		}
-	}
-
-	@SubscribeEvent
 	public static void AnvilUpdate(AnvilUpdateEvent event) {
 		ItemStack rightItem = event.getRight();
 		ItemStack leftItem = event.getLeft();
@@ -443,18 +412,17 @@ public class WuestEventHandler {
 			// These items create enchanted books.
 			if (leftItem.getItem() instanceof ItemFluffyFabric) {
 				// Set the output to an enchanted book with the Silk Touch enchantment.
-				enchantedBook = ((EnchantedBookItem) Items.ENCHANTED_BOOK)
+				enchantedBook = EnchantedBookItem
 						.getEnchantedItemStack(new EnchantmentData(Enchantments.SILK_TOUCH, 1));
 				event.setCost(3);
 			} else if (leftItem.getItem() instanceof ItemWhetStone) {
 				// Set the output to an enchanted book with the Sharpness 1 enchantment.
-				enchantedBook = ((EnchantedBookItem) Items.ENCHANTED_BOOK)
-						.getEnchantedItemStack(new EnchantmentData(Enchantments.SHARPNESS, 1));
+				enchantedBook = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(Enchantments.SHARPNESS, 1));
 				event.setCost(1);
 
 			} else if (leftItem.getItem() instanceof ItemSnorkel) {
 				// Set the output to an enchanted book with water breathing 1 enchantment.
-				enchantedBook = ((EnchantedBookItem) Items.ENCHANTED_BOOK)
+				enchantedBook = EnchantedBookItem
 						.getEnchantedItemStack(new EnchantmentData(Enchantments.RESPIRATION, 1));
 				event.setCost(2);
 			}
@@ -468,9 +436,6 @@ public class WuestEventHandler {
 				|| (leftItem.getItem() instanceof ArmorItem
 						&& ((ArmorItem) leftItem.getItem()).getEquipmentSlot() == EquipmentSlotType.FEET
 						&& rightItem.getItem() instanceof ItemFluffyFabric)) {
-			ArmorItem itemType = rightItem.getItem() instanceof ArmorItem ? (ArmorItem) rightItem.getItem()
-					: (ArmorItem) leftItem.getItem();
-
 			Item enchantingItem = rightItem.getItem() instanceof ArmorItem ? rightItem.getItem() : leftItem.getItem();
 
 			ItemStack result = new ItemStack(enchantingItem);
@@ -489,68 +454,38 @@ public class WuestEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onDrops(HarvestDropsEvent event) {
-		Block block = event.getState().getBlock();
+	public static void onLootLoad(LootTableLoadEvent event) {
+		ResourceLocation newTable = null;
+		ResourceLocation eventName = event.getName();
 
-		// TODO: Add to loot tables
-		if (!event.isCanceled() && !event.isSilkTouching() && !event.getWorld().isRemote) {
-			// Get the random chance.
-			double maxPercentage = 0.01;
-
-			// For coal ore, add a random chance that a diamond shard can drop.
-			if (block == Blocks.COAL_ORE) {
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.diamondShardDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						ModRegistry.DiamondShard(), 1);
-			} else if (block instanceof BlockLeaves && Repurpose.proxy.proxyConfiguration.enableAppleStickExtraDrops) {
-				// Chance to drop apples.
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.appleDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.APPLE, 1);
-
-				// Chance to drop sticks.
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.stickDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.STICK, 1);
-			} else if ((block instanceof BlockDirt || block instanceof BlockGrass)
-					&& Repurpose.proxy.proxyConfiguration.enableExtraDropsFromDirt) {
-				// Check for chance of drop for carrots, potatoes, beetroots and bones.
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.carrotDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.CARROT, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.potatoDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.POTATO, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.beetRootDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.BEETROOT, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.boneDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.BONE, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.clayBallDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.CLAY_BALL, 1);
-			} else if (block instanceof BlockStone && Repurpose.proxy.proxyConfiguration.enableExtraDropsFromStone) {
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.coalDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.COAL, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.ironNuggetDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.IRON_NUGGET, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.flintDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.FLINT, 1);
-
-				maxPercentage = ((double) Repurpose.proxy.proxyConfiguration.goldNuggetDropChance) / 100d;
-				WuestEventHandler.checkChanceAndAddToDrops(event.getWorld(), event.getDrops(), maxPercentage,
-						Items.GOLD_NUGGET, 1);
+		if (eventName.equals(Blocks.DIRT.getRegistryName()) || eventName.equals(Blocks.GRASS_BLOCK.getRegistryName())) {
+			newTable = new ResourceLocation(Repurpose.MODID, "blocks/dirt");
+		} else if (eventName.equals(Blocks.GRASS.getRegistryName())) {
+			newTable = new ResourceLocation(Repurpose.MODID, "blocks/grass");
+		} else if (eventName.equals(Blocks.STONE.getRegistryName())) {
+			newTable = new ResourceLocation(Repurpose.MODID, "blocks/stone");
+		} else if (eventName.equals(Blocks.COAL_ORE.getRegistryName())) {
+			newTable = new ResourceLocation(Repurpose.MODID, "blocks/coal_ore");
+		} else if (eventName.equals(EntityType.ZOMBIE.getRegistryName())
+				|| eventName.equals(EntityType.SKELETON.getRegistryName())
+				|| eventName.equals(EntityType.CREEPER.getRegistryName())) {
+			newTable = new ResourceLocation(Repurpose.MODID, "entities/" + eventName.getPath());
+		} else if (eventName.getPath().toLowerCase().contains("blocks/leaves")) {
+			boolean foundBlock = false;
+			for (Block block : BlockTags.LEAVES.getAllElements()) {
+				if (eventName.equals(block.getRegistryName())) {
+					foundBlock = true;
+					break;
+				}
 			}
+
+			if (foundBlock) {
+				newTable = new ResourceLocation(Repurpose.MODID, "blocks/leaves");
+			}
+		}
+
+		if (newTable != null) {
+			event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(newTable)).build());
 		}
 	}
 
@@ -821,23 +756,23 @@ public class WuestEventHandler {
 						int k3 = 0;
 
 						switch (enchantment1.getRarity()) {
-						case COMMON: {
-							k3 = 1;
-							break;
-						}
+							case COMMON: {
+								k3 = 1;
+								break;
+							}
 
-						case UNCOMMON: {
-							k3 = 2;
-							break;
-						}
+							case UNCOMMON: {
+								k3 = 2;
+								break;
+							}
 
-						case RARE: {
-							k3 = 4;
-							break;
-						}
-						case VERY_RARE: {
-							k3 = 8;
-						}
+							case RARE: {
+								k3 = 4;
+								break;
+							}
+							case VERY_RARE: {
+								k3 = 8;
+							}
 						}
 
 						if (isEnchantedScroll) {

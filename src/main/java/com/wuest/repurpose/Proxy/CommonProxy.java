@@ -3,9 +3,9 @@ package com.wuest.repurpose.Proxy;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Config.ModConfiguration;
-import com.wuest.repurpose.Crafting.GrassSeedCondition;
 import com.wuest.repurpose.Crafting.RecipeCondition;
 import com.wuest.repurpose.Crafting.SmeltingCondition;
+import com.wuest.repurpose.Loot.Conditions.ConfigRandomChance;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -52,7 +52,7 @@ public class CommonProxy {
 		CraftingHelper.register(new SmeltingCondition.Serializer());
 
 		// Register loot table conditions.
-		LootConditionManager.registerCondition(new GrassSeedCondition.Serializer());
+		LootConditionManager.registerCondition(new ConfigRandomChance.Serializer());
 
 		Repurpose.network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Repurpose.MODID, "main_channel"))
 				.clientAcceptedVersions(Repurpose.PROTOCOL_VERSION::equals)

@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:block",
+	"pools": [
+	  {
+		"rolls": 1,
+		"entries": [
+		  {
+			"type": "minecraft:item",
+			"conditions": [
+			  {
+				"condition": "repurpose:config_random_chance",
+				"option_name": "Monster Head Drop Chance",
+				"chance": -1
+			  }
+			],
+			"name": "minecraft:zombie_head"
+		  }
+		]
+	  }
+	]
+  }
+  

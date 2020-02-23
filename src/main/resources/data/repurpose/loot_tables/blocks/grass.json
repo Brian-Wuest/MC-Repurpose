@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Beetroot Seed Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:beetroot_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Melon Seed Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:melon_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Pumpkin Seed Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:pumpkin_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Cocoa Seed Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:cocoa_beans"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}
