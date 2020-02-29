@@ -63,8 +63,6 @@ public class CommonProxy {
 
 		// Register the capabilities.
 		ModRegistry.RegisterCapabilities();
-
-		ModRegistry.RegisterEnchantments();
 	}
 
 	public void init(FMLCommonSetupEvent event) {

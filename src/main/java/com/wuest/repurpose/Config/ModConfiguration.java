@@ -1,19 +1,18 @@
 package com.wuest.repurpose.Config;
 
-import static com.wuest.repurpose.Proxy.CommonProxy.proxyConfiguration;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import com.wuest.repurpose.Repurpose;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
-import com.wuest.repurpose.Repurpose;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import static com.wuest.repurpose.Proxy.CommonProxy.proxyConfiguration;
 
 public class ModConfiguration {
 	public static String OPTIONS = "general.";
@@ -92,14 +91,14 @@ public class ModConfiguration {
 	public static String Bag_Of_Holding_Name = "Bag of Holding";
 
 	// Recipe options.
-	public static String[] recipeKeys = new String[] { addMetalRecipesName, addArmorRecipesName, addMiscRecipesName,
+	public static String[] recipeKeys = new String[]{addMetalRecipesName, addArmorRecipesName, addMiscRecipesName,
 			addNetherStarRecipeName, addStoneRecipesName, addWoodRecipesName, enableBedCompassName,
 			enableEnchrichedFarmlandName, enableMiniRedstoneBlockName, enableRedstoneClockName, addDirtRecipesName,
 			addSnorkelName, addWhetstoneName, addGlowstoneSlabName, addFluffyFabricName, addStoneShearsName,
 			addDiamonShardName, addRedstoneScannerName, sickleRecipeName, swiftBladeName, ironLumpName,
 			charcoalBlockName, saddleName, stringName, scrollName, woodenCrateName, Clutch_Of_EggsName,
 			Carton_Of_EggsName, Bunch_Of_BeetsName, Bunch_Of_CarrotsName, Bunch_Of_PotatoesName, Crate_Of_BeetsName,
-			Crate_Of_CarrotsName, Crate_Of_PotatoesName, Bag_Of_Holding_Name };
+			Crate_Of_CarrotsName, Crate_Of_PotatoesName, Bag_Of_Holding_Name};
 
 	private ConfigFileSettings configFileSettings;
 
@@ -108,7 +107,6 @@ public class ModConfiguration {
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableStepAssistEnchantment;
-	public boolean enableSwiftCombat;
 	public boolean enableFlatBedrockGeneration;
 	public boolean enableVerboseLogging;
 	public boolean enableMobileLight;
@@ -141,7 +139,6 @@ public class ModConfiguration {
 		this.rightClickCropHarvest = false;
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
-		this.enableSwiftCombat = true;
 		this.recipeConfiguration = new HashMap<String, Boolean>();
 		this.enableFlatBedrockGeneration = true;
 		this.enableMobileLight = true;
@@ -299,7 +296,6 @@ public class ModConfiguration {
 				.get();
 		proxyConfiguration.enableStepAssistEnchantment = proxyConfiguration.configFileSettings.enableStepAssistEnchantment
 				.get();
-		proxyConfiguration.enableSwiftCombat = proxyConfiguration.configFileSettings.enableSwiftCombat.get();
 		proxyConfiguration.enableFlatBedrockGeneration = proxyConfiguration.configFileSettings.enableFlatBedrockGeneration
 				.get();
 		proxyConfiguration.enableVerboseLogging = proxyConfiguration.configFileSettings.enableVerboseLogging.get();
@@ -411,7 +407,6 @@ public class ModConfiguration {
 		public BooleanValue enableHomeCommand;
 		public BooleanValue enableGrassSpreadToCustomDirt;
 		public BooleanValue enableStepAssistEnchantment;
-		public BooleanValue enableSwiftCombat;
 		public BooleanValue enableFlatBedrockGeneration;
 		public BooleanValue enableVerboseLogging;
 		public BooleanValue enableMobileLight;

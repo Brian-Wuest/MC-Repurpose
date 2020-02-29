@@ -80,7 +80,7 @@ public class ModRegistry {
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
 	public static Map<String, Boolean> FoundMaterials = new HashMap<String, Boolean>();
 
-	private static EnchantmentStepAssist stepAssist;
+	public static EnchantmentStepAssist stepAssist;
 
 	public static BlockCustomWall DirtWall() {
 		for (Block entry : ModRegistry.ModBlocks) {
@@ -249,6 +249,7 @@ public class ModRegistry {
 		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
 
 		ModRegistry.registerBlock(new RedstoneClock("block_redstone_clock"));
+
 		ForgeRegistries.TILE_ENTITIES.register(TileEntityRedstoneClock.TileType);
 
 		ModRegistry.registerBlock(new BlockDirtStairs());
@@ -337,13 +338,6 @@ public class ModRegistry {
 
 		// Bag of Holding
 		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
-	}
-
-	public static void RegisterEnchantments() {
-		ModRegistry.stepAssist = new EnchantmentStepAssist(Rarity.COMMON, EnchantmentType.ARMOR_FEET,
-				new EquipmentSlotType[] { EquipmentSlotType.FEET });
-
-		ForgeRegistries.ENCHANTMENTS.register(ModRegistry.stepAssist);
 	}
 
 	/**

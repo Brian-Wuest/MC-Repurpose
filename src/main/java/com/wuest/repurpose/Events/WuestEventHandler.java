@@ -94,17 +94,6 @@ public class WuestEventHandler {
 	private static HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
 
 	@SubscribeEvent
-	public static void equipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if (event.getEntity() instanceof PlayerEntity && event.getSlot() == EquipmentSlotType.MAINHAND) {
-			// This is still here to remove old attack modifiers which were incorrectly
-			// added.
-			Multimap<String, AttributeModifier> modifiers = event.getTo().getAttributeModifiers(event.getSlot());
-
-			WuestEventHandler.removeAttackModifiers(event.getTo());
-		}
-	}
-
-	@SubscribeEvent
 	public static void onPlayerLoginEvent(PlayerLoggedInEvent event) {
 		if (!event.getPlayer().world.isRemote) {
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
@@ -114,13 +103,6 @@ public class WuestEventHandler {
 
 			Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 			System.out.println("Sent config to '" + player.getDisplayName() + ".'");
-
-			if (!Repurpose.proxy.proxyConfiguration.enableSwiftCombat) {
-				// Go through the player's inventory and remove the NBTTags.
-				for (ItemStack stack : player.inventory.mainInventory) {
-					WuestEventHandler.removeAttackModifiers(stack);
-				}
-			}
 
 			// get the actual inventory Slot:
 			ItemStack offHandStack = player.getHeldItemOffhand();
@@ -623,43 +605,6 @@ public class WuestEventHandler {
 		BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
 		bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
 		return bigDecimal.doubleValue();
-	}
-
-	private static void removeAttackModifiers(ItemStack stack) {
-		if (stack.getTag() != null && stack.getTag().contains("AttributeModifiers")) {
-			ListNBT tagList = stack.getTag().getList("AttributeModifiers", 10);
-			ArrayList<Integer> indexesToRemove = new ArrayList<Integer>();
-
-			// When this value is 2 then only this mod added attribute modifiers
-			if (tagList.size() >= 2) {
-				for (int i = 0; i < tagList.size(); i++) {
-					CompoundNBT CompoundNBT = tagList.getCompound(i);
-					AttributeModifier attributeModifier = SharedMonsterAttributes.readAttributeModifier(CompoundNBT);
-
-					if (attributeModifier.getID().equals(ItemStoneShears.getAttackDamageID())
-							|| attributeModifier.getID().equals(ItemStoneShears.getAttackSpeedID())) {
-						indexesToRemove.add(i);
-					}
-
-					if (attributeModifier.getID().equals(ItemStoneShears.getAttackSpeedID())
-							&& attributeModifier.getAmount() != 6) {
-						// Another mod did some attribute modifiers, don't remove them so I don't break
-						// that mod.
-						indexesToRemove.clear();
-					}
-				}
-
-				for (int i = 0; i < indexesToRemove.size(); i++) {
-					tagList.remove(indexesToRemove.get(i) - i);
-				}
-
-				if (tagList.size() < 2) {
-					stack.removeChildTag("AttributeModifiers");
-				} else {
-					stack.setTagInfo("AttributeModifiers", tagList);
-				}
-			}
-		}
 	}
 
 	private static AnvilUpdateEvent processScrollUpdate(AnvilUpdateEvent event) {

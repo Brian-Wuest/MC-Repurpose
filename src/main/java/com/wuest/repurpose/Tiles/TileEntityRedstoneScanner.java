@@ -9,6 +9,7 @@ import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
 
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -18,6 +19,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -33,6 +35,10 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 			TileEntityRedstoneScanner::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedstoneScanner())), null);
 
 	protected boolean foundEntity = false;
+
+	static {
+		TileEntityRedstoneScanner.TileType.setRegistryName(new ResourceLocation(Repurpose.MODID, "redstone_scanner"));
+	}
 
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneScanner class.

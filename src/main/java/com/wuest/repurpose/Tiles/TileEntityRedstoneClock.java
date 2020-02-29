@@ -8,10 +8,12 @@ import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This is the tile entity which controls the redstone strength and holds the
@@ -22,6 +24,10 @@ import net.minecraft.util.Direction;
 public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration> {
 	public static TileEntityType<TileEntityRedstoneClock> TileType = new TileEntityType<TileEntityRedstoneClock>(
 			TileEntityRedstoneClock::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedStoneClock())), null);
+
+	static {
+		TileEntityRedstoneClock.TileType.setRegistryName(new ResourceLocation(Repurpose.MODID, "redstone_clock"));
+	}
 
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneClock class.
