@@ -3,7 +3,6 @@ package com.wuest.repurpose.Events;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
@@ -12,11 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * @author WuestMan The eventbus for this has to be set to "Mod" instead of the
- *         standard forge in order for it to register the blocks.
+ * standard forge in order for it to register the blocks.
  */
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Repurpose.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -39,7 +37,7 @@ public class ClientServerEventHandler {
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 		ModRegistry.stepAssist = new EnchantmentStepAssist(Enchantment.Rarity.COMMON, EnchantmentType.ARMOR_FEET,
-				new EquipmentSlotType[] { EquipmentSlotType.FEET });
+				new EquipmentSlotType[]{EquipmentSlotType.FEET});
 
 		event.getRegistry().register(ModRegistry.stepAssist);
 	}

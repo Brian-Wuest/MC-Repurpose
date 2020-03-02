@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "repurpose:block_charcoal" }
+		"": { "model": "repurpose:block/block_charcoal" }
 	}
 }

@@ -1,5 +1,5 @@
 {
-    "parent": "block/block",
+    "parent": "minecraft:block/block",
     "display": {
         "gui": {
             "rotation": [ 30, 135, 0 ],
@@ -14,11 +14,11 @@
     },
     "ambientocclusion": false,
     "textures": {
-    	"wall": "blocks/grass_side",
-        "particle": "blocks/dirt",
-        "top": "blocks/grass_top",
-        "bottom": "blocks/dirt",
-        "overlay": "blocks/grass_side_overlay"
+    	"wall": "minecraft:blocks/grass_side",
+        "particle": "minecraft:blocks/dirt",
+        "top": "minecraft:blocks/grass_top",
+        "bottom": "minecraft:blocks/dirt",
+        "overlay": "minecraft:blocks/grass_side_overlay"
     },
     "elements": [
         {   "from": [ 4, 0, 4 ],

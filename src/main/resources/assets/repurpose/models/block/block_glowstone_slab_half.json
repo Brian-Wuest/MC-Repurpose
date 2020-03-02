@@ -1,8 +1,8 @@
 {
-    "parent": "block/half_slab",
+    "parent": "minecraft:block/slab",
     "textures": {
-        "bottom": "blocks/glowstone",
-        "top": "blocks/glowstone",
-        "side": "blocks/glowstone"
+        "bottom": "bminecraft:block/glowstone",
+        "top": "minecraft:block/glowstone",
+        "side": "minecraft:block/glowstone"
     }
 }

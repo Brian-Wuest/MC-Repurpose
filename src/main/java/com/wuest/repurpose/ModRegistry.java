@@ -280,7 +280,7 @@ public class ModRegistry {
 		ModRegistry.registerItem(new ItemWhetStone("item_whetstone"));
 
 		// Glowstone Slabs.
-		ModRegistry.registerBlock(new BlockGlowstoneSlab(), "block_grass_slab");
+		ModRegistry.registerBlock(new BlockGlowstoneSlab(), "block_glowstone_slab");
 
 		// Stone shears.
 		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
@@ -454,7 +454,7 @@ public class ModRegistry {
 	 * @param blockName The block's name
 	 */
 	public static void setBlockName(Block block, String blockName) {
-		block.setRegistryName(blockName);
+		block.setRegistryName(Repurpose.MODID, blockName);
 	}
 
 	public enum CustomItemTier implements IItemTier {

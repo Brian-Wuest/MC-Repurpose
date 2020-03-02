@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "repurpose:block_mini_redstone" }
+		"": { "model": "repurpose:block/block_mini_redstone" }
 	}
 }

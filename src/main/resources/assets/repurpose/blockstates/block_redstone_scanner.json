@@ -1,7 +1,7 @@
 {
 	"variants": 
 	{
-		"powered=false": { "model": "repurpose:block_redstone_scanner_unpowered" },
-		"powered=true": { "model": "repurpose:block_redstone_scanner" }
+		"powered=false": { "model": "repurpose:block/block_redstone_scanner_unpowered" },
+		"powered=true": { "model": "repurpose:block/block_redstone_scanner" }
 	}
 }

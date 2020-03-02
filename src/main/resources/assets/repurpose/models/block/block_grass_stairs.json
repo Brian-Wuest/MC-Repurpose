@@ -37,11 +37,11 @@
         }
     },
     "textures": {
-    	"particle": "blocks/dirt",
-        "bottom": "blocks/dirt",
-        "top": "blocks/grass_top",
-        "side": "blocks/grass_side",
-        "overlay": "blocks/grass_side_overlay"
+    	"particle": "minecraft:blocks/dirt",
+        "bottom": "minecraft:blocks/dirt",
+        "top": "minecraft:blocks/grass_top",
+        "side": "minecraft:blocks/grass_side",
+        "overlay": "minecraft:blocks/grass_side_overlay"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
