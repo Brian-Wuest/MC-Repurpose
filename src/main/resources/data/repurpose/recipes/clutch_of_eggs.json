@@ -20,8 +20,7 @@
         ]
     },
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 1,
-        "data": 1
+        "item": "repurpose:clutch_of_eggs",
+        "count": 1
     }
 }

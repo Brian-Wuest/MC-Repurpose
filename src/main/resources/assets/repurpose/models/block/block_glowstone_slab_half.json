@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:block/slab",
     "textures": {
-        "bottom": "bminecraft:block/glowstone",
+        "bottom": "minecraft:block/glowstone",
         "top": "minecraft:block/glowstone",
         "side": "minecraft:block/glowstone"
     }

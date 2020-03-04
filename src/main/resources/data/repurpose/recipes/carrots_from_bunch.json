@@ -9,9 +9,8 @@
     "group": "Bunch of Carrots",
     "ingredients": [
         {
-            "item": "repurpose:item_wooden_crate",
-            "count": 1,
-            "data": 5
+            "item": "repurpose:bunch_of_carrots",
+            "count": 1
         }
     ],
     "result": {

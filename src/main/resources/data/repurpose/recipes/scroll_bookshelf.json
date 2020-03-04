@@ -15,8 +15,7 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:planks",
-                "data": 32767
+                "tag": "minecraft:planks"
             }
         ],
         "b": [

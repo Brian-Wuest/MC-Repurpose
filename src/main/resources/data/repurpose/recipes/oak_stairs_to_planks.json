@@ -19,8 +19,7 @@
         ]
     },
     "result": {
-        "item": "minecraft:planks",
-        "count": 3,
-        "data": 0
+        "item": "minecraft:oak_planks",
+        "count": 3
     }
 }

@@ -2,8 +2,8 @@
 	"parent": "minecraft:block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"all": "minecraft:blocks/redstone_block",
-		"particle": "minecraft:blocks/redstone_block"
+		"all": "minecraft:block/redstone_block",
+		"particle": "minecraft:block/redstone_block"
 	},
 	"elements": [
         {   "from": [ 4, 0, 4 ],

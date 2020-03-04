@@ -13,7 +13,7 @@
               "chance": -1
             }
           ],
-          "name": "repurpose:apple"
+          "name": "minecraft:apple"
         },
         {
           "type": "minecraft:item",
@@ -24,7 +24,7 @@
               "chance": -1
             }
           ],
-          "name": "repurpose:stick"
+          "name": "minecraft:stick"
         }
       ]
     }

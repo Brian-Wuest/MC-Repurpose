@@ -9,13 +9,11 @@
     "group": "Armor Recipes",
     "ingredients": [
         {
-            "item": "minecraft:leather_leggings",
-            "data": 0
+            "item": "minecraft:leather_leggings"
         }
     ],
     "result": {
         "item": "minecraft:leather",
-        "data": 0,
         "count": 7
     }
 }

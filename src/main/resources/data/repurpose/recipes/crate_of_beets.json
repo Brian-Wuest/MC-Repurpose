@@ -15,20 +15,17 @@
     "key": {
         "A": [
             {
-                "item": "repurpose:item_wooden_crate",
-                "data": 7
+                "item": "repurpose:bunch_of_beets"
             }
         ],
         "B": [
             {
-                "item": "repurpose:item_wooden_crate",
-                "data": 0
+                "item": "repurpose:item_wooden_crate"
             }
         ]
     },
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 1,
-        "data": 8
+        "item": "repurpose:crate_of_beets",
+        "count": 1
     }
 }

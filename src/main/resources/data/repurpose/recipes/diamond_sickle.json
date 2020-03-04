@@ -15,8 +15,7 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:diamond",
-                "data": 0
+                "item": "minecraft:diamond"
             }
         ],
         "b" : [

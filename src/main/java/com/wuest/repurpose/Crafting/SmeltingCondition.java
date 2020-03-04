@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
+import java.util.HashMap;
+
 /**
  * 
  * @author WuestMan
@@ -43,7 +45,9 @@ public class SmeltingCondition implements ICondition {
 
 		if (this.identifier != null) {
 			if (this.identifier.equals("flesh_to_leather")) {
-				if (Repurpose.proxy.getServerConfiguration().recipeConfiguration
+				HashMap<String, Boolean> recipeConfiguration = Repurpose.proxy.getServerConfiguration().recipeConfiguration;
+
+				if (recipeConfiguration
 						.get(Repurpose.proxy.getServerConfiguration().addMiscRecipesName)) {
 
 					result = true;

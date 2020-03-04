@@ -14,14 +14,12 @@
     "key": {
         "a": [
             {
-                "item": "repurpose:item_iron_lump",
-                "data": 0
+                "item": "repurpose:item_iron_lump"
             }
         ]
     },
     "result": {
         "item": "minecraft:chainmail_boots",
-        "count": 1,
-        "data": 0
+        "count": 1
     }
 }

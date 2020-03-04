@@ -9,14 +9,12 @@
     "group": "Bunch of Potatoes",
     "ingredients": [
         {
-            "item": "repurpose:item_wooden_crate",
-            "count": 1,
-            "data": 4
+            "item": "repurpose:crate_of_potatoes",
+            "count": 1
         }
     ],
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 8,
-        "data": 3
+        "item": "repurpose:bunch_of_potatoes",
+        "count": 8
     }
 }

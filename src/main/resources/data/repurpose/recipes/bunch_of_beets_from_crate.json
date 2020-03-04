@@ -9,14 +9,13 @@
     "group": "Bunch of Beets",
     "ingredients": [
         {
-            "item": "repurpose:item_wooden_crate",
+            "item": "repurpose:crate_of_beets",
             "count": 1,
             "data": 8
         }
     ],
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 8,
-        "data": 7
+        "item": "repurpose:bunch_of_beets",
+        "count": 8
     }
 }

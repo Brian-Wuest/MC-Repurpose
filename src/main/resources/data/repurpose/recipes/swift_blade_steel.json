@@ -15,8 +15,7 @@
     "key": {
         "a": [
             {
-                "type": "forge:ore_dict",
-                "ore": "ingotSteel"
+                "tag": "forge:ingots/steel"
             }
         ],
         "b" : [

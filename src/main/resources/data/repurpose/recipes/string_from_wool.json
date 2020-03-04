@@ -9,13 +9,11 @@
     "group": "String",
     "ingredients": [
         {
-            "item": "minecraft:wool",
-            "data": 32767
+            "tag": "minecraft:wool"
         }
     ],
     "result": {
         "item": "minecraft:string",
-        "data": 0,
         "count": 4
     }
 }

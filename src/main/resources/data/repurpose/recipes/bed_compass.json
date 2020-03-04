@@ -9,8 +9,7 @@
     "group": "Bed Compass",
     "ingredients": [
         {
-            "item": "minecraft:bed",
-            "data": 32767
+            "tag": "minecraft:beds"
         },
         {
             "item": "minecraft:compass"
@@ -18,7 +17,6 @@
     ],
     "result": {
         "item": "repurpose:item_bed_compass",
-        "data": 0,
         "count": 1
     }
 }

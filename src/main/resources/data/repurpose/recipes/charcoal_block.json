@@ -15,14 +15,12 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:coal",
-                "data": 1
+                "item": "minecraft:coal"
             }
         ]
     },
     "result": {
         "item": "repurpose:block_charcoal",
-        "count": 1,
-        "data": 0
+        "count": 1
     }
 }

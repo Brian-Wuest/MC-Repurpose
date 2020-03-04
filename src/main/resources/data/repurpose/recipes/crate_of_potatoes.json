@@ -15,20 +15,17 @@
     "key": {
         "A": [
             {
-                "item": "repurpose:item_wooden_crate",
-                "data": 3
+                "item": "repurpose:bunch_of_potatoes"
             }
         ],
         "B": [
             {
-                "item": "repurpose:item_wooden_crate",
-                "data": 0
+                "item": "repurpose:item_wooden_crate"
             }
         ]
     },
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 1,
-        "data": 4
+        "item": "repurpose:crate_of_potatoes",
+        "count": 1
     }
 }

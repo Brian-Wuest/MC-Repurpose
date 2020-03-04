@@ -321,6 +321,12 @@ public class ModConfiguration {
 		proxyConfiguration.appleDropChance = proxyConfiguration.configFileSettings.appleDropChance.get();
 		proxyConfiguration.stickDropChance = proxyConfiguration.configFileSettings.stickDropChance.get();
 		proxyConfiguration.monsterHeadDropChance = proxyConfiguration.configFileSettings.monsterHeadDropChance.get();
+
+		// Recipe configuration.
+		for (String key : ModConfiguration.recipeKeys) {
+			Repurpose.LOGGER.debug("Setting recipe configuration for key: " + key);
+			Repurpose.proxy.proxyConfiguration.recipeConfiguration.put(key, Repurpose.proxy.proxyConfiguration.configFileSettings.recipeConfiguration.get(key).get());
+		}
 	}
 
 	public CompoundNBT ToNBTTagCompound() {

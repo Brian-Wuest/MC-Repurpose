@@ -19,8 +19,7 @@
         ]
     },
     "result": {
-        "item": "minecraft:planks",
-        "count": 3,
-        "data": 3
+        "item": "minecraft:jungle_planks",
+        "count": 3
     }
 }

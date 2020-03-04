@@ -9,14 +9,12 @@
     "group": "Clutch of Eggs",
     "ingredients": [
         {
-            "item": "repurpose:item_wooden_crate",
-            "count": 1,
-            "data": 2
+            "item": "repurpose:carton_of_eggs",
+            "count": 1
         }
     ],
     "result": {
-        "item": "repurpose:item_wooden_crate",
-        "count": 2,
-        "data": 1
+        "item": "repurpose:clutch_of_eggs",
+        "count": 2
     }
 }

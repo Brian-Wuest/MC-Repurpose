@@ -1,6 +1,6 @@
 {   "parent": "minecraft:block/block",
 	"textures": {
-        "particle": "minecraft:blocks/dirt",
+        "particle": "minecraft:block/dirt",
         "side": "repurpose:blocks/block_enriched_farmland",
         "top": "repurpose:blocks/block_enriched_farmland_top"
     },

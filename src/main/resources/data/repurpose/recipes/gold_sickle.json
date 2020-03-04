@@ -15,8 +15,7 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:gold_ingot",
-                "data": 0
+                "tag": "forge:ingots/gold"
             }
         ],
         "b" : [

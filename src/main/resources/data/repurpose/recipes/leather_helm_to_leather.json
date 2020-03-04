@@ -9,13 +9,11 @@
     "group": "Armor Recipes",
     "ingredients": [
         {
-            "item": "minecraft:leather_helmet",
-            "data": 0
+            "item": "minecraft:leather_helmet"
         }
     ],
     "result": {
         "item": "minecraft:leather",
-        "data": 0,
         "count": 5
     }
 }

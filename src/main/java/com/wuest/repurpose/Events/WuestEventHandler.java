@@ -1,59 +1,31 @@
 package com.wuest.repurpose.Events;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import com.google.common.collect.Multimap;
-import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.DimensionHomeProvider;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
-import com.wuest.repurpose.Items.ItemBagOfHolding;
-import com.wuest.repurpose.Items.ItemFluffyFabric;
-import com.wuest.repurpose.Items.ItemScroll;
-import com.wuest.repurpose.Items.ItemSnorkel;
-import com.wuest.repurpose.Items.ItemStoneShears;
-import com.wuest.repurpose.Items.ItemWhetStone;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
+import com.wuest.repurpose.Items.*;
+import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Proxy.ClientProxy;
+import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
 import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.BeetrootBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.CropsBlock;
+import net.minecraft.block.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.BookItem;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.stats.Stats;
@@ -76,8 +48,6 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
@@ -86,6 +56,10 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Repurpose.MODID)
 public class WuestEventHandler {
@@ -102,16 +76,16 @@ public class WuestEventHandler {
 			ConfigSyncMessage message = new ConfigSyncMessage(tag);
 
 			Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-			System.out.println("Sent config to '" + player.getDisplayName() + ".'");
+			System.out.println("Sent config to '" + player.getDisplayName().getString() + ".'");
 
 			// get the actual inventory Slot:
 			ItemStack offHandStack = player.getHeldItemOffhand();
 
 			if (offHandStack.getItem() instanceof ItemBagOfHolding) {
-				// CompoundNBT compound =
-				// offHandStack.getItem().getNBTShareTag(offHandStack);
-				// BagOfHoldingUpdateMessage message = new BagOfHoldingUpdateMessage(compound);
-				// Repurpose.network.sendTo(message, (PlayerEntityMP) event.player);
+				CompoundNBT compound =
+						offHandStack.getItem().getShareTag(offHandStack);
+				BagOfHoldingUpdateMessage bagOfHoldingUpdateMessage = new BagOfHoldingUpdateMessage(compound);
+				Repurpose.network.sendTo(bagOfHoldingUpdateMessage, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 			}
 		}
 	}
@@ -122,8 +96,8 @@ public class WuestEventHandler {
 	 * @param event The event object.
 	 */
 	@SubscribeEvent
-	public static void EntityJoinWorldEvent(EntityJoinWorldEvent event) {
-		if (event.getWorld().isRemote && event.getEntity() instanceof PlayerEntity) {
+	public static void EntityJoinWorldEvent(PlayerEvent.PlayerLoggedOutEvent event) {
+		if (event.getPlayer().getEntityWorld().isRemote) {
 			// When the player logs out, make sure to re-set the server configuration.
 			// This is so a new configuration can be successfully loaded when they switch
 			// servers or worlds (on single
@@ -136,7 +110,7 @@ public class WuestEventHandler {
 	public static void AttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
 		// Only attach for players.
 		if (event.getObject() instanceof PlayerEntity) {
-			event.addCapability(new ResourceLocation(Repurpose.MODID, "DimensionHome"),
+			event.addCapability(new ResourceLocation(Repurpose.MODID, "dimension_home"),
 					new DimensionHomeProvider(new DimensionHome()));
 		}
 	}
@@ -308,7 +282,7 @@ public class WuestEventHandler {
 
 							if (p.canPlayerEdit(farmlandPosition.offset(facing), facing, seeds)
 									&& state.getBlock().canSustainPlant(state, event.getWorld(), farmlandPosition,
-											Direction.UP, (IPlantable) seeds.getItem())
+									Direction.UP, (IPlantable) seeds.getItem())
 									&& event.getWorld().isAirBlock(farmlandPosition.up())) {
 								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
 									System.out.println(
@@ -416,8 +390,8 @@ public class WuestEventHandler {
 				&& ((ArmorItem) rightItem.getItem()).getEquipmentSlot() == EquipmentSlotType.FEET
 				&& leftItem.getItem() instanceof ItemFluffyFabric)
 				|| (leftItem.getItem() instanceof ArmorItem
-						&& ((ArmorItem) leftItem.getItem()).getEquipmentSlot() == EquipmentSlotType.FEET
-						&& rightItem.getItem() instanceof ItemFluffyFabric)) {
+				&& ((ArmorItem) leftItem.getItem()).getEquipmentSlot() == EquipmentSlotType.FEET
+				&& rightItem.getItem() instanceof ItemFluffyFabric)) {
 			Item enchantingItem = rightItem.getItem() instanceof ArmorItem ? rightItem.getItem() : leftItem.getItem();
 
 			ItemStack result = new ItemStack(enchantingItem);
@@ -592,7 +566,7 @@ public class WuestEventHandler {
 	}
 
 	private static void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage,
-			Item itemToDrop, int quantity) {
+												 Item itemToDrop, int quantity) {
 		double randomChance = WuestEventHandler.getRandomChance(world);
 
 		if (randomChance <= maxPercentage) {
@@ -642,7 +616,7 @@ public class WuestEventHandler {
 			if ((!isEnchantedScroll
 					&& (leftItemStack.getItem() != rightItemStack.getItem() || !leftItemStack.isDamageable()))
 					|| (isEnchantedScroll
-							&& !leftItemStack.getItem().isBookEnchantable(leftItemStack, rightItemStack))) {
+					&& !leftItemStack.getItem().isBookEnchantable(leftItemStack, rightItemStack))) {
 				event.setOutput(ItemStack.EMPTY);
 				event.setCost(0);
 				return event;

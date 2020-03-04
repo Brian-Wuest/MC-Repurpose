@@ -14,14 +14,12 @@
     "key": {
         "#": [
             {
-                "item": "minecraft:wooden_slab",
-                "data": 3
+                "item": "minecraft:jungle_slab"
             }
         ]
     },
     "result": {
         "item": "minecraft:stick",
-        "count": 4,
-        "data": 0
+        "count": 4
     }
 }

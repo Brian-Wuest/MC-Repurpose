@@ -15,20 +15,17 @@
     "key": {
         "#": [
             {
-                "item": "minecraft:quartz_block",
-                "data": 0
+                "item": "minecraft:quartz_block"
             }
         ],
         "A" : [
             {
-                "item": "minecraft:skull",
-                "data": 1
+                "item": "minecraft:wither_skeleton_skull"
             }
         ],
         "B": [
             {
-                "item": "minecraft:diamond_block",
-                "data": 0
+                "item": "minecraft:diamond_block"
             }
         ]
     },

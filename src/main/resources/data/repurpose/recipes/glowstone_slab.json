@@ -13,14 +13,12 @@
     "key": {
         "#": [
             {
-                "item": "minecraft:glowstone",
-                "data": 0
+                "item": "minecraft:glowstone"
             }
         ]
     },
     "result": {
-        "item": "repurpose:block_half_glowstone_slab",
-        "count": 6,
-        "data": 0
+        "item": "repurpose:block_glowstone_slab",
+        "count": 6
     }
 }

@@ -13,14 +13,12 @@
     "key": {
         "#": [
             {
-                "item": "repurpose:block_grass_wall",
-                "data": 0
+                "item": "repurpose:block_grass_wall"
             }
         ]
     },
     "result": {
-        "item": "minecraft:grass",
-        "count": 1,
-        "data": 0
+        "item": "minecraft:grass_block",
+        "count": 1
     }
 }

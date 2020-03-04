@@ -19,8 +19,7 @@
         ],
         "y": [
             {
-                "item": "minecraft:dye",
-                "data": 10
+                "item": "minecraft:green_dye"
             }
         ],
         "z": [
@@ -31,7 +30,6 @@
     },
     "result": {
         "item": "minecraft:slime_ball",
-        "count": 2,
-        "data": 0
+        "count": 2
     }
 }

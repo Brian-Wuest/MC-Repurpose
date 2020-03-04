@@ -2,12 +2,12 @@
 	"parent": "minecraft:block/cube",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "minecraft:blocks/repeater_off",
-        "base": "minecraft:blocks/gold_block",
-		"slab": "minecraft:blocks/stone_slab_top",
-        "repeater": "minecraft:blocks/repeater_off",
-        "torch": "minecraft:blocks/redstone_torch_off",
-        "redstone": "minecraft:blocks/redstone_block"
+		"particle": "minecraft:block/repeater",
+        "base": "minecraft:block/gold_block",
+		"slab": "minecraft:block/smooth_stone",
+        "repeater": "minecraft:block/repeater",
+        "torch": "minecraft:block/redstone_torch_off",
+        "redstone": "minecraft:block/redstone_block"
 	},
     "elements": [
         {   "from": [ 1, 0, 1 ],

@@ -15,14 +15,12 @@
     "key": {
         "#": [
             {
-                "item": "minecraft:grass",
-                "data": 0
+                "item": "minecraft:grass_block"
             }
         ]
     },
     "result": {
         "item": "repurpose:block_grass_stairs",
-        "count": 4,
-        "data": 0
+        "count": 4
     }
 }

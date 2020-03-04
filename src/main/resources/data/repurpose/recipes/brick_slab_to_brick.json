@@ -14,14 +14,12 @@
     "key": {
         "#": [
             {
-                "item": "minecraft:stone_slab",
-                "data": 4
+                "item": "minecraft:brick_slab"
             }
         ]
     },
     "result": {
-        "item": "minecraft:brick_block",
-        "count": 2,
-        "data": 0
+        "item": "minecraft:bricks",
+        "count": 2
     }
 }

@@ -327,7 +327,7 @@ public class ModRegistry {
 
 		// Wooden Crate
 		for (ItemWoodenCrate.CrateType crateType : ItemWoodenCrate.CrateType.values()) {
-			String name = crateType.toString();
+			String name = crateType.toString().toLowerCase();
 
 			if (crateType == ItemWoodenCrate.CrateType.Empty) {
 				name = "item_wooden_crate";

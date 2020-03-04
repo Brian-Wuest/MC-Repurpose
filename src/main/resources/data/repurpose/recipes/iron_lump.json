@@ -9,18 +9,17 @@
     "group": "Iron Lump",
     "ingredients": [
         {
-            "item": "minecraft:iron_nugget"
+            "tag": "forge:nuggets/iron"
         },
         {
-            "item": "minecraft:iron_nugget"
+            "tag": "forge:nuggets/iron"
         },
         {
-            "item": "minecraft:iron_nugget"
+            "tag": "forge:nuggets/iron"
         }
     ],
     "result": {
         "item": "repurpose:item_iron_lump",
-        "data": 0,
         "count": 1
     }
 }

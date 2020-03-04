@@ -14,14 +14,12 @@
     "key": {
         "#": [
             {
-                "item": "repurpose:block_half_dirt_slab",
-                "data": 0
+                "item": "repurpose:block_dirt_slab"
             }
         ]
     },
     "result": {
         "item": "minecraft:dirt",
-        "count": 1,
-        "data": 0
+        "count": 1
     }
 }

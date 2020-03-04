@@ -33,7 +33,6 @@
     },
     "result": {
         "item": "repurpose:block_redstone_clock",
-        "count": 1,
-        "data": 0
+        "count": 1
     }
 }

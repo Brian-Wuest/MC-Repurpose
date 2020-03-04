@@ -1,10 +1,10 @@
 {
     "textures": {
-    	"particle": "minecraft:blocks/dirt",
-        "bottom": "minecraft:blocks/dirt",
-        "top": "minecraft:blocks/grass_top",
-        "side": "minecraft:blocks/grass_side",
-        "overlay": "minecraft:blocks/grass_side_overlay"
+    	"particle": "minecraft:block/dirt",
+        "bottom": "minecraft:block/dirt",
+        "top": "minecraft:block/grass_block_top",
+        "side": "minecraft:block/grass_block_side",
+        "overlay": "minecraft:block/grass_block_side_overlay"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

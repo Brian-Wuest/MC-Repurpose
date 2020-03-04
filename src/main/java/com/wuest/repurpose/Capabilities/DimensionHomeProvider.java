@@ -20,8 +20,7 @@ public class DimensionHomeProvider implements ICapabilitySerializable<CompoundNB
 
 	/**
 	 * Initializes a new instance of the DimensionHomeProvider class.
-	 * 
-	 * @param entity        The entity to associated with the capability.
+	 *
 	 * @param dimensionHome The capability associated with the entity.
 	 */
 	public DimensionHomeProvider(IDimensionHome dimensionHome) {

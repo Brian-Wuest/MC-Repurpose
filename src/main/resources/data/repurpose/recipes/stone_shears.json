@@ -19,8 +19,7 @@
         ],
         "b": [
             {
-                "item": "minecraft:cobblestone",
-                "data": 0
+                "item": "minecraft:cobblestone"
             }
         ]
     },

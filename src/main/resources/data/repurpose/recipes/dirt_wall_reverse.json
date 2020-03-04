@@ -13,14 +13,12 @@
     "key": {
         "#": [
             {
-                "item": "repurpose:block_dirt_wall",
-                "data": 0
+                "item": "repurpose:block_dirt_wall"
             }
         ]
     },
     "result": {
         "item": "minecraft:dirt",
-        "count": 1,
-        "data": 0
+        "count": 1
     }
 }

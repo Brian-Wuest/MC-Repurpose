@@ -15,20 +15,17 @@
     "key": {
         "x": [
             {
-                "item": "minecraft:dirt",
-                "data": 0
+                "item": "minecraft:dirt"
             }
         ],
         "a" : [
             {
-                "item": "minecraft:wheat",
-                "data": 0
+                "item": "minecraft:wheat"
             }
         ],
         "b": [
             {
-                "item": "minecraft:water_bucket",
-                "data": 0
+                "item": "minecraft:water_bucket"
             } 
         ],
         "y": [
@@ -39,7 +36,6 @@
     },
     "result": {
         "item": "repurpose:block_enriched_farmland",
-        "count": 3,
-        "data": 0
+        "count": 3
     }
 }

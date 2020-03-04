@@ -15,8 +15,7 @@
     "key": {
         "a": [
             {
-                "item": "minecraft:cobblestone",
-                "data": 0
+                "item": "minecraft:cobblestone"
             }
         ],
         "b" : [
