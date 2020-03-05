@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "repurpose:block_dirt_wall",
+    "repurpose:block_grass_wall"
+  ]
+}

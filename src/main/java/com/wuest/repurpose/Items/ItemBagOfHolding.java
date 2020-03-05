@@ -127,14 +127,14 @@ public class ItemBagOfHolding extends Item {
 	 */
 	@Override
 	public CompoundNBT getShareTag(ItemStack stack) {
-		if (stack.getShareTag() == null || stack.getShareTag().isEmpty()) {
+		if (stack.getTag() == null || stack.getTag().isEmpty()) {
 			// Make sure to serialize the NBT for this stack so the information is pushed to
 			// the client and the
 			// appropriate Icon is displayed for this stack.
 			stack.setTag(stack.serializeNBT());
 		}
 
-		return stack.getShareTag();
+		return stack.getTag();
 	}
 
 	public ActionResultType PlaceBlockFromPouch(PlayerEntity player, BlockItem itemBlock,

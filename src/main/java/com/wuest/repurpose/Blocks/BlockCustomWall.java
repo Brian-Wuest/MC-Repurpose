@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -78,7 +79,8 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 								.with(FourWayBlock.WEST, state.get(FourWayBlock.WEST))
 								.with(FourWayBlock.NORTH, state.get(FourWayBlock.NORTH))
 								.with(FourWayBlock.SOUTH, state.get(FourWayBlock.SOUTH))
-								.with(FourWayBlock.WATERLOGGED, state.get(FourWayBlock.WATERLOGGED));
+								.with(FourWayBlock.WATERLOGGED, state.get(FourWayBlock.WATERLOGGED))
+								.with(WallBlock.UP,state.get(WallBlock.UP));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}
@@ -115,25 +117,19 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 		return drops;
 	}
 
-	public boolean canBeConnectedTo(BlockState state, IBlockReader world, BlockPos pos, Direction facing) {
-		BlockState iblockstate = world.getBlockState(pos);
-		Block block = iblockstate.getBlock();
-		Material material = block.getMaterial(iblockstate);
-
-		if (block == Blocks.BARRIER) {
-			return false;
-		}
-
-		// Make sure all custom walls can be connected.
-		return (!(block instanceof BlockCustomWall) && !(block instanceof FenceGateBlock)
-				? (material.isOpaque() && iblockstate.isNormalCube(world, pos) ? material != Material.GOURD : false)
-				: true);
-	}
-
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		super.fillStateContainer(builder);
 		builder.add(BlockCustomWall.VARIANT);
+	}
+
+	/**
+	 * Gets the render layer this block will render on. SOLID for solid blocks, CUTOUT or CUTOUT_MIPPED for on-off
+	 * transparency (glass, reeds), TRANSLUCENT for fully blended transparency (stained glass)
+	 */
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	public static enum EnumType implements IStringSerializable {

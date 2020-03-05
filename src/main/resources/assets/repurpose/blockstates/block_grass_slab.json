@@ -2,6 +2,6 @@
     "variants": {
         "type=bottom": { "model": "repurpose:block/block_grass_slab_half" },
         "type=top": { "model": "repurpose:block/block_grass_slab_upper" },
-        "type=double": { "model": "minecraft:block/grass" }
+        "type=double": { "model": "minecraft:block/grass_block" }
     }
 }

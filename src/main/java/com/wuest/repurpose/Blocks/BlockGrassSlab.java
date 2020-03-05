@@ -1,9 +1,6 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
@@ -13,9 +10,12 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
+
+import java.util.List;
 
 public class BlockGrassSlab extends SlabBlock implements IModBlock {
 	public BlockGrassSlab() {
@@ -43,5 +43,14 @@ public class BlockGrassSlab extends SlabBlock implements IModBlock {
 		}
 
 		return drops;
+	}
+
+	/**
+	 * Gets the render layer this block will render on. SOLID for solid blocks, CUTOUT or CUTOUT_MIPPED for on-off
+	 * transparency (glass, reeds), TRANSLUCENT for fully blended transparency (stained glass)
+	 */
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 }

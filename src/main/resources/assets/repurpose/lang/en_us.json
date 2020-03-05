@@ -38,14 +38,14 @@
     "block.repurpose.block_redstone_clock": "Redstone Clock",
     "block.repurpose.block_dirt_stairs": "Dirt Stairs",
     "block.repurpose.block_grass_stairs": "Grass Stairs",
-    "block.repurpose.block_half_dirt_slab": "Dirt Slab",
-    "block.repurpose.block_half_grass_slab": "Grass Slab",
+    "block.repurpose.block_dirt_slab": "Dirt Slab",
+    "block.repurpose.block_grass_slab": "Grass Slab",
     "block.repurpose.block_dirt_wall": "Dirt Wall",
     "block.repurpose.block_grass_wall": "Grass Wall",
     "block.repurpose.block_enriched_farmland": "Enriched Farmland",
     "block.repurpose.block_mini_redstone": "Mini Block of Redstone",
     "block.repurpose.block_redstone_scanner": "Redstone Scanner",
-    "block.repurpose.block_half_glowstone_slab": "Glowstone Slab",
+    "block.repurpose.block_glowstone_slab": "Glowstone Slab",
     "block.repurpose.block_charcoal": "Charcoal Block",
 
     "enchantment.step_assist": "Step Assist"
