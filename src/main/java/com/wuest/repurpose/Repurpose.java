@@ -4,6 +4,8 @@ import com.wuest.repurpose.Events.HomeCommand;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.CommonProxy;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.loading.FMLServerLaunchProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +43,7 @@ public class Repurpose
 	public Repurpose() {
         // Register the setup method for mod-loading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		MinecraftForge.EVENT_BUS.addListener(this::serverStart);
 
         Repurpose.proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 

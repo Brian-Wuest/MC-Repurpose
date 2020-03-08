@@ -20,7 +20,7 @@ public class ItemWoodenCrate extends Item {
 	 * @param name
 	 */
 	public ItemWoodenCrate(String name, CrateType crateType) {
-		super(new Item.Properties().group(ItemGroup.FOOD));
+		super(new Item.Properties().group(ItemGroup.FOOD).containerItem(crateType == CrateType.Empty ? null : ModRegistry.EmptyWoodenCrate()));
 
 		ModRegistry.setItemName(this, name);
 

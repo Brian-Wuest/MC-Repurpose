@@ -111,7 +111,7 @@ public class GuiRedstoneClock extends BasicGui {
 	}
 
 	@Override
-	protected void postButtonRender(int x, int y) {
+	protected void postButtonRender(int x, int y, int mouseX, int mouseY) {
 		this.font.drawString("Powered Sides", x + 150, y + 10, this.textColor);
 		this.font.drawString("Powered Duration", x + 10, y + 10, this.textColor);
 		this.font.drawString("(In Seconds)", x + 10, y + 20, this.textColor);
@@ -122,18 +122,18 @@ public class GuiRedstoneClock extends BasicGui {
 		this.font.drawString("Changes reflected after current state", x + 10, y + 116, this.textColor);
 		this.font.drawString("is complete.", x + 10, y + 126, this.textColor);
 
-		if (this.upChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
-		} else if (this.northChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'North' side.", 300), x, y);
-		} else if (this.downChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
-		} else if (this.eastChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'East' side.", 300), x, y);
-		} else if (this.westChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'West' side.", 300), x, y);
-		} else if (this.southChecker.checkHover(x, y)) {
-			this.renderTooltip(this.font.listFormattedStringToWidth("The 'South' side.", 300), x, y);
+		if (this.upChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Up' side.", 300), mouseX, mouseY);
+		} else if (this.northChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'North' side.", 300), mouseX, mouseY);
+		} else if (this.downChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'Down' side.", 300), mouseX, mouseY);
+		} else if (this.eastChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'East' side.", 300), mouseX, mouseY);
+		} else if (this.westChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'West' side.", 300), mouseX, mouseY);
+		} else if (this.southChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.font.listFormattedStringToWidth("The 'South' side.", 300), mouseX, mouseY);
 		}
 	}
 

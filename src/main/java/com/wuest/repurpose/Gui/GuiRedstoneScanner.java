@@ -159,22 +159,22 @@ public class GuiRedstoneScanner extends BasicGui {
 	}
 
 	@Override
-	protected void postButtonRender(int x, int y) {
-		if (this.upChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), x, y);
-		} else if (this.northChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), x, y);
-		} else if (this.downChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), x, y);
-		} else if (this.eastChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), x, y);
-		} else if (this.westChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), x, y);
-		} else if (this.southChecker.checkHover(x, y)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), x, y);
-		} else if (this.animalChecker.checkHover(x, y)) {
+	protected void postButtonRender(int x, int y, int mouseX, int mouseY) {
+		if (this.upChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), mouseX, mouseY);
+		} else if (this.northChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), mouseX, mouseY);
+		} else if (this.downChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), mouseX, mouseY);
+		} else if (this.eastChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), mouseX, mouseY);
+		} else if (this.westChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), mouseX, mouseY);
+		} else if (this.southChecker.checkHover(mouseX, mouseY)) {
+			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), mouseX, mouseY);
+		} else if (this.animalChecker.checkHover(mouseX, mouseY)) {
 			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth(
-					"This includes things such as: pigs, cows, iron golems, etc...", 300), x, y);
+					"This includes things such as: pigs, cows, iron golems, etc...", 300), mouseX, mouseY);
 		}
 	}
 

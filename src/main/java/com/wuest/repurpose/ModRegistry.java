@@ -180,6 +180,20 @@ public class ModRegistry {
 		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
 
+	public static ItemWoodenCrate EmptyWoodenCrate()
+	{
+		for (Item item : ModRegistry.ModItems)
+		{
+			if (item.getClass().isAssignableFrom(ItemWoodenCrate.class)
+				&&  ((ItemWoodenCrate)item).crateType == ItemWoodenCrate.CrateType.Empty)
+			{
+				return (ItemWoodenCrate)item;
+			}
+		}
+
+		return null;
+	}
+
 	public static ItemSwiftBlade CustomMaterialBlade(String materialName) {
 		IItemTier material = CustomItemTier.getByName(materialName);
 
@@ -480,7 +494,7 @@ public class ModRegistry {
 							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/steel")));
 				}),
 		OBSIDIAN("Obsidian", ItemTier.DIAMOND.getHarvestLevel() + 1, (int) (ItemTier.DIAMOND.getMaxUses() * 1.5),
-				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage(),
+				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage() + 2,
 				ItemTier.DIAMOND.getEnchantability(), () -> {
 					return Ingredient.fromItems(Item.getItemFromBlock(Blocks.OBSIDIAN));
 				});

@@ -70,7 +70,7 @@ public abstract class BasicGui extends Screen {
 
 		this.renderButtons(x, y);
 
-		this.postButtonRender(adjustedXYValue.getFirst(), adjustedXYValue.getSecond());
+		this.postButtonRender(adjustedXYValue.getFirst(), adjustedXYValue.getSecond(), x, y);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public abstract class BasicGui extends Screen {
 
 	protected abstract void preButtonRender(int x, int y);
 
-	protected abstract void postButtonRender(int x, int y);
+	protected abstract void postButtonRender(int x, int y, int mouseX, int mouseY);
 
 	protected abstract Tuple<Integer, Integer> getAdjustedXYValue();
 

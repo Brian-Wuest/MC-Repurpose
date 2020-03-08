@@ -49,6 +49,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ClientProxy extends CommonProxy {
 	public ModConfiguration serverConfiguration = null;
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
+
 	/**
 	 * The hashmap of mod item guis.
 	 */
@@ -91,6 +92,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postinit(FMLCommonSetupEvent event) {
 		super.postinit(event);
+
+		ClientProxy.AddGuis();
 	}
 
 	@Override
@@ -158,45 +161,40 @@ public class ClientProxy extends CommonProxy {
 	@OnlyIn(Dist.CLIENT)
 	public static void RegisterBlockRenderer() {
 		// Register the block renderer.
-		Minecraft.getInstance().getBlockColors().register(new IBlockColor() {
-			public int getColor(BlockState state, IEnviromentBlockReader worldIn, BlockPos pos, int tintIndex) {
-				return worldIn != null && pos != null ? BiomeColors.getGrassColor(worldIn, pos)
-						: GrassColors.get(0.5D, 1.0D);
-			}
-		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs() });
+		Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> worldIn != null && pos != null
+				? BiomeColors.getGrassColor(worldIn, pos)
+				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs());
 
 		// Register the item renderer.
-		Minecraft.getInstance().getItemColors().register(new IItemColor() {
-			public int getColor(ItemStack stack, int tintIndex) {
-				// Get the item for this stack.
-				Item item = stack.getItem();
+		Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+			// Get the item for this stack.
+			Item item = stack.getItem();
 
-				if (item instanceof BlockItem) {
-					// Get the block for this item and determine if it's a grass stairs.
-					BlockItem itemBlock = (BlockItem) item;
-					boolean paintBlock = false;
+			if (item instanceof BlockItem) {
+				// Get the block for this item and determine if it's a grass stairs.
+				BlockItem itemBlock = (BlockItem) item;
+				boolean paintBlock = false;
 
-					if (itemBlock.getBlock() instanceof BlockCustomWall) {
-						BlockCustomWall customWall = (BlockCustomWall) itemBlock.getBlock();
+				if (itemBlock.getBlock() instanceof BlockCustomWall) {
+					BlockCustomWall customWall = (BlockCustomWall) itemBlock.getBlock();
 
-						if (customWall.BlockVariant == EnumType.GRASS) {
-							paintBlock = true;
-						}
-					} else if (itemBlock.getBlock() instanceof BlockGrassSlab) {
-						paintBlock = true;
-					} else if (itemBlock.getBlock() instanceof BlockGrassStairs) {
+					if (customWall.BlockVariant == EnumType.GRASS) {
 						paintBlock = true;
 					}
-
-					if (paintBlock) {
-						BlockPos pos = Minecraft.getInstance().player.getPosition();
-						ClientWorld world = Minecraft.getInstance().world;
-						return pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.get(0.5D, 1.0D);
-					}
+				} else if (itemBlock.getBlock() instanceof BlockGrassSlab) {
+					paintBlock = true;
+				} else if (itemBlock.getBlock() instanceof BlockGrassStairs) {
+					paintBlock = true;
 				}
 
-				return -1;
+				if (paintBlock) {
+					BlockPos pos = Minecraft.getInstance().player.getPosition();
+					ClientWorld world = Minecraft.getInstance().world;
+					return BiomeColors.getGrassColor(world, pos);
+				}
 			}
+
+			return -1;
 		}, new Block[] { ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs() });
 	}
 

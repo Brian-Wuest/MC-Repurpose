@@ -41,8 +41,9 @@ public class BlockMiniRedstone extends RedstoneBlock implements IModBlock {
 	 *             {@link IBlockState#getWeakPower(IBlockAccess,BlockPos,EnumFacing)}
 	 *             whenever possible. Implementing/overriding is fine.
 	 */
+	@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return 15;
+		return 8;
 	}
 
 	@Deprecated
