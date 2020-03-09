@@ -1,27 +1,14 @@
 package com.wuest.repurpose.Items;
 
-import java.util.HashSet;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.wuest.repurpose.ModRegistry;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -29,42 +16,46 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class ItemSickle extends ToolItem {
-	public static HashSet<Block> effectiveBlocks = ItemSickle.getEffectiveBlocks();
+	public static HashSet<Block> effectiveBlocks = new HashSet<>();
 	protected int breakRadius = 0;
 
-	public static HashSet<Block> getEffectiveBlocks() {
-		HashSet<Block> returnBlocks = new HashSet<>();
+	public static void setEffectiveBlocks() {
+		effectiveBlocks.clear();
 
-		returnBlocks.addAll(BlockTags.LEAVES.getAllElements());
-		returnBlocks.addAll(BlockTags.SMALL_FLOWERS.getAllElements());
-		returnBlocks.add(Blocks.TALL_GRASS);
-		returnBlocks.add(Blocks.DEAD_BUSH);
-		returnBlocks.add(Blocks.ROSE_BUSH);
-		returnBlocks.add(Blocks.PEONY);
-
-		return returnBlocks;
+		effectiveBlocks.addAll(BlockTags.LEAVES.getAllElements());
+		effectiveBlocks.addAll(BlockTags.SMALL_FLOWERS.getAllElements());
+		effectiveBlocks.add(Blocks.TALL_GRASS);
+		effectiveBlocks.add(Blocks.DEAD_BUSH);
+		effectiveBlocks.add(Blocks.ROSE_BUSH);
+		effectiveBlocks.add(Blocks.PEONY);
+		effectiveBlocks.add(Blocks.GRASS);
+		effectiveBlocks.add(Blocks.SEAGRASS);
+		effectiveBlocks.add(Blocks.TALL_SEAGRASS);
 	}
 
 	/**
-     * Initializes a new instance of the ItemSickle class.
-     * @param material The type of tool material.
-     * @param name The name to register.
-     */
-    public ItemSickle(IItemTier tier, String name)
-    {
-    	super(1.0f, -2.4000000953674316f, tier, effectiveBlocks, new Item.Properties());
-        this.breakRadius = 1 + tier.getHarvestLevel();
+	 * Initializes a new instance of the ItemSickle class.
+	 *
+	 * @param tier The type of tool material.
+	 * @param name The name to register.
+	 */
+	public ItemSickle(IItemTier tier, String name) {
+		super(1.0f, -2.4000000953674316f, tier, effectiveBlocks, new Item.Properties().group(ItemGroup.TOOLS));
+		this.breakRadius = 1 + tier.getHarvestLevel();
 
-        ModRegistry.setItemName(this, name);
-    }
+		ModRegistry.setItemName(this, name);
+	}
 
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
@@ -83,7 +74,7 @@ public class ItemSickle extends ToolItem {
 	 */
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos,
-			LivingEntity entityLiving) {
+									LivingEntity entityLiving) {
 		if (!worldIn.isRemote) {
 			stack.damageItem(1, entityLiving, (livingEntity) -> {
 				livingEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
@@ -123,7 +114,7 @@ public class ItemSickle extends ToolItem {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

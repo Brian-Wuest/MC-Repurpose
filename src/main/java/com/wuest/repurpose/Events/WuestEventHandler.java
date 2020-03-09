@@ -426,7 +426,7 @@ public class WuestEventHandler {
 				|| eventName.equals(EntityType.SKELETON.getRegistryName())
 				|| eventName.equals(EntityType.CREEPER.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "entities/" + eventName.getPath());
-		} else if (eventName.getPath().toLowerCase().contains("blocks/leaves")) {
+		} else if (eventName.getPath().toLowerCase().contains("_leaves")) {
 			boolean foundBlock = false;
 			for (Block block : BlockTags.LEAVES.getAllElements()) {
 				if (eventName.equals(block.getRegistryName())) {

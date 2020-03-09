@@ -1,6 +1,7 @@
 package com.wuest.repurpose;
 
 import com.wuest.repurpose.Events.HomeCommand;
+import com.wuest.repurpose.Items.ItemSickle;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.CommonProxy;
 
@@ -70,5 +71,7 @@ public class Repurpose
 		{	
 			HomeCommand.register(command.getDispatcher());
 		}
+
+		ItemSickle.setEffectiveBlocks();
 	}
 }

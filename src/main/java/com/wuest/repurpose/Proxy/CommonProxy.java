@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Proxy;
 
+import com.wuest.repurpose.Items.ItemSickle;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Config.ModConfiguration;
