@@ -14,7 +14,12 @@
             }
           ],
           "name": "minecraft:apple"
-        },
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "conditions": [

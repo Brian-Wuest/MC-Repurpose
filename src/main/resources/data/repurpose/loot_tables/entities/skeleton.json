@@ -1,5 +1,5 @@
 {
-	"type": "minecraft:block",
+	"type": "minecraft:entity",
 	"pools": [
 	  {
 		"rolls": 1,
@@ -13,7 +13,7 @@
 				"chance": -1
 			  }
 			],
-			"name": "minecraft:zombie_head"
+			"name": "minecraft:skeleton_skull"
 		  }
 		]
 	  }

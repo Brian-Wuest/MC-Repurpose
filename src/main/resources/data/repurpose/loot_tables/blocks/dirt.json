@@ -1,66 +1,86 @@
 {
-	"type": "minecraft:block",
-	"pools": [
-	  {
-		"rolls": 1,
-		"entries": [
-		  {
-			"type": "minecraft:item",
-			"conditions": [
-			  {
-				"condition": "repurpose:config_random_chance",
-				"option_name": "Beetroot Drop Chance",
-				"chance": -1
-			  }
-			],
-			"name": "minecraft:beetroot"
-		  },
-		  {
-			"type": "minecraft:item",
-			"conditions": [
-			  {
-				"condition": "repurpose:config_random_chance",
-				"option_name": "Potato Drop Chance",
-				"chance": -1
-			  }
-			],
-			"name": "minecraft:potato"
-		  },
-		  {
-			"type": "minecraft:item",
-			"conditions": [
-			  {
-				"condition": "repurpose:config_random_chance",
-				"option_name": "Carrot Drop Chance Name",
-				"chance": -1
-			  }
-			],
-			"name": "minecraft:carrot"
-		  },
-		  {
-			"type": "minecraft:item",
-			"conditions": [
-			  {
-				"condition": "repurpose:config_random_chance",
-				"option_name": "Bone Drop Chance",
-				"chance": -1
-			  }
-			],
-			"name": "minecraft:bone_meal"
-		  },
-		  {
-			"type": "minecraft:item",
-			"conditions": [
-			  {
-				"condition": "repurpose:config_random_chance",
-				"option_name": "Clay Item Drop Chance",
-				"chance": -1
-			  }
-			],
-			"name": "minecraft:clay_ball"
-		  }
-		]
-	  }
-	]
-  }
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Beetroot Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:beetroot"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Potato Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:potato"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Carrot Drop Chance Name",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:carrot"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Bone Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:bone_meal"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "repurpose:config_random_chance",
+              "option_name": "Clay Item Drop Chance",
+              "chance": -1
+            }
+          ],
+          "name": "minecraft:clay_ball"
+        }
+      ]
+    }
+  ]
+}
   

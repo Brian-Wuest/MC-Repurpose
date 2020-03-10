@@ -413,6 +413,14 @@ public class WuestEventHandler {
 	public static void onLootLoad(LootTableLoadEvent event) {
 		ResourceLocation newTable = null;
 		ResourceLocation eventName = event.getName();
+		String modID = eventName.getNamespace();
+		String path = eventName.getPath();
+
+		if (path.contains("/")) {
+			path = path.substring(path.lastIndexOf("/") + 1);
+		}
+
+		eventName = new ResourceLocation(modID, path);
 
 		if (eventName.equals(Blocks.DIRT.getRegistryName()) || eventName.equals(Blocks.GRASS_BLOCK.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "blocks/dirt");
@@ -429,7 +437,7 @@ public class WuestEventHandler {
 		} else if (eventName.getPath().toLowerCase().contains("_leaves")) {
 			boolean foundBlock = false;
 			for (Block block : BlockTags.LEAVES.getAllElements()) {
-				if (eventName.equals(block.getRegistryName())) {
+				if (eventName.getPath().equals(block.getRegistryName().getPath())) {
 					foundBlock = true;
 					break;
 				}

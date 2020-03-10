@@ -14,7 +14,12 @@
             }
           ],
           "name": "minecraft:flint"
-        },
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
@@ -25,7 +30,12 @@
             }
           ],
           "name": "minecraft:iron_nugget"
-        },
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
@@ -36,7 +46,12 @@
             }
           ],
           "name": "minecraft:gold_nugget"
-        },
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
