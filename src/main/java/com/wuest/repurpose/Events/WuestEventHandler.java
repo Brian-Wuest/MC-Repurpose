@@ -238,8 +238,14 @@ public class WuestEventHandler {
 						// Make sure this is the same class as the crop's seed.
 						if (dropItem.getClass() == seed.getClass() && replanted != ActionResultType.PASS) {
 							Direction facing = event.getFace();
-							ItemUseContext context = new ItemUseContext(p, event.getHand(),
-									new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.UP, farmlandPosition, false));
+
+							BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(
+									farmlandPosition.getX(),
+									farmlandPosition.up().getY(),
+									farmlandPosition.getZ()),
+								facing, farmlandPosition.up(), false);
+
+							ItemUseContext context = new CustomItemUseContext(event.getWorld(), p, event.getHand(), drop, rayTraceResult);
 							replanted = drop.onItemUse(context);
 
 							if (replanted == ActionResultType.SUCCESS || replanted == ActionResultType.PASS) {

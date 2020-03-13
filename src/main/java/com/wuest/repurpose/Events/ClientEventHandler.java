@@ -1,17 +1,10 @@
 package com.wuest.repurpose.Events;
 
-import java.awt.Color;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -24,11 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.SectionPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.NibbleArray;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -39,13 +29,18 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 /**
  * This class is used to handle client side only events.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
-@Mod.EventBusSubscriber(modid = Repurpose.MODID, value = { Dist.CLIENT })
+@Mod.EventBusSubscriber(modid = Repurpose.MODID, value = {Dist.CLIENT})
 public class ClientEventHandler {
 	public static ArrayList<KeyBinding> keyBindings = new ArrayList<KeyBinding>();
 	public static LocalDateTime bedCompassTime;
@@ -63,7 +58,7 @@ public class ClientEventHandler {
 	/**
 	 * This event is called by GuiIngameForge during each frame by
 	 * GuiIngameForge.pre() and GuiIngameForce.post().
-	 * 
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -86,7 +81,7 @@ public class ClientEventHandler {
 	/**
 	 * This event is called by GuiIngameForge during each frame by
 	 * GuiIngameForge.pre() and GuiIngameForce.post().
-	 * 
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -290,7 +285,7 @@ public class ClientEventHandler {
 	/**
 	 * This method is used to create light around the player when they are holding a
 	 * light-source block.
-	 * 
+	 *
 	 * @param event The Player Tick Event
 	 */
 	private static void setPlayerLight(TickEvent.PlayerTickEvent event) {
@@ -327,40 +322,27 @@ public class ClientEventHandler {
 				}
 
 				if (foundLightBlock) {
-					NibbleArray array = new NibbleArray();
-					array.set(pos.getX(), pos.getY(), pos.getZ(), 12);
-
-					world.getChunkProvider().getLightManager().setData(LightType.BLOCK, SectionPos.from(pos), array);
-
-					// System.out.println("Light Level: " +
-					// ((Integer)world.getLightFor(EnumSkyBlock.BLOCK,
-					// pos)).toString());
+					// Decreases total light value for this position from max by 3.
+					world.getChunkProvider().getLightManager().func_215573_a(pos, 3);
 				} else {
-					NibbleArray array = new NibbleArray();
-					array.set(pos.getX(), pos.getY(), pos.getZ(), 0);
-
-					world.getChunkProvider().getLightManager().setData(LightType.BLOCK, SectionPos.from(originalPos),
-							array);
+					// Decreases total light value for this position from max to nothing.
+					world.getChunkProvider().getLightManager().func_215573_a(pos, 15);
 				}
 			}
 
 			world.markChunkDirty(originalPos, null);
 			world.notifyBlockUpdate(originalPos, world.getBlockState(originalPos), world.getBlockState(originalPos), 3);
 
-			for (BlockPos otherPos : (BlockPos[]) BlockPos.getAllInBox(prevPos, pos).toArray()) {
+			for (BlockPos otherPos : BlockPos.getAllInBoxMutable(prevPos, pos)) {
 				// Don't update for the current position.
-				if (originalPos.getX() == otherPos.getX() && originalPos.getY() == otherPos.getY()
-						&& originalPos.getZ() == otherPos.getZ()) {
-					continue;
-				} else {
+				if (!(originalPos.getX() == otherPos.getX() && originalPos.getY() == otherPos.getY()
+						&& originalPos.getZ() == otherPos.getZ())) {
 					world.getChunkProvider().getLightManager().checkBlock(otherPos);
 				}
 			}
 		} else {
-			NibbleArray array = new NibbleArray();
-			array.set(pos.getX(), pos.getY(), pos.getZ(), 0);
-
-			world.getChunkProvider().getLightManager().setData(LightType.BLOCK, SectionPos.from(originalPos), array);
+			// Decreases total light value for this position from max to nothing.
+			world.getChunkProvider().getLightManager().func_215573_a(pos, 15);
 
 			world.getChunkProvider().getLightManager().checkBlock(originalPos);
 		}
@@ -512,9 +494,8 @@ public class ClientEventHandler {
 
 	/**
 	 * This class is used to hold information stored about a player's step assist.
-	 * 
-	 * @author WuestMan
 	 *
+	 * @author WuestMan
 	 */
 	public static class StepAssistInfo {
 		public float oldStepHeight = 0.0F;
