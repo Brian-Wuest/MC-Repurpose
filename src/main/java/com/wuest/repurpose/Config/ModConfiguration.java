@@ -27,9 +27,7 @@ public class ModConfiguration {
 	public static String enableGrassSpreadToCustomDirtName = "Enable Grass Spreading To Custom Dirt";
 	public static String enableVersionCheckMessageName = "Enable Version Checking";
 	public static String enableStepAssistEnchantmentName = "Enable Step Assist Enchantment";
-	public static String enableFlatBedrockGenerationName = "Enable Flat Bedrock Generation";
 	public static String enableVerboseLogginName = "Enable Verbose Logging";
-	public static String enableMobileLightName = "Enable Mobile Light";
 
 	public static String diamondShardDropChanceName = "Diamond Shard Drop Chance";
 
@@ -107,7 +105,6 @@ public class ModConfiguration {
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableStepAssistEnchantment;
-	public boolean enableFlatBedrockGeneration;
 	public boolean enableVerboseLogging;
 
 	public HashMap<String, Boolean> recipeConfiguration;
@@ -139,7 +136,6 @@ public class ModConfiguration {
 		this.enableHomeCommand = true;
 		this.enableGrassSpreadToCustomDirt = true;
 		this.recipeConfiguration = new HashMap<String, Boolean>();
-		this.enableFlatBedrockGeneration = true;
 	}
 
 	public ModConfiguration(ForgeConfigSpec.Builder builder) {
@@ -162,10 +158,6 @@ public class ModConfiguration {
 		proxyConfiguration.configFileSettings.enableGrassSpreadToCustomDirt = builder.comment(
 				"Determines if grass will spread to the custom dirt blocks added by this mod. Sever configuration overrides client.")
 				.define(ModConfiguration.OPTIONS + ModConfiguration.enableGrassSpreadToCustomDirtName, true);
-
-		proxyConfiguration.configFileSettings.enableFlatBedrockGeneration = builder
-				.comment("Determines if overworld bedrock is flat. Server configuration overrides client.")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableFlatBedrockGenerationName, true);
 
 		proxyConfiguration.configFileSettings.enableVerboseLogging = builder.comment(
 				"Determines if more events are printed to the minecraft log. Only use this when submitting a log for an issue. Only a few areas will have this functionality enabled.")
@@ -290,8 +282,6 @@ public class ModConfiguration {
 				.get();
 		proxyConfiguration.enableStepAssistEnchantment = proxyConfiguration.configFileSettings.enableStepAssistEnchantment
 				.get();
-		proxyConfiguration.enableFlatBedrockGeneration = proxyConfiguration.configFileSettings.enableFlatBedrockGeneration
-				.get();
 		proxyConfiguration.enableVerboseLogging = proxyConfiguration.configFileSettings.enableVerboseLogging.get();
 
 		proxyConfiguration.diamondShardDropChance = proxyConfiguration.configFileSettings.diamondShardDropChance.get();
@@ -329,7 +319,6 @@ public class ModConfiguration {
 		tag.putBoolean(ModConfiguration.enableHomeCommandName, this.enableHomeCommand);
 		tag.putBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
 		tag.putBoolean(ModConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
-		tag.putBoolean(ModConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
 		tag.putBoolean(ModConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
 
 		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet()) {
@@ -368,7 +357,6 @@ public class ModConfiguration {
 		config.enableGrassSpreadToCustomDirt = tag.getBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName);
 		config.enableStepAssistEnchantment = tag.getBoolean(ModConfiguration.enableStepAssistEnchantmentName);
 
-		config.enableFlatBedrockGeneration = tag.getBoolean(ModConfiguration.enableFlatBedrockGenerationName);
 		config.enableVerboseLogging = tag.getBoolean(ModConfiguration.enableVerboseLogginName);
 
 		config.diamondShardDropChance = tag.getInt(ModConfiguration.diamondShardDropChanceName);
@@ -404,7 +392,6 @@ public class ModConfiguration {
 		public BooleanValue enableHomeCommand;
 		public BooleanValue enableGrassSpreadToCustomDirt;
 		public BooleanValue enableStepAssistEnchantment;
-		public BooleanValue enableFlatBedrockGeneration;
 		public BooleanValue enableVerboseLogging;
 
 		public HashMap<String, BooleanValue> recipeConfiguration;
