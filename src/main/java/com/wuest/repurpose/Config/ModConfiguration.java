@@ -109,7 +109,6 @@ public class ModConfiguration {
 	public boolean enableStepAssistEnchantment;
 	public boolean enableFlatBedrockGeneration;
 	public boolean enableVerboseLogging;
-	public boolean enableMobileLight;
 
 	public HashMap<String, Boolean> recipeConfiguration;
 
@@ -141,7 +140,6 @@ public class ModConfiguration {
 		this.enableGrassSpreadToCustomDirt = true;
 		this.recipeConfiguration = new HashMap<String, Boolean>();
 		this.enableFlatBedrockGeneration = true;
-		this.enableMobileLight = true;
 	}
 
 	public ModConfiguration(ForgeConfigSpec.Builder builder) {
@@ -172,10 +170,6 @@ public class ModConfiguration {
 		proxyConfiguration.configFileSettings.enableVerboseLogging = builder.comment(
 				"Determines if more events are printed to the minecraft log. Only use this when submitting a log for an issue. Only a few areas will have this functionality enabled.")
 				.define(ModConfiguration.OPTIONS + ModConfiguration.enableVerboseLogginName, false);
-
-		proxyConfiguration.configFileSettings.enableMobileLight = builder.comment(
-				"Determines if light source blocks will illuminate the player's area when held in either hand. This does not affect monster generation. Server overrides client.")
-				.define(ModConfiguration.OPTIONS + ModConfiguration.enableMobileLightName, false);
 
 		proxyConfiguration.configFileSettings.enableStepAssistEnchantment = builder.comment(
 				"Determines if the Step Assist family of enchantments is enabled. \r\nRequires World Restart. Server Configuration overrides client.")
@@ -299,7 +293,6 @@ public class ModConfiguration {
 		proxyConfiguration.enableFlatBedrockGeneration = proxyConfiguration.configFileSettings.enableFlatBedrockGeneration
 				.get();
 		proxyConfiguration.enableVerboseLogging = proxyConfiguration.configFileSettings.enableVerboseLogging.get();
-		proxyConfiguration.enableMobileLight = proxyConfiguration.configFileSettings.enableMobileLight.get();
 
 		proxyConfiguration.diamondShardDropChance = proxyConfiguration.configFileSettings.diamondShardDropChance.get();
 
@@ -338,7 +331,6 @@ public class ModConfiguration {
 		tag.putBoolean(ModConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
 		tag.putBoolean(ModConfiguration.enableFlatBedrockGenerationName, this.enableFlatBedrockGeneration);
 		tag.putBoolean(ModConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
-		tag.putBoolean(ModConfiguration.enableMobileLightName, this.enableMobileLight);
 
 		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet()) {
 			tag.putBoolean(entry.getKey(), entry.getValue());
@@ -378,7 +370,6 @@ public class ModConfiguration {
 
 		config.enableFlatBedrockGeneration = tag.getBoolean(ModConfiguration.enableFlatBedrockGenerationName);
 		config.enableVerboseLogging = tag.getBoolean(ModConfiguration.enableVerboseLogginName);
-		config.enableMobileLight = tag.getBoolean(ModConfiguration.enableMobileLightName);
 
 		config.diamondShardDropChance = tag.getInt(ModConfiguration.diamondShardDropChanceName);
 
@@ -415,7 +406,6 @@ public class ModConfiguration {
 		public BooleanValue enableStepAssistEnchantment;
 		public BooleanValue enableFlatBedrockGeneration;
 		public BooleanValue enableVerboseLogging;
-		public BooleanValue enableMobileLight;
 
 		public HashMap<String, BooleanValue> recipeConfiguration;
 

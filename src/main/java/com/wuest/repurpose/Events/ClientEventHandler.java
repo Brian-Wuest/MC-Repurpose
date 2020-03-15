@@ -18,7 +18,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.minecraft.world.lighting.BlockLightEngine;
+import net.minecraft.world.lighting.LightEngine;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -30,6 +33,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,10 +187,6 @@ public class ClientEventHandler {
 		if (event.side.isClient()) {
 			if (event.phase == Phase.START) {
 				ClientEventHandler.setStepHeight(event);
-
-				if (Repurpose.proxy.getServerConfiguration().enableMobileLight) {
-					ClientEventHandler.setPlayerLight(event);
-				}
 			}
 		}
 	}
@@ -282,71 +283,6 @@ public class ClientEventHandler {
 		}
 	}
 
-	/**
-	 * This method is used to create light around the player when they are holding a
-	 * light-source block.
-	 *
-	 * @param event The Player Tick Event
-	 */
-	private static void setPlayerLight(TickEvent.PlayerTickEvent event) {
-		World world = event.player.world;
-		PlayerEntity player = event.player;
-		BlockPos originalPos = new BlockPos(player.posX, player.posY + 1, player.posZ);
-		BlockPos pos = new BlockPos(player.posX, player.posY + 1, player.posZ);
-		BlockPos prevPos = pos.north(2).east(2).up(3);
-		pos = pos.south(1).west(2).down(3);
-
-		if (event.player.getHealth() > 0.0F) {
-			ItemStack mainHandStack = player.getHeldItemMainhand();
-			ItemStack offHandStack = player.getHeldItemOffhand();
-
-			if (mainHandStack != ItemStack.EMPTY || mainHandStack != ItemStack.EMPTY) {
-				Block mainBlock = null;
-				Block offHandBlock = null;
-				boolean foundLightBlock = false;
-
-				if (mainHandStack != ItemStack.EMPTY) {
-					mainBlock = Block.getBlockFromItem(mainHandStack.getItem());
-
-					if (mainBlock != null && mainBlock.getLightValue(mainBlock.getDefaultState()) > 0) {
-						foundLightBlock = true;
-					}
-				}
-
-				if (offHandStack != ItemStack.EMPTY && !foundLightBlock) {
-					offHandBlock = Block.getBlockFromItem(offHandStack.getItem());
-
-					if (offHandBlock != null && offHandBlock.getLightValue(mainBlock.getDefaultState()) > 0) {
-						foundLightBlock = true;
-					}
-				}
-
-				if (foundLightBlock) {
-					// Decreases total light value for this position from max by 3.
-					world.getChunkProvider().getLightManager().func_215573_a(pos, 3);
-				} else {
-					// Decreases total light value for this position from max to nothing.
-					world.getChunkProvider().getLightManager().func_215573_a(pos, 15);
-				}
-			}
-
-			world.markChunkDirty(originalPos, null);
-			world.notifyBlockUpdate(originalPos, world.getBlockState(originalPos), world.getBlockState(originalPos), 3);
-
-			for (BlockPos otherPos : BlockPos.getAllInBoxMutable(prevPos, pos)) {
-				// Don't update for the current position.
-				if (!(originalPos.getX() == otherPos.getX() && originalPos.getY() == otherPos.getY()
-						&& originalPos.getZ() == otherPos.getZ())) {
-					world.getChunkProvider().getLightManager().checkBlock(otherPos);
-				}
-			}
-		} else {
-			// Decreases total light value for this position from max to nothing.
-			world.getChunkProvider().getLightManager().func_215573_a(pos, 15);
-
-			world.getChunkProvider().getLightManager().checkBlock(originalPos);
-		}
-	}
 
 	private static void setStepHeight(TickEvent.PlayerTickEvent event) {
 		PlayerEntity player = event.player;
