@@ -10,22 +10,17 @@ import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -45,6 +40,21 @@ public class ItemBagOfHolding extends Item {
 
 	public ItemBagOfHolding(String name) {
 		super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1));
+
+		// This will determine what model is shown to the user when the bag is opened or closed.
+		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID,"bag_of_holding"), new IItemPropertyGetter() {
+
+			@OnlyIn(Dist.CLIENT)
+			public float call(ItemStack itemStack, @Nullable World world, @Nullable LivingEntity entity) {
+				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(itemStack);
+
+				if (handler.opened) {
+					return 1f;
+				}
+
+				return  0f;
+			}
+		});
 
 		ModRegistry.setItemName(this, name);
 	}

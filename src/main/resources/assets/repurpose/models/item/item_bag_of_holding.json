@@ -1,6 +1,20 @@
 {
-	"parent": "item/handheld",
-	"textures": {
-		"layer0": "repurpose:items/item_bag_of_holding_closed"
-	}
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "repurpose:items/item_bag_of_holding_closed"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "repurpose:bag_of_holding": 0.0000000
+      },
+      "model": "repurpose:item/item_bag_of_holding"
+    },
+    {
+      "predicate": {
+        "repurpose:bag_of_holding": 1.0000000
+      },
+      "model": "repurpose:item/item_bag_of_holding_opened"
+    }
+  ]
 }
