@@ -294,13 +294,13 @@ public class ClientEventHandler {
 		// auto-jump was enabled.
 		// If it was, re-set their step height to the original step height and remove
 		// them from the hashset.
-		if (ClientEventHandler.playerStepAssists.containsKey(player.getName())
+		if (ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText())
 				&& (bootsStack == null || !bootsStack.isEnchanted() || Minecraft.getInstance().gameSettings.autoJump)) {
 			// Reset the player step height to the original step height and remove this
 			// record from the hashset.
-			StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName());
+			StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName().getFormattedText());
 			player.stepHeight = info.oldStepHeight;
-			ClientEventHandler.playerStepAssists.remove(player.getName());
+			ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
 			return;
 		}
 
@@ -310,7 +310,7 @@ public class ClientEventHandler {
 		// the configuration.
 		if (!Minecraft.getInstance().gameSettings.autoJump
 				&& Repurpose.proxy.getServerConfiguration().enableStepAssistEnchantment) {
-			if (ClientEventHandler.playerStepAssists.containsKey(player.getName()) && bootsStack != null
+			if (ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText()) && bootsStack != null
 					&& bootsStack.isEnchanted()) {
 				// The player was in the list and still has boots. Make sure they have the
 				// enchantment.
@@ -318,7 +318,7 @@ public class ClientEventHandler {
 				// the difference between
 				// the old step height and the new step height.
 				boolean foundStepAssist = false;
-				StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName());
+				StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName().getFormattedText());
 
 				for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet()) {
 					if (entry.getKey() instanceof EnchantmentStepAssist) {
@@ -346,7 +346,7 @@ public class ClientEventHandler {
 
 							if (player.stepHeight < 0.0F) {
 								player.stepHeight = 0.0F;
-								ClientEventHandler.playerStepAssists.remove(player.getName());
+								ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
 							}
 						}
 
@@ -363,9 +363,9 @@ public class ClientEventHandler {
 						player.stepHeight = 0.0F;
 					}
 
-					ClientEventHandler.playerStepAssists.remove(player.getName());
+					ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
 				}
-			} else if (!ClientEventHandler.playerStepAssists.containsKey(player.getName()) && bootsStack != null
+			} else if (!ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText()) && bootsStack != null
 					&& bootsStack.isEnchanted()) {
 				// The player has equipped enchanted boots.
 				for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet()) {
