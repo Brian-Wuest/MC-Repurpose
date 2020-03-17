@@ -8,6 +8,7 @@ import com.wuest.repurpose.Crafting.RecipeCondition;
 import com.wuest.repurpose.Crafting.SmeltingCondition;
 import com.wuest.repurpose.Loot.Conditions.ConfigRandomChance;
 
+import net.minecraft.inventory.container.Container;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.BlockState;
@@ -76,7 +77,7 @@ public class CommonProxy {
 	public void postinit(FMLCommonSetupEvent event) {
 	}
 
-	public void openGuiForItem(ItemUseContext itemUseContext) {
+	public void openGuiForItem(ItemUseContext itemUseContext, Container container) {
 	}
 
 	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {

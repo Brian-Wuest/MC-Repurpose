@@ -3,6 +3,7 @@ package com.wuest.repurpose.Items.Containers;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.sun.org.apache.bcel.internal.generic.RET;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
@@ -19,7 +20,9 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,17 +37,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public class BagOfHoldingContainer extends Container {
 	private ItemBagOfHoldingProvider inventory;
 	private PlayerInventory playerInventory;
-	private final NonNullList<ItemStack> inventoryItemStacks = NonNullList.create();
-	private final List<IContainerListener> modListeners = Lists.newArrayList();
 
 	public static ContainerType<BagOfHoldingContainer> containerType = new ContainerType<>(BagOfHoldingContainer::new);
 
-	public BagOfHoldingContainer(int windowId, PlayerInventory playerInventory) {
-		this(playerInventory);
+	public static BagOfHoldingContainer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer buf) {
+		return new BagOfHoldingContainer(windowId, inv);
 	}
 
-	public BagOfHoldingContainer(PlayerInventory playerInventory) {
-		super(BagOfHoldingContainer.containerType, GuiItemBagOfHolding.GUI_ID);
+	public BagOfHoldingContainer(int windowId, PlayerInventory playerInventory) {
+		super(BagOfHoldingContainer.containerType, windowId);
 		int xPos = 8;
 		int yPos = 18;
 		int iid = 0;
@@ -100,36 +101,6 @@ public class BagOfHoldingContainer extends Container {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Adds an item slot to this container
-	 */
-	@Override
-	protected Slot addSlot(Slot slotIn) {
-		slotIn.slotNumber = this.inventorySlots.size();
-		this.inventorySlots.add(slotIn);
-		this.inventoryItemStacks.add(ItemStack.EMPTY);
-		return slotIn;
-	}
-
-	@Override
-	public void addListener(IContainerListener listener) {
-		if (!this.modListeners.contains(listener)) {
-			this.modListeners.add(listener);
-
-			super.addListener(listener);
-		}
-	}
-
-	/**
-	 * Remove the given Listener. Method name is for legacy.
-	 */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void removeListener(IContainerListener listener) {
-		this.modListeners.remove(listener);
-		super.removeListener(listener);
 	}
 
 	/**
@@ -197,24 +168,22 @@ public class BagOfHoldingContainer extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		boolean foundChangesToSend = false;
+
+		// Only do the evaulation on whether or not the inventory has changed. Let the base method update the inventory and notify the listeners.
 		for (int i = 0; i < this.inventorySlots.size(); ++i) {
-			ItemStack itemstack = ((Slot) this.inventorySlots.get(i)).getStack();
+			ItemStack itemstack = this.inventorySlots.get(i).getStack();
 			ItemStack itemstack1 = this.inventoryItemStacks.get(i);
 
 			if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
-				boolean clientStackChanged = !ItemStack.areItemStackTagsEqual(itemstack1, itemstack);
-				itemstack1 = itemstack.isEmpty() ? ItemStack.EMPTY : itemstack.copy();
-				this.inventoryItemStacks.set(i, itemstack1);
+				foundChangesToSend = !itemstack1.equals(itemstack, true);
 
-				if (clientStackChanged) {
-					for (int j = 0; j < this.modListeners.size(); ++j) {
-						((IContainerListener) this.modListeners.get(j)).sendSlotContents(this, i, itemstack1);
-					}
-
-					foundChangesToSend = true;
+				if (foundChangesToSend) {
+					break;
 				}
 			}
 		}
+
+		super.detectAndSendChanges();
 
 		if (foundChangesToSend) {
 			this.UpdateStack();

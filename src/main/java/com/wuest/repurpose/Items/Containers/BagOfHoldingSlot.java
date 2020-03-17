@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Items.Containers;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -18,5 +19,12 @@ public class BagOfHoldingSlot extends SlotItemHandler {
 		// Don't allow block containers, bags of holding or anything which has an
 		// item_handler_capability into this slot.
 		return BagOfHoldingContainer.validForContainer(stack);
+	}
+
+	@Override
+	public boolean canTakeStack(PlayerEntity playerIn)
+	{
+		// Always allow the player to take the stack.
+		return true;
 	}
 }

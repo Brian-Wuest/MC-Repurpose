@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
@@ -30,6 +31,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,7 +46,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy extends CommonProxy {
 	public ModConfiguration serverConfiguration = null;
@@ -62,6 +66,8 @@ public class ClientProxy extends CommonProxy {
 
 	public ClientProxy() {
 		super();
+
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 	}
 
 		/**
@@ -85,8 +91,6 @@ public class ClientProxy extends CommonProxy {
 		// any necessary renderer.
 		Repurpose.proxy.registerRenderers();
 		this.RegisterEventListeners();
-
-		this.RegisterKeyBindings();
 	}
 
 	@Override
@@ -94,6 +98,10 @@ public class ClientProxy extends CommonProxy {
 		super.postinit(event);
 
 		ClientProxy.AddGuis();
+	}
+
+	private void clientSetup(FMLClientSetupEvent event) {
+		this.RegisterKeyBindings();
 	}
 
 	@Override
@@ -107,15 +115,9 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void openGuiForItem(ItemUseContext itemUseContext) {
+	public void openGuiForItem(ItemUseContext itemUseContext, Container container) {
 		ItemStack stack = itemUseContext.getPlayer().getHeldItemOffhand();
 		Screen screenToShow = null;
-
-		if (stack.getItem() == ModRegistry.BagofHolding())
-		{
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-			screenToShow = new GuiItemBagOfHolding(handler, itemUseContext.getPlayer());
-		}
 		
 		Minecraft.getInstance().displayGuiScreen(screenToShow);
 	}

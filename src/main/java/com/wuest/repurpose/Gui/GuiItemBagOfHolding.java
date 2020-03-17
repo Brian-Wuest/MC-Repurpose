@@ -6,7 +6,12 @@ import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.items.IItemHandler;
 
@@ -15,12 +20,22 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 
 	private IItemHandler itemHandler;
 
-	public GuiItemBagOfHolding(IItemHandler itemHandler, PlayerEntity p) {
-		super(new BagOfHoldingContainer(p.inventory), p.inventory, new StringTextComponent("Bag of Holding"));
+	public GuiItemBagOfHolding(BagOfHoldingContainer container, PlayerInventory itemHandler, ITextComponent textComponent) {
+		super(container, itemHandler, new StringTextComponent("Bag of Holding"));
 
 		this.xSize = 175;
 		this.ySize = 221;
-		this.itemHandler = itemHandler;
+		ItemStack offHandStack = itemHandler.offHandInventory.get(0);
+
+		ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(offHandStack);
+
+		this.itemHandler = handler;
+	}
+
+	@Override
+	protected void init() {
+		super.init();
+		this.minecraft.player.openContainer = this.getContainer();
 	}
 
 	/**
@@ -28,9 +43,11 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	 */
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+		if (this.minecraft != null) {
+			this.renderBackground();
+			super.render(mouseX, mouseY, partialTicks);
+			this.renderHoveredToolTip(mouseX, mouseY);
+		}
 	}
 
 	/**

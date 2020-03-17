@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
@@ -13,6 +14,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
@@ -27,6 +33,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 /**
  * 
@@ -75,7 +82,20 @@ public class ItemBagOfHolding extends Item {
 			BlockRayTraceResult result = ItemBagOfHolding.rayTrace(player, 5.0, 1.0f);
 
 			if (result.getType() == Type.MISS) {
-				Repurpose.proxy.openGuiForItem(new ItemUseContext(player, hand, result));
+
+				// The consumer specified here is the "openMenu" method.
+				INamedContainerProvider container = new SimpleNamedContainerProvider((windowId, playerInventory, playerEntity) ->
+						new BagOfHoldingContainer(windowId, playerInventory), new StringTextComponent(ModRegistry.BagofHolding().getRegistryName().toString()));
+
+				NetworkHooks.openGui((ServerPlayerEntity) player, container, buf -> {
+				});
+
+				/*BagOfHoldingContainer container = new BagOfHoldingContainer(player.inventory);
+
+				container.addListener((ServerPlayerEntity)player);
+				player.openContainer = container;
+
+				Repurpose.proxy.openGuiForItem(new ItemUseContext(player, hand, result), container);*/
 				/*
 				 * player.openGui(Repurpose.instance, GuiItemBagOfHolding.GUI_ID, world,
 				 * player.getPosition().getX(), player.getPosition().getY(),
