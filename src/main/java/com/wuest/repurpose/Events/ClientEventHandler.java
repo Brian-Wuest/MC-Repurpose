@@ -5,7 +5,6 @@ import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
 import com.wuest.repurpose.Repurpose;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
@@ -18,12 +17,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
-import net.minecraft.world.lighting.BlockLightEngine;
-import net.minecraft.world.lighting.LightEngine;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.TickEvent;
@@ -33,8 +29,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,8 +134,9 @@ public class ClientEventHandler {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-	public void KeyInput(KeyInputEvent event) {
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	@OnlyIn(Dist.CLIENT)
+	public static void KeyInput(InputEvent.KeyInputEvent event) {
 		for (KeyBinding binding : ClientEventHandler.keyBindings) {
 			if (binding.isPressed()) {
 				boolean foundModifier = false;
