@@ -5,6 +5,7 @@ import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -15,8 +16,8 @@ import net.minecraft.item.ItemStack;
 public class ItemBlockBurnable extends BlockItem {
 	private int burnTime;
 
-	public ItemBlockBurnable(Block block) {
-		super(block, new Item.Properties());
+	public ItemBlockBurnable(Block block, ItemGroup itemGroup) {
+		super(block, new Item.Properties().group(itemGroup));
 		ModRegistry.setItemName(this, block.getRegistryName().getPath());
 	}
 
@@ -30,7 +31,8 @@ public class ItemBlockBurnable extends BlockItem {
 	 *         it not act as a fuel. Return -1 to let the default vanilla logic
 	 *         decide.
 	 */
-	public int getItemBurnTime(ItemStack itemStack) {
+	@Override
+	public int getBurnTime(ItemStack itemStack) {
 		return this.burnTime;
 	}
 }

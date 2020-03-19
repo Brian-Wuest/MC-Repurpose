@@ -54,14 +54,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemTier;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -333,7 +330,7 @@ public class ModRegistry {
 
 		// Charcoal block.
 		Block block = new BlockCharcoal("block_charcoal");
-		BlockItem itemBlock = (new ItemBlockBurnable(block)).setBurnTime(16000);
+		BlockItem itemBlock = (new ItemBlockBurnable(block, ItemGroup.MISC)).setBurnTime(16000);
 		ModRegistry.registerBlock(block, itemBlock);
 
 		// Scroll
