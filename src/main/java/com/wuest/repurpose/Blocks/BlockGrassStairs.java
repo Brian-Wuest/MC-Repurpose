@@ -26,24 +26,4 @@ public class BlockGrassStairs extends StairsBlock implements IModBlock {
 
 		ModRegistry.setBlockName(this, "block_grass_stairs");
 	}
-
-	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		List<ItemStack> drops = super.getDrops(state, builder);
-
-		if (drops.size() > 0) {
-			ItemStack tool = builder.get(LootParameters.TOOL);
-			int silklevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool);
-
-			drops.clear();
-
-			if (silklevel > 0) {
-				drops.add(new ItemStack(ModRegistry.GrassStairs()));
-			} else {
-				drops.add(new ItemStack(ModRegistry.DirtStairs()));
-			}
-		}
-
-		return drops;
-	}
 }

@@ -25,26 +25,6 @@ public class BlockGrassSlab extends SlabBlock implements IModBlock {
 		ModRegistry.setBlockName(this, "block_grass_slab");
 	}
 
-	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		List<ItemStack> drops = super.getDrops(state, builder);
-
-		if (drops.size() > 0) {
-			ItemStack tool = builder.get(LootParameters.TOOL);
-			int silklevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool);
-
-			drops.clear();
-
-			if (silklevel > 0) {
-				drops.add(new ItemStack(ModRegistry.GrassSlab()));
-			} else {
-				drops.add(new ItemStack(ModRegistry.DirtSlab()));
-			}
-		}
-
-		return drops;
-	}
-
 	/**
 	 * Gets the render layer this block will render on. SOLID for solid blocks, CUTOUT or CUTOUT_MIPPED for on-off
 	 * transparency (glass, reeds), TRANSLUCENT for fully blended transparency (stained glass)

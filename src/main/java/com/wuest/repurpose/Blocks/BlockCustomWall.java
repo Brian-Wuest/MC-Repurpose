@@ -98,26 +98,6 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		List<ItemStack> drops = super.getDrops(state, builder);
-
-		if (drops.size() > 0) {
-			ItemStack tool = builder.get(LootParameters.TOOL);
-			int silklevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool);
-
-			drops.clear();
-
-			if (silklevel > 0) {
-				drops.add(new ItemStack(ModRegistry.GrassWall()));
-			} else {
-				drops.add(new ItemStack(ModRegistry.DirtWall()));
-			}
-		}
-
-		return drops;
-	}
-
-	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		super.fillStateContainer(builder);
 		builder.add(BlockCustomWall.VARIANT);
