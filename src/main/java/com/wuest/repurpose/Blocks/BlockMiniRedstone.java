@@ -26,7 +26,7 @@ public class BlockMiniRedstone extends RedstoneBlock implements IModBlock {
 	 * Initializes a new instance of the BlockMiniRedstone.
 	 */
 	public BlockMiniRedstone() {
-		super(Block.Properties.create(Material.IRON, MaterialColor.TNT).harvestLevel(0).harvestTool(null)
+		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT)
 				.hardnessAndResistance(.5f, 10.0f).sound(SoundType.METAL));
 
 		ModRegistry.setBlockName(this, "block_mini_redstone");

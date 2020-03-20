@@ -15,8 +15,8 @@ public class BlockCharcoal extends Block implements IModBlock
 {
 	public BlockCharcoal(String name)
 	{
-		super(Block.Properties.create(Material.ROCK)
-		.hardnessAndResistance(5.0F, 10.0F)
+		super(Block.Properties.create(Material.CLAY)
+		.hardnessAndResistance(.5F, 10.0F)
 		.sound(SoundType.STONE));
 
 		ModRegistry.setBlockName(this, name);
