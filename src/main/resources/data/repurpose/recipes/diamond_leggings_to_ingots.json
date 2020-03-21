@@ -1,0 +1,16 @@
+{
+  "conditions": [
+    {
+      "type": "repurpose:smelting_recipe",
+      "recipeKey": "armor_recipes"
+    }
+  ],
+  "type": "repurpose:extended_smelting",
+  "ingredient": {
+    "item": "minecraft:diamond_leggings"
+  },
+  "result": "minecraft:diamond",
+  "experience": 1.0,
+  "cookingtime": 200,
+  "resultcount": 7
+}

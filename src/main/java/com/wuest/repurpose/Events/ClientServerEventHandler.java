@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Events;
 
+import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
@@ -12,12 +13,14 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -48,6 +51,18 @@ public class ClientServerEventHandler {
 				new EquipmentSlotType[]{EquipmentSlotType.FEET});
 
 		event.getRegistry().register(ModRegistry.stepAssist);
+	}
+
+	@SubscribeEvent
+	public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+		IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+
+		ExtendedCookingRecipeSerializer serializer = new ExtendedCookingRecipeSerializer(200);
+		serializer.setRegistryName(Repurpose.MODID, "extended_smelting");
+
+		ModRegistry.ExtendedSmelting = serializer;
+
+		registry.register(serializer);
 	}
 
 	@SubscribeEvent

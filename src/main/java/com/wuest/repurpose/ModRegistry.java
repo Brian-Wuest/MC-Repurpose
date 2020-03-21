@@ -20,6 +20,7 @@ import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
+import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemBedCompass;
@@ -76,6 +77,7 @@ public class ModRegistry {
 	public static ArrayList<Item> ModItems = new ArrayList<Item>();
 	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
 	public static Map<String, Boolean> FoundMaterials = new HashMap<String, Boolean>();
+	public static ExtendedCookingRecipeSerializer ExtendedSmelting = null;
 
 	public static EnchantmentStepAssist stepAssist;
 

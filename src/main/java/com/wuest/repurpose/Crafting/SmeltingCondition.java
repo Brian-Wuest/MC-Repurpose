@@ -1,8 +1,8 @@
 package com.wuest.repurpose.Crafting;
 
 import com.google.gson.JsonObject;
+import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -10,9 +10,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import java.util.HashMap;
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class SmeltingCondition implements ICondition {
 	public static final ResourceLocation NAME = new ResourceLocation(Repurpose.MODID, "smelting_recipe");
@@ -37,7 +35,7 @@ public class SmeltingCondition implements ICondition {
 
 	/**
 	 * Determines if the recipe is active.
-	 * 
+	 *
 	 * @return True if the recipe is active, otherwise false.
 	 */
 	public boolean determineActiveRecipe() {
@@ -47,9 +45,13 @@ public class SmeltingCondition implements ICondition {
 			if (this.identifier.equals("flesh_to_leather")) {
 				HashMap<String, Boolean> recipeConfiguration = Repurpose.proxy.getServerConfiguration().recipeConfiguration;
 
-				if (recipeConfiguration
-						.get(Repurpose.proxy.getServerConfiguration().addMiscRecipesName)) {
+				if (recipeConfiguration.get(ModConfiguration.addMiscRecipesName)) {
+					result = true;
+				}
+			} else if (this.identifier.equals("armor_recipes")) {
+				HashMap<String, Boolean> recipeConfiguration = Repurpose.proxy.getServerConfiguration().recipeConfiguration;
 
+				if (recipeConfiguration.get(ModConfiguration.addArmorRecipesName)) {
 					result = true;
 				}
 			}

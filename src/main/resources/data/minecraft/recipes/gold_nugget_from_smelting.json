@@ -1,0 +1,26 @@
+{
+  type minecraftsmelting,
+  ingredient [
+    {
+      item minecraftgolden_pickaxe
+    },
+    {
+      item minecraftgolden_shovel
+    },
+    {
+      item minecraftgolden_axe
+    },
+    {
+      item minecraftgolden_hoe
+    },
+    {
+      item minecraftgolden_sword
+    },
+    {
+      item minecraftgolden_horse_armor
+    }
+  ],
+  result minecraftgold_nugget,
+  experience 0.1,
+  cookingtime 200
+}
