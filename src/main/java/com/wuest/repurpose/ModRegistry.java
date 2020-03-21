@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import com.wuest.repurpose.Blocks.BlockCharcoal;
 import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockDirtSlab;
 import com.wuest.repurpose.Blocks.BlockDirtStairs;
@@ -52,14 +51,10 @@ import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment.Rarity;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.LazyLoadBase;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -329,11 +324,6 @@ public class ModRegistry {
 
 		// Iron lump.
 		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
-
-		// Charcoal block.
-		Block block = new BlockCharcoal("block_charcoal");
-		BlockItem itemBlock = (new ItemBlockBurnable(block, ItemGroup.MISC)).setBurnTime(16000);
-		ModRegistry.registerBlock(block, itemBlock);
 
 		// Scroll
 		ModRegistry.registerItem(new ItemScroll("item_scroll"));
