@@ -1,23 +1,22 @@
 package com.wuest.repurpose.Gui;
 
-import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Tuple;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
+import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
-
+import com.wuest.repurpose.Tuple;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.client.config.GuiSlider;
-import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.client.gui.HoverChecker;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 
 public class GuiRedstoneClock extends BasicGui {
 	public RedstoneClockPowerConfiguration powerConfiguration;
-	protected GuiButtonExt btnCancel;
-	protected GuiButtonExt btnDone;
+	protected ExtendedButton btnCancel;
+	protected ExtendedButton btnDone;
 	protected GuiCheckBox btnNorth;
 	protected HoverChecker northChecker;
 	protected GuiCheckBox btnEast;
@@ -31,8 +30,8 @@ public class GuiRedstoneClock extends BasicGui {
 	protected GuiCheckBox btnUp;
 	protected HoverChecker upChecker;
 
-	protected GuiSlider btnPowered;
-	protected GuiSlider btnUnPowered;
+	protected Slider btnPowered;
+	protected Slider btnUnPowered;
 
 	protected TileEntityRedstoneClock tileEntity;
 
@@ -91,11 +90,11 @@ public class GuiRedstoneClock extends BasicGui {
 		this.addButton(this.btnSouth);
 		this.southChecker = new HoverChecker(this.btnSouth, 800);
 
-		this.btnPowered = new GuiSlider(grayBoxX + 10, grayBoxY + 30, 100, 20, "", "", 1, 30,
+		this.btnPowered = new Slider(grayBoxX + 10, grayBoxY + 30, 100, 20, "", "", 1, 30,
 				this.powerConfiguration.getPoweredTick() / 20, false, true, this::buttonClicked);
 		this.addButton(this.btnPowered);
 
-		this.btnUnPowered = new GuiSlider(grayBoxX + 10, grayBoxY + 80, 100, 20, "", "", 1, 30,
+		this.btnUnPowered = new Slider(grayBoxX + 10, grayBoxY + 80, 100, 20, "", "", 1, 30,
 				this.powerConfiguration.getUnPoweredTick() / 20, false, true, this::buttonClicked);
 		this.addButton(this.btnUnPowered);
 
@@ -142,7 +141,7 @@ public class GuiRedstoneClock extends BasicGui {
 	 * buttons)
 	 */
 	@Override
-	public void buttonClicked(Button button) {
+	public void buttonClicked(AbstractButton button) {
 		if (button == this.btnCancel) {
 			this.minecraft.displayGuiScreen(null);
 		} else if (button == this.btnDone) {

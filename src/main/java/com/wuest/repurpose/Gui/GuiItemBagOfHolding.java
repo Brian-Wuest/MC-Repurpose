@@ -3,12 +3,8 @@ package com.wuest.repurpose.Gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
-
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;

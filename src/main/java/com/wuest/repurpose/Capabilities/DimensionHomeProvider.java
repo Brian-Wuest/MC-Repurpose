@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Capabilities;
 
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -12,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
  * The capability provider for the DimensionHome capability. This class MUST
  * implement INBTSerializable in order for the capability to be saved when the
  * world is saved.
- * 
+ *
  * @author WuestMan
  */
 public class DimensionHomeProvider implements ICapabilitySerializable<CompoundNBT> {

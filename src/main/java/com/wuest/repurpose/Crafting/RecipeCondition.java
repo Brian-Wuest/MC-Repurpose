@@ -2,15 +2,12 @@ package com.wuest.repurpose.Crafting;
 
 import com.google.gson.JsonObject;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class RecipeCondition implements ICondition {
 	public static final ResourceLocation NAME = new ResourceLocation(Repurpose.MODID, "config_recipe");
@@ -35,7 +32,7 @@ public class RecipeCondition implements ICondition {
 
 	/**
 	 * Determines if the recipe is active.
-	 * 
+	 *
 	 * @return True if the recipe is active, otherwise false.
 	 */
 	public boolean determineActiveRecipe() {

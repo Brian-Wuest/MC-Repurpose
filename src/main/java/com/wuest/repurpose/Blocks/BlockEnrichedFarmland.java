@@ -1,11 +1,6 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -15,7 +10,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -30,6 +24,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	public BlockEnrichedFarmland() {
@@ -48,18 +45,12 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	@Override
 	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
 		// Falling on this block won't turn it to dirt.
-		entityIn.fall(fallDistance, 1.0F);
+		entityIn.onLivingFall(fallDistance, 1.0F);
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return VoxelShapes.fullCube();
-	}
-
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
 	}
 
 	/**
@@ -70,7 +61,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	 * only the specific face passed in.
 	 */
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn,
-			BlockPos currentPos, BlockPos facingPos) {
+										  BlockPos currentPos, BlockPos facingPos) {
 		return stateIn;
 	}
 
@@ -85,14 +76,14 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	 * @param state     The Current state
 	 * @param world     The current world
 	 * @param pos       Block position in world
-	 * @param direction The direction relative to the given position the plant wants
+	 * @param facing    The direction relative to the given position the plant wants
 	 *                  to be, typically its UP
 	 * @param plantable The plant that wants to check
 	 * @return True to allow the plant to be planted/stay.
 	 */
 	@Override
 	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing,
-			net.minecraftforge.common.IPlantable plantable) {
+								   net.minecraftforge.common.IPlantable plantable) {
 		// This block can sustain everything.
 		return true;
 	}
@@ -103,7 +94,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

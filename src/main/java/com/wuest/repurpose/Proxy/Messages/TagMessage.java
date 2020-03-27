@@ -13,14 +13,6 @@ public class TagMessage {
 		this.tagMessage = tagMessage;
 	}
 
-	public CompoundNBT getMessageTag() {
-		return this.tagMessage;
-	}
-
-	public void setMessageTag(CompoundNBT value) {
-		this.tagMessage = value;
-	}
-
 	public static <T extends TagMessage> T decode(PacketBuffer buf, Class<T> clazz) {
 		T message = null;
 
@@ -38,5 +30,13 @@ public class TagMessage {
 
 	public static <T extends TagMessage> void encode(T message, PacketBuffer buf) {
 		buf.writeCompoundTag(message.tagMessage);
+	}
+
+	public CompoundNBT getMessageTag() {
+		return this.tagMessage;
+	}
+
+	public void setMessageTag(CompoundNBT value) {
+		this.tagMessage = value;
 	}
 }

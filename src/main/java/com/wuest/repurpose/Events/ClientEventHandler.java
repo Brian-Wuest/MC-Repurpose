@@ -41,9 +41,6 @@ import java.util.Map.Entry;
  */
 @Mod.EventBusSubscriber(modid = Repurpose.MODID, value = {Dist.CLIENT})
 public class ClientEventHandler {
-	public static ArrayList<KeyBinding> keyBindings = new ArrayList<KeyBinding>();
-	public static LocalDateTime bedCompassTime;
-	public static BlockPos bedLocation;
 	protected static final ResourceLocation WIDGETS_TEX_PATH = new ResourceLocation("textures/gui/widgets.png");
 	private static final int BUFF_ICON_SIZE = 18;
 	private static final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 5; // 2 pixels between buff icons
@@ -51,7 +48,9 @@ public class ClientEventHandler {
 	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
 	private static final int BUFF_ICONS_OFFSET = 8;
 	private static final int GREEN_TEXT = Color.GREEN.getRGB();
-
+	public static ArrayList<KeyBinding> keyBindings = new ArrayList<KeyBinding>();
+	public static LocalDateTime bedCompassTime;
+	public static BlockPos bedLocation;
 	private static HashMap<String, StepAssistInfo> playerStepAssists = new HashMap<String, StepAssistInfo>();
 
 	/**
@@ -114,10 +113,11 @@ public class ClientEventHandler {
 
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.enableBlend();
-				GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-						GlStateManager.DestFactor.ZERO);
-				RenderHelper.enableGUIStandardItemLighting();
+				GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.param,
+						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param, GlStateManager.SourceFactor.ONE.param,
+						GlStateManager.DestFactor.ZERO.param);
+
+				RenderHelper.enableStandardItemLighting();
 
 				// Draw Item here:
 				ItemStack itemToDraw = ItemBagOfHolding.getItemStackFromInventory(player);

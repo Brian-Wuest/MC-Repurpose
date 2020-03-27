@@ -1,22 +1,14 @@
 package com.wuest.repurpose.Items;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.*;
@@ -25,8 +17,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -35,10 +30,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 /**
- * 
  * @author WuestMan
- *
  */
 public class ItemBagOfHolding extends Item {
 	public static final String customValues = "bag_values";
@@ -49,7 +45,7 @@ public class ItemBagOfHolding extends Item {
 		super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1));
 
 		// This will determine what model is shown to the user when the bag is opened or closed.
-		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID,"bag_of_holding"), new IItemPropertyGetter() {
+		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
 
 			@OnlyIn(Dist.CLIENT)
 			public float call(ItemStack itemStack, @Nullable World world, @Nullable LivingEntity entity) {
@@ -59,18 +55,96 @@ public class ItemBagOfHolding extends Item {
 					return 1f;
 				}
 
-				return  0f;
+				return 0f;
 			}
 		});
 
 		ModRegistry.setItemName(this, name);
 	}
 
+	public static void RefreshItemStack(PlayerEntity player, ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding && !player.world.isRemote) {
+			ItemBagOfHoldingProvider.UpdateRefreshValue(stack);
+		}
+	}
+
+	@Nullable
+	public static BlockRayTraceResult rayTrace(PlayerEntity player, double blockReachDistance, float partialTicks) {
+		Vec3d vec3d = player.getEyePosition(partialTicks);
+		Vec3d vec3d1 = player.getLook(partialTicks);
+		Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
+				vec3d1.z * blockReachDistance);
+
+		RayTraceContext rayTraceContext = new RayTraceContext(vec3d, vec3d2, RayTraceContext.BlockMode.COLLIDER,
+				RayTraceContext.FluidMode.NONE, player);
+		return player.world.rayTraceBlocks(rayTraceContext);
+	}
+
+	public static int getCurrentSlotFromStack(ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			return handler.slotIndex;
+		}
+
+		return 0;
+	}
+
+	public static void setCurrentSlotForStack(PlayerEntity player, ItemStack stack, int slot) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.slotIndex = slot;
+
+			handler.UpdateStack(stack);
+		}
+	}
+
+	public static boolean getBagOpenedFromStack(ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			return handler.opened;
+		}
+
+		return false;
+	}
+
+	public static void setBagOpenedStack(ItemStack stack, boolean open) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.opened = open;
+
+			handler.UpdateStack(stack);
+
+			int metaValue = open ? 1 : 0;
+			stack.setDamage(metaValue);
+		}
+	}
+
+	public static ItemStack getItemStackFromInventory(PlayerEntity player) {
+		ItemStack stack = player.getHeldItemOffhand();
+
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			if (handler != null) {
+				if (slot >= handler.getSlots()) {
+					slot = 0;
+				}
+
+				return handler.getStackInSlot(slot);
+			}
+		}
+
+		return ItemStack.EMPTY;
+	}
+
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		if (!world.isRemote && hand == Hand.OFF_HAND) {
 			ItemStack stack = player.getHeldItem(hand);
 
-			if (player.isSneaking()) {
+			if (player.isCrouching()) {
 				// Open and close the bag.
 				// This is important for auto-pickup.
 				ItemBagOfHolding.setBagOpenedStack(stack, !ItemBagOfHolding.getBagOpenedFromStack(stack));
@@ -168,7 +242,7 @@ public class ItemBagOfHolding extends Item {
 	}
 
 	public ActionResultType PlaceBlockFromPouch(PlayerEntity player, BlockItem itemBlock,
-			BlockRayTraceResult rayTraceResult, Hand hand) {
+												BlockRayTraceResult rayTraceResult, Hand hand) {
 		return itemBlock.tryPlace(new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult)));
 	}
 
@@ -178,7 +252,7 @@ public class ItemBagOfHolding extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();
@@ -190,83 +264,5 @@ public class ItemBagOfHolding extends Item {
 			tooltip.add(new StringTextComponent(
 					"Place in off-hand and right-click to open inventory or place block. Sneak and right-click when in off-hand to open/close bag."));
 		}
-	}
-
-	public static void RefreshItemStack(PlayerEntity player, ItemStack stack) {
-		if (stack.getItem() instanceof ItemBagOfHolding && !player.world.isRemote) {
-			ItemBagOfHoldingProvider.UpdateRefreshValue(stack);
-		}
-	}
-
-	@Nullable
-	public static BlockRayTraceResult rayTrace(PlayerEntity player, double blockReachDistance, float partialTicks) {
-		Vec3d vec3d = player.getEyePosition(partialTicks);
-		Vec3d vec3d1 = player.getLook(partialTicks);
-		Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
-				vec3d1.z * blockReachDistance);
-
-		RayTraceContext rayTraceContext = new RayTraceContext(vec3d, vec3d2, RayTraceContext.BlockMode.COLLIDER,
-				RayTraceContext.FluidMode.NONE, player);
-		return player.world.rayTraceBlocks(rayTraceContext);
-	}
-
-	public static int getCurrentSlotFromStack(ItemStack stack) {
-		if (stack.getItem() instanceof ItemBagOfHolding) {
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-
-			return handler.slotIndex;
-		}
-
-		return 0;
-	}
-
-	public static void setCurrentSlotForStack(PlayerEntity player, ItemStack stack, int slot) {
-		if (stack.getItem() instanceof ItemBagOfHolding) {
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-			handler.slotIndex = slot;
-
-			handler.UpdateStack(stack);
-		}
-	}
-
-	public static boolean getBagOpenedFromStack(ItemStack stack) {
-		if (stack.getItem() instanceof ItemBagOfHolding) {
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-
-			return handler.opened;
-		}
-
-		return false;
-	}
-
-	public static void setBagOpenedStack(ItemStack stack, boolean open) {
-		if (stack.getItem() instanceof ItemBagOfHolding) {
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-			handler.opened = open;
-
-			handler.UpdateStack(stack);
-
-			int metaValue = open ? 1 : 0;
-			stack.setDamage(metaValue);
-		}
-	}
-
-	public static ItemStack getItemStackFromInventory(PlayerEntity player) {
-		ItemStack stack = player.getHeldItemOffhand();
-
-		if (stack.getItem() instanceof ItemBagOfHolding) {
-			int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
-			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
-
-			if (handler != null) {
-				if (slot >= handler.getSlots()) {
-					slot = 0;
-				}
-
-				return handler.getStackInSlot(slot);
-			}
-		}
-
-		return ItemStack.EMPTY;
 	}
 }

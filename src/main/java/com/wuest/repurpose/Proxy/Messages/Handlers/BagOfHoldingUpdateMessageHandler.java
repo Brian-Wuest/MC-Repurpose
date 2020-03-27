@@ -1,17 +1,16 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import java.util.function.Supplier;
-
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class BagOfHoldingUpdateMessageHandler {
 

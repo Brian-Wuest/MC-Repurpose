@@ -1,14 +1,9 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.wuest.repurpose.Base.TileBlockBase;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Base.TileBlockBase;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -20,6 +15,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +27,10 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implements IModBlock {
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
@@ -52,13 +51,13 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
-			BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+											 BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
 			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
 
-		return true;
+		return ActionResultType.PASS;
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 
 	/**
 	 * Processes custom update state.
-	 * 
+	 *
 	 * @param worldIn    The world this state is being updated in.
 	 * @param pos        The block position.
 	 * @param state      The block state.
@@ -157,7 +156,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

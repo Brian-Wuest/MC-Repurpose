@@ -1,17 +1,16 @@
 package com.wuest.repurpose.Config;
 
-import java.util.ArrayList;
-
 import com.wuest.repurpose.Base.BaseConfig;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
+
 /**
  * This is the class responsible for holding the configuration options for the
  * redstone scanner.
- * 
+ *
  * @author WuestMan
  */
 public class RedstoneScannerConfig extends BaseConfig {
@@ -39,7 +38,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Gets a facing based off of a facing name.
-	 * 
+	 *
 	 * @param name The name of the facing to get.
 	 * @return Null if the facing wasn't found or the facing found.
 	 */
@@ -55,7 +54,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Gets a facing based off of a facing enum value.
-	 * 
+	 *
 	 * @param facing The Direction value to get the Facing config for.
 	 * @return Null if the facing wasn't found or the facing found.
 	 */
@@ -78,7 +77,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * The new value of the tick delay.
-	 * 
+	 *
 	 * @param value The new tick delay.
 	 */
 	public void setTickDelay(int value) {
@@ -91,7 +90,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Gets the block pos of this class.
-	 * 
+	 *
 	 * @return The block pos saved in this class.
 	 */
 	public BlockPos getBlockPos() {
@@ -100,7 +99,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Sets the block pos for this class.
-	 * 
+	 *
 	 * @param value The new block pos for this class.
 	 */
 	public void setBlockPos(BlockPos value) {
@@ -109,7 +108,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Sets the block pos for this class.
-	 * 
+	 *
 	 * @param x The X-Coordinate for this block.
 	 * @param y The Y-Coordinate for this block.
 	 * @param z The Z=Coordinate for this block.
@@ -120,7 +119,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if animals are detected as part of the scan.
-	 * 
+	 *
 	 * @return A value indicating whether animals are a detected during a scan.
 	 */
 	public boolean getAnimalsDetected() {
@@ -129,7 +128,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if animals are detected as a part of the scan.
-	 * 
+	 *
 	 * @param value The new value of the boolean.
 	 */
 	public void setAnimalsDetected(boolean value) {
@@ -138,7 +137,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if the facing is active.
-	 * 
+	 *
 	 * @param facing The facing to check.
 	 * @return True if the facing is active otherwise false.
 	 */
@@ -150,7 +149,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Gets the scan length for a particular facing.
-	 * 
+	 *
 	 * @param facing The facing to get the scanning range for.
 	 * @return The scanning range for this facing.
 	 */
@@ -162,7 +161,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if non-players are detected as part of the scan.
-	 * 
+	 *
 	 * @return A value indicating whether non-players are detected.
 	 */
 	public boolean getNonPlayersDetected() {
@@ -171,7 +170,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if non-players are detected as part of the scan.
-	 * 
+	 *
 	 * @param value The new value of the boolean.
 	 */
 	public void setNonPlayersDetected(boolean value) {
@@ -180,7 +179,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if monsters are detected as part of the scan.
-	 * 
+	 *
 	 * @return A value indicating whether monsters are detected.
 	 */
 	public boolean getMonstersDetected() {
@@ -189,7 +188,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if monsters are detected as part of the scan.
-	 * 
+	 *
 	 * @param value The new value of the boolean.
 	 */
 	public void setMonstersDetected(boolean value) {
@@ -198,7 +197,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if players are detected as part of the scan.
-	 * 
+	 *
 	 * @return A value indicating whether players are detected.
 	 */
 	public boolean getPlayersDetected() {
@@ -207,7 +206,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Determines if players are detected as part of the scan.
-	 * 
+	 *
 	 * @param value The new value of the boolean.
 	 */
 	public void setPlayersDetected(boolean value) {
@@ -216,7 +215,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Adds a pre-configured facing configuration to the arraylist.
-	 * 
+	 *
 	 * @param value the pre-configured value to add.
 	 */
 	public void AddFacingConfig(FacingConfig value) {
@@ -225,7 +224,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Adds a facing to the arraylist.
-	 * 
+	 *
 	 * @param facing     The facing to add.
 	 * @param active     Determines if the facing is active.
 	 * @param scanLength The distance for the scan for this facing.
@@ -237,7 +236,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Sets the active flag for the facing's config.
-	 * 
+	 *
 	 * @param facing The facing to look for in the facing config.
 	 * @param active The new value of the active flag.
 	 */
@@ -247,7 +246,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Sets the scan length flag for the facing's config.
-	 * 
+	 *
 	 * @param facing     The facing to look for in the facing config.
 	 * @param scanLength The distance for the scan for this facing.
 	 */
@@ -262,7 +261,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Sets the active and scan length properties of the facing's config.
-	 * 
+	 *
 	 * @param facing     The facing to look for in the facing config.
 	 * @param active     The new value of the active flag.
 	 * @param scanLength The distance for the scan for this facing.
@@ -304,7 +303,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Writes the values of this class to an CompoundNBT.
-	 * 
+	 *
 	 * @param compound The compound to write the tag values too.
 	 */
 	@Override
@@ -337,10 +336,10 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 	/**
 	 * Builds a RedstoneScannerConfig from an CompoundNBT.
-	 * 
+	 *
 	 * @param compound The compound to build the class from.
 	 * @return A new instance of the RedstoneScannerConfig build with all of the
-	 *         values loaded from the tag (if any).
+	 * values loaded from the tag (if any).
 	 */
 	public RedstoneScannerConfig ReadFromCompoundNBT(CompoundNBT compound) {
 		RedstoneScannerConfig config = new RedstoneScannerConfig();
@@ -400,9 +399,8 @@ public class RedstoneScannerConfig extends BaseConfig {
 	/**
 	 * This class is used to define the scanning configuration for a particular
 	 * side.
-	 * 
-	 * @author WuestMan
 	 *
+	 * @author WuestMan
 	 */
 	public static class FacingConfig {
 		private Direction facing;
@@ -418,7 +416,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Gets the facing value.
-		 * 
+		 *
 		 * @return Gets the Direction value of this class.
 		 */
 		public Direction getFacing() {
@@ -427,7 +425,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Set the facing value.
-		 * 
+		 *
 		 * @param value The new value of the facing.
 		 * @return The updated facing config for ease of setup.
 		 */
@@ -438,7 +436,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Gets whether this facing is active.
-		 * 
+		 *
 		 * @return A bool representing the status of this facing.
 		 */
 		public boolean getActive() {
@@ -447,7 +445,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Sets the facing active status.
-		 * 
+		 *
 		 * @param value The new status of this facing.
 		 * @return The updated facing config for ease of setup.
 		 */
@@ -458,7 +456,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Gets the length (in blocks) that this scan will cover.
-		 * 
+		 *
 		 * @return The number of blocks to scan.
 		 */
 		public int getScanLength() {
@@ -467,7 +465,7 @@ public class RedstoneScannerConfig extends BaseConfig {
 
 		/**
 		 * Sets the number of blocks to scan.
-		 * 
+		 *
 		 * @param value The number of blocks to scan for this facing when active.
 		 * @return The updated facing config for ease of setup.
 		 */

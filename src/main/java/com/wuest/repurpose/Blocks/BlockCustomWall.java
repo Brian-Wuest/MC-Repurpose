@@ -1,34 +1,21 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FourWayBlock;
-import net.minecraft.block.WallBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
 
 public class BlockCustomWall extends WallBlock implements IModBlock {
 	public static final EnumProperty<BlockCustomWall.EnumType> VARIANT = EnumProperty.<BlockCustomWall.EnumType>create(
@@ -57,7 +44,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {
@@ -80,7 +67,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 								.with(FourWayBlock.NORTH, state.get(FourWayBlock.NORTH))
 								.with(FourWayBlock.SOUTH, state.get(FourWayBlock.SOUTH))
 								.with(FourWayBlock.WATERLOGGED, state.get(FourWayBlock.WATERLOGGED))
-								.with(WallBlock.UP,state.get(WallBlock.UP));
+								.with(WallBlock.UP, state.get(WallBlock.UP));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}
@@ -93,7 +80,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	 */
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos,
-			PlayerEntity player) {
+								  PlayerEntity player) {
 		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall()));
 	}
 
@@ -103,20 +90,18 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 		builder.add(BlockCustomWall.VARIANT);
 	}
 
-	/**
-	 * Gets the render layer this block will render on. SOLID for solid blocks, CUTOUT or CUTOUT_MIPPED for on-off
-	 * transparency (glass, reeds), TRANSLUCENT for fully blended transparency (stained glass)
-	 */
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
-
 	public static enum EnumType implements IStringSerializable {
 		DIRT(0, "block_dirt_wall", "block_dirt_wall", Material.EARTH),
 		GRASS(1, "block_grass_wall", "block_grass_wall", Material.EARTH);
 
 		private static final BlockCustomWall.EnumType[] META_LOOKUP = new BlockCustomWall.EnumType[values().length];
+
+		static {
+			for (BlockCustomWall.EnumType customwall$enumtype : values()) {
+				META_LOOKUP[customwall$enumtype.getMetadata()] = customwall$enumtype;
+			}
+		}
+
 		private final int meta;
 		private final String name;
 		private String unlocalizedName;
@@ -129,20 +114,20 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 			this.material = blockMaterial;
 		}
 
-		public int getMetadata() {
-			return this.meta;
-		}
-
-		public String toString() {
-			return this.name;
-		}
-
 		public static BlockCustomWall.EnumType byMetadata(int meta) {
 			if (meta < 0 || meta >= META_LOOKUP.length) {
 				meta = 0;
 			}
 
 			return META_LOOKUP[meta];
+		}
+
+		public int getMetadata() {
+			return this.meta;
+		}
+
+		public String toString() {
+			return this.name;
 		}
 
 		public String getName() {
@@ -155,12 +140,6 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 
 		public String getUnlocalizedName() {
 			return this.unlocalizedName;
-		}
-
-		static {
-			for (BlockCustomWall.EnumType customwall$enumtype : values()) {
-				META_LOOKUP[customwall$enumtype.getMetadata()] = customwall$enumtype;
-			}
 		}
 	}
 }

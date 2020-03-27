@@ -1,10 +1,9 @@
 package com.wuest.repurpose.Events;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Capabilities.IDimensionHome;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
@@ -90,13 +89,11 @@ public class HomeCommand {
 	 * Teleports the entity to the specified location.
 	 */
 	private static boolean attemptTeleport(PlayerEntity player, boolean ignoreCollisions, double x, double y,
-			double z) {
-		double d0 = player.posX;
-		double d1 = player.posY;
-		double d2 = player.posZ;
-		player.posX = x;
-		player.posY = y;
-		player.posZ = z;
+										   double z) {
+		double d0 = player.getPosX();
+		double d1 = player.getPosY();
+		double d2 = player.getPosZ();
+
 		boolean flag = false;
 		BlockPos blockpos = new BlockPos(player);
 		World world = player.world;
@@ -111,13 +108,15 @@ public class HomeCommand {
 				if (iblockstate.getMaterial().blocksMovement()) {
 					flag1 = true;
 				} else {
-					--player.posY;
+					--y;
 					blockpos = blockpos1;
 				}
 			}
 
+			player.setRawPosition(x, y, z);
+
 			if (flag1) {
-				player.setPositionAndUpdate(player.posX, player.posY, player.posZ);
+				player.setPositionAndUpdate(player.getPosX(), player.getPosY(), player.getPosZ());
 				flag = true;
 			}
 		}

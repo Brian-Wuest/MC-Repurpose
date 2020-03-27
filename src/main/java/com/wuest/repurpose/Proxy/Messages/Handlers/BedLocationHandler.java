@@ -1,15 +1,14 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import java.util.function.Supplier;
-
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class BedLocationHandler {
 	public static void handle(final BedLocationMessage message, Supplier<NetworkEvent.Context> ctx) {

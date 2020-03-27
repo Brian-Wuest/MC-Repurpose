@@ -1,34 +1,32 @@
 package com.wuest.repurpose.Gui;
 
-import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Tuple;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
 import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
+import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
-
+import com.wuest.repurpose.Tuple;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.client.config.GuiSlider;
-import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.client.gui.HoverChecker;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 
 /**
  * This class is used to provide a GUI for the redstone scanner.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class GuiRedstoneScanner extends BasicGui {
 	public RedstoneScannerConfig Config;
 	protected TileEntityRedstoneScanner scannerTile;
-	protected GuiButtonExt btnCancel;
-	protected GuiButtonExt btnDone;
+	protected ExtendedButton btnCancel;
+	protected ExtendedButton btnDone;
 
-	protected GuiSlider btnHorizontalRange;
-	protected GuiSlider btnUpRange;
-	protected GuiSlider btnDownRange;
+	protected Slider btnHorizontalRange;
+	protected Slider btnUpRange;
+	protected Slider btnDownRange;
 
 	protected GuiCheckBox btnNorth;
 	protected HoverChecker northChecker;
@@ -76,15 +74,15 @@ public class GuiRedstoneScanner extends BasicGui {
 		int grayBoxX = upperLeft.getFirst();
 		int grayBoxY = upperLeft.getSecond();
 
-		this.btnHorizontalRange = new GuiSlider(grayBoxX + 5, grayBoxY + 15, 50, 20, "", "", 0, 5,
+		this.btnHorizontalRange = new Slider(grayBoxX + 5, grayBoxY + 15, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.NORTH).getScanLength(), false, true, this::buttonClicked);
 		this.addButton(this.btnHorizontalRange);
 
-		this.btnUpRange = new GuiSlider(grayBoxX + 5, grayBoxY + 50, 50, 20, "", "", 0, 5,
+		this.btnUpRange = new Slider(grayBoxX + 5, grayBoxY + 50, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.UP).getScanLength(), false, true, this::buttonClicked);
 		this.addButton(this.btnUpRange);
 
-		this.btnDownRange = new GuiSlider(grayBoxX + 90, grayBoxY + 50, 50, 20, "", "", 0, 5,
+		this.btnDownRange = new Slider(grayBoxX + 90, grayBoxY + 50, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.DOWN).getScanLength(), false, true, this::buttonClicked);
 		this.addButton(this.btnDownRange);
 
@@ -125,7 +123,7 @@ public class GuiRedstoneScanner extends BasicGui {
 
 		this.btnNonPlayers = new GuiCheckBox(grayBoxX + 5, grayBoxY + 115, "Non-Players",
 				this.Config.getNonPlayersDetected(), this::buttonClicked).setStringColor(this.textColor)
-						.setWithShadow(false);
+				.setWithShadow(false);
 		this.addButton(this.btnNonPlayers);
 
 		// Middle Column:
@@ -183,7 +181,7 @@ public class GuiRedstoneScanner extends BasicGui {
 	 * buttons)
 	 */
 	@Override
-	public void buttonClicked(Button button) {
+	public void buttonClicked(AbstractButton button) {
 		if (button == this.btnCancel) {
 			this.minecraft.displayGuiScreen(null);
 		} else if (button == this.btnDone) {

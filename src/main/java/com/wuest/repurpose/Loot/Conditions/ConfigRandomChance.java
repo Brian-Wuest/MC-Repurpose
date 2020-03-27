@@ -4,7 +4,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -20,12 +19,17 @@ public class ConfigRandomChance implements ILootCondition {
 		this.configOptionName = configOptionName;
 	}
 
+	public static ILootCondition.IBuilder builder(int chance, String configOptionName) {
+		return () -> {
+			return new ConfigRandomChance(chance, configOptionName);
+		};
+	}
+
 	public boolean test(LootContext context) {
 		CompoundNBT nbt = Repurpose.proxy.getServerConfiguration().ToNBTTagCompound();
 
 		int chanceValue = this.chance;
-		if (this.chance < 0 && nbt.contains(this.configOptionName))
-		{
+		if (this.chance < 0 && nbt.contains(this.configOptionName)) {
 			// The chance wasn't filled in (it overrides ALL settings) and this option exists in the configuration.
 			chanceValue = nbt.getInt(this.configOptionName);
 		}
@@ -33,12 +37,6 @@ public class ConfigRandomChance implements ILootCondition {
 		int randomResult = context.getRandom().nextInt(101);
 
 		return randomResult < chanceValue && randomResult > 0;
-	}
-
-	public static ILootCondition.IBuilder builder(int chance, String configOptionName) {
-		return () -> {
-			return new ConfigRandomChance(chance, configOptionName);
-		};
 	}
 
 	public static class Serializer extends ILootCondition.AbstractSerializer<ConfigRandomChance> {

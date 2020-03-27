@@ -1,20 +1,15 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
+
+import java.util.Random;
 
 public class BlockDirtSlab extends SlabBlock implements IModBlock {
 	public BlockDirtSlab() {
@@ -34,7 +29,7 @@ public class BlockDirtSlab extends SlabBlock implements IModBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {

@@ -1,19 +1,16 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import java.util.function.Supplier;
-
-import javax.xml.ws.handler.MessageContext;
-
 import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class RedstoneClockHandler {
 	public static void handle(final RedstoneClockMessage message, Supplier<NetworkEvent.Context> ctx) {

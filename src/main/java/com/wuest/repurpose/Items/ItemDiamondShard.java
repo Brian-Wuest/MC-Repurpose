@@ -1,11 +1,6 @@
 package com.wuest.repurpose.Items;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -18,10 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 /**
  * This class is used in the drop event for coal ore as there is a chance for
  * this item to drop along with coal.
- * 
+ *
  * @author WuestMan
  */
 public class ItemDiamondShard extends Item {
@@ -37,7 +35,7 @@ public class ItemDiamondShard extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

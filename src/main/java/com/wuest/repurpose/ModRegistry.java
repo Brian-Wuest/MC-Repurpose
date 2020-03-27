@@ -1,65 +1,33 @@
 package com.wuest.repurpose;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
-
-import com.wuest.repurpose.Blocks.BlockCustomWall;
-import com.wuest.repurpose.Blocks.BlockDirtSlab;
-import com.wuest.repurpose.Blocks.BlockDirtStairs;
-import com.wuest.repurpose.Blocks.BlockEnrichedFarmland;
-import com.wuest.repurpose.Blocks.BlockGlowstoneSlab;
-import com.wuest.repurpose.Blocks.BlockGrassSlab;
-import com.wuest.repurpose.Blocks.BlockGrassStairs;
-import com.wuest.repurpose.Blocks.BlockMiniRedstone;
-import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
-import com.wuest.repurpose.Blocks.RedstoneClock;
+import com.wuest.repurpose.Blocks.*;
 import com.wuest.repurpose.Capabilities.DimensionHome;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
-import com.wuest.repurpose.Items.ItemBagOfHolding;
-import com.wuest.repurpose.Items.ItemBedCompass;
-import com.wuest.repurpose.Items.ItemBlockBurnable;
-import com.wuest.repurpose.Items.ItemDiamondShard;
-import com.wuest.repurpose.Items.ItemFluffyFabric;
-import com.wuest.repurpose.Items.ItemIronLump;
-import com.wuest.repurpose.Items.ItemScroll;
-import com.wuest.repurpose.Items.ItemSickle;
-import com.wuest.repurpose.Items.ItemSnorkel;
-import com.wuest.repurpose.Items.ItemStoneShears;
-import com.wuest.repurpose.Items.ItemSwiftBlade;
-import com.wuest.repurpose.Items.ItemWhetStone;
-import com.wuest.repurpose.Items.ItemWoodenCrate;
-import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
-import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
-import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
-import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
-import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
-import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
-import com.wuest.repurpose.Proxy.Messages.Handlers.BagOfHoldingUpdateMessageHandler;
-import com.wuest.repurpose.Proxy.Messages.Handlers.BedLocationHandler;
-import com.wuest.repurpose.Proxy.Messages.Handlers.ConfigSyncHandler;
-import com.wuest.repurpose.Proxy.Messages.Handlers.CurrentSlotUpdateHandler;
-import com.wuest.repurpose.Proxy.Messages.Handlers.RedstoneClockHandler;
-import com.wuest.repurpose.Proxy.Messages.Handlers.RedstoneScannerHandler;
+import com.wuest.repurpose.Items.*;
+import com.wuest.repurpose.Proxy.Messages.*;
+import com.wuest.repurpose.Proxy.Messages.Handlers.*;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 public class ModRegistry {
 	/**
@@ -174,14 +142,11 @@ public class ModRegistry {
 		return ModRegistry.GetItem(ItemBagOfHolding.class);
 	}
 
-	public static ItemWoodenCrate EmptyWoodenCrate()
-	{
-		for (Item item : ModRegistry.ModItems)
-		{
+	public static ItemWoodenCrate EmptyWoodenCrate() {
+		for (Item item : ModRegistry.ModItems) {
 			if (item.getClass().isAssignableFrom(ItemWoodenCrate.class)
-				&&  ((ItemWoodenCrate)item).crateType == ItemWoodenCrate.CrateType.Empty)
-			{
-				return (ItemWoodenCrate)item;
+					&& ((ItemWoodenCrate) item).crateType == ItemWoodenCrate.CrateType.Empty) {
+				return (ItemWoodenCrate) item;
 			}
 		}
 
@@ -207,7 +172,7 @@ public class ModRegistry {
 
 	/**
 	 * Gets the item from the ModItems collections.
-	 * 
+	 *
 	 * @param genericClass The class of item to get from the collection.
 	 * @return Null if the item could not be found otherwise the item found.
 	 */
@@ -233,7 +198,7 @@ public class ModRegistry {
 
 	/**
 	 * Gets the block from the ModBlockss collections.
-	 * 
+	 *
 	 * @param genericClass The class of block to get from the collection.
 	 * @return Null if the block could not be found otherwise the block found.
 	 */
@@ -463,30 +428,30 @@ public class ModRegistry {
 	public enum CustomItemTier implements IItemTier {
 		COPPER("Copper", ItemTier.STONE.getHarvestLevel(), ItemTier.STONE.getMaxUses(), ItemTier.STONE.getEfficiency(),
 				ItemTier.STONE.getAttackDamage(), ItemTier.STONE.getEnchantability(), () -> {
-					return Ingredient
-							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/copper")));
-				}),
+			return Ingredient
+					.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/copper")));
+		}),
 		OSMIUM("Osmium", ItemTier.IRON.getHarvestLevel(), 500, ItemTier.IRON.getEfficiency(),
 				ItemTier.IRON.getAttackDamage() + .5f, ItemTier.IRON.getEnchantability(), () -> {
-					return Ingredient
-							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/osmium")));
-				}),
+			return Ingredient
+					.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/osmium")));
+		}),
 		BRONZE("Bronze", ItemTier.IRON.getHarvestLevel(), ItemTier.IRON.getMaxUses(), ItemTier.IRON.getEfficiency(),
 				ItemTier.IRON.getAttackDamage(), ItemTier.IRON.getEnchantability(), () -> {
-					return Ingredient
-							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/bronze")));
-				}),
+			return Ingredient
+					.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/bronze")));
+		}),
 		STEEL("Steel", ItemTier.DIAMOND.getHarvestLevel(), (int) (ItemTier.IRON.getMaxUses() * 1.5),
 				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage(),
 				ItemTier.DIAMOND.getEnchantability(), () -> {
-					return Ingredient
-							.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/steel")));
-				}),
+			return Ingredient
+					.fromTag(ItemTags.getCollection().get(new ResourceLocation("forge", "ingots/steel")));
+		}),
 		OBSIDIAN("Obsidian", ItemTier.DIAMOND.getHarvestLevel() + 1, (int) (ItemTier.DIAMOND.getMaxUses() * 1.5),
 				ItemTier.DIAMOND.getEfficiency(), ItemTier.DIAMOND.getAttackDamage() + 2,
 				ItemTier.DIAMOND.getEnchantability(), () -> {
-					return Ingredient.fromItems(Item.getItemFromBlock(Blocks.OBSIDIAN));
-				});
+			return Ingredient.fromItems(Item.getItemFromBlock(Blocks.OBSIDIAN));
+		});
 
 		private final String name;
 		private final int harvestLevel;
@@ -494,17 +459,27 @@ public class ModRegistry {
 		private final float efficiency;
 		private final float attackDamage;
 		private final int enchantability;
-		private final LazyLoadBase<Ingredient> repairMaterial;
+		private final LazyValue<Ingredient> repairMaterial;
 
 		private CustomItemTier(String name, int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
-				int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+							   int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
 			this.name = name;
 			this.harvestLevel = harvestLevelIn;
 			this.maxUses = maxUsesIn;
 			this.efficiency = efficiencyIn;
 			this.attackDamage = attackDamageIn;
 			this.enchantability = enchantabilityIn;
-			this.repairMaterial = new LazyLoadBase<>(repairMaterialIn);
+			this.repairMaterial = new LazyValue<>(repairMaterialIn);
+		}
+
+		public static CustomItemTier getByName(String name) {
+			for (CustomItemTier item : CustomItemTier.values()) {
+				if (item.getName().equals(name)) {
+					return item;
+				}
+			}
+
+			return null;
 		}
 
 		public String getName() {
@@ -533,16 +508,6 @@ public class ModRegistry {
 
 		public Ingredient getRepairMaterial() {
 			return this.repairMaterial.getValue();
-		}
-
-		public static CustomItemTier getByName(String name) {
-			for (CustomItemTier item : CustomItemTier.values()) {
-				if (item.getName().equals(name)) {
-					return item;
-				}
-			}
-
-			return null;
 		}
 	}
 }

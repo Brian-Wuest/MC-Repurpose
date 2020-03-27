@@ -1,11 +1,6 @@
 package com.wuest.repurpose.Base;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 import com.wuest.repurpose.Capabilities.ITransferable;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -14,12 +9,15 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 /**
  * This is the base tile entity used by the mod.
- * 
- * @author WuestMan
  *
  * @param <T> The base configuration used by this tile entity.
+ * @author WuestMan
  */
 public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	protected T config;
@@ -38,7 +36,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Sets the configuration class used by this tile entity.
-	 * 
+	 *
 	 * @param value The updated tile entity.
 	 */
 	public void setConfig(T value) {
@@ -48,7 +46,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Gets the list of allowed capabilities.
-	 * 
+	 *
 	 * @return The list of allowed capabilities if any.
 	 */
 	public ArrayList<Capability> getAllowedCapabilities() {
@@ -63,7 +61,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Sets the allowed capabilities for this TileEntity.
-	 * 
+	 *
 	 * @param allowedCapabilities The list of allowed capabilities.
 	 */
 	public void setAllowedCapabilities(ArrayList<Capability> allowedCapabilities) {
@@ -73,7 +71,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Transfers capabilities available for transferring to the supplied itemstack.
-	 * 
+	 *
 	 * @return
 	 */
 	public ItemStack transferCapabilities(ItemStack stack) {

@@ -1,14 +1,13 @@
 package com.wuest.repurpose.Config;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import com.wuest.repurpose.Base.BaseConfig;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class RedstoneClockPowerConfiguration extends BaseConfig {
 	private HashMap<Direction, Boolean> facingPower = new HashMap<Direction, Boolean>();
@@ -27,7 +26,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Gets the powered tick value.
-	 * 
+	 *
 	 * @return The amount of ticks a redstone clock should be powered.
 	 */
 	public int getPoweredTick() {
@@ -36,7 +35,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Sets the amount of ticks the block should be powered.
-	 * 
+	 *
 	 * @param value The amount of powered ticks. If the value is less than 1 the
 	 *              value will be 1.
 	 */
@@ -50,7 +49,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Gets the unpowered tick value.
-	 * 
+	 *
 	 * @return The amount of ticks a redstone clock should be unpowered.
 	 */
 	public int getUnPoweredTick() {
@@ -59,7 +58,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Sets the amount of ticks the block should be unpowered.
-	 * 
+	 *
 	 * @param value The amount of unpowered ticks. If the value is less than 1 the
 	 *              value will be 1.
 	 */
@@ -73,7 +72,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Gets the power for a particular side.
-	 * 
+	 *
 	 * @param facing The side to get the power for.
 	 * @return The power for the given side.
 	 */
@@ -83,7 +82,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Gets the sides which are producing power.
-	 * 
+	 *
 	 * @return The sides which are sending power.
 	 */
 	public ArrayList<Direction> getPoweredSides() {
@@ -100,7 +99,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Gets the block position.
-	 * 
+	 *
 	 * @return The block position for this configuration.
 	 */
 	public BlockPos getPos() {
@@ -109,7 +108,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Sets the block position for this configuration.
-	 * 
+	 *
 	 * @param value The block position.
 	 */
 	public void setPos(BlockPos value) {
@@ -118,7 +117,7 @@ public class RedstoneClockPowerConfiguration extends BaseConfig {
 
 	/**
 	 * Sets whether a side is powered.
-	 * 
+	 *
 	 * @param facing The side to set.
 	 * @param value  The value determining if the side is powered.
 	 */

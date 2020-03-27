@@ -1,13 +1,7 @@
 package com.wuest.repurpose.Items;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Events.ClientEventHandler;
-
+import com.wuest.repurpose.ModRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +16,13 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.time.LocalDateTime;
+import java.util.List;
+
+;
 
 public class ItemBedCompass extends Item {
 	/**
@@ -54,7 +54,7 @@ public class ItemBedCompass extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag flagIn) {
+							   ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

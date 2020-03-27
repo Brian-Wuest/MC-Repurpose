@@ -23,47 +23,6 @@ public class ItemBagOfHoldingProvider extends ItemStackHandler {
 		this.opened = false;
 	}
 
-	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT inventoryTag = super.serializeNBT();
-		CompoundNBT returnTag = new CompoundNBT();
-
-		returnTag.putBoolean(ItemBagOfHoldingProvider.refreshValueKey, this.refreshValue);
-		returnTag.putInt(ItemBagOfHoldingProvider.slotIndexKey, this.slotIndex);
-		returnTag.put(ItemBagOfHoldingProvider.inventoryKey, inventoryTag);
-		returnTag.putBoolean(ItemBagOfHoldingProvider.openedKey, this.opened);
-
-		return returnTag;
-	}
-
-	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
-		if (nbt.contains(ItemBagOfHoldingProvider.inventoryKey)) {
-			super.deserializeNBT(nbt.getCompound(ItemBagOfHoldingProvider.inventoryKey));
-		}
-
-		if (nbt.contains(ItemBagOfHoldingProvider.refreshValueKey)) {
-			this.refreshValue = nbt.getBoolean(ItemBagOfHoldingProvider.refreshValueKey);
-		}
-
-		if (nbt.contains(ItemBagOfHoldingProvider.slotIndexKey)) {
-			this.slotIndex = nbt.getInt(ItemBagOfHoldingProvider.slotIndexKey);
-		}
-
-		if (nbt.contains(ItemBagOfHoldingProvider.openedKey)) {
-			this.opened = nbt.getBoolean(ItemBagOfHoldingProvider.openedKey);
-		}
-	}
-
-	public void UpdateStack(ItemStack stack) {
-		if (!stack.hasTag()) {
-			stack.setTag(new CompoundNBT());
-		}
-
-		CompoundNBT stackTag = stack.getTag();
-		stackTag.put(ItemBagOfHoldingProvider.handlerKey, this.serializeNBT());
-	}
-
 	public static void UpdateStackFromNbt(ItemStack stack, CompoundNBT tagCompound) {
 		if (!stack.hasTag()) {
 			stack.setTag(new CompoundNBT());
@@ -121,11 +80,11 @@ public class ItemBagOfHoldingProvider extends ItemStackHandler {
 	/**
 	 * The difference between this one and the GetFromStack method is that this will return null when the provider doesn't exist.
 	 * This is to check to see if it's in the player's current main hand or off-hand.
+	 *
 	 * @param stack
 	 * @return
 	 */
-	public static ItemBagOfHoldingProvider HasProvider(ItemStack stack)
-	{
+	public static ItemBagOfHoldingProvider HasProvider(ItemStack stack) {
 		if (stack.hasTag()) {
 			CompoundNBT stackTag = stack.getChildTag(ItemBagOfHoldingProvider.handlerKey);
 
@@ -138,5 +97,46 @@ public class ItemBagOfHoldingProvider extends ItemStackHandler {
 		}
 
 		return null;
+	}
+
+	@Override
+	public CompoundNBT serializeNBT() {
+		CompoundNBT inventoryTag = super.serializeNBT();
+		CompoundNBT returnTag = new CompoundNBT();
+
+		returnTag.putBoolean(ItemBagOfHoldingProvider.refreshValueKey, this.refreshValue);
+		returnTag.putInt(ItemBagOfHoldingProvider.slotIndexKey, this.slotIndex);
+		returnTag.put(ItemBagOfHoldingProvider.inventoryKey, inventoryTag);
+		returnTag.putBoolean(ItemBagOfHoldingProvider.openedKey, this.opened);
+
+		return returnTag;
+	}
+
+	@Override
+	public void deserializeNBT(CompoundNBT nbt) {
+		if (nbt.contains(ItemBagOfHoldingProvider.inventoryKey)) {
+			super.deserializeNBT(nbt.getCompound(ItemBagOfHoldingProvider.inventoryKey));
+		}
+
+		if (nbt.contains(ItemBagOfHoldingProvider.refreshValueKey)) {
+			this.refreshValue = nbt.getBoolean(ItemBagOfHoldingProvider.refreshValueKey);
+		}
+
+		if (nbt.contains(ItemBagOfHoldingProvider.slotIndexKey)) {
+			this.slotIndex = nbt.getInt(ItemBagOfHoldingProvider.slotIndexKey);
+		}
+
+		if (nbt.contains(ItemBagOfHoldingProvider.openedKey)) {
+			this.opened = nbt.getBoolean(ItemBagOfHoldingProvider.openedKey);
+		}
+	}
+
+	public void UpdateStack(ItemStack stack) {
+		if (!stack.hasTag()) {
+			stack.setTag(new CompoundNBT());
+		}
+
+		CompoundNBT stackTag = stack.getTag();
+		stackTag.put(ItemBagOfHoldingProvider.handlerKey, this.serializeNBT());
 	}
 }

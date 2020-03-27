@@ -1,11 +1,6 @@
 package com.wuest.repurpose.Items;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -18,9 +13,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 /**
  * This item is just used to create a "Silk Touch" enchantment via the Anvil.
- * 
+ *
  * @author WuestMan
  */
 public class ItemSnorkel extends Item {
@@ -51,7 +49,7 @@ public class ItemSnorkel extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

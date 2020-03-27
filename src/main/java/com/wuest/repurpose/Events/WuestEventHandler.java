@@ -131,11 +131,11 @@ public class WuestEventHandler {
 
 	@SubscribeEvent
 	public static void PlayerChangedDimension(PlayerChangedDimensionEvent event) {
-		IDimensionHome dimensionHome = event.getEntityPlayer().getCapability(ModRegistry.DimensionHomes, null)
+		IDimensionHome dimensionHome = event.getPlayer().getCapability(ModRegistry.DimensionHomes, null)
 				.orElse(null);
 
 		if (dimensionHome != null) {
-			dimensionHome.setHomePosition(event.getTo(), event.getEntityPlayer().getPosition());
+			dimensionHome.setHomePosition(event.getTo(), event.getPlayer().getPosition());
 		}
 	}
 
@@ -146,7 +146,7 @@ public class WuestEventHandler {
 			// when they die, so copy over the
 			// capabilities.
 			PlayerEntity original = event.getOriginal();
-			PlayerEntity newPlayer = event.getEntityPlayer();
+			PlayerEntity newPlayer = event.getPlayer();
 
 			IDimensionHome originalDimensionHome = original.getCapability(ModRegistry.DimensionHomes, null)
 					.orElse(null);
@@ -165,7 +165,7 @@ public class WuestEventHandler {
 		// Can use the proxy's configuration.
 		if (event.getHand() == Hand.OFF_HAND && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest
 				&& !event.getWorld().isRemote && !event.isCanceled()) {
-			PlayerEntity p = event.getEntityPlayer();
+			PlayerEntity p = event.getPlayer();
 
 			ItemStack currentStack = p.inventory.getCurrentItem();
 
@@ -243,7 +243,7 @@ public class WuestEventHandler {
 									farmlandPosition.getX(),
 									farmlandPosition.up().getY(),
 									farmlandPosition.getZ()),
-								facing, farmlandPosition.up(), false);
+									facing, farmlandPosition.up(), false);
 
 							ItemUseContext context = new CustomItemUseContext(event.getWorld(), p, event.getHand(), drop, rayTraceResult);
 							replanted = drop.onItemUse(context);
@@ -463,7 +463,7 @@ public class WuestEventHandler {
 	public static void onPickUp(EntityItemPickupEvent event) {
 		if (!event.isCanceled()) {
 			boolean setSlot = false;
-			PlayerEntity player = event.getEntityPlayer();
+			PlayerEntity player = event.getPlayer();
 			ItemStack eventStack = event.getItem().getItem();
 
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {

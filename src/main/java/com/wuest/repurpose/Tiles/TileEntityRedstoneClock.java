@@ -1,13 +1,9 @@
 package com.wuest.repurpose.Tiles;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
-
+import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,10 +11,13 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 /**
  * This is the tile entity which controls the redstone strength and holds the
  * configuration data for the redstone clock.
- * 
+ *
  * @author WuestMan
  */
 public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration> {
@@ -43,7 +42,7 @@ public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerCo
 
 	/**
 	 * Gets the redstone strength for this state and side.
-	 * 
+	 *
 	 * @param state The current state of the block.
 	 * @param side  The facing to get the power from.
 	 * @return 15 if the side and block are powered, otherwise 0;
@@ -63,7 +62,7 @@ public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerCo
 	/**
 	 * Sets the redstone strength for a particular side and returns a powered or
 	 * unpowered state.
-	 * 
+	 *
 	 * @param state    The state to return as powered or unpowered.
 	 * @param strength The new strength of the side.
 	 * @param side     The side to update.

@@ -1,13 +1,9 @@
 package com.wuest.repurpose.Gui;
 
-import java.awt.Color;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Tuple;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,21 +12,61 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public abstract class BasicGui extends Screen {
 
+	private final ResourceLocation backgroundTextures = new ResourceLocation("repurpose",
+			"textures/gui/default_background.png");
 	public BlockPos pos;
 	protected PlayerEntity player;
 	protected int textColor = Color.DARK_GRAY.getRGB();
-
-	private final ResourceLocation backgroundTextures = new ResourceLocation("repurpose",
-			"textures/gui/default_background.png");
 	private boolean pauseGame;
 
 	public BasicGui() {
 		super(new StringTextComponent(""));
 		this.pauseGame = true;
+	}
+
+	/**
+	 * Draws a textured rectangle Args: x, y, z, width, height, textureWidth,
+	 * textureHeight
+	 *
+	 * @param x             The X-Axis screen coordinate.
+	 * @param y             The Y-Axis screen coordinate.
+	 * @param z             The Z-Axis screen coordinate.
+	 * @param width         The width of the rectangle.
+	 * @param height        The height of the rectangle.
+	 * @param textureWidth  The width of the texture.
+	 * @param textureHeight The height of the texture.
+	 */
+	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
+														   float textureWidth, float textureHeight) {
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+		float u = 0;
+		float v = 0;
+		float f = 1.0F / textureWidth;
+		float f1 = 1.0F / textureHeight;
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
+
+		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+
+		vertexBuffer.pos(x, y + height, z).tex(u * f, (v + height) * f1).endVertex();
+
+		vertexBuffer.pos(x + width, y + height, z).tex((u + width) * f, (v + height) * f1).endVertex();
+
+		vertexBuffer.pos(x + width, y, z).tex((u + width) * f, v * f1).endVertex();
+
+		vertexBuffer.pos(x, y, z).tex(u * f, v * f1).endVertex();
+
+		tessellator.draw();
 	}
 
 	protected int getCenteredXAxis() {
@@ -74,7 +110,7 @@ public abstract class BasicGui extends Screen {
 	}
 
 	/**
-	 * Creates a {@link GuiButtonExt} using the button clicked event as the handler.
+	 * Creates a {@link ExtendedButton} using the button clicked event as the handler.
 	 * Then adds it to the buttons list and returns the created object.
 	 *
 	 * @param x      The x-axis position.
@@ -84,8 +120,8 @@ public abstract class BasicGui extends Screen {
 	 * @param text   The text of the button.
 	 * @return A new button.
 	 */
-	public GuiButtonExt createAndAddButton(int x, int y, int width, int height, String text) {
-		GuiButtonExt returnValue = new GuiButtonExt(x, y, width, height, text, this::buttonClicked);
+	public ExtendedButton createAndAddButton(int x, int y, int width, int height, String text) {
+		ExtendedButton returnValue = new ExtendedButton(x, y, width, height, text, this::buttonClicked);
 
 		this.addButton(returnValue);
 
@@ -107,49 +143,11 @@ public abstract class BasicGui extends Screen {
 		}
 	}
 
-	public abstract void buttonClicked(Button button);
+	public abstract void buttonClicked(AbstractButton button);
 
 	protected abstract void preButtonRender(int x, int y);
 
 	protected abstract void postButtonRender(int x, int y, int mouseX, int mouseY);
 
 	protected abstract Tuple<Integer, Integer> getAdjustedXYValue();
-
-	/**
-	 * Draws a textured rectangle Args: x, y, z, width, height, textureWidth,
-	 * textureHeight
-	 *
-	 * @param x             The X-Axis screen coordinate.
-	 * @param y             The Y-Axis screen coordinate.
-	 * @param z             The Z-Axis screen coordinate.
-	 * @param width         The width of the rectangle.
-	 * @param height        The height of the rectangle.
-	 * @param textureWidth  The width of the texture.
-	 * @param textureHeight The height of the texture.
-	 */
-	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
-			float textureWidth, float textureHeight) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
-		float u = 0;
-		float v = 0;
-		float f = 1.0F / textureWidth;
-		float f1 = 1.0F / textureHeight;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexBuffer = tessellator.getBuffer();
-
-		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-
-		vertexBuffer.pos(x, y + height, z).tex(u * f, (v + height) * f1).endVertex();
-
-		vertexBuffer.pos(x + width, y + height, z).tex((u + width) * f, (v + height) * f1).endVertex();
-
-		vertexBuffer.pos(x + width, y, z).tex((u + width) * f, v * f1).endVertex();
-
-		vertexBuffer.pos(x, y, z).tex(u * f, v * f1).endVertex();
-
-		tessellator.draw();
-	}
 }

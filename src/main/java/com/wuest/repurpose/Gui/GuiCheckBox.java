@@ -1,11 +1,14 @@
 package com.wuest.repurpose.Gui;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
-public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBox {
+import java.awt.*;
+
+public class GuiCheckBox extends CheckboxButton {
 	protected int boxWidth;
 	protected int stringColor;
 	protected boolean withShadow;
@@ -14,7 +17,7 @@ public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBo
 	protected IPressable handler;
 
 	public GuiCheckBox(int xPos, int yPos, String displayString, boolean isChecked, IPressable handler) {
-		super(xPos, yPos, displayString, isChecked);
+		super(xPos, yPos, 11, 12, displayString, isChecked);
 
 		this.boxWidth = 11;
 		this.mineCraft = Minecraft.getInstance();
@@ -56,7 +59,7 @@ public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBo
 	 * Gets a value indicating whether a shadow is included with the checkbox text.
 	 *
 	 * @return The value of whether shadows are included when writing the text of
-	 *         this checkbox.
+	 * this checkbox.
 	 */
 	public boolean getWithShadow() {
 		return this.withShadow;
@@ -83,7 +86,7 @@ public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBo
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.boxWidth
 					&& mouseY < this.y + this.height;
 			GuiUtils.drawContinuousTexturedBox(WIDGETS_LOCATION, this.x, this.y, 0, 46, this.boxWidth, this.height, 200,
-					20, 2, 3, 2, 2, this.blitOffset);
+					20, 2, 3, 2, 2, this.getBlitOffset());
 
 			int color = this.stringColor;
 
@@ -104,5 +107,10 @@ public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBo
 				this.mineCraft.fontRenderer.drawString(displayString, x + this.boxWidth + 2, y + 2, color);
 			}
 		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public interface IPressable {
+		void onPress(GuiCheckBox p_onPress_1_);
 	}
 }

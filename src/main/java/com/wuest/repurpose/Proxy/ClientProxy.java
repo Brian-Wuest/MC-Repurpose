@@ -15,6 +15,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
@@ -46,18 +48,16 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
 public class ClientProxy extends CommonProxy {
-	public ModConfiguration serverConfiguration = null;
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
-
 	/**
 	 * The hashmap of mod item guis.
 	 */
 	public static HashMap<Item, BasicGui> ModItemGuis = new HashMap<>();
-
 	/**
 	 * The hashmap of mod block guis.
 	 */
 	public static HashMap<Block, BasicGui> ModBlockGuis = new HashMap<>();
+	public ModConfiguration serverConfiguration = null;
 
 	public ClientProxy() {
 		super();
@@ -71,88 +71,6 @@ public class ClientProxy extends CommonProxy {
 	public static void AddGuis() {
 		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock(), new GuiRedstoneClock());
 		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner(), new GuiRedstoneScanner());
-	}
-
-	@Override
-	public void preInit(FMLCommonSetupEvent event) {
-		super.preInit(event);
-	}
-
-	@Override
-	public void init(FMLCommonSetupEvent event) {
-		super.init(event);
-
-		// After all items have been registered and all recipes loaded, register
-		// any necessary renderer.
-		Repurpose.proxy.registerRenderers();
-		this.RegisterEventListeners();
-	}
-
-	@Override
-	public void postinit(FMLCommonSetupEvent event) {
-		super.postinit(event);
-
-		ClientProxy.AddGuis();
-	}
-
-	private void clientSetup(FMLClientSetupEvent event) {
-		this.RegisterKeyBindings();
-	}
-
-	@Override
-	public void registerRenderers() {
-		// Register block colors.
-		ClientProxy.RegisterBlockRenderer();
-	}
-
-	@Override
-	public void generateParticles(PlayerEntity player) {
-	}
-
-	@Override
-	public void openGuiForItem(ItemUseContext itemUseContext, Container container) {
-		ItemStack stack = itemUseContext.getPlayer().getHeldItemOffhand();
-		Screen screenToShow = null;
-
-		Minecraft.getInstance().displayGuiScreen(screenToShow);
-	}
-
-	@Override
-	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
-		for (Map.Entry<Block, BasicGui> entry : ClientProxy.ModBlockGuis.entrySet()) {
-			if (entry.getKey() == state.getBlock()) {
-				BasicGui screen = entry.getValue();
-				screen.pos = pos;
-
-				Minecraft.getInstance().displayGuiScreen(screen);
-			}
-		}
-	}
-
-	/*
-	 * @Override public Object getClientGuiElement(int ID, PlayerEntity player,
-	 * World world, int x, int y, int z) { TileEntity tileEntity =
-	 * world.getTileEntity(new BlockPos(x, y, z));
-	 *
-	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
-	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
-	 * y, z); } else if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
-	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
-	 * ItemBagOfHoldingProvider.GetFromStack(stack);
-	 *
-	 * return new GuiItemBagOfHolding(handler, player); }
-	 *
-	 * return null; }
-	 */
-
-	@Override
-	public ModConfiguration getServerConfiguration() {
-		if (this.serverConfiguration == null) {
-			// Get the server configuration.
-			return CommonProxy.proxyConfiguration;
-		} else {
-			return this.serverConfiguration;
-		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -193,6 +111,101 @@ public class ClientProxy extends CommonProxy {
 
 			return -1;
 		}, new Block[]{ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs()});
+	}
+
+	@Override
+	public void preInit(FMLCommonSetupEvent event) {
+		super.preInit(event);
+	}
+
+	@Override
+	public void init(FMLCommonSetupEvent event) {
+		super.init(event);
+
+		// After all items have been registered and all recipes loaded, register
+		// any necessary renderer.
+		Repurpose.proxy.registerRenderers();
+		this.RegisterEventListeners();
+	}
+
+	@Override
+	public void postinit(FMLCommonSetupEvent event) {
+		super.postinit(event);
+
+		ClientProxy.AddGuis();
+	}
+
+	private void clientSetup(FMLClientSetupEvent event) {
+		this.RegisterKeyBindings();
+
+		// This render type (func_228643_e_) is the "cutout" render type.
+		RenderTypeLookup.setRenderLayer(ModRegistry.DirtWall(), RenderType.getCutoutMipped());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassWall(), RenderType.getCutoutMipped());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.EnrichedFarmland(), RenderType.getCutout());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassSlab(), RenderType.getCutoutMipped());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.MiniRedstone(), RenderType.getCutout());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.RedstoneScanner(), RenderType.getCutout());
+	}
+
+	@Override
+	public void registerRenderers() {
+		// Register block colors.
+		ClientProxy.RegisterBlockRenderer();
+	}
+
+	@Override
+	public void generateParticles(PlayerEntity player) {
+	}
+
+	@Override
+	public void openGuiForItem(ItemUseContext itemUseContext, Container container) {
+		ItemStack stack = itemUseContext.getPlayer().getHeldItemOffhand();
+		Screen screenToShow = null;
+
+		Minecraft.getInstance().displayGuiScreen(screenToShow);
+	}
+
+	/*
+	 * @Override public Object getClientGuiElement(int ID, PlayerEntity player,
+	 * World world, int x, int y, int z) { TileEntity tileEntity =
+	 * world.getTileEntity(new BlockPos(x, y, z));
+	 *
+	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
+	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
+	 * y, z); } else if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
+	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
+	 * ItemBagOfHoldingProvider.GetFromStack(stack);
+	 *
+	 * return new GuiItemBagOfHolding(handler, player); }
+	 *
+	 * return null; }
+	 */
+
+	@Override
+	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
+		for (Map.Entry<Block, BasicGui> entry : ClientProxy.ModBlockGuis.entrySet()) {
+			if (entry.getKey() == state.getBlock()) {
+				BasicGui screen = entry.getValue();
+				screen.pos = pos;
+
+				Minecraft.getInstance().displayGuiScreen(screen);
+			}
+		}
+	}
+
+	@Override
+	public ModConfiguration getServerConfiguration() {
+		if (this.serverConfiguration == null) {
+			// Get the server configuration.
+			return CommonProxy.proxyConfiguration;
+		} else {
+			return this.serverConfiguration;
+		}
 	}
 
 	private void RegisterEventListeners() {

@@ -1,18 +1,14 @@
 package com.wuest.repurpose.Proxy;
 
-import com.wuest.repurpose.Items.ItemSickle;
-import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Crafting.RecipeCondition;
 import com.wuest.repurpose.Crafting.SmeltingCondition;
 import com.wuest.repurpose.Loot.Conditions.ConfigRandomChance;
-
-import net.minecraft.inventory.container.Container;
-import org.apache.commons.lang3.tuple.Pair;
-
+import com.wuest.repurpose.ModRegistry;
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +22,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.file.Path;
 
@@ -87,13 +84,13 @@ public class CommonProxy {
 	 * @Override public Object getServerGuiElement(int ID, EntityPlayer player,
 	 * World world, int x, int y, int z) { TileEntity tileEntity =
 	 * world.getTileEntity(new BlockPos(x, y, z));
-	 * 
+	 *
 	 * if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
 	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
 	 * ItemBagOfHoldingProvider.GetFromStack(stack);
 	 * ((ItemBagOfHolding)stack.getItem()).RefreshItemStack(player, stack); return
 	 * new BagOfHoldingContainer(handler, player); }
-	 * 
+	 *
 	 * return null; }
 	 */
 

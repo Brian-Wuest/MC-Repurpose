@@ -2,7 +2,6 @@ package com.wuest.repurpose.Items;
 
 import com.google.common.collect.Multimap;
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -14,9 +13,8 @@ import net.minecraft.item.SwordItem;
 /**
  * This class is used to create a sword which has the same speed as pre-1.9
  * swords.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class ItemSwiftBlade extends SwordItem {
 	protected final float attackDamage;

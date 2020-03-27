@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;

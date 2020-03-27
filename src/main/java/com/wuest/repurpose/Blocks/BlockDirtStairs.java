@@ -1,28 +1,24 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
 
 /**
  * This class is used to define a set of dirt stairs.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class BlockDirtStairs extends StairsBlock implements IModBlock {
 	/**
 	 * Initializes a new instance of the BlockDirtStairs class.
-	 * 
-	 * @param modelState
 	 */
 	public BlockDirtStairs() {
 		super(Blocks.DIRT.getDefaultState(), Block.Properties.from(Blocks.GRASS_BLOCK));
@@ -40,7 +36,7 @@ public class BlockDirtStairs extends StairsBlock implements IModBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {

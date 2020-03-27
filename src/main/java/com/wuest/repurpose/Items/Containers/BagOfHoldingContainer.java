@@ -1,15 +1,9 @@
 package com.wuest.repurpose.Items.Containers;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-import com.sun.org.apache.bcel.internal.generic.RET;
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
-import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,32 +11,20 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class BagOfHoldingContainer extends Container {
+	public static ContainerType<BagOfHoldingContainer> containerType = new ContainerType<>(BagOfHoldingContainer::new);
 	private ItemBagOfHoldingProvider inventory;
 	private PlayerInventory playerInventory;
-
-	public static ContainerType<BagOfHoldingContainer> containerType = new ContainerType<>(BagOfHoldingContainer::new);
-
-	public static BagOfHoldingContainer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer buf) {
-		return new BagOfHoldingContainer(windowId, inv);
-	}
 
 	public BagOfHoldingContainer(int windowId, PlayerInventory playerInventory) {
 		super(BagOfHoldingContainer.containerType, windowId);
@@ -81,9 +63,13 @@ public class BagOfHoldingContainer extends Container {
 		this.playerInventory = playerInventory;
 	}
 
+	public static BagOfHoldingContainer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer buf) {
+		return new BagOfHoldingContainer(windowId, inv);
+	}
+
 	/**
 	 * Determines if the stack is valid for this container.
-	 * 
+	 *
 	 * @param stack - The stack to check.
 	 * @return True if the stack is valid for the bag of holding, otherwise false.
 	 */
