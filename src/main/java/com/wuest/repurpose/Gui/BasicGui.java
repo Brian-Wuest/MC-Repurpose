@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Tuple;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -135,7 +134,7 @@ public abstract class BasicGui extends Screen {
 
 	protected void renderButtons(int mouseX, int mouseY) {
 		for (net.minecraft.client.gui.widget.Widget button : this.buttons) {
-			Button currentButton = (Button) button;
+			AbstractButton currentButton = (AbstractButton) button;
 
 			if (currentButton != null && currentButton.visible) {
 				currentButton.renderButton(mouseX, mouseY, this.getMinecraft().getRenderPartialTicks());

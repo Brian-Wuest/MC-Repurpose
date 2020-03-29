@@ -86,7 +86,7 @@ public class GuiRedstoneScanner extends BasicGui {
 				this.Config.getFacingConfig(Direction.DOWN).getScanLength(), false, true, this::buttonClicked);
 		this.addButton(this.btnDownRange);
 
-		this.btnNorth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 25, "",
+		this.btnNorth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 23, "",
 				this.Config.getFacingConfig(Direction.NORTH).getActive(), this::buttonClicked);
 		this.addButton(this.btnNorth);
 		this.northChecker = new HoverChecker(this.btnNorth, 800);
@@ -106,12 +106,12 @@ public class GuiRedstoneScanner extends BasicGui {
 		this.addButton(this.btnWest);
 		this.westChecker = new HoverChecker(this.btnWest, 800);
 
-		this.btnSouth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 49, "",
+		this.btnSouth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 51, "",
 				this.Config.getFacingConfig(Direction.SOUTH).getActive(), this::buttonClicked);
 		this.addButton(this.btnSouth);
 		this.southChecker = new HoverChecker(this.btnSouth, 800);
 
-		this.btnUp = new GuiCheckBox(grayBoxX + 212, grayBoxY + 49, "",
+		this.btnUp = new GuiCheckBox(grayBoxX + 212, grayBoxY + 51, "",
 				this.Config.getFacingConfig(Direction.UP).getActive(), this::buttonClicked);
 		this.addButton(this.btnUp);
 		this.upChecker = new HoverChecker(this.btnUp, 800);
