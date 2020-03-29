@@ -143,7 +143,11 @@ public class ClientProxy extends CommonProxy {
 
 		RenderTypeLookup.setRenderLayer(ModRegistry.GrassWall(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.EnrichedFarmland(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassStairs(), RenderType.getCutoutMipped());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.DirtStairs(), RenderType.getCutoutMipped());
+
+		RenderTypeLookup.setRenderLayer(ModRegistry.EnrichedFarmland(), RenderType.getCutoutMipped());
 
 		RenderTypeLookup.setRenderLayer(ModRegistry.GrassSlab(), RenderType.getCutoutMipped());
 

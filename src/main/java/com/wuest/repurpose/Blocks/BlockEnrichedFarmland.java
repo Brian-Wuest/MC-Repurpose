@@ -48,11 +48,6 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 		entityIn.onLivingFall(fallDistance, 1.0F);
 	}
 
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelShapes.fullCube();
-	}
-
 	/**
 	 * Update the provided state given the provided neighbor facing and neighbor
 	 * state, returning a new state. For example, fences make their connections to

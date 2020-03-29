@@ -60,12 +60,12 @@ public class GuiRedstoneClock extends BasicGui {
 		int grayBoxY = (this.height / 2) - 83;
 
 		// Create the buttons.
-		this.btnUp = new GuiCheckBox(grayBoxX + 190, grayBoxY + 25, "",
+		this.btnUp = new GuiCheckBox(grayBoxX + 190, grayBoxY + 23, "",
 				this.powerConfiguration.getSidePower(Direction.UP), this::buttonClicked);
 		this.addButton(this.btnUp);
 		this.upChecker = new HoverChecker(this.btnUp, 800);
 
-		this.btnNorth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 37, "",
+		this.btnNorth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 36, "",
 				this.powerConfiguration.getSidePower(Direction.NORTH), this::buttonClicked);
 		this.addButton(this.btnNorth);
 		this.northChecker = new HoverChecker(this.btnNorth, 800);
@@ -85,7 +85,7 @@ public class GuiRedstoneClock extends BasicGui {
 		this.addButton(this.btnWest);
 		this.westChecker = new HoverChecker(this.btnWest, 800);
 
-		this.btnSouth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 61, "",
+		this.btnSouth = new GuiCheckBox(grayBoxX + 190, grayBoxY + 62, "",
 				this.powerConfiguration.getSidePower(Direction.SOUTH), this::buttonClicked);
 		this.addButton(this.btnSouth);
 		this.southChecker = new HoverChecker(this.btnSouth, 800);
