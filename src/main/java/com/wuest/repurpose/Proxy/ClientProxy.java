@@ -37,7 +37,6 @@ import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,16 +60,14 @@ public class ClientProxy extends CommonProxy {
 
 	public ClientProxy() {
 		super();
-
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 	}
 
 	/**
 	 * Adds all of the Mod Guis to the HasMap.
 	 */
 	public static void AddGuis() {
-		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock(), new GuiRedstoneClock());
-		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner(), new GuiRedstoneScanner());
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock.get(), new GuiRedstoneClock());
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner.get(), new GuiRedstoneScanner());
 	}
 
 	@Override
@@ -95,8 +92,11 @@ public class ClientProxy extends CommonProxy {
 		ClientProxy.AddGuis();
 	}
 
-	private void clientSetup(FMLClientSetupEvent event) {
+	@Override
+	public void clientSetup(FMLClientSetupEvent event) {
 		this.RegisterKeyBindings();
+
+		DeferredWorkQueue.runLater(ClientSetup::init);
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class ClientProxy extends CommonProxy {
 		// Register the block renderer.
 		Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> worldIn != null && pos != null
 				? BiomeColors.getGrassColor(worldIn, pos)
-				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs());
+				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get());
 
 		// Register the item renderer.
 		Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
@@ -192,7 +192,7 @@ public class ClientProxy extends CommonProxy {
 			}
 
 			return -1;
-		}, new Block[]{ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs()});
+		}, new Block[]{ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get()});
 	}
 
 	private void RegisterEventListeners() {

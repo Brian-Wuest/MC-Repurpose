@@ -403,7 +403,7 @@ public class WuestEventHandler {
 			ItemStack result = new ItemStack(enchantingItem);
 
 			if (result != null) {
-				result.addEnchantment(ModRegistry.StepAssist(), 1);
+				result.addEnchantment(ModRegistry.StepAssist.get(), 1);
 				event.setCost(2);
 			}
 

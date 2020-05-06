@@ -26,14 +26,12 @@ public class ItemSwiftBlade extends SwordItem {
 	/*
 	 * Initializes a new instance of the ItemSwiftBlade class.
 	 */
-	public ItemSwiftBlade(IItemTier tier, int attackDamageIn, float attackSpeedIn, String name) {
+	public ItemSwiftBlade(IItemTier tier, int attackDamageIn, float attackSpeedIn) {
 		super(tier, attackDamageIn, attackSpeedIn,
 				new Item.Properties().maxStackSize(1).maxDamage(tier.getMaxUses()).group(ItemGroup.COMBAT));
 		this.material = tier;
 		this.attackDamage = 3.0F + material.getAttackDamage();
 		this.attackSpeed = attackSpeedIn;
-
-		ModRegistry.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(name));
 	}
 
 	/*

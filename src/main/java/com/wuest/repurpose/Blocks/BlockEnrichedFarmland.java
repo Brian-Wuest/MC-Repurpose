@@ -1,11 +1,5 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -31,15 +25,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	public BlockEnrichedFarmland() {
 		super(Block.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND)
 				.harvestLevel(0).harvestTool(ToolType.SHOVEL));
 
 		// Make sure that this block is always wet.
-		this.setDefaultState(this.stateContainer.getBaseState().with(MOISTURE, Integer.valueOf(7)));
-
-		ModRegistry.setBlockName(this, "block_enriched_farmland");
+		this.setDefaultState(this.stateContainer.getBaseState().with(MOISTURE, 7));
 	}
 
 	/**
@@ -70,7 +65,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	 * only the specific face passed in.
 	 */
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn,
-			BlockPos currentPos, BlockPos facingPos) {
+										  BlockPos currentPos, BlockPos facingPos) {
 		return stateIn;
 	}
 
@@ -92,7 +87,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	 */
 	@Override
 	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing,
-			net.minecraftforge.common.IPlantable plantable) {
+								   net.minecraftforge.common.IPlantable plantable) {
 		// This block can sustain everything.
 		return true;
 	}
@@ -103,7 +98,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

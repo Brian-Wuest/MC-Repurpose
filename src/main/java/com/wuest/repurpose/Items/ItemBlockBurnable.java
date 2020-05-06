@@ -18,7 +18,6 @@ public class ItemBlockBurnable extends BlockItem {
 
 	public ItemBlockBurnable(Block block, ItemGroup itemGroup) {
 		super(block, new Item.Properties().group(itemGroup));
-		ModRegistry.setItemName(this, block.getRegistryName().getPath());
 	}
 
 	public ItemBlockBurnable setBurnTime(int burnTime) {

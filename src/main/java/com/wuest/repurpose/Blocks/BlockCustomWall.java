@@ -1,34 +1,22 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.List;
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FourWayBlock;
-import net.minecraft.block.WallBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
+
+import java.util.Random;
 
 public class BlockCustomWall extends WallBlock implements IModBlock {
 	public static final EnumProperty<BlockCustomWall.EnumType> VARIANT = EnumProperty.<BlockCustomWall.EnumType>create(
@@ -42,8 +30,6 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 				.sound(modelBlock.getSoundType(null)));
 
 		this.BlockVariant = variant;
-
-		ModRegistry.setBlockName(this, variant.getUnlocalizedName());
 	}
 
 	/**
@@ -70,17 +56,17 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
-						BlockState grassStairsState = ModRegistry.GrassWall().getDefaultState()
+						BlockState grassStairsState = ModRegistry.GrassWall.get().getDefaultState()
 								.with(FourWayBlock.EAST, state.get(FourWayBlock.EAST))
 								.with(FourWayBlock.WEST, state.get(FourWayBlock.WEST))
 								.with(FourWayBlock.NORTH, state.get(FourWayBlock.NORTH))
 								.with(FourWayBlock.SOUTH, state.get(FourWayBlock.SOUTH))
 								.with(FourWayBlock.WATERLOGGED, state.get(FourWayBlock.WATERLOGGED))
-								.with(WallBlock.UP,state.get(WallBlock.UP));
+								.with(WallBlock.UP, state.get(WallBlock.UP));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
 				}
@@ -93,8 +79,8 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	 */
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos,
-			PlayerEntity player) {
-		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall()));
+								  PlayerEntity player) {
+		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall.get()));
 	}
 
 	@Override

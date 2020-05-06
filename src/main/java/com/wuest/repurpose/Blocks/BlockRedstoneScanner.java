@@ -73,7 +73,6 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT).hardnessAndResistance(.5f, 10.0f)
 				.sound(SoundType.METAL), TileEntityRedstoneScanner.TileType);
 
-		ModRegistry.setBlockName(this, "block_redstone_scanner");
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
 	}
 

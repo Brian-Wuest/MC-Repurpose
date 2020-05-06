@@ -17,8 +17,6 @@ public class EnchantmentStepAssist extends Enchantment
 	public EnchantmentStepAssist(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots)
 	{
 		super(rarityIn, typeIn, slots);
-		
-		this.setRegistryName(Repurpose.MODID, "step_assist");
 	}
 	
 	@Override

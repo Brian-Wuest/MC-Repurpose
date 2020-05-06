@@ -1,26 +1,20 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
+import java.util.Random;
+
 public class BlockDirtSlab extends SlabBlock implements IModBlock {
 	public BlockDirtSlab() {
 		super(Block.Properties.create(Material.EARTH, MaterialColor.DIRT).sound(SoundType.GROUND)
 				.hardnessAndResistance(0.5f, 0.5f).harvestTool(ToolType.SHOVEL).harvestLevel(0));
-		ModRegistry.setBlockName(this, "block_dirt_slab");
 	}
 
 	/**
@@ -47,13 +41,13 @@ public class BlockDirtSlab extends SlabBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
 						BlockState grassSlabsState = null;
 
-						grassSlabsState = ModRegistry.GrassSlab().getDefaultState().with(SlabBlock.TYPE,
+						grassSlabsState = ModRegistry.GrassSlab.get().getDefaultState().with(SlabBlock.TYPE,
 								state.get(SlabBlock.TYPE));
 
 						worldIn.setBlockState(pos, grassSlabsState, 3);

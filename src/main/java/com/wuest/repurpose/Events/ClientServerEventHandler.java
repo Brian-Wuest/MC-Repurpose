@@ -1,26 +1,17 @@
 package com.wuest.repurpose.Events;
 
-import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
-import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
 import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -30,51 +21,17 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Repurpose.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientServerEventHandler {
-	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		for (Block block : ModRegistry.ModBlocks) {
-			Repurpose.LOGGER
-					.debug("Logging Block With Name: " + block.getRegistryName() + " and type: " + block.toString());
-			event.getRegistry().register(block);
-		}
 
-	}
-
-	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(ModRegistry.ModItems.toArray(new Item[0]));
-	}
-
-	@SubscribeEvent
-	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
-		ModRegistry.stepAssist = new EnchantmentStepAssist(Enchantment.Rarity.COMMON, EnchantmentType.ARMOR_FEET,
-				new EquipmentSlotType[]{EquipmentSlotType.FEET});
-
-		event.getRegistry().register(ModRegistry.stepAssist);
-	}
-
-	@SubscribeEvent
-	public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-		IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
-
-		ExtendedCookingRecipeSerializer serializer = new ExtendedCookingRecipeSerializer(200);
-		serializer.setRegistryName(Repurpose.MODID, "extended_smelting");
-
-		ModRegistry.ExtendedSmelting = serializer;
-
-		registry.register(serializer);
-	}
-
-	@SubscribeEvent
+/*	@SubscribeEvent
 	public static void registerContainers(RegistryEvent.Register<ContainerType<?>> evt) {
 		IForgeRegistry<ContainerType<?>> registry = evt.getRegistry();
 
 		ContainerType<BagOfHoldingContainer> bag = IForgeContainerType.create(BagOfHoldingContainer::fromNetwork);
-		bag.setRegistryName(ModRegistry.BagofHolding().getRegistryName());
+		bag.setRegistryName(ModRegistry.BagOfHolding.get().getRegistryName());
 		BagOfHoldingContainer.containerType = bag;
 
 		registry.register(bag);
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ScreenManager.registerFactory(bag, GuiItemBagOfHolding::new));
-	}
+	}*/
 }

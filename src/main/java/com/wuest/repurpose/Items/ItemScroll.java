@@ -1,21 +1,16 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.item.BookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class ItemScroll extends BookItem {
-	public ItemScroll(String name) {
+	public ItemScroll() {
 		super(new Item.Properties().group(ItemGroup.MISC));
-		ModRegistry.setItemName(this, name);
 	}
 
 	/**
@@ -35,7 +30,7 @@ public class ItemScroll extends BookItem {
 	 * {@link net.minecraft.enchantment.Enchantment#canApplyAtEnchantingTable(ItemStack)};
 	 * check the individual implementation for reference. By default this will check
 	 * if the enchantment type is valid for this item type.
-	 * 
+	 *
 	 * @param stack       the item stack to be enchanted
 	 * @param enchantment the enchantment to be applied
 	 * @return true if the enchantment can be applied to this item

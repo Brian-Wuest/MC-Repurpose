@@ -9,6 +9,7 @@ import com.wuest.repurpose.Crafting.SmeltingCondition;
 import com.wuest.repurpose.Loot.Conditions.ConfigRandomChance;
 
 import net.minecraft.inventory.container.Container;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.BlockState;
@@ -81,6 +82,9 @@ public class CommonProxy {
 	}
 
 	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
+	}
+
+	public void clientSetup(FMLClientSetupEvent clientSetupEvent) {
 	}
 
 	/*

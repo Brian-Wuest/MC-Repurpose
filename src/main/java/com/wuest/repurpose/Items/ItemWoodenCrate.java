@@ -1,35 +1,28 @@
 package com.wuest.repurpose.Items;
 
 import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 /**
- * 
  * @author WuestMan
- *
  */
 public class ItemWoodenCrate extends Item {
 	public final CrateType crateType;
 
 	/**
 	 * Creates a new instance of the ItemWoodenCrateClass.
-	 * 
-	 * @param name
 	 */
-	public ItemWoodenCrate(String name, CrateType crateType) {
-		super(new Item.Properties().group(ItemGroup.FOOD).containerItem(crateType == CrateType.Empty ? null : ModRegistry.EmptyWoodenCrate()));
-
-		ModRegistry.setItemName(this, name);
+	public ItemWoodenCrate(CrateType crateType) {
+		super(new Item.Properties().group(ItemGroup.FOOD).containerItem(crateType == CrateType.Empty ? null : ModRegistry.WoodenCrate.get()));
 
 		this.crateType = crateType;
 	}
 
 	/**
 	 * ItemStack sensitive version of hasContainerItem
-	 * 
+	 *
 	 * @param stack The current item stack
 	 * @return True if this item has a 'container'
 	 */
@@ -43,9 +36,8 @@ public class ItemWoodenCrate extends Item {
 
 	/**
 	 * This enum is used to identify the crate types.
-	 * 
-	 * @author WuestMan
 	 *
+	 * @author WuestMan
 	 */
 	public enum CrateType {
 		Empty(0), Clutch_Of_Eggs(1), Carton_Of_Eggs(2), Bunch_Of_Potatoes(3), Crate_Of_Potatoes(4), Bunch_Of_Carrots(5),

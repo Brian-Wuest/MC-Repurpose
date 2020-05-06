@@ -1,22 +1,14 @@
 package com.wuest.repurpose.Items;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.*;
@@ -25,8 +17,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -35,21 +30,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 /**
- * 
  * @author WuestMan
- *
  */
 public class ItemBagOfHolding extends Item {
 	public static final String customValues = "bag_values";
 	public static final String currentSlotName = "current_slot";
 	public static final String bagOpenName = "bag_opened";
 
-	public ItemBagOfHolding(String name) {
+	public ItemBagOfHolding() {
 		super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1));
 
 		// This will determine what model is shown to the user when the bag is opened or closed.
-		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID,"bag_of_holding"), new IItemPropertyGetter() {
+		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
 
 			@OnlyIn(Dist.CLIENT)
 			public float call(ItemStack itemStack, @Nullable World world, @Nullable LivingEntity entity) {
@@ -59,11 +55,9 @@ public class ItemBagOfHolding extends Item {
 					return 1f;
 				}
 
-				return  0f;
+				return 0f;
 			}
 		});
-
-		ModRegistry.setItemName(this, name);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
@@ -85,7 +79,7 @@ public class ItemBagOfHolding extends Item {
 
 				// The consumer specified here is the "openMenu" method.
 				INamedContainerProvider container = new SimpleNamedContainerProvider((windowId, playerInventory, playerEntity) ->
-						new BagOfHoldingContainer(windowId, playerInventory), new StringTextComponent(ModRegistry.BagofHolding().getRegistryName().toString()));
+						new BagOfHoldingContainer(windowId, playerInventory), new StringTextComponent(ModRegistry.BagOfHolding.get().getRegistryName().toString()));
 
 				NetworkHooks.openGui((ServerPlayerEntity) player, container, buf -> {
 				});
@@ -168,7 +162,7 @@ public class ItemBagOfHolding extends Item {
 	}
 
 	public ActionResultType PlaceBlockFromPouch(PlayerEntity player, BlockItem itemBlock,
-			BlockRayTraceResult rayTraceResult, Hand hand) {
+												BlockRayTraceResult rayTraceResult, Hand hand) {
 		return itemBlock.tryPlace(new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult)));
 	}
 
@@ -178,7 +172,7 @@ public class ItemBagOfHolding extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

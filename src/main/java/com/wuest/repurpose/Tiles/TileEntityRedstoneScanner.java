@@ -32,13 +32,9 @@ import net.minecraft.util.math.shapes.VoxelShapes;
  */
 public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerConfig> {
 	public static TileEntityType<TileEntityRedstoneScanner> TileType = new TileEntityType<TileEntityRedstoneScanner>(
-			TileEntityRedstoneScanner::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedstoneScanner())), null);
+			TileEntityRedstoneScanner::new, new HashSet<>(Arrays.asList(ModRegistry.RedstoneScanner.get())), null);
 
 	protected boolean foundEntity = false;
-
-	static {
-		TileEntityRedstoneScanner.TileType.setRegistryName(new ResourceLocation(Repurpose.MODID, "redstone_scanner"));
-	}
 
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneScanner class.
@@ -55,8 +51,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	/**
 	 * This method is used to determine if an entity was found within the scanning
 	 * range.
-	 * 
-	 * @param state - The current blocks state.
+	 *
 	 * @return The redstone strength the block associated with this tile entity
 	 *         should provide.
 	 */

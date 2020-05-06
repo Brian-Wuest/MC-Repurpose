@@ -1,10 +1,7 @@
 package com.wuest.repurpose.Blocks;
 
-import java.util.Random;
-
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -12,21 +9,19 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 /**
  * This class is used to define a set of dirt stairs.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class BlockDirtStairs extends StairsBlock implements IModBlock {
 	/**
 	 * Initializes a new instance of the BlockDirtStairs class.
-	 * 
-	 * @param modelState
 	 */
 	public BlockDirtStairs() {
 		super(Blocks.DIRT.getDefaultState(), Block.Properties.from(Blocks.GRASS_BLOCK));
-		ModRegistry.setBlockName(this, "block_dirt_stairs");
 	}
 
 	/**
@@ -53,11 +48,11 @@ public class BlockDirtStairs extends StairsBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
-						BlockState grassStairsState = ModRegistry.GrassStairs().getDefaultState()
+						BlockState grassStairsState = ModRegistry.GrassStairs.get().getDefaultState()
 								.with(StairsBlock.FACING, state.get(StairsBlock.FACING))
 								.with(StairsBlock.HALF, state.get(StairsBlock.HALF))
 								.with(StairsBlock.SHAPE, state.get(StairsBlock.SHAPE));
