@@ -317,8 +317,8 @@ public class ClientEventHandler {
 
 				for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet()) {
 					if (entry.getKey() instanceof EnchantmentStepAssist) {
-						// Found the step assist, create the info and update the player's step height
-						// based on level.
+						// Found the step assist, create the info and update the player's step height based on level.
+						// Also make sure that the player's step height is adjusted since it can be passed up when logging into a world.
 						if (entry.getValue() != info.enchantmentLevel) {
 							// Adjust the step height because the item changed.
 							float newStepHeightAdjustment = (entry.getValue() == 1 ? 1.0F
@@ -381,18 +381,15 @@ public class ClientEventHandler {
 
 							info.newStepHeight = player.stepHeight + adjustedStepHeight;
 
-							// If the new step height would be greater than the maximum step height for this
-							// level, set
-							// it to the maximum step height.
+							// If the new step height would be greater than the maximum step height for this level, set it to the maximum step height.
 							if (info.newStepHeight > (entry.getValue() == 1 ? 1.0F
 									: entry.getValue() == 2 ? 1.5F : 2.0F)) {
 								info.newStepHeight = entry.getValue() == 1 ? 1.0F : entry.getValue() == 2 ? 1.5F : 2.0F;
 							}
 
 							player.stepHeight = info.newStepHeight;
+							ClientEventHandler.playerStepAssists.put(player.getName().getFormattedText(), info);
 						}
-
-						ClientEventHandler.playerStepAssists.put(player.getName().getFormattedText(), info);
 
 						break;
 					}
