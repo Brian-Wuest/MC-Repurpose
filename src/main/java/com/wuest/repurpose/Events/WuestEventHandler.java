@@ -257,13 +257,13 @@ public class WuestEventHandler {
 											+ crop.getRegistryName().toString()
 											+ "] from the crop's drops. Not including it in the list of drops to be added to the player's inventory.");
 								}
-
-								continue;
 							}
 						}
 
-						p.inventory.addItemStackToInventory(drop);
-						p.openContainer.detectAndSendChanges();
+						if (drop != ItemStack.EMPTY) {
+							p.inventory.addItemStackToInventory(drop);
+							p.openContainer.detectAndSendChanges();
+						}
 					}
 
 					if (replanted != ActionResultType.PASS) {
