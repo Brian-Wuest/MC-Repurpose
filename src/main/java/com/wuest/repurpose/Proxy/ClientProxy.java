@@ -144,10 +144,6 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void generateParticles(PlayerEntity player) {
-	}
-
-	@Override
 	public void openGuiForItem(ItemUseContext itemUseContext, Container container) {
 		ItemStack stack = itemUseContext.getPlayer().getHeldItemOffhand();
 		Screen screenToShow = null;

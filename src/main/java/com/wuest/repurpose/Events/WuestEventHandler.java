@@ -66,8 +66,6 @@ import java.util.*;
 public class WuestEventHandler {
 	private static HashMap<String, BlockPos> playerBedLocation;
 
-	private static HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
-
 	@SubscribeEvent
 	public static void onPlayerLoginEvent(PlayerLoggedInEvent event) {
 		if (!event.getPlayer().world.isRemote) {
@@ -360,8 +358,6 @@ public class WuestEventHandler {
 			// This is needed as the client doesn't properly store the bed location.
 			WuestEventHandler.sendPlayerBedLocation(event);
 		}
-
-		// this.generatePlayerParticles(event);
 	}
 
 	@SubscribeEvent
@@ -559,41 +555,6 @@ public class WuestEventHandler {
 			// Only send the message to the client if the bed position changes.
 			Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 		}
-	}
-
-	private static void generatePlayerParticles(TickEvent.PlayerTickEvent event) {
-		PlayerEntity player = event.player;
-
-		if (WuestEventHandler.playerExistedTicks.containsKey(player.getDisplayName().getString())) {
-			int ticks = WuestEventHandler.playerExistedTicks.get(player.getDisplayName().getString());
-
-			if (ticks % 20 == 0) {
-				Repurpose.proxy.generateParticles(player);
-				ticks = 0;
-			}
-
-			ticks++;
-			WuestEventHandler.playerExistedTicks.put(player.getDisplayName().getString(), ticks);
-		} else {
-			WuestEventHandler.playerExistedTicks.put(player.getDisplayName().getString(), 0);
-		}
-
-	}
-
-	private static void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage,
-												 Item itemToDrop, int quantity) {
-		double randomChance = WuestEventHandler.getRandomChance(world);
-
-		if (randomChance <= maxPercentage) {
-			drops.add(new ItemStack(itemToDrop, quantity));
-		}
-	}
-
-	private static double getRandomChance(World world) {
-		double randomChance = world.rand.nextDouble();
-		BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
-		bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
-		return bigDecimal.doubleValue();
 	}
 
 	private static AnvilUpdateEvent processScrollUpdate(AnvilUpdateEvent event) {

@@ -84,9 +84,6 @@ public class CommonProxy {
 	public void clientSetup(FMLClientSetupEvent clientSetupEvent) {
 	}
 
-	public void generateParticles(PlayerEntity players) {
-	}
-
 	public ModConfiguration getServerConfiguration() {
 		return CommonProxy.proxyConfiguration;
 	}
