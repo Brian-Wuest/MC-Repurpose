@@ -227,7 +227,7 @@ public class WuestEventHandler {
 							null);
 
 					// Break the original crop block.
-					event.getWorld().removeBlock(event.getPos(), false);
+					event.getWorld().destroyBlock(event.getPos(), false);
 
 					ActionResultType replanted = ActionResultType.FAIL;
 					BlockState tempState = cropState.with(ageInteger, 0);
