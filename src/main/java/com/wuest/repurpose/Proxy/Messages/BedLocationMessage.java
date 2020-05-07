@@ -17,6 +17,6 @@ public class BedLocationMessage extends TagMessage {
 	}
 
 	public static BedLocationMessage decode(PacketBuffer buf) {
-        return TagMessage.decode(buf, BedLocationMessage.class);
-    }
+		return TagMessage.decode(buf, BedLocationMessage.class);
+	}
 }

@@ -17,6 +17,6 @@ public class ConfigSyncMessage extends TagMessage {
 	}
 
 	public static ConfigSyncMessage decode(PacketBuffer buf) {
-        return TagMessage.decode(buf, ConfigSyncMessage.class);
-    }
+		return TagMessage.decode(buf, ConfigSyncMessage.class);
+	}
 }

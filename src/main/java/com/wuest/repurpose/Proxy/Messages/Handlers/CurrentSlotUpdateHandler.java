@@ -1,15 +1,14 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import java.util.function.Supplier;
-
 import com.wuest.repurpose.Items.ItemBagOfHolding;
 import com.wuest.repurpose.Proxy.Messages.CurrentSlotUpdateMessage;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class CurrentSlotUpdateHandler {
 

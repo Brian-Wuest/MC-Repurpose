@@ -1,9 +1,9 @@
 package com.wuest.repurpose.Gui;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.config.GuiUtils;
+
+import java.awt.*;
 
 public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBox {
 	protected int boxWidth;
@@ -56,7 +56,7 @@ public class GuiCheckBox extends net.minecraftforge.fml.client.config.GuiCheckBo
 	 * Gets a value indicating whether a shadow is included with the checkbox text.
 	 *
 	 * @return The value of whether shadows are included when writing the text of
-	 *         this checkbox.
+	 * this checkbox.
 	 */
 	public boolean getWithShadow() {
 		return this.withShadow;

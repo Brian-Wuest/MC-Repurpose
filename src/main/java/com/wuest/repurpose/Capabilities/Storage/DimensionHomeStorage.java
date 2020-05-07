@@ -1,10 +1,6 @@
 package com.wuest.repurpose.Capabilities.Storage;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import com.wuest.repurpose.Capabilities.IDimensionHome;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -12,9 +8,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 /**
  * This is the storage class for the DimensionHome capability.
- * 
+ *
  * @author WuestMan
  */
 public class DimensionHomeStorage implements Capability.IStorage<IDimensionHome> {

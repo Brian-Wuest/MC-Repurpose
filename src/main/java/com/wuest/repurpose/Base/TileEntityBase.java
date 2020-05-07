@@ -1,11 +1,7 @@
 package com.wuest.repurpose.Base;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 import com.wuest.repurpose.Capabilities.ITransferable;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -13,13 +9,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import org.apache.logging.log4j.Level;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * This is the base tile entity used by the mod.
- * 
- * @author WuestMan
  *
  * @param <T> The base configuration used by this tile entity.
+ * @author WuestMan
  */
 public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	protected T config;
@@ -38,7 +38,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Sets the configuration class used by this tile entity.
-	 * 
+	 *
 	 * @param value The updated tile entity.
 	 */
 	public void setConfig(T value) {
@@ -48,7 +48,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Gets the list of allowed capabilities.
-	 * 
+	 *
 	 * @return The list of allowed capabilities if any.
 	 */
 	public ArrayList<Capability> getAllowedCapabilities() {
@@ -63,7 +63,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Sets the allowed capabilities for this TileEntity.
-	 * 
+	 *
 	 * @param allowedCapabilities The list of allowed capabilities.
 	 */
 	public void setAllowedCapabilities(ArrayList<Capability> allowedCapabilities) {
@@ -73,7 +73,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	/**
 	 * Transfers capabilities available for transferring to the supplied itemstack.
-	 * 
+	 *
 	 * @return
 	 */
 	public ItemStack transferCapabilities(ItemStack stack) {
@@ -86,7 +86,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 			if (stackCapability != null && tileEntityCapability != null && stackCapability instanceof ITransferable
 					&& tileEntityCapability instanceof ITransferable) {
 				// transfer the capability data, it's up to the capability to transfer the data.
-				((ITransferable) stackCapability).Transfer((ITransferable) tileEntityCapability);
+				((ITransferable) stackCapability).Transfer(tileEntityCapability);
 			}
 		}
 
@@ -147,7 +147,6 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
-		// System.out.println("Writing Clock Data.");
 		super.write(compound);
 
 		if (this.config != null) {
@@ -159,7 +158,6 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	@Override
 	public void read(CompoundNBT compound) {
-		// System.out.println("Reading Tag Data.");
 		super.read(compound);
 
 		this.config = this.createConfigInstance().ReadFromCompoundNBT(compound);
@@ -168,9 +166,8 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	public T createConfigInstance() {
 		try {
 			return this.getTypeParameterClass().newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
+			Repurpose.LOGGER.log(Level.ERROR, e.getMessage());
 			e.printStackTrace();
 		}
 

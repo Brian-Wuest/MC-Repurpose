@@ -1,16 +1,9 @@
 package com.wuest.repurpose.Tiles;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
-import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
-
-import com.wuest.repurpose.Repurpose;
-import net.minecraft.block.Block;
+import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.INPC;
@@ -19,15 +12,18 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
 /**
  * This class is the TileEntity responsible for a lot of the work done with the
  * Redstone Scanner.
- * 
+ *
  * @author WuestMan
  */
 public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerConfig> {
@@ -53,7 +49,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	 * range.
 	 *
 	 * @return The redstone strength the block associated with this tile entity
-	 *         should provide.
+	 * should provide.
 	 */
 	public int getRedstoneStrength() {
 		return this.foundEntity ? 15 : 0;
@@ -61,7 +57,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 
 	/**
 	 * Determines the tick delay from the block configuration.
-	 * 
+	 *
 	 * @return The tick delay from the configuration.
 	 */
 	public int getTickDelay() {
@@ -71,10 +67,10 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	/**
 	 * This is the initial method used to start the scan. The scan distance and
 	 * sides are based on the configuration.
-	 * 
+	 *
 	 * @param state The curent state of the block.
 	 * @return An un-modified state if there was nothing to change. Otherwise this
-	 *         method will provide a powered or unpowered state.
+	 * method will provide a powered or unpowered state.
 	 */
 	public BlockState setRedstoneStrength(BlockState state) {
 		this.ScanForEntities();
@@ -127,7 +123,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 
 	/**
 	 * Scans this Y level for the targeted entities.
-	 * 
+	 *
 	 * @param northScanRange The north axis scanning range.
 	 * @param eastScanRange  The east axis scanning range.
 	 * @param southScanRange The south axis scanning range.
@@ -136,7 +132,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	 * @return True if a target entity was found, otherwise false.
 	 */
 	protected boolean ScanLevel(int northScanRange, int eastScanRange, int southScanRange, int westScanRange,
-			BlockPos startingPos) {
+								BlockPos startingPos) {
 		boolean foundATarget = false;
 
 		BlockPos endingPos = startingPos;
@@ -162,7 +158,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 			// We want to include the full block when trying to get the entities within this
 			// block position.
 			AxisAlignedBB axisPos = VoxelShapes.fullCube().getBoundingBox().offset(currentPos);
-			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity) null, axisPos);
+			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, axisPos);
 
 			if (!list.isEmpty()) {
 				// The first entity found matching the searched for targets will trigger the

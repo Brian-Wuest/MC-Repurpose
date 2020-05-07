@@ -13,8 +13,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ExtendedCookingRecipeSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtendedFurnaceRecipe> {
-	private final int cookingTime;
 	protected final int resultCount;
+	private final int cookingTime;
 
 	public ExtendedCookingRecipeSerializer(int p_i50025_2_) {
 		this.cookingTime = p_i50025_2_;

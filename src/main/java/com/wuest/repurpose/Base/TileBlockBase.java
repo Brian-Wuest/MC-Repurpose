@@ -1,20 +1,11 @@
 package com.wuest.repurpose.Base;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -26,10 +17,19 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
+import org.apache.logging.log4j.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Random;
 
 /**
  * The base block for any block associated with a tile entity.
- * 
+ *
  * @author WuestMan
  */
 public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
@@ -37,8 +37,6 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 
 	/**
 	 * Initializes a new instance of the TileBlockBase class.
-	 * 
-	 * @param materialIn The material associated with this block.
 	 */
 	public TileBlockBase(Block.Properties properties, TileEntityType<?> entityType) {
 		super(properties.tickRandomly());
@@ -63,10 +61,9 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	 */
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		/**
-		 * Can this block provide power. Only wire currently seems to have this change
-		 * based on its state.
-		 */
+		/*
+			Can this block provide power. Only wire currently seems to have this change based on its state.
+		*/
 		return this.canProvidePower(state) && side != null;
 	}
 
@@ -110,21 +107,8 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	public T createNewTileEntity() {
 		try {
 			return this.getTypeParameterClass().getConstructor(this.entityType.getClass()).newInstance(this.entityType);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			Repurpose.LOGGER.log(Level.ERROR, e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -155,7 +139,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 
 	@Override
 	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world,
-			BlockPos pos1, BlockPos pos2, Hand hand) {
+										   BlockPos pos1, BlockPos pos2, Hand hand) {
 		World world1 = (World) world;
 
 		for (Direction enumfacing : Direction.values()) {
@@ -177,7 +161,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
 		super.eventReceived(state, worldIn, pos, eventID, eventParam);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
+		return tileentity != null && tileentity.receiveClientEvent(eventID, eventParam);
 	}
 
 	/**
@@ -208,11 +192,11 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 
 	/**
 	 * Gets the tile entity at the current position.
-	 * 
+	 *
 	 * @param worldIn The world to the entity for.
 	 * @param pos     The position in the world to get the entity for.
 	 * @return Null if the tile was not found or if one was found and is not a
-	 *         proper tile entity. Otherwise the tile entity instance.
+	 * proper tile entity. Otherwise the tile entity instance.
 	 */
 	public T getLocalTileEntity(World worldIn, BlockPos pos) {
 		TileEntity entity = worldIn.getTileEntity(pos);
@@ -231,7 +215,7 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 
 	/**
 	 * Processes custom update state.
-	 * 
+	 *
 	 * @param worldIn    The world this state is being updated in.
 	 * @param pos        The block position.
 	 * @param state      The block state.

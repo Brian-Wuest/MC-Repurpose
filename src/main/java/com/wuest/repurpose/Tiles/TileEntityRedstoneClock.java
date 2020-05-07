@@ -4,11 +4,9 @@ import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.HashSet;

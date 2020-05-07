@@ -49,11 +49,6 @@ public class ItemWoodenCrate extends Item {
 			this.meta = meta;
 		}
 
-		@Override
-		public String toString() {
-			return this.name().toLowerCase();
-		}
-
 		public static CrateType getValueFromMeta(int meta) {
 			for (CrateType type : CrateType.values()) {
 				if (type.meta == meta) {
@@ -62,6 +57,11 @@ public class ItemWoodenCrate extends Item {
 			}
 
 			return CrateType.Empty;
+		}
+
+		@Override
+		public String toString() {
+			return this.name().toLowerCase();
 		}
 	}
 }

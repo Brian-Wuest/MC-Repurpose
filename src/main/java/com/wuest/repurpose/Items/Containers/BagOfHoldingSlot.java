@@ -6,7 +6,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class BagOfHoldingSlot extends SlotItemHandler {
-	public BagOfHoldingSlot(IItemHandler  inventory, int slotIndexIn, int xPosition, int yPosition) {
+	public BagOfHoldingSlot(IItemHandler inventory, int slotIndexIn, int xPosition, int yPosition) {
 		super(inventory, slotIndexIn, xPosition, yPosition);
 	}
 
@@ -22,8 +22,7 @@ public class BagOfHoldingSlot extends SlotItemHandler {
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity playerIn)
-	{
+	public boolean canTakeStack(PlayerEntity playerIn) {
 		// Always allow the player to take the stack.
 		return true;
 	}

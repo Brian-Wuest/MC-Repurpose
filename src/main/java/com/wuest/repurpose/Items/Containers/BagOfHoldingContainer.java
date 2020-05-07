@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -25,10 +24,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public class BagOfHoldingContainer extends Container {
 	private ItemBagOfHoldingProvider inventory;
 	private PlayerInventory playerInventory;
-
-	public static BagOfHoldingContainer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer buf) {
-		return new BagOfHoldingContainer(windowId, inv);
-	}
 
 	public BagOfHoldingContainer(int windowId, PlayerInventory playerInventory) {
 		super(ModRegistry.BagOfHoldingContainer.get(), windowId);
@@ -67,6 +62,10 @@ public class BagOfHoldingContainer extends Container {
 		this.playerInventory = playerInventory;
 	}
 
+	public static BagOfHoldingContainer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer buf) {
+		return new BagOfHoldingContainer(windowId, inv);
+	}
+
 	/**
 	 * Determines if the stack is valid for this container.
 	 *
@@ -74,19 +73,15 @@ public class BagOfHoldingContainer extends Container {
 	 * @return True if the stack is valid for the bag of holding, otherwise false.
 	 */
 	public static boolean validForContainer(ItemStack stack) {
-		if (Block.getBlockFromItem(stack.getItem()) instanceof ContainerBlock
-				|| stack.getItem() instanceof ItemBagOfHolding
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.EAST).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.SOUTH).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).isPresent()
-				|| stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.WEST).isPresent()) {
-			return false;
-		}
-
-		return true;
+		return !(Block.getBlockFromItem(stack.getItem()) instanceof ContainerBlock)
+				&& !(stack.getItem() instanceof ItemBagOfHolding)
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.EAST).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.SOUTH).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).isPresent()
+				&& !stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.WEST).isPresent();
 	}
 
 	/**
@@ -106,7 +101,7 @@ public class BagOfHoldingContainer extends Container {
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int fromSlot) {
 		try {
 			ItemStack previous = ItemStack.EMPTY;
-			Slot slot = (Slot) this.inventorySlots.get(fromSlot);
+			Slot slot = this.inventorySlots.get(fromSlot);
 
 			if (slot != null && slot.getHasStack()) {
 				ItemStack current = slot.getStack();
@@ -185,7 +180,7 @@ public class BagOfHoldingContainer extends Container {
 		ItemStack heldStack = this.playerInventory.offHandInventory.get(0);
 
 		if (this.inventory instanceof ItemBagOfHoldingProvider) {
-			((ItemBagOfHoldingProvider) this.inventory).UpdateStack(heldStack);
+			this.inventory.UpdateStack(heldStack);
 
 			if (this.playerInventory.player instanceof ServerPlayerEntity) {
 				BagOfHoldingUpdateMessage message = new BagOfHoldingUpdateMessage(

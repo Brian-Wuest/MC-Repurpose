@@ -5,9 +5,8 @@ import net.minecraft.network.PacketBuffer;
 
 /**
  * The unique message for the RedstoneScanner.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class RedstoneScannerMessage extends TagMessage {
 	/**

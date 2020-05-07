@@ -4,8 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 
-;
-
 /**
  * This class defines a set of grass stairs.
  *

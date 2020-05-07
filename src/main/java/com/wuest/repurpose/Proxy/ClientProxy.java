@@ -45,18 +45,16 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
 public class ClientProxy extends CommonProxy {
-	public ModConfiguration serverConfiguration = null;
 	public static ClientEventHandler clientEventHandler = new ClientEventHandler();
-
 	/**
 	 * The hashmap of mod item guis.
 	 */
 	public static HashMap<Item, BasicGui> ModItemGuis = new HashMap<>();
-
 	/**
 	 * The hashmap of mod block guis.
 	 */
 	public static HashMap<Block, BasicGui> ModBlockGuis = new HashMap<>();
+	public ModConfiguration serverConfiguration = null;
 
 	public ClientProxy() {
 		super();
@@ -68,6 +66,46 @@ public class ClientProxy extends CommonProxy {
 	public static void AddGuis() {
 		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock.get(), new GuiRedstoneClock());
 		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner.get(), new GuiRedstoneScanner());
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static void RegisterBlockRenderer() {
+		// Register the block renderer.
+		Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> worldIn != null && pos != null
+				? BiomeColors.getGrassColor(worldIn, pos)
+				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get());
+
+		// Register the item renderer.
+		Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+			// Get the item for this stack.
+			Item item = stack.getItem();
+
+			if (item instanceof BlockItem) {
+				// Get the block for this item and determine if it's a grass stairs.
+				BlockItem itemBlock = (BlockItem) item;
+				boolean paintBlock = false;
+
+				if (itemBlock.getBlock() instanceof BlockCustomWall) {
+					BlockCustomWall customWall = (BlockCustomWall) itemBlock.getBlock();
+
+					if (customWall.BlockVariant == EnumType.GRASS) {
+						paintBlock = true;
+					}
+				} else if (itemBlock.getBlock() instanceof BlockGrassSlab) {
+					paintBlock = true;
+				} else if (itemBlock.getBlock() instanceof BlockGrassStairs) {
+					paintBlock = true;
+				}
+
+				if (paintBlock) {
+					BlockPos pos = Minecraft.getInstance().player.getPosition();
+					ClientWorld world = Minecraft.getInstance().world;
+					return BiomeColors.getGrassColor(world, pos);
+				}
+			}
+
+			return -1;
+		}, new Block[]{ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get()});
 	}
 
 	@Override
@@ -129,22 +167,6 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	/*
-	 * @Override public Object getClientGuiElement(int ID, PlayerEntity player,
-	 * World world, int x, int y, int z) { TileEntity tileEntity =
-	 * world.getTileEntity(new BlockPos(x, y, z));
-	 *
-	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
-	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
-	 * y, z); } else if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
-	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
-	 * ItemBagOfHoldingProvider.GetFromStack(stack);
-	 *
-	 * return new GuiItemBagOfHolding(handler, player); }
-	 *
-	 * return null; }
-	 */
-
 	@Override
 	public ModConfiguration getServerConfiguration() {
 		if (this.serverConfiguration == null) {
@@ -153,46 +175,6 @@ public class ClientProxy extends CommonProxy {
 		} else {
 			return this.serverConfiguration;
 		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static void RegisterBlockRenderer() {
-		// Register the block renderer.
-		Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> worldIn != null && pos != null
-				? BiomeColors.getGrassColor(worldIn, pos)
-				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get());
-
-		// Register the item renderer.
-		Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-			// Get the item for this stack.
-			Item item = stack.getItem();
-
-			if (item instanceof BlockItem) {
-				// Get the block for this item and determine if it's a grass stairs.
-				BlockItem itemBlock = (BlockItem) item;
-				boolean paintBlock = false;
-
-				if (itemBlock.getBlock() instanceof BlockCustomWall) {
-					BlockCustomWall customWall = (BlockCustomWall) itemBlock.getBlock();
-
-					if (customWall.BlockVariant == EnumType.GRASS) {
-						paintBlock = true;
-					}
-				} else if (itemBlock.getBlock() instanceof BlockGrassSlab) {
-					paintBlock = true;
-				} else if (itemBlock.getBlock() instanceof BlockGrassStairs) {
-					paintBlock = true;
-				}
-
-				if (paintBlock) {
-					BlockPos pos = Minecraft.getInstance().player.getPosition();
-					ClientWorld world = Minecraft.getInstance().world;
-					return BiomeColors.getGrassColor(world, pos);
-				}
-			}
-
-			return -1;
-		}, new Block[]{ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get()});
 	}
 
 	private void RegisterEventListeners() {

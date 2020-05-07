@@ -1,10 +1,10 @@
 package com.wuest.repurpose.Events;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
-
+import com.wuest.repurpose.ModRegistry;
+import com.wuest.repurpose.Proxy.CommonProxy;
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
@@ -40,7 +40,7 @@ public class HomeCommand {
 		if (sender instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) sender;
 
-			if (!Repurpose.proxy.proxyConfiguration.enableHomeCommand) {
+			if (!CommonProxy.proxyConfiguration.enableHomeCommand) {
 				return;
 			}
 
@@ -65,8 +65,8 @@ public class HomeCommand {
 				}
 
 				if (blockpos1 != null) {
-					HomeCommand.attemptTeleport(player, true, (double) ((float) blockpos1.getX() + 0.5F),
-							(double) ((float) blockpos1.getY() + 0.1F), (double) ((float) blockpos1.getZ() + 0.5F));
+					HomeCommand.attemptTeleport(player, true, (float) blockpos1.getX() + 0.5F,
+							(float) blockpos1.getY() + 0.1F, (float) blockpos1.getZ() + 0.5F);
 				} else {
 					if (player.dimension == DimensionType.OVERWORLD) {
 						// Send the player saying that the bed could not be
@@ -90,7 +90,7 @@ public class HomeCommand {
 	 * Teleports the entity to the specified location.
 	 */
 	private static boolean attemptTeleport(PlayerEntity player, boolean ignoreCollisions, double x, double y,
-			double z) {
+										   double z) {
 		double d0 = player.posX;
 		double d1 = player.posY;
 		double d2 = player.posZ;

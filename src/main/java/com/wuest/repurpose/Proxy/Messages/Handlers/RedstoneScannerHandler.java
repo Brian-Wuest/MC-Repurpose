@@ -1,17 +1,16 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
-import java.util.function.Supplier;
-
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
 import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class RedstoneScannerHandler {
 

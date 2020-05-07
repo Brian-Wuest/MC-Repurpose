@@ -3,7 +3,6 @@ package com.wuest.repurpose.Gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Triple;
 import com.wuest.repurpose.Tuple;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -24,21 +23,58 @@ import java.util.List;
 
 public abstract class BasicGui extends Screen {
 
+	private final ResourceLocation backgroundTextures = new ResourceLocation("repurpose",
+			"textures/gui/default_background.png");
 	public BlockPos pos;
 	protected PlayerEntity player;
 	protected int textColor = Color.DARK_GRAY.getRGB();
 	protected int modifiedInitialXAxis = 128;
 	protected int modifiedInitialYAxis = 83;
 	protected ArrayList<Triple<HoverChecker, String, Integer>> hoverCheckers;
-
-	private final ResourceLocation backgroundTextures = new ResourceLocation("repurpose",
-			"textures/gui/default_background.png");
 	private boolean pauseGame;
 
 	public BasicGui() {
 		super(new StringTextComponent(""));
 		this.pauseGame = true;
 		this.hoverCheckers = new ArrayList<>();
+	}
+
+	/**
+	 * Draws a textured rectangle Args: x, y, z, width, height, textureWidth,
+	 * textureHeight
+	 *
+	 * @param x             The X-Axis screen coordinate.
+	 * @param y             The Y-Axis screen coordinate.
+	 * @param z             The Z-Axis screen coordinate.
+	 * @param width         The width of the rectangle.
+	 * @param height        The height of the rectangle.
+	 * @param textureWidth  The width of the texture.
+	 * @param textureHeight The height of the texture.
+	 */
+	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
+														   float textureWidth, float textureHeight) {
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+		float u = 0;
+		float v = 0;
+		float f = 1.0F / textureWidth;
+		float f1 = 1.0F / textureHeight;
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
+
+		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+
+		vertexBuffer.pos(x, y + height, z).tex(u * f, (v + height) * f1).endVertex();
+
+		vertexBuffer.pos(x + width, y + height, z).tex((u + width) * f, (v + height) * f1).endVertex();
+
+		vertexBuffer.pos(x + width, y, z).tex((u + width) * f, v * f1).endVertex();
+
+		vertexBuffer.pos(x, y, z).tex(u * f, v * f1).endVertex();
+
+		tessellator.draw();
 	}
 
 	protected int getCenteredXAxis() {
@@ -142,44 +178,6 @@ public abstract class BasicGui extends Screen {
 	 */
 	protected Tuple<Integer, Integer> getAdjustedXYValue() {
 		return new Tuple<>(this.getCenteredXAxis() - this.modifiedInitialXAxis, this.getCenteredYAxis() - this.modifiedInitialYAxis);
-	}
-
-	/**
-	 * Draws a textured rectangle Args: x, y, z, width, height, textureWidth,
-	 * textureHeight
-	 *
-	 * @param x             The X-Axis screen coordinate.
-	 * @param y             The Y-Axis screen coordinate.
-	 * @param z             The Z-Axis screen coordinate.
-	 * @param width         The width of the rectangle.
-	 * @param height        The height of the rectangle.
-	 * @param textureWidth  The width of the texture.
-	 * @param textureHeight The height of the texture.
-	 */
-	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
-														   float textureWidth, float textureHeight) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
-		float u = 0;
-		float v = 0;
-		float f = 1.0F / textureWidth;
-		float f1 = 1.0F / textureHeight;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexBuffer = tessellator.getBuffer();
-
-		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-
-		vertexBuffer.pos(x, y + height, z).tex(u * f, (v + height) * f1).endVertex();
-
-		vertexBuffer.pos(x + width, y + height, z).tex((u + width) * f, (v + height) * f1).endVertex();
-
-		vertexBuffer.pos(x + width, y, z).tex((u + width) * f, v * f1).endVertex();
-
-		vertexBuffer.pos(x, y, z).tex(u * f, v * f1).endVertex();
-
-		tessellator.draw();
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.wuest.repurpose.Config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -97,32 +98,24 @@ public class ModConfiguration {
 			charcoalBlockName, saddleName, stringName, scrollName, woodenCrateName, Clutch_Of_EggsName,
 			Carton_Of_EggsName, Bunch_Of_BeetsName, Bunch_Of_CarrotsName, Bunch_Of_PotatoesName, Crate_Of_BeetsName,
 			Crate_Of_CarrotsName, Crate_Of_PotatoesName, Bag_Of_Holding_Name};
-
-	private ConfigFileSettings configFileSettings;
-
 	// Configuration Options.
 	public boolean rightClickCropHarvest;
 	public boolean enableHomeCommand;
 	public boolean enableGrassSpreadToCustomDirt;
 	public boolean enableStepAssistEnchantment;
 	public boolean enableVerboseLogging;
-
 	public HashMap<String, Boolean> recipeConfiguration;
-
 	// Extra Drop Options.
 	public int diamondShardDropChance;
-
 	public int beetRootSeedDropChance;
 	public int melonSeedDropChance;
 	public int pumpkinSeedDropChance;
 	public int cocoaSeedDropChance;
-
 	public int potatoDropChance;
 	public int beetRootDropChance;
 	public int carrotDropChance;
 	public int boneDropChance;
 	public int clayBallDropChance;
-
 	public int coalDropChance;
 	public int flintDropChance;
 	public int ironNuggetDropChance;
@@ -130,6 +123,7 @@ public class ModConfiguration {
 	public int appleDropChance;
 	public int stickDropChance;
 	public int monsterHeadDropChance;
+	private ConfigFileSettings configFileSettings;
 
 	private ModConfiguration() {
 		this.rightClickCropHarvest = false;
@@ -308,44 +302,8 @@ public class ModConfiguration {
 		// Recipe configuration.
 		for (String key : ModConfiguration.recipeKeys) {
 			Repurpose.LOGGER.debug("Setting recipe configuration for key: " + key);
-			Repurpose.proxy.proxyConfiguration.recipeConfiguration.put(key, Repurpose.proxy.proxyConfiguration.configFileSettings.recipeConfiguration.get(key).get());
+			proxyConfiguration.recipeConfiguration.put(key, proxyConfiguration.configFileSettings.recipeConfiguration.get(key).get());
 		}
-	}
-
-	public CompoundNBT ToNBTTagCompound() {
-		CompoundNBT tag = new CompoundNBT();
-
-		tag.putBoolean(ModConfiguration.rightClickCropHarvestName, this.rightClickCropHarvest);
-		tag.putBoolean(ModConfiguration.enableHomeCommandName, this.enableHomeCommand);
-		tag.putBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
-		tag.putBoolean(ModConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
-		tag.putBoolean(ModConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
-
-		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet()) {
-			tag.putBoolean(entry.getKey(), entry.getValue());
-		}
-
-		tag.putInt(ModConfiguration.diamondShardDropChanceName, this.diamondShardDropChance);
-
-		tag.putInt(ModConfiguration.beetRootSeedDropChanceName, this.beetRootSeedDropChance);
-		tag.putInt(ModConfiguration.melonSeedDropChanceName, this.melonSeedDropChance);
-		tag.putInt(ModConfiguration.pumpkinSeedDropChanceName, this.pumpkinSeedDropChance);
-		tag.putInt(ModConfiguration.cocoaSeedDropChanceName, this.cocoaSeedDropChance);
-
-		tag.putInt(ModConfiguration.potatoDropChanceName, this.potatoDropChance);
-		tag.putInt(ModConfiguration.carrotDropChanceName, this.carrotDropChance);
-		tag.putInt(ModConfiguration.beetRootDropChanceName, this.beetRootDropChance);
-		tag.putInt(ModConfiguration.clayBallDropChanceName, this.clayBallDropChance);
-		tag.putInt(ModConfiguration.boneDropChanceName, this.boneDropChance);
-
-		tag.putInt(ModConfiguration.coalDropChanceName, this.coalDropChance);
-		tag.putInt(ModConfiguration.flintDropChanceName, this.flintDropChance);
-		tag.putInt(ModConfiguration.ironNuggetDropChanceName, this.ironNuggetDropChance);
-		tag.putInt(ModConfiguration.goldNuggetDropChanceName, this.goldNuggetDropChance);
-		tag.putInt(ModConfiguration.appleDropChanceName, this.appleDropChance);
-		tag.putInt(ModConfiguration.stickDropChanceName, this.stickDropChance);
-
-		return tag;
 	}
 
 	public static ModConfiguration getFromNBTTagCompound(CompoundNBT tag) {
@@ -384,6 +342,42 @@ public class ModConfiguration {
 		}
 
 		return config;
+	}
+
+	public CompoundNBT ToNBTTagCompound() {
+		CompoundNBT tag = new CompoundNBT();
+
+		tag.putBoolean(ModConfiguration.rightClickCropHarvestName, this.rightClickCropHarvest);
+		tag.putBoolean(ModConfiguration.enableHomeCommandName, this.enableHomeCommand);
+		tag.putBoolean(ModConfiguration.enableGrassSpreadToCustomDirtName, this.enableGrassSpreadToCustomDirt);
+		tag.putBoolean(ModConfiguration.enableStepAssistEnchantmentName, this.enableStepAssistEnchantment);
+		tag.putBoolean(ModConfiguration.enableVerboseLogginName, this.enableVerboseLogging);
+
+		for (Entry<String, Boolean> entry : this.recipeConfiguration.entrySet()) {
+			tag.putBoolean(entry.getKey(), entry.getValue());
+		}
+
+		tag.putInt(ModConfiguration.diamondShardDropChanceName, this.diamondShardDropChance);
+
+		tag.putInt(ModConfiguration.beetRootSeedDropChanceName, this.beetRootSeedDropChance);
+		tag.putInt(ModConfiguration.melonSeedDropChanceName, this.melonSeedDropChance);
+		tag.putInt(ModConfiguration.pumpkinSeedDropChanceName, this.pumpkinSeedDropChance);
+		tag.putInt(ModConfiguration.cocoaSeedDropChanceName, this.cocoaSeedDropChance);
+
+		tag.putInt(ModConfiguration.potatoDropChanceName, this.potatoDropChance);
+		tag.putInt(ModConfiguration.carrotDropChanceName, this.carrotDropChance);
+		tag.putInt(ModConfiguration.beetRootDropChanceName, this.beetRootDropChance);
+		tag.putInt(ModConfiguration.clayBallDropChanceName, this.clayBallDropChance);
+		tag.putInt(ModConfiguration.boneDropChanceName, this.boneDropChance);
+
+		tag.putInt(ModConfiguration.coalDropChanceName, this.coalDropChance);
+		tag.putInt(ModConfiguration.flintDropChanceName, this.flintDropChance);
+		tag.putInt(ModConfiguration.ironNuggetDropChanceName, this.ironNuggetDropChance);
+		tag.putInt(ModConfiguration.goldNuggetDropChanceName, this.goldNuggetDropChance);
+		tag.putInt(ModConfiguration.appleDropChanceName, this.appleDropChance);
+		tag.putInt(ModConfiguration.stickDropChanceName, this.stickDropChance);
+
+		return tag;
 	}
 
 	private class ConfigFileSettings {

@@ -1,8 +1,6 @@
 package com.wuest.repurpose.Items;
 
 import com.google.common.collect.Multimap;
-import com.wuest.repurpose.ModRegistry;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -14,9 +12,8 @@ import net.minecraft.item.SwordItem;
 /**
  * This class is used to create a sword which has the same speed as pre-1.9
  * swords.
- * 
- * @author WuestMan
  *
+ * @author WuestMan
  */
 public class ItemSwiftBlade extends SwordItem {
 	protected final float attackDamage;
@@ -79,9 +76,9 @@ public class ItemSwiftBlade extends SwordItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER,
-					"Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
+					"Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
 			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER,
-					"Weapon modifier", (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
+					"Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
 		}
 
 		return multimap;

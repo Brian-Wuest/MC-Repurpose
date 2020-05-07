@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,6 +29,16 @@ public class ItemSickle extends ToolItem {
 	public static HashSet<Block> effectiveBlocks = new HashSet<>();
 	protected int breakRadius = 0;
 
+	/**
+	 * Initializes a new instance of the ItemSickle class.
+	 *
+	 * @param tier The type of tool material.
+	 */
+	public ItemSickle(IItemTier tier) {
+		super(1.0f, -2.4000000953674316f, tier, effectiveBlocks, new Item.Properties().group(ItemGroup.TOOLS));
+		this.breakRadius = 1 + tier.getHarvestLevel();
+	}
+
 	public static void setEffectiveBlocks() {
 		effectiveBlocks.clear();
 
@@ -42,16 +51,6 @@ public class ItemSickle extends ToolItem {
 		effectiveBlocks.add(Blocks.GRASS);
 		effectiveBlocks.add(Blocks.SEAGRASS);
 		effectiveBlocks.add(Blocks.TALL_SEAGRASS);
-	}
-
-	/**
-	 * Initializes a new instance of the ItemSickle class.
-	 *
-	 * @param tier The type of tool material.
-	 */
-	public ItemSickle(IItemTier tier ) {
-		super(1.0f, -2.4000000953674316f, tier, effectiveBlocks, new Item.Properties().group(ItemGroup.TOOLS));
-		this.breakRadius = 1 + tier.getHarvestLevel();
 	}
 
 	@Override

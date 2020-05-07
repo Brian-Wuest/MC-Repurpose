@@ -21,8 +21,6 @@ import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-;
-
 public class ItemBedCompass extends Item {
 	/**
 	 * Initializes a new instance of the ItemBedCompass class.
