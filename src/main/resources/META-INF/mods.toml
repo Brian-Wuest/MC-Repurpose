@@ -1,10 +1,10 @@
 modLoader="javafml" #mandatory
-loaderVersion="[24,)" #mandatory
+loaderVersion="[28,)" #mandatory
 issueTrackerURL="https://github.com/Brian-Wuest/MC-Repurpose/issues" #optional
 
 [[mods]] #mandatory
     modId="repurpose" #mandatory
-    version="1.1.0.0" #mandatory
+    version="${file.jarVersion}" #mandatory
     displayName="Repurpose" #mandatory
     #logoFile="" #optional
     updateJSONURL="https://raw.githubusercontent.com/Brian-Wuest/MC-Repurpose/master/changeLog.json" #optional
@@ -15,6 +15,6 @@ issueTrackerURL="https://github.com/Brian-Wuest/MC-Repurpose/issues" #optional
 [[dependencies.repurpose]]
     modId="forge" #mandatory
     mandatory=false #mandatory
-    versionRange="[28.0.92,)" #mandatory
+    versionRange="[28.2.3,)" #mandatory
     ordering="NONE"
     side="BOTH"
