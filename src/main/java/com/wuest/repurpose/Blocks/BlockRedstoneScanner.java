@@ -67,9 +67,9 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	 */
 	public BlockRedstoneScanner() {
 		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT).hardnessAndResistance(.5f, 10.0f)
-				.sound(SoundType.METAL), TileEntityRedstoneScanner.TileType);
+				.sound(SoundType.METAL), null);
 
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
+		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.TRUE));
 	}
 
 	public ItemGroup getItemGroup() {

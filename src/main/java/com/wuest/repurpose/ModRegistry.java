@@ -33,6 +33,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -136,8 +138,21 @@ public class ModRegistry {
 	public static final RegistryObject<ItemWoodenCrate> CrateOfBeets = ITEMS.register("crate_of_beets", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Crate_Of_Beets));
 
 	/* *********************************** Tile Entities *********************************** */
-	public static final RegistryObject<TileEntityType<TileEntityRedstoneClock>> RedstoneClockTileEntity = TILE_ENTITIES.register("redstone_clock", () -> TileEntityRedstoneClock.TileType);
-	public static final RegistryObject<TileEntityType<TileEntityRedstoneScanner>> RedstoneScannerTileEntity = TILE_ENTITIES.register("redstone_scanner", () -> TileEntityRedstoneScanner.TileType);
+	public static final RegistryObject<TileEntityType<TileEntityRedstoneClock>> RedstoneClockTileEntity = TILE_ENTITIES.register("redstone_clock", () -> {
+		TileEntityRedstoneClock.TileType = new TileEntityType<>(
+				TileEntityRedstoneClock::new, new HashSet<>(Arrays.asList(ModRegistry.RedStoneClock.get())), null);
+
+		ModRegistry.RedStoneClock.get().entityType = TileEntityRedstoneClock.TileType;
+
+		return TileEntityRedstoneClock.TileType;
+	});
+	public static final RegistryObject<TileEntityType<TileEntityRedstoneScanner>> RedstoneScannerTileEntity = TILE_ENTITIES.register("redstone_scanner", () -> {
+		TileEntityRedstoneScanner.TileType = new TileEntityType<>(
+				TileEntityRedstoneScanner::new, new HashSet<>(Arrays.asList(ModRegistry.RedstoneScanner.get())), null);
+
+		ModRegistry.RedstoneScanner.get().entityType = TileEntityRedstoneScanner.TileType;
+		return TileEntityRedstoneScanner.TileType;
+	} );
 
 	/* *********************************** Enchantments *********************************** */
 	public static final RegistryObject<EnchantmentStepAssist> StepAssist = ENCHANTMENTS.register("step_assist", () -> new EnchantmentStepAssist(Enchantment.Rarity.COMMON, EnchantmentType.ARMOR_FEET,

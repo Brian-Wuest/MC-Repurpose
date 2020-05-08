@@ -39,9 +39,9 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	 * A simple block that emits redstone signals at regular intervals.
 	 */
 	public RedstoneClock() {
-		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT).hardnessAndResistance(.5f, 10.0f),
-				TileEntityRedstoneClock.TileType);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
+		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT)
+				.hardnessAndResistance(.5f, 10.0f), null);
+		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.TRUE));
 	}
 
 	public ItemGroup getItemGroup() {

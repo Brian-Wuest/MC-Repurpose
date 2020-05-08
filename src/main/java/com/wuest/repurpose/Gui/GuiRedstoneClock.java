@@ -57,29 +57,29 @@ public class GuiRedstoneClock extends BasicGui {
 		int grayBoxY = adjustedPosition.getSecond();
 
 		// Create the buttons.
-		this.btnUp = this.createAndAddCheckBox(grayBoxX + 190, grayBoxY + 25, "",
-				this.powerConfiguration.getSidePower(Direction.UP), this::buttonClicked);
-		this.addHoverChecker(this.btnUp, "The 'Top' side.", 800, 300);
-
-		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 190, grayBoxY + 37, "",
+		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 27, "",
 				this.powerConfiguration.getSidePower(Direction.NORTH), this::buttonClicked);
 		this.addHoverChecker(this.btnNorth, "The 'North' side.", 800, 300);
 
-		this.btnDown = this.createAndAddCheckBox(grayBoxX + 190, grayBoxY + 49, "",
+		this.btnDown = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 39, "",
 				this.powerConfiguration.getSidePower(Direction.DOWN), this::buttonClicked);
 		this.addHoverChecker(this.btnDown, "The 'Bottom' side.", 800, 300);
 
-		this.btnEast = this.createAndAddCheckBox(grayBoxX + 202, grayBoxY + 49, "",
+		this.btnEast = this.createAndAddCheckBox(grayBoxX + 197, grayBoxY + 39, "",
 				this.powerConfiguration.getSidePower(Direction.EAST), this::buttonClicked);
 		this.addHoverChecker(this.btnEast, "The 'East' side.", 800, 300);
 
-		this.btnWest = this.createAndAddCheckBox(grayBoxX + 178, grayBoxY + 49, "",
+		this.btnWest = this.createAndAddCheckBox(grayBoxX + 173, grayBoxY + 39, "",
 				this.powerConfiguration.getSidePower(Direction.WEST), this::buttonClicked);
 		this.addHoverChecker(this.btnWest, "The 'West' side.", 800, 300);
 
-		this.btnSouth = this.createAndAddCheckBox(grayBoxX + 190, grayBoxY + 61, "",
+		this.btnSouth = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 51, "",
 				this.powerConfiguration.getSidePower(Direction.SOUTH), this::buttonClicked);
 		this.addHoverChecker(this.btnSouth, "The 'South' side.", 800, 300);
+
+		this.btnUp = this.createAndAddCheckBox(grayBoxX + 197, grayBoxY + 51, "",
+				this.powerConfiguration.getSidePower(Direction.UP), this::buttonClicked);
+		this.addHoverChecker(this.btnUp, "The 'Top' side.", 800, 300);
 
 		this.btnPowered = this.createAndAddSlider(grayBoxX + 10, grayBoxY + 30, 100, 20, "", "", 1, 30,
 				this.powerConfiguration.getPoweredTick() / 20, false, true, this::buttonClicked);

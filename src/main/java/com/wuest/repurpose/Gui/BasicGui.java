@@ -111,6 +111,8 @@ public abstract class BasicGui extends Screen {
 	public void render(int x, int y, float f) {
 		Tuple<Integer, Integer> adjustedXYValue = this.getAdjustedXYValue();
 
+		this.renderBackground();
+
 		this.preButtonRender(adjustedXYValue.getFirst(), adjustedXYValue.getSecond());
 
 		this.renderButtons(x, y);

@@ -27,8 +27,7 @@ import java.util.List;
  * @author WuestMan
  */
 public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerConfig> {
-	public static TileEntityType<TileEntityRedstoneScanner> TileType = new TileEntityType<TileEntityRedstoneScanner>(
-			TileEntityRedstoneScanner::new, new HashSet<>(Arrays.asList(ModRegistry.RedstoneScanner.get())), null);
+	public static TileEntityType<TileEntityRedstoneScanner> TileType = null;
 
 	protected boolean foundEntity = false;
 
