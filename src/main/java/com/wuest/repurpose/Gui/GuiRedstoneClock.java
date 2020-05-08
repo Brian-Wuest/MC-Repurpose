@@ -57,19 +57,19 @@ public class GuiRedstoneClock extends BasicGui {
 		int grayBoxY = adjustedPosition.getSecond();
 
 		// Create the buttons.
-		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 27, "",
+		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 25, "",
 				this.powerConfiguration.getSidePower(Direction.NORTH), this::buttonClicked);
 		this.addHoverChecker(this.btnNorth, "The 'North' side.", 800, 300);
 
-		this.btnDown = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 39, "",
+		this.btnDown = this.createAndAddCheckBox(grayBoxX + 185, grayBoxY + 38, "",
 				this.powerConfiguration.getSidePower(Direction.DOWN), this::buttonClicked);
 		this.addHoverChecker(this.btnDown, "The 'Bottom' side.", 800, 300);
 
-		this.btnEast = this.createAndAddCheckBox(grayBoxX + 197, grayBoxY + 39, "",
+		this.btnEast = this.createAndAddCheckBox(grayBoxX + 197, grayBoxY + 38, "",
 				this.powerConfiguration.getSidePower(Direction.EAST), this::buttonClicked);
 		this.addHoverChecker(this.btnEast, "The 'East' side.", 800, 300);
 
-		this.btnWest = this.createAndAddCheckBox(grayBoxX + 173, grayBoxY + 39, "",
+		this.btnWest = this.createAndAddCheckBox(grayBoxX + 173, grayBoxY + 38, "",
 				this.powerConfiguration.getSidePower(Direction.WEST), this::buttonClicked);
 		this.addHoverChecker(this.btnWest, "The 'West' side.", 800, 300);
 

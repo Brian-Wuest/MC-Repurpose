@@ -78,19 +78,19 @@ public class GuiRedstoneScanner extends BasicGui {
 		this.btnDownRange = this.createAndAddSlider(grayBoxX + 90, grayBoxY + 50, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.DOWN).getScanLength(), false, true, this::buttonClicked);
 
-		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 25, "",
+		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 23, "",
 				this.Config.getFacingConfig(Direction.NORTH).getActive(), this::buttonClicked);
 		this.addHoverChecker(this.btnNorth, "The 'North' side.", 800, 300);
 
-		this.btnDown = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 37, "",
+		this.btnDown = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 36, "",
 				this.Config.getFacingConfig(Direction.DOWN).getActive(), this::buttonClicked);
 		this.addHoverChecker(this.btnDown, "The 'Bottom' side.", 800, 300);
 
-		this.btnEast = this.createAndAddCheckBox(grayBoxX + 212, grayBoxY + 37, "",
+		this.btnEast = this.createAndAddCheckBox(grayBoxX + 212, grayBoxY + 36, "",
 				this.Config.getFacingConfig(Direction.EAST).getActive(), this::buttonClicked);
 		this.addHoverChecker(this.btnEast, "The 'East' side.", 800, 300);
 
-		this.btnWest = this.createAndAddCheckBox(grayBoxX + 188, grayBoxY + 37, "",
+		this.btnWest = this.createAndAddCheckBox(grayBoxX + 188, grayBoxY + 36, "",
 				this.Config.getFacingConfig(Direction.WEST).getActive(), this::buttonClicked);
 		this.addHoverChecker(this.btnWest, "The 'West' side.", 800, 300);
 
