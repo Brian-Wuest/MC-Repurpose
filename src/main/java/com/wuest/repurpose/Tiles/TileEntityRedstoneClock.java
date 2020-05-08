@@ -18,8 +18,7 @@ import java.util.HashSet;
  * @author WuestMan
  */
 public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration> {
-	public static TileEntityType<TileEntityRedstoneClock> TileType = new TileEntityType<TileEntityRedstoneClock>(
-			TileEntityRedstoneClock::new, new HashSet<>(Arrays.asList(ModRegistry.RedStoneClock.get())), null);
+	public static TileEntityType<TileEntityRedstoneClock> TileType = null;
 
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneClock class.

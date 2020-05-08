@@ -39,8 +39,8 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	 */
 	public RedstoneClock() {
 		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT)
-				.hardnessAndResistance(.5f, 10.0f), TileEntityRedstoneClock.TileType);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
+				.hardnessAndResistance(.5f, 10.0f), null);
+		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.TRUE));
 	}
 
 	public ItemGroup getItemGroup() {

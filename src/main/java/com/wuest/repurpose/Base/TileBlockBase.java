@@ -33,7 +33,7 @@ import java.util.Random;
  * @author WuestMan
  */
 public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
-	public final TileEntityType<?> entityType;
+	public TileEntityType<?> entityType;
 
 	/**
 	 * Initializes a new instance of the TileBlockBase class.
