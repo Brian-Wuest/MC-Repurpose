@@ -6,16 +6,14 @@ import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
-import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
-import com.wuest.repurpose.Items.*;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
+import com.wuest.repurpose.Items.*;
 import com.wuest.repurpose.Proxy.Messages.*;
 import com.wuest.repurpose.Proxy.Messages.Handlers.*;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -25,14 +23,12 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -235,7 +231,7 @@ public class ModRegistry {
 		private final int enchantability;
 		private final LazyValue<Ingredient> repairMaterial;
 
-		private CustomItemTier(String name, int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
+		CustomItemTier(String name, int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
 							   int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
 			this.name = name;
 			this.harvestLevel = harvestLevelIn;

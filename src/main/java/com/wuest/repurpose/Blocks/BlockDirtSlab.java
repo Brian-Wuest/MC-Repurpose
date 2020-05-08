@@ -2,7 +2,6 @@ package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Proxy.CommonProxy;
-import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;

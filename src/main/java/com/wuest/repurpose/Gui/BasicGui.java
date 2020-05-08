@@ -5,6 +5,7 @@ import com.wuest.repurpose.Triple;
 import com.wuest.repurpose.Tuple;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -12,11 +13,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.client.gui.HoverChecker;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BasicGui extends Screen {
 
@@ -49,7 +53,7 @@ public abstract class BasicGui extends Screen {
 	 * @param textureHeight The height of the texture.
 	 */
 	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
-			float textureWidth, float textureHeight) {
+														   float textureWidth, float textureHeight) {
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -134,7 +138,7 @@ public abstract class BasicGui extends Screen {
 	}
 
 	public GuiCheckBox createAndAddCheckBox(int xPos, int yPos, String displayString, boolean isChecked,
-			Button.IPressable handler) {
+											GuiCheckBox.IPressable handler) {
 		GuiCheckBox checkBox = new GuiCheckBox(xPos, yPos, displayString, isChecked, handler);
 
 		this.addButton(checkBox);
@@ -142,8 +146,8 @@ public abstract class BasicGui extends Screen {
 	}
 
 	public Slider createAndAddSlider(int xPos, int yPos, int width, int height, String prefix, String suf,
-			double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr,
-			Button.IPressable handler) {
+									 double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr,
+									 Button.IPressable handler) {
 		Slider slider = new Slider(xPos, yPos, width, height, prefix, suf, minVal, maxVal, currentVal, showDec,
 				drawStr, handler);
 

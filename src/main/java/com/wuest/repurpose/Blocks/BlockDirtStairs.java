@@ -2,15 +2,12 @@ package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Proxy.CommonProxy;
-import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Random;
 
 import java.util.Random;
 

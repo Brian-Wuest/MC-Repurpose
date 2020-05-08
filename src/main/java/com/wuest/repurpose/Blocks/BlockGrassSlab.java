@@ -5,7 +5,6 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.common.ToolType;
 
 public class BlockGrassSlab extends SlabBlock implements IModBlock {

@@ -50,7 +50,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
-			Hand handIn, BlockRayTraceResult hit) {
+											 Hand handIn, BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
 			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
@@ -154,7 +154,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag advanced) {
+							   ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

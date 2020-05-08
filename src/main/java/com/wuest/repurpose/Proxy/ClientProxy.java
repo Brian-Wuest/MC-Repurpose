@@ -137,21 +137,22 @@ public class ClientProxy extends CommonProxy {
 		this.RegisterKeyBindings();
 
 		// This render type (func_228643_e_) is the "cutout" render type.
-		RenderTypeLookup.setRenderLayer(ModRegistry.DirtWall(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.DirtWall.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.GrassWall(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassWall.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.GrassStairs(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassStairs.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.DirtStairs(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.DirtStairs.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.EnrichedFarmland(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.EnrichedFarmland.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.GrassSlab(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModRegistry.GrassSlab.get(), RenderType.getCutoutMipped());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.MiniRedstone(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModRegistry.MiniRedstone.get(), RenderType.getCutout());
 
-		RenderTypeLookup.setRenderLayer(ModRegistry.RedstoneScanner(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModRegistry.RedstoneScanner.get(), RenderType.getCutout());
+		
 		DeferredWorkQueue.runLater(ClientSetup::init);
 	}
 
@@ -167,18 +168,6 @@ public class ClientProxy extends CommonProxy {
 		Screen screenToShow = null;
 
 		Minecraft.getInstance().displayGuiScreen(screenToShow);
-	}
-
-	@Override
-	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
-		for (Map.Entry<Block, BasicGui> entry : ClientProxy.ModBlockGuis.entrySet()) {
-			if (entry.getKey() == state.getBlock()) {
-				BasicGui screen = entry.getValue();
-				screen.pos = pos;
-
-				Minecraft.getInstance().displayGuiScreen(screen);
-			}
-		}
 	}
 
 	@Override
