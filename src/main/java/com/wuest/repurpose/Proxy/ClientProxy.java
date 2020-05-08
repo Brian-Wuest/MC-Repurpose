@@ -152,7 +152,7 @@ public class ClientProxy extends CommonProxy {
 		RenderTypeLookup.setRenderLayer(ModRegistry.MiniRedstone.get(), RenderType.getCutout());
 
 		RenderTypeLookup.setRenderLayer(ModRegistry.RedstoneScanner.get(), RenderType.getCutout());
-		
+
 		DeferredWorkQueue.runLater(ClientSetup::init);
 	}
 
