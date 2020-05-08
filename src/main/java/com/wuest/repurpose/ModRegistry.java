@@ -6,307 +6,159 @@ import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.Capabilities.Storage.DimensionHomeStorage;
 import com.wuest.repurpose.Crafting.ExtendedCookingRecipeSerializer;
 import com.wuest.repurpose.Enchantment.EnchantmentStepAssist;
+import com.wuest.repurpose.Gui.GuiItemBagOfHolding;
 import com.wuest.repurpose.Items.*;
+import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.Proxy.Messages.*;
 import com.wuest.repurpose.Proxy.Messages.Handlers.*;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.LazyValue;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.LazyLoadBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ConstantConditions")
 public class ModRegistry {
+
+	/**
+	 * Deferred registry for items.
+	 */
+	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, Repurpose.MODID);
+
+	/**
+	 * Deferred registry for blocks.
+	 */
+	public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Repurpose.MODID);
+
+	/**
+	 * Deferred registry for tile entities.
+	 */
+	public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, Repurpose.MODID);
+
+	/**
+	 * Deferred registry for enchantments.
+	 */
+	public static final DeferredRegister<Enchantment> ENCHANTMENTS = new DeferredRegister<>(ForgeRegistries.ENCHANTMENTS, Repurpose.MODID);
+
+	/**
+	 * Deferred registry for recipe serializers.
+	 */
+	public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = new DeferredRegister<>(ForgeRegistries.RECIPE_SERIALIZERS, Repurpose.MODID);
+
+	/**
+	 * Deferred registry for container types.
+	 */
+	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = new DeferredRegister<>(ForgeRegistries.CONTAINERS, Repurpose.MODID);
+
+	/* *********************************** Blocks *********************************** */
+	public static final RegistryObject<BlockCustomWall> DirtWall = BLOCKS.register("block_dirt_wall", () -> new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
+	public static final RegistryObject<BlockCustomWall> GrassWall = BLOCKS.register("block_grass_wall", () -> new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
+	public static final RegistryObject<RedstoneClock> RedStoneClock = BLOCKS.register("block_redstone_clock", com.wuest.repurpose.Blocks.RedstoneClock::new);
+	public static final RegistryObject<BlockDirtStairs> DirtStairs = BLOCKS.register("block_dirt_stairs", BlockDirtStairs::new);
+	public static final RegistryObject<BlockGrassStairs> GrassStairs = BLOCKS.register("block_grass_stairs", BlockGrassStairs::new);
+	public static final RegistryObject<BlockDirtSlab> DirtSlab = BLOCKS.register("block_dirt_slab", BlockDirtSlab::new);
+	public static final RegistryObject<BlockGrassSlab> GrassSlab = BLOCKS.register("block_grass_slab", BlockGrassSlab::new);
+	public static final RegistryObject<BlockEnrichedFarmland> EnrichedFarmland = BLOCKS.register("block_enriched_farmland", BlockEnrichedFarmland::new);
+	public static final RegistryObject<BlockMiniRedstone> MiniRedstone = BLOCKS.register("block_mini_redstone", BlockMiniRedstone::new);
+	public static final RegistryObject<BlockRedstoneScanner> RedstoneScanner = BLOCKS.register("block_redstone_scanner", BlockRedstoneScanner::new);
+	public static final RegistryObject<BlockGlowstoneSlab> GlowstoneSlab = BLOCKS.register("block_glowstone_slab", BlockGlowstoneSlab::new);
+
+
+	/* *********************************** Item Blocks *********************************** */
+	public static final RegistryObject<BlockItem> DirtWallItem = ITEMS.register("block_dirt_wall", () -> new BlockItem(DirtWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> GrassWallItem = ITEMS.register("block_grass_wall", () -> new BlockItem(GrassWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> RedstoneClockItem = ITEMS.register("block_redstone_clock", () -> new BlockItem(RedStoneClock.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
+	public static final RegistryObject<BlockItem> DirtStairsItem = ITEMS.register("block_dirt_stairs", () -> new BlockItem(DirtStairs.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> GrassStairsItem = ITEMS.register("block_grass_stairs", () -> new BlockItem(GrassStairs.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> DirtSlabItem = ITEMS.register("block_dirt_slab", () -> new BlockItem(DirtSlab.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> GrassSlabItem = ITEMS.register("block_grass_slab", () -> new BlockItem(GrassSlab.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> EnrichedFarmlandItem = ITEMS.register("block_enriched_farmland", () -> new BlockItem(EnrichedFarmland.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> MiniRedstoneItem = ITEMS.register("block_mini_redstone", () -> new BlockItem(MiniRedstone.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
+	public static final RegistryObject<BlockItem> RedstoneScannerItem = ITEMS.register("block_redstone_scanner", () -> new BlockItem(RedstoneScanner.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
+	public static final RegistryObject<BlockItem> GlowstoneSlabItem = ITEMS.register("block_glowstone_slab", () -> new BlockItem(GlowstoneSlab.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+
+	/* *********************************** Items *********************************** */
+	public static final RegistryObject<ItemBedCompass> BedCompass = ITEMS.register("item_bed_compass", ItemBedCompass::new);
+	public static final RegistryObject<ItemDiamondShard> DiamondShard = ITEMS.register("item_diamond_shard", ItemDiamondShard::new);
+	public static final RegistryObject<ItemFluffyFabric> FluffyFabric = ITEMS.register("item_fluffy_fabric", ItemFluffyFabric::new);
+	public static final RegistryObject<ItemSnorkel> Snorkel = ITEMS.register("item_snorkel", ItemSnorkel::new);
+	public static final RegistryObject<ItemWhetStone> WhetStone = ITEMS.register("item_whetstone", ItemWhetStone::new);
+	public static final RegistryObject<ItemStoneShears> StoneShears = ITEMS.register("item_stone_shears", ItemStoneShears::new);
+
+	public static final RegistryObject<ItemSickle> WoodSickle = ITEMS.register("item_wood_sickle", () -> new ItemSickle(ItemTier.WOOD));
+	public static final RegistryObject<ItemSickle> StoneSickle = ITEMS.register("item_stone_sickle", () -> new ItemSickle(ItemTier.STONE));
+	public static final RegistryObject<ItemSickle> IronSickle = ITEMS.register("item_iron_sickle", () -> new ItemSickle(ItemTier.IRON));
+	public static final RegistryObject<ItemSickle> DiamondSickle = ITEMS.register("item_diamond_sickle", () -> new ItemSickle(ItemTier.DIAMOND));
+	public static final RegistryObject<ItemSickle> GoldSickles = ITEMS.register("item_gold_sickle", () -> new ItemSickle(ItemTier.GOLD));
+
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeWood = ITEMS.register("item_swift_blade_wood", () -> new ItemSwiftBlade(ItemTier.WOOD, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeStone = ITEMS.register("item_swift_blade_stone", () -> new ItemSwiftBlade(ItemTier.STONE, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeIron = ITEMS.register("item_swift_blade_iron", () -> new ItemSwiftBlade(ItemTier.IRON, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeDiamond = ITEMS.register("item_swift_blade_diamond", () -> new ItemSwiftBlade(ItemTier.DIAMOND, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeGold = ITEMS.register("item_swift_blade_gold", () -> new ItemSwiftBlade(ItemTier.GOLD, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeCopper = ITEMS.register("item_swift_blade_copper", () -> new ItemSwiftBlade(CustomItemTier.COPPER, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeOsmium = ITEMS.register("item_swift_blade_osmium", () -> new ItemSwiftBlade(CustomItemTier.OSMIUM, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeBronze = ITEMS.register("item_swift_blade_bronze", () -> new ItemSwiftBlade(CustomItemTier.BRONZE, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeSteel = ITEMS.register("item_swift_blade_steel", () -> new ItemSwiftBlade(CustomItemTier.STEEL, 3, 10));
+	public static final RegistryObject<ItemSwiftBlade> SwiftBladeObsidian = ITEMS.register("item_swift_blade_obsidian", () -> new ItemSwiftBlade(CustomItemTier.OBSIDIAN, 3, 10));
+
+	public static final RegistryObject<ItemIronLump> IronLump = ITEMS.register("item_iron_lump", ItemIronLump::new);
+	public static final RegistryObject<ItemScroll> Scroll = ITEMS.register("item_scroll", ItemScroll::new);
+	public static final RegistryObject<ItemBagOfHolding> BagOfHolding = ITEMS.register("item_bag_of_holding", ItemBagOfHolding::new);
+
+	public static final RegistryObject<ItemWoodenCrate> WoodenCrate = ITEMS.register("item_wooden_crate", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Empty));
+	public static final RegistryObject<ItemWoodenCrate> ClutchOfEggs = ITEMS.register("clutch_of_eggs", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Clutch_Of_Eggs));
+	public static final RegistryObject<ItemWoodenCrate> CartonOfEggs = ITEMS.register("carton_of_eggs", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Carton_Of_Eggs));
+	public static final RegistryObject<ItemWoodenCrate> BunchOfPotatoes = ITEMS.register("bunch_of_potatoes", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Bunch_Of_Potatoes));
+	public static final RegistryObject<ItemWoodenCrate> CrateOfPotatoes = ITEMS.register("crate_of_potatoes", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Crate_Of_Potatoes));
+	public static final RegistryObject<ItemWoodenCrate> BunchOfCarrots = ITEMS.register("bunch_of_carrots", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Bunch_Of_Carrots));
+	public static final RegistryObject<ItemWoodenCrate> CrateOfCarrots = ITEMS.register("crate_of_carrots", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Crate_Of_Carrots));
+	public static final RegistryObject<ItemWoodenCrate> BunchOfBeets = ITEMS.register("bunch_of_beets", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Bunch_Of_Beets));
+	public static final RegistryObject<ItemWoodenCrate> CrateOfBeets = ITEMS.register("crate_of_beets", () -> new ItemWoodenCrate(ItemWoodenCrate.CrateType.Crate_Of_Beets));
+
+	/* *********************************** Tile Entities *********************************** */
+	public static final RegistryObject<TileEntityType<TileEntityRedstoneClock>> RedstoneClockTileEntity = TILE_ENTITIES.register("redstone_clock", () -> TileEntityRedstoneClock.TileType);
+	public static final RegistryObject<TileEntityType<TileEntityRedstoneScanner>> RedstoneScannerTileEntity = TILE_ENTITIES.register("redstone_scanner", () -> TileEntityRedstoneScanner.TileType);
+
+	/* *********************************** Enchantments *********************************** */
+	public static final RegistryObject<EnchantmentStepAssist> StepAssist = ENCHANTMENTS.register("step_assist", () -> new EnchantmentStepAssist(Enchantment.Rarity.COMMON, EnchantmentType.ARMOR_FEET,
+			new EquipmentSlotType[]{EquipmentSlotType.FEET}));
+
+	/* *********************************** Recipe Serializers *********************************** */
+	public static final RegistryObject<ExtendedCookingRecipeSerializer> ExtendedSmelting = RECIPE_SERIALIZERS.register("extended_smelting", () -> new ExtendedCookingRecipeSerializer(200));
+
+	/* *********************************** Container Types *********************************** */
+	public static final RegistryObject<ContainerType<BagOfHoldingContainer>> BagOfHoldingContainer = CONTAINER_TYPES.register("item_bag_of_holding", () -> IForgeContainerType.create(com.wuest.repurpose.Items.Containers.BagOfHoldingContainer::fromNetwork));
+
 	/**
 	 * This capability is used to save the locations where a player spawns when
 	 * transferring dimensions.
 	 */
 	@CapabilityInject(IDimensionHome.class)
 	public static Capability<IDimensionHome> DimensionHomes = null;
-
-	public static ArrayList<Item> ModItems = new ArrayList<Item>();
-	public static ArrayList<Block> ModBlocks = new ArrayList<Block>();
-	public static Map<String, Boolean> FoundMaterials = new HashMap<String, Boolean>();
-	public static ExtendedCookingRecipeSerializer ExtendedSmelting = null;
-
-	public static EnchantmentStepAssist stepAssist;
-
-	public static BlockCustomWall DirtWall() {
-		for (Block entry : ModRegistry.ModBlocks) {
-			if (entry instanceof BlockCustomWall
-					&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.DIRT) {
-				return (BlockCustomWall) entry;
-			}
-		}
-
-		return null;
-	}
-
-	public static BlockCustomWall GrassWall() {
-		for (Block entry : ModRegistry.ModBlocks) {
-			if (entry instanceof BlockCustomWall
-					&& ((BlockCustomWall) entry).BlockVariant == BlockCustomWall.EnumType.GRASS) {
-				return (BlockCustomWall) entry;
-			}
-		}
-
-		return null;
-	}
-
-	public static ItemBedCompass BedCompass() {
-		return ModRegistry.GetItem(ItemBedCompass.class);
-	}
-
-	public static RedstoneClock RedStoneClock() {
-		return ModRegistry.GetBlock(RedstoneClock.class);
-	}
-
-	public static BlockDirtStairs DirtStairs() {
-		return ModRegistry.GetBlock(BlockDirtStairs.class);
-	}
-
-	public static BlockGrassStairs GrassStairs() {
-		return ModRegistry.GetBlock(BlockGrassStairs.class);
-	}
-
-	public static BlockDirtSlab DirtSlab() {
-		return ModRegistry.GetBlock(BlockDirtSlab.class);
-	}
-
-	public static BlockGrassSlab GrassSlab() {
-		return ModRegistry.GetBlock(BlockGrassSlab.class);
-	}
-
-	public static BlockEnrichedFarmland EnrichedFarmland() {
-		return ModRegistry.GetBlock(BlockEnrichedFarmland.class);
-	}
-
-	public static BlockMiniRedstone MiniRedstone() {
-		return ModRegistry.GetBlock(BlockMiniRedstone.class);
-	}
-
-	public static BlockRedstoneScanner RedstoneScanner() {
-		return ModRegistry.GetBlock(BlockRedstoneScanner.class);
-	}
-
-	public static ItemDiamondShard DiamondShard() {
-		return ModRegistry.GetItem(ItemDiamondShard.class);
-	}
-
-	public static ItemFluffyFabric FluffyFabric() {
-		return ModRegistry.GetItem(ItemFluffyFabric.class);
-	}
-
-	public static ItemSnorkel Snorkel() {
-		return ModRegistry.GetItem(ItemSnorkel.class);
-	}
-
-	public static ItemWhetStone WhetStone() {
-		return ModRegistry.GetItem(ItemWhetStone.class);
-	}
-
-	public static ItemStoneShears StoneShears() {
-		return ModRegistry.GetItem(ItemStoneShears.class);
-	}
-
-	public static ItemScroll Scroll() {
-		return ModRegistry.GetItem(ItemScroll.class);
-	}
-
-	public static BlockGlowstoneSlab GlowstoneSlab() {
-		return ModRegistry.GetBlock(BlockGlowstoneSlab.class);
-	}
-
-	public static EnchantmentStepAssist StepAssist() {
-		return ModRegistry.stepAssist;
-	}
-
-	public static ItemWoodenCrate WoodenCrate() {
-		return ModRegistry.GetItem(ItemWoodenCrate.class);
-	}
-
-	public static ItemBagOfHolding BagofHolding() {
-		return ModRegistry.GetItem(ItemBagOfHolding.class);
-	}
-
-	public static ItemWoodenCrate EmptyWoodenCrate() {
-		for (Item item : ModRegistry.ModItems) {
-			if (item.getClass().isAssignableFrom(ItemWoodenCrate.class)
-					&& ((ItemWoodenCrate) item).crateType == ItemWoodenCrate.CrateType.Empty) {
-				return (ItemWoodenCrate) item;
-			}
-		}
-
-		return null;
-	}
-
-	public static ItemSwiftBlade CustomMaterialBlade(String materialName) {
-		IItemTier material = CustomItemTier.getByName(materialName);
-
-		if (material == null) {
-			return null;
-		}
-
-		for (Item item : ModRegistry.ModItems) {
-			if (item.getClass().isAssignableFrom(ItemSwiftBlade.class)
-					&& ((ItemSwiftBlade) item).getTier() == material) {
-				return ((ItemSwiftBlade) item);
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Gets the item from the ModItems collections.
-	 *
-	 * @param genericClass The class of item to get from the collection.
-	 * @return Null if the item could not be found otherwise the item found.
-	 */
-	public static <T extends Item> T GetItem(Class<T> genericClass) {
-		for (Item entry : ModRegistry.ModItems) {
-			if (entry.getClass().isAssignableFrom(genericClass)) {
-				return (T) entry;
-			}
-		}
-
-		return null;
-	}
-
-	public static <T extends Item> T GetItemSpecific(Class<T> genericClass) {
-		for (Item entry : ModRegistry.ModItems) {
-			if (entry.getClass() == genericClass) {
-				return (T) entry;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Gets the block from the ModBlockss collections.
-	 *
-	 * @param genericClass The class of block to get from the collection.
-	 * @return Null if the block could not be found otherwise the block found.
-	 */
-	public static <T extends Block> T GetBlock(Class<T> genericClass) {
-		for (Block entry : ModRegistry.ModBlocks) {
-			if (entry.getClass().isAssignableFrom(genericClass)) {
-				return (T) entry;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * This is where all in-game mod components (Items, Blocks) will be registered.
-	 */
-	public static void RegisterModComponents() {
-		ModRegistry.registerBlock(new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
-		ModRegistry.registerBlock(new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
-
-		ModRegistry.registerItem(new ItemBedCompass("item_bed_compass"));
-
-		ModRegistry.registerBlock(new RedstoneClock("block_redstone_clock"));
-
-		ForgeRegistries.TILE_ENTITIES.register(TileEntityRedstoneClock.TileType);
-
-		ModRegistry.registerBlock(new BlockDirtStairs());
-		ModRegistry.registerBlock(new BlockGrassStairs());
-
-		// Dirt Slab.
-		ModRegistry.registerBlock(new BlockDirtSlab(), "block_dirt_slab");
-
-		// Grass Slab
-		ModRegistry.registerBlock(new BlockGrassSlab(), "block_grass_slab");
-
-		ModRegistry.registerBlock(new BlockEnrichedFarmland());
-		ModRegistry.registerBlock(new BlockMiniRedstone());
-
-		ModRegistry.registerBlock(new BlockRedstoneScanner());
-		ForgeRegistries.TILE_ENTITIES.register(TileEntityRedstoneScanner.TileType);
-
-		// Diamond Shard
-		ModRegistry.registerItem(new ItemDiamondShard("item_diamond_shard"));
-
-		// Fluffy Fabric
-		ModRegistry.registerItem(new ItemFluffyFabric("item_fluffy_fabric"));
-
-		// Snorkel
-		ModRegistry.registerItem(new ItemSnorkel("item_snorkel"));
-
-		// Whetstone
-		ModRegistry.registerItem(new ItemWhetStone("item_whetstone"));
-
-		// Glowstone Slabs.
-		ModRegistry.registerBlock(new BlockGlowstoneSlab(), "block_glowstone_slab");
-
-		// Stone shears.
-		ModRegistry.registerItem(new ItemStoneShears("item_stone_shears"));
-
-		// Sickles.
-		ModRegistry.registerItem(new ItemSickle(ItemTier.WOOD, "item_wood_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ItemTier.STONE, "item_stone_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ItemTier.IRON, "item_iron_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ItemTier.DIAMOND, "item_diamond_sickle"));
-		ModRegistry.registerItem(new ItemSickle(ItemTier.GOLD, "item_gold_sickle"));
-
-		// Swift Blades.
-		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.WOOD, 3, 10, "wood"));
-		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.STONE, 3, 10, "stone"));
-		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.IRON, 3, 10, "iron"));
-		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.DIAMOND, 3, 10, "diamond"));
-		ModRegistry.registerItem(new ItemSwiftBlade(ItemTier.GOLD, 3, 10, "gold"));
-
-		Item item = new ItemSwiftBlade(CustomItemTier.COPPER, 3, 10, "copper");
-		ModRegistry.registerItem(item);
-
-		item = new ItemSwiftBlade(CustomItemTier.OSMIUM, 3, 10, "osmium");
-		ModRegistry.registerItem(item);
-
-		item = new ItemSwiftBlade(CustomItemTier.BRONZE, 3, 10, "bronze");
-		ModRegistry.registerItem(item);
-
-		item = new ItemSwiftBlade(CustomItemTier.STEEL, 3, 10, "steel");
-		ModRegistry.registerItem(item);
-
-		item = new ItemSwiftBlade(CustomItemTier.OBSIDIAN, 3, 10, "obsidian");
-		ModRegistry.registerItem(item);
-
-		// Iron lump.
-		ModRegistry.registerItem(new ItemIronLump("item_iron_lump"));
-
-		// Scroll
-		ModRegistry.registerItem(new ItemScroll("item_scroll"));
-
-		// Wooden Crate
-		for (ItemWoodenCrate.CrateType crateType : ItemWoodenCrate.CrateType.values()) {
-			String name = crateType.toString().toLowerCase();
-
-			if (crateType == ItemWoodenCrate.CrateType.Empty) {
-				name = "item_wooden_crate";
-			}
-
-			ModRegistry.registerItem(new ItemWoodenCrate(name, crateType));
-		}
-
-		// Bag of Holding
-		ModRegistry.registerItem(new ItemBagOfHolding("item_bag_of_holding"));
-	}
 
 	/**
 	 * This is where the mod messages are registered.
@@ -345,84 +197,6 @@ public class ModRegistry {
 		// Register the dimension home capability.
 		CapabilityManager.INSTANCE.register(IDimensionHome.class, new DimensionHomeStorage(),
 				() -> new DimensionHome());
-	}
-
-	/**
-	 * Register an Item
-	 *
-	 * @param item The Item instance
-	 * @param <T>  The Item type
-	 * @return The Item instance
-	 */
-	public static <T extends Item> T registerItem(T item) {
-		// ForgeRegistries.ITEMS.register(item);
-		ModRegistry.ModItems.add(item);
-
-		return item;
-	}
-
-	public static <T extends Block> T registerBlock(T block) {
-		return ModRegistry.registerBlock(block, true);
-	}
-
-	public static <T extends Block> T registerBlock(T block, boolean includeItemBlock) {
-		if (includeItemBlock) {
-			ModRegistry.ModItems.add(new BlockItem(block, (new Item.Properties()).group(ItemGroup.BUILDING_BLOCKS))
-					.setRegistryName(block.getRegistryName()));
-		}
-
-		ModRegistry.ModBlocks.add(block);
-		return block;
-	}
-
-	/**
-	 * Registers a block in the game registry.
-	 *
-	 * @param <T>   The type of block to register.
-	 * @param block The block to register.
-	 * @return The block which was registered.
-	 */
-	private static <T extends Block> T registerBlock(T block, String name) {
-		ModItems.add(
-				new BlockItem(block, (new Item.Properties()).group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(name));
-
-		ModRegistry.ModBlocks.add(block);
-
-		return block;
-	}
-
-	public static <T extends Block, I extends BlockItem> T registerBlock(T block, I itemBlock) {
-		ModRegistry.ModBlocks.add(block);
-
-		if (itemBlock != null) {
-			ModRegistry.ModItems.add(itemBlock);
-		}
-
-		return block;
-	}
-
-	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the
-	 * un-localised name to the full registry name.
-	 *
-	 * @param item     The item
-	 * @param itemName The item's name
-	 */
-	public static void setItemName(Item item, String itemName) {
-		if (itemName != null) {
-			item.setRegistryName(itemName);
-		}
-	}
-
-	/**
-	 * Set the registry name of {@code block} to {@code blockName} and the
-	 * un-localised name to the full registry name.
-	 *
-	 * @param block     The block
-	 * @param blockName The block's name
-	 */
-	public static void setBlockName(Block block, String blockName) {
-		block.setRegistryName(Repurpose.MODID, blockName);
 	}
 
 	public enum CustomItemTier implements IItemTier {

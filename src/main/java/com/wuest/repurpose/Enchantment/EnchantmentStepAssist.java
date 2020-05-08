@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Enchantment;
 
-import com.wuest.repurpose.Repurpose;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -14,8 +13,6 @@ public class EnchantmentStepAssist extends Enchantment {
 
 	public EnchantmentStepAssist(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
 		super(rarityIn, typeIn, slots);
-
-		this.setRegistryName(Repurpose.MODID, "step_assist");
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.item.BookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -10,9 +9,8 @@ import net.minecraft.item.ItemStack;
  * @author WuestMan
  */
 public class ItemScroll extends BookItem {
-	public ItemScroll(String name) {
+	public ItemScroll() {
 		super(new Item.Properties().group(ItemGroup.MISC));
-		ModRegistry.setItemName(this, name);
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Blocks;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RedstoneBlock;
@@ -16,8 +15,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-;
-
 public class BlockMiniRedstone extends RedstoneBlock implements IModBlock {
 	protected static final AxisAlignedBB bounds = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.50D, 0.75D);
 	protected static final VoxelShape shape = VoxelShapes.create(BlockMiniRedstone.bounds);
@@ -28,14 +25,17 @@ public class BlockMiniRedstone extends RedstoneBlock implements IModBlock {
 	public BlockMiniRedstone() {
 		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT)
 				.hardnessAndResistance(.5f, 10.0f).sound(SoundType.METAL));
-
-		ModRegistry.setBlockName(this, "block_mini_redstone");
 	}
 
 	public ItemGroup getItemGroup() {
 		return ItemGroup.REDSTONE;
 	}
 
+	/**
+	 * @deprecated call via
+	 * {@link IBlockState#getWeakPower(IBlockAccess, BlockPos, EnumFacing)}
+	 * whenever possible. Implementing/overriding is fine.
+	 */
 	@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 		return 8;

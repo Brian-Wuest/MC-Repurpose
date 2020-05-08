@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -23,10 +22,8 @@ import java.util.List;
  * @author WuestMan
  */
 public class ItemDiamondShard extends Item {
-	public ItemDiamondShard(String name) {
+	public ItemDiamondShard() {
 		super(new Item.Properties().group(ItemGroup.MATERIALS));
-
-		ModRegistry.setItemName(this, name);
 	}
 
 	/**

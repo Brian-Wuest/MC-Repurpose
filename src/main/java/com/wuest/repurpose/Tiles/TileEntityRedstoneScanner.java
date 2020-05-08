@@ -4,8 +4,6 @@ import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.BlockRedstoneScanner;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
 import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.INPC;
@@ -14,7 +12,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -31,11 +28,7 @@ import java.util.List;
  */
 public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerConfig> {
 	public static TileEntityType<TileEntityRedstoneScanner> TileType = new TileEntityType<TileEntityRedstoneScanner>(
-			TileEntityRedstoneScanner::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedstoneScanner())), null);
-
-	static {
-		TileEntityRedstoneScanner.TileType.setRegistryName(new ResourceLocation(Repurpose.MODID, "redstone_scanner"));
-	}
+			TileEntityRedstoneScanner::new, new HashSet<>(Arrays.asList(ModRegistry.RedstoneScanner.get())), null);
 
 	protected boolean foundEntity = false;
 
@@ -55,7 +48,6 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 	 * This method is used to determine if an entity was found within the scanning
 	 * range.
 	 *
-	 * @param state - The current blocks state.
 	 * @return The redstone strength the block associated with this tile entity
 	 * should provide.
 	 */
@@ -166,7 +158,7 @@ public class TileEntityRedstoneScanner extends TileEntityBase<RedstoneScannerCon
 			// We want to include the full block when trying to get the entities within this
 			// block position.
 			AxisAlignedBB axisPos = VoxelShapes.fullCube().getBoundingBox().offset(currentPos);
-			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity) null, axisPos);
+			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, axisPos);
 
 			if (!list.isEmpty()) {
 				// The first entity found matching the searched for targets will trigger the

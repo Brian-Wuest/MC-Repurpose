@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -37,13 +38,20 @@ public class Repurpose {
 	}
 
 	public Repurpose() {
+		// Register the blocks and items for this mod.
+		ModRegistry.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModRegistry.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModRegistry.ENCHANTMENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModRegistry.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModRegistry.CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
 		// Register the setup method for mod-loading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 		MinecraftForge.EVENT_BUS.addListener(this::serverStart);
 
 		Repurpose.proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-
-		ModRegistry.RegisterModComponents();
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
@@ -66,5 +74,9 @@ public class Repurpose {
 		}
 
 		ItemSickle.setEffectiveBlocks();
+	}
+
+	private void doClientStuff(final FMLClientSetupEvent event) {
+		Repurpose.proxy.clientSetup(event);
 	}
 }

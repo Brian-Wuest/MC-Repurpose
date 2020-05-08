@@ -18,6 +18,6 @@ public class ExtendedFurnaceRecipe extends FurnaceRecipe {
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
-		return ModRegistry.ExtendedSmelting;
+		return ModRegistry.ExtendedSmelting.get();
 	}
 }

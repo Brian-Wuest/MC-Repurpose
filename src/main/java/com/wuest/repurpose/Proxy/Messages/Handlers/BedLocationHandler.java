@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Proxy.Messages.Handlers;
 
+import com.wuest.repurpose.Events.ClientEventHandler;
 import com.wuest.repurpose.Proxy.ClientProxy;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
 import com.wuest.repurpose.Repurpose;
@@ -20,10 +21,10 @@ public class BedLocationHandler {
 				CompoundNBT tag = message.getMessageTag();
 
 				if (tag != null && tag.contains("bedX")) {
-					((ClientProxy) Repurpose.proxy).clientEventHandler.bedLocation = new BlockPos(tag.getInt("bedX"),
+					ClientEventHandler.bedLocation = new BlockPos(tag.getInt("bedX"),
 							tag.getInt("bedY"), tag.getInt("bedZ"));
 				} else {
-					((ClientProxy) Repurpose.proxy).clientEventHandler.bedLocation = null;
+					ClientEventHandler.bedLocation = null;
 				}
 			}
 		});

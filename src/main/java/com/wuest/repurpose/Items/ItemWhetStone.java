@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -24,13 +23,9 @@ import java.util.List;
 public class ItemWhetStone extends Item {
 	/**
 	 * Initializes a new instance of the ItemWhetStone class.
-	 *
-	 * @param name the item name.
 	 */
-	public ItemWhetStone(String name) {
+	public ItemWhetStone() {
 		super(new Item.Properties().group(ItemGroup.MISC));
-
-		ModRegistry.setItemName(this, name);
 	}
 
 	/**

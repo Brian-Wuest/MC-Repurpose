@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -25,10 +24,8 @@ public class ItemSnorkel extends Item {
 	/**
 	 * Initializes a new instance of the ItemFluffyFabric class.
 	 */
-	public ItemSnorkel(String name) {
+	public ItemSnorkel() {
 		super(new Item.Properties().group(ItemGroup.MISC));
-
-		ModRegistry.setItemName(this, name);
 	}
 
 	/**

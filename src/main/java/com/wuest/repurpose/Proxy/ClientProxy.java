@@ -39,7 +39,6 @@ import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,16 +60,14 @@ public class ClientProxy extends CommonProxy {
 
 	public ClientProxy() {
 		super();
-
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 	}
 
 	/**
 	 * Adds all of the Mod Guis to the HasMap.
 	 */
 	public static void AddGuis() {
-		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock(), new GuiRedstoneClock());
-		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner(), new GuiRedstoneScanner());
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedStoneClock.get(), new GuiRedstoneClock());
+		ClientProxy.ModBlockGuis.put(ModRegistry.RedstoneScanner.get(), new GuiRedstoneScanner());
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -78,7 +75,7 @@ public class ClientProxy extends CommonProxy {
 		// Register the block renderer.
 		Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> worldIn != null && pos != null
 				? BiomeColors.getGrassColor(worldIn, pos)
-				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs());
+				: GrassColors.get(0.5D, 1.0D), ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get());
 
 		// Register the item renderer.
 		Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
@@ -110,7 +107,7 @@ public class ClientProxy extends CommonProxy {
 			}
 
 			return -1;
-		}, new Block[]{ModRegistry.GrassWall(), ModRegistry.GrassSlab(), ModRegistry.GrassStairs()});
+		}, new Block[]{ModRegistry.GrassWall.get(), ModRegistry.GrassSlab.get(), ModRegistry.GrassStairs.get()});
 	}
 
 	@Override
@@ -135,7 +132,8 @@ public class ClientProxy extends CommonProxy {
 		ClientProxy.AddGuis();
 	}
 
-	private void clientSetup(FMLClientSetupEvent event) {
+	@Override
+	public void clientSetup(FMLClientSetupEvent event) {
 		this.RegisterKeyBindings();
 
 		// This render type (func_228643_e_) is the "cutout" render type.
@@ -154,16 +152,13 @@ public class ClientProxy extends CommonProxy {
 		RenderTypeLookup.setRenderLayer(ModRegistry.MiniRedstone(), RenderType.getCutout());
 
 		RenderTypeLookup.setRenderLayer(ModRegistry.RedstoneScanner(), RenderType.getCutout());
+		DeferredWorkQueue.runLater(ClientSetup::init);
 	}
 
 	@Override
 	public void registerRenderers() {
 		// Register block colors.
 		ClientProxy.RegisterBlockRenderer();
-	}
-
-	@Override
-	public void generateParticles(PlayerEntity player) {
 	}
 
 	@Override
@@ -174,21 +169,17 @@ public class ClientProxy extends CommonProxy {
 		Minecraft.getInstance().displayGuiScreen(screenToShow);
 	}
 
-	/*
-	 * @Override public Object getClientGuiElement(int ID, PlayerEntity player,
-	 * World world, int x, int y, int z) { TileEntity tileEntity =
-	 * world.getTileEntity(new BlockPos(x, y, z));
-	 *
-	 * if (ID == GuiRedstoneClock.GUI_ID) { return new GuiRedstoneClock(x, y, z); }
-	 * else if (ID == GuiRedstoneScanner.GUI_ID) { return new GuiRedstoneScanner(x,
-	 * y, z); } else if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
-	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
-	 * ItemBagOfHoldingProvider.GetFromStack(stack);
-	 *
-	 * return new GuiItemBagOfHolding(handler, player); }
-	 *
-	 * return null; }
-	 */
+	@Override
+	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
+		for (Map.Entry<Block, BasicGui> entry : ClientProxy.ModBlockGuis.entrySet()) {
+			if (entry.getKey() == state.getBlock()) {
+				BasicGui screen = entry.getValue();
+				screen.pos = pos;
+
+				Minecraft.getInstance().displayGuiScreen(screen);
+			}
+		}
+	}
 
 	@Override
 	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {

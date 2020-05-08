@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
@@ -34,13 +33,10 @@ public class ItemSickle extends ToolItem {
 	 * Initializes a new instance of the ItemSickle class.
 	 *
 	 * @param tier The type of tool material.
-	 * @param name The name to register.
 	 */
-	public ItemSickle(IItemTier tier, String name) {
+	public ItemSickle(IItemTier tier) {
 		super(1.0f, -2.4000000953674316f, tier, effectiveBlocks, new Item.Properties().group(ItemGroup.TOOLS));
 		this.breakRadius = 1 + tier.getHarvestLevel();
-
-		ModRegistry.setItemName(this, name);
 	}
 
 	public static void setEffectiveBlocks() {

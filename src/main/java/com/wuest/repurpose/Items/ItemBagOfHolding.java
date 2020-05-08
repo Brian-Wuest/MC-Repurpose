@@ -41,7 +41,7 @@ public class ItemBagOfHolding extends Item {
 	public static final String currentSlotName = "current_slot";
 	public static final String bagOpenName = "bag_opened";
 
-	public ItemBagOfHolding(String name) {
+	public ItemBagOfHolding() {
 		super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1));
 
 		// This will determine what model is shown to the user when the bag is opened or closed.
@@ -58,8 +58,84 @@ public class ItemBagOfHolding extends Item {
 				return 0f;
 			}
 		});
+	}
 
-		ModRegistry.setItemName(this, name);
+	public static void RefreshItemStack(PlayerEntity player, ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding && !player.world.isRemote) {
+			ItemBagOfHoldingProvider.UpdateRefreshValue(stack);
+		}
+	}
+
+	@Nullable
+	public static BlockRayTraceResult rayTrace(PlayerEntity player, double blockReachDistance, float partialTicks) {
+		Vec3d vec3d = player.getEyePosition(partialTicks);
+		Vec3d vec3d1 = player.getLook(partialTicks);
+		Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
+				vec3d1.z * blockReachDistance);
+
+		RayTraceContext rayTraceContext = new RayTraceContext(vec3d, vec3d2, RayTraceContext.BlockMode.COLLIDER,
+				RayTraceContext.FluidMode.NONE, player);
+		return player.world.rayTraceBlocks(rayTraceContext);
+	}
+
+	public static int getCurrentSlotFromStack(ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			return handler.slotIndex;
+		}
+
+		return 0;
+	}
+
+	public static void setCurrentSlotForStack(PlayerEntity player, ItemStack stack, int slot) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.slotIndex = slot;
+
+			handler.UpdateStack(stack);
+		}
+	}
+
+	public static boolean getBagOpenedFromStack(ItemStack stack) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			return handler.opened;
+		}
+
+		return false;
+	}
+
+	public static void setBagOpenedStack(ItemStack stack, boolean open) {
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+			handler.opened = open;
+
+			handler.UpdateStack(stack);
+
+			int metaValue = open ? 1 : 0;
+			stack.setDamage(metaValue);
+		}
+	}
+
+	public static ItemStack getItemStackFromInventory(PlayerEntity player) {
+		ItemStack stack = player.getHeldItemOffhand();
+
+		if (stack.getItem() instanceof ItemBagOfHolding) {
+			int slot = ItemBagOfHolding.getCurrentSlotFromStack(stack);
+			ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
+
+			if (handler != null) {
+				if (slot >= handler.getSlots()) {
+					slot = 0;
+				}
+
+				return handler.getStackInSlot(slot);
+			}
+		}
+
+		return ItemStack.EMPTY;
 	}
 
 	public static void RefreshItemStack(PlayerEntity player, ItemStack stack) {
@@ -159,22 +235,10 @@ public class ItemBagOfHolding extends Item {
 
 				// The consumer specified here is the "openMenu" method.
 				INamedContainerProvider container = new SimpleNamedContainerProvider((windowId, playerInventory, playerEntity) ->
-						new BagOfHoldingContainer(windowId, playerInventory), new StringTextComponent(ModRegistry.BagofHolding().getRegistryName().toString()));
+						new BagOfHoldingContainer(windowId, playerInventory), new StringTextComponent(ModRegistry.BagOfHolding.get().getRegistryName().toString()));
 
 				NetworkHooks.openGui((ServerPlayerEntity) player, container, buf -> {
 				});
-
-				/*BagOfHoldingContainer container = new BagOfHoldingContainer(player.inventory);
-
-				container.addListener((ServerPlayerEntity)player);
-				player.openContainer = container;
-
-				Repurpose.proxy.openGuiForItem(new ItemUseContext(player, hand, result), container);*/
-				/*
-				 * player.openGui(Repurpose.instance, GuiItemBagOfHolding.GUI_ID, world,
-				 * player.getPosition().getX(), player.getPosition().getY(),
-				 * player.getPosition().getZ());
-				 */
 			} else if (result.getType() == Type.BLOCK) {
 				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(stack);
 

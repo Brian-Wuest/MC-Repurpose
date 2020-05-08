@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.Base.TileBlockBase;
-import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
 import net.minecraft.block.Block;
@@ -37,8 +36,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-;
-
 /**
  * This class is to provide a way to scan for entities and if a particular
  * entity was found, generate a redstone signal.
@@ -72,7 +69,6 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT).hardnessAndResistance(.5f, 10.0f)
 				.sound(SoundType.METAL), TileEntityRedstoneScanner.TileType);
 
-		ModRegistry.setBlockName(this, "block_redstone_scanner");
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
 	}
 
@@ -110,8 +106,8 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
-											 BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
+			Hand handIn, BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
 			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
@@ -181,7 +177,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip,
-							   ITooltipFlag advanced) {
+			ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

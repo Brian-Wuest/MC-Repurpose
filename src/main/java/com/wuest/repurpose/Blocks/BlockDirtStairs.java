@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,6 +9,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
 
 import java.util.Random;
 
@@ -22,7 +25,6 @@ public class BlockDirtStairs extends StairsBlock implements IModBlock {
 	 */
 	public BlockDirtStairs() {
 		super(Blocks.DIRT.getDefaultState(), Block.Properties.from(Blocks.GRASS_BLOCK));
-		ModRegistry.setBlockName(this, "block_dirt_stairs");
 	}
 
 	/**
@@ -37,7 +39,7 @@ public class BlockDirtStairs extends StairsBlock implements IModBlock {
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
+		if (!worldIn.isRemote && CommonProxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {
 					BlockPos blockpos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
@@ -49,11 +51,11 @@ public class BlockDirtStairs extends StairsBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
-						BlockState grassStairsState = ModRegistry.GrassStairs().getDefaultState()
+						BlockState grassStairsState = ModRegistry.GrassStairs.get().getDefaultState()
 								.with(StairsBlock.FACING, state.get(StairsBlock.FACING))
 								.with(StairsBlock.HALF, state.get(StairsBlock.HALF))
 								.with(StairsBlock.SHAPE, state.get(StairsBlock.SHAPE));

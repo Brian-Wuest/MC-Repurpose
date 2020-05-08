@@ -19,6 +19,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -80,21 +81,7 @@ public class CommonProxy {
 	public void openGuiForBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
 	}
 
-	/*
-	 * @Override public Object getServerGuiElement(int ID, EntityPlayer player,
-	 * World world, int x, int y, int z) { TileEntity tileEntity =
-	 * world.getTileEntity(new BlockPos(x, y, z));
-	 *
-	 * if (ID == GuiItemBagOfHolding.GUI_ID) { ItemStack stack =
-	 * player.getHeldItemOffhand(); ItemBagOfHoldingProvider handler =
-	 * ItemBagOfHoldingProvider.GetFromStack(stack);
-	 * ((ItemBagOfHolding)stack.getItem()).RefreshItemStack(player, stack); return
-	 * new BagOfHoldingContainer(handler, player); }
-	 *
-	 * return null; }
-	 */
-
-	public void generateParticles(PlayerEntity players) {
+	public void clientSetup(FMLClientSetupEvent clientSetupEvent) {
 	}
 
 	public ModConfiguration getServerConfiguration() {

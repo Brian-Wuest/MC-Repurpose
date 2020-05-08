@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.Base.TileBlockBase;
-import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneClock;
 import net.minecraft.block.Block;
@@ -39,11 +38,10 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	/**
 	 * A simple block that emits redstone signals at regular intervals.
 	 */
-	public RedstoneClock(String name) {
-		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT)
-				.hardnessAndResistance(.5f, 10.0f), TileEntityRedstoneClock.TileType);
+	public RedstoneClock() {
+		super(Block.Properties.create(Material.CLAY, MaterialColor.TNT).hardnessAndResistance(.5f, 10.0f),
+				TileEntityRedstoneClock.TileType);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, Boolean.valueOf(true)));
-		ModRegistry.setBlockName(this, name);
 	}
 
 	public ItemGroup getItemGroup() {
@@ -51,8 +49,8 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
-											 BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
+			Hand handIn, BlockRayTraceResult hit) {
 		if (worldIn.isRemote) {
 			Repurpose.proxy.openGuiForBlock(state, worldIn, pos, player, handIn);
 		}
@@ -156,7 +154,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip,
-							   ITooltipFlag advanced) {
+			ITooltipFlag advanced) {
 		super.addInformation(stack, worldIn, tooltip, advanced);
 
 		boolean advancedKeyDown = Screen.hasShiftDown();

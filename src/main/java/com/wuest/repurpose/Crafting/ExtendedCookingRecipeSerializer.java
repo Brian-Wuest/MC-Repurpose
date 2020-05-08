@@ -10,8 +10,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class ExtendedCookingRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtendedFurnaceRecipe> {
+public class ExtendedCookingRecipeSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtendedFurnaceRecipe> {
 	protected final int resultCount;
 	private final int cookingTime;
 

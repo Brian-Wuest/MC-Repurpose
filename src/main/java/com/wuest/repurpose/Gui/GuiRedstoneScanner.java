@@ -4,6 +4,7 @@ import com.wuest.repurpose.Config.RedstoneScannerConfig;
 import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
 import com.wuest.repurpose.Repurpose;
 import com.wuest.repurpose.Tiles.TileEntityRedstoneScanner;
+import com.wuest.repurpose.Triple;
 import com.wuest.repurpose.Tuple;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -29,25 +30,19 @@ public class GuiRedstoneScanner extends BasicGui {
 	protected Slider btnDownRange;
 
 	protected GuiCheckBox btnNorth;
-	protected HoverChecker northChecker;
 	protected GuiCheckBox btnEast;
-	protected HoverChecker eastChecker;
 	protected GuiCheckBox btnSouth;
-	protected HoverChecker southChecker;
 	protected GuiCheckBox btnWest;
-	protected HoverChecker westChecker;
 	protected GuiCheckBox btnDown;
-	protected HoverChecker downChecker;
 	protected GuiCheckBox btnUp;
-	protected HoverChecker upChecker;
 
-	protected HoverChecker animalChecker;
 	protected GuiCheckBox btnAnimals;
 	protected GuiCheckBox btnMonsters;
 	protected GuiCheckBox btnPlayers;
 	protected GuiCheckBox btnNonPlayers;
 
 	public GuiRedstoneScanner() {
+		super();
 	}
 
 	/**
@@ -74,72 +69,59 @@ public class GuiRedstoneScanner extends BasicGui {
 		int grayBoxX = upperLeft.getFirst();
 		int grayBoxY = upperLeft.getSecond();
 
-		this.btnHorizontalRange = new Slider(grayBoxX + 5, grayBoxY + 15, 50, 20, "", "", 0, 5,
+		this.btnHorizontalRange = this.createAndAddSlider(grayBoxX + 5, grayBoxY + 15, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.NORTH).getScanLength(), false, true, this::buttonClicked);
-		this.addButton(this.btnHorizontalRange);
 
-		this.btnUpRange = new Slider(grayBoxX + 5, grayBoxY + 50, 50, 20, "", "", 0, 5,
+		this.btnUpRange = this.createAndAddSlider(grayBoxX + 5, grayBoxY + 50, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.UP).getScanLength(), false, true, this::buttonClicked);
-		this.addButton(this.btnUpRange);
 
-		this.btnDownRange = new Slider(grayBoxX + 90, grayBoxY + 50, 50, 20, "", "", 0, 5,
+		this.btnDownRange = this.createAndAddSlider(grayBoxX + 90, grayBoxY + 50, 50, 20, "", "", 0, 5,
 				this.Config.getFacingConfig(Direction.DOWN).getScanLength(), false, true, this::buttonClicked);
-		this.addButton(this.btnDownRange);
 
-		this.btnNorth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 23, "",
+		this.btnNorth = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 25, "",
 				this.Config.getFacingConfig(Direction.NORTH).getActive(), this::buttonClicked);
-		this.addButton(this.btnNorth);
-		this.northChecker = new HoverChecker(this.btnNorth, 800);
+		this.addHoverChecker(this.btnNorth, "The 'North' side.", 800, 300);
 
-		this.btnDown = new GuiCheckBox(grayBoxX + 200, grayBoxY + 37, "",
+		this.btnDown = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 37, "",
 				this.Config.getFacingConfig(Direction.DOWN).getActive(), this::buttonClicked);
-		this.addButton(this.btnDown);
-		this.downChecker = new HoverChecker(this.btnDown, 800);
+		this.addHoverChecker(this.btnDown, "The 'Bottom' side.", 800, 300);
 
-		this.btnEast = new GuiCheckBox(grayBoxX + 212, grayBoxY + 37, "",
+		this.btnEast = this.createAndAddCheckBox(grayBoxX + 212, grayBoxY + 37, "",
 				this.Config.getFacingConfig(Direction.EAST).getActive(), this::buttonClicked);
-		this.addButton(this.btnEast);
-		this.eastChecker = new HoverChecker(this.btnEast, 800);
+		this.addHoverChecker(this.btnEast, "The 'East' side.", 800, 300);
 
-		this.btnWest = new GuiCheckBox(grayBoxX + 188, grayBoxY + 37, "",
+		this.btnWest = this.createAndAddCheckBox(grayBoxX + 188, grayBoxY + 37, "",
 				this.Config.getFacingConfig(Direction.WEST).getActive(), this::buttonClicked);
-		this.addButton(this.btnWest);
-		this.westChecker = new HoverChecker(this.btnWest, 800);
+		this.addHoverChecker(this.btnWest, "The 'West' side.", 800, 300);
 
-		this.btnSouth = new GuiCheckBox(grayBoxX + 200, grayBoxY + 51, "",
+		this.btnSouth = this.createAndAddCheckBox(grayBoxX + 200, grayBoxY + 49, "",
 				this.Config.getFacingConfig(Direction.SOUTH).getActive(), this::buttonClicked);
-		this.addButton(this.btnSouth);
-		this.southChecker = new HoverChecker(this.btnSouth, 800);
+		this.addHoverChecker(this.btnSouth, "The 'South' side.", 800, 300);
 
-		this.btnUp = new GuiCheckBox(grayBoxX + 212, grayBoxY + 51, "",
+		this.btnUp = this.createAndAddCheckBox(grayBoxX + 212, grayBoxY + 49, "",
 				this.Config.getFacingConfig(Direction.UP).getActive(), this::buttonClicked);
-		this.addButton(this.btnUp);
-		this.upChecker = new HoverChecker(this.btnUp, 800);
+		this.addHoverChecker(this.btnUp, "The 'Top' side.", 800, 300);
 
-		this.btnAnimals = new GuiCheckBox(grayBoxX + 5, grayBoxY + 100, "Animals", this.Config.getAnimalsDetected(),
+		this.btnAnimals = this.createAndAddCheckBox(grayBoxX + 5, grayBoxY + 100, "Animals", this.Config.getAnimalsDetected(),
 				this::buttonClicked).setStringColor(this.textColor).setWithShadow(false);
-		this.addButton(this.btnAnimals);
-		this.animalChecker = new HoverChecker(this.btnAnimals, 800);
+		this.addHoverChecker(this.btnAnimals, "This includes things such as: pigs, cows, iron golems, etc...", 800, 300);
 
-		this.btnNonPlayers = new GuiCheckBox(grayBoxX + 5, grayBoxY + 115, "Non-Players",
+		this.btnNonPlayers = this.createAndAddCheckBox(grayBoxX + 5, grayBoxY + 115, "Non-Players",
 				this.Config.getNonPlayersDetected(), this::buttonClicked).setStringColor(this.textColor)
 				.setWithShadow(false);
-		this.addButton(this.btnNonPlayers);
 
 		// Middle Column:
 		grayBoxX += 95;
 		grayBoxY = (this.height / 2) - 83;
 
-		this.btnMonsters = new GuiCheckBox(grayBoxX, grayBoxY + 100, "Monsters", this.Config.getMonstersDetected(),
+		this.btnMonsters = this.createAndAddCheckBox(grayBoxX, grayBoxY + 100, "Monsters", this.Config.getMonstersDetected(),
 				this::buttonClicked).setStringColor(this.textColor).setWithShadow(false);
-		this.addButton(this.btnMonsters);
 
-		this.btnPlayers = new GuiCheckBox(grayBoxX, grayBoxY + 115, "Players", this.Config.getPlayersDetected(),
+		this.btnPlayers = this.createAndAddCheckBox(grayBoxX, grayBoxY + 115, "Players", this.Config.getPlayersDetected(),
 				this::buttonClicked).setStringColor(this.textColor).setWithShadow(false);
-		this.addButton(this.btnPlayers);
 
-		grayBoxX = (this.width / 2) - 128;
-		grayBoxY = (this.height / 2) - 83;
+		grayBoxX = upperLeft.getFirst();
+		grayBoxY = upperLeft.getSecond();
 
 		this.btnDone = this.createAndAddButton(grayBoxX + 10, grayBoxY + 136, 90, 20, "Done");
 		this.btnCancel = this.createAndAddButton(grayBoxX + 147, grayBoxY + 136, 90, 20, "Cancel");
@@ -149,30 +131,20 @@ public class GuiRedstoneScanner extends BasicGui {
 	protected void preButtonRender(int x, int y) {
 		this.drawControlBackground(x, y);
 
-		this.font.drawString("Active Sides", x + 170, y + 10, this.textColor);
-		this.font.drawString("Horizontal Scan Radius", x + 5, y + 5, this.textColor);
-		this.font.drawString("Up Scan Range", x + 5, y + 40, this.textColor);
-		this.font.drawString("Down Scan Range", x + 90, y + 40, this.textColor);
-		this.font.drawString("Types of entities to scan for:", x + 5, y + 85, this.textColor);
+		this.drawString("Active Sides", x + 170, y + 10, this.textColor);
+		this.drawString("Horizontal Scan Radius", x + 5, y + 5, this.textColor);
+		this.drawString("Up Scan Range", x + 5, y + 40, this.textColor);
+		this.drawString("Down Scan Range", x + 90, y + 40, this.textColor);
+		this.drawString("Types of entities to scan for:", x + 5, y + 85, this.textColor);
 	}
 
 	@Override
 	protected void postButtonRender(int x, int y, int mouseX, int mouseY) {
-		if (this.upChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Up' side.", 300), mouseX, mouseY);
-		} else if (this.northChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'North' side.", 300), mouseX, mouseY);
-		} else if (this.downChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'Down' side.", 300), mouseX, mouseY);
-		} else if (this.eastChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'East' side.", 300), mouseX, mouseY);
-		} else if (this.westChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'West' side.", 300), mouseX, mouseY);
-		} else if (this.southChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth("The 'South' side.", 300), mouseX, mouseY);
-		} else if (this.animalChecker.checkHover(mouseX, mouseY)) {
-			this.renderTooltip(this.minecraft.fontRenderer.listFormattedStringToWidth(
-					"This includes things such as: pigs, cows, iron golems, etc...", 300), mouseX, mouseY);
+		for (Triple<HoverChecker, String, Integer> triple : this.hoverCheckers) {
+			if (triple.getFirst().checkHover(mouseX, mouseY)) {
+				this.renderTooltip(this.listFormattedStringToWidth(triple.getSecond(), triple.getThird()), mouseX, mouseY);
+				break;
+			}
 		}
 	}
 
@@ -183,7 +155,7 @@ public class GuiRedstoneScanner extends BasicGui {
 	@Override
 	public void buttonClicked(AbstractButton button) {
 		if (button == this.btnCancel) {
-			this.minecraft.displayGuiScreen(null);
+			this.closeScreen();
 		} else if (button == this.btnDone) {
 			// Update the configuration.
 			this.Config.SetFacingConfig(Direction.NORTH, this.btnNorth.isChecked(),
@@ -212,13 +184,7 @@ public class GuiRedstoneScanner extends BasicGui {
 			Block block = this.minecraft.world.getBlockState(this.scannerTile.getPos()).getBlock();
 			this.minecraft.world.getPendingBlockTicks().scheduleTick(this.scannerTile.getPos(), block, 2);
 
-			this.minecraft.displayGuiScreen(null);
+			this.closeScreen();
 		}
 	}
-
-	@Override
-	protected Tuple<Integer, Integer> getAdjustedXYValue() {
-		return new Tuple<>(this.getCenteredXAxis() - 128, this.getCenteredYAxis() - 83);
-	}
-
 }

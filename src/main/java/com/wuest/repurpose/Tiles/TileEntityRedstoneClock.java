@@ -4,12 +4,12 @@ import com.wuest.repurpose.Base.TileEntityBase;
 import com.wuest.repurpose.Blocks.RedstoneClock;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.ModRegistry;
-import com.wuest.repurpose.Repurpose;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,11 +22,7 @@ import java.util.HashSet;
  */
 public class TileEntityRedstoneClock extends TileEntityBase<RedstoneClockPowerConfiguration> {
 	public static TileEntityType<TileEntityRedstoneClock> TileType = new TileEntityType<TileEntityRedstoneClock>(
-			TileEntityRedstoneClock::new, new HashSet<Block>(Arrays.asList(ModRegistry.RedStoneClock())), null);
-
-	static {
-		TileEntityRedstoneClock.TileType.setRegistryName(new ResourceLocation(Repurpose.MODID, "redstone_clock"));
-	}
+			TileEntityRedstoneClock::new, new HashSet<>(Arrays.asList(ModRegistry.RedStoneClock.get())), null);
 
 	/**
 	 * Initializes a new instance of the TileEntityRedstoneClock class.

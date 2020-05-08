@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Base;
 
 import com.wuest.repurpose.Capabilities.ITransferable;
+import com.wuest.repurpose.Repurpose;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -8,6 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import org.apache.logging.log4j.Level;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -84,7 +90,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 			if (stackCapability != null && tileEntityCapability != null && stackCapability instanceof ITransferable
 					&& tileEntityCapability instanceof ITransferable) {
 				// transfer the capability data, it's up to the capability to transfer the data.
-				((ITransferable) stackCapability).Transfer((ITransferable) tileEntityCapability);
+				((ITransferable) stackCapability).Transfer(tileEntityCapability);
 			}
 		}
 
@@ -145,7 +151,6 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
-		// System.out.println("Writing Clock Data.");
 		super.write(compound);
 
 		if (this.config != null) {
@@ -157,7 +162,6 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 
 	@Override
 	public void read(CompoundNBT compound) {
-		// System.out.println("Reading Tag Data.");
 		super.read(compound);
 
 		this.config = this.createConfigInstance().ReadFromCompoundNBT(compound);
@@ -166,9 +170,8 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	public T createConfigInstance() {
 		try {
 			return this.getTypeParameterClass().newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
+			Repurpose.LOGGER.log(Level.ERROR, e.getMessage());
 			e.printStackTrace();
 		}
 

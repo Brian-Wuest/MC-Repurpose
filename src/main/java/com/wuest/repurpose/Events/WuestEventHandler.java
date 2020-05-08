@@ -9,6 +9,7 @@ import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
 import com.wuest.repurpose.Items.*;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Proxy.ClientProxy;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Proxy.Messages.BagOfHoldingUpdateMessage;
 import com.wuest.repurpose.Proxy.Messages.BedLocationMessage;
 import com.wuest.repurpose.Proxy.Messages.ConfigSyncMessage;
@@ -65,14 +66,12 @@ import java.util.*;
 public class WuestEventHandler {
 	private static HashMap<String, BlockPos> playerBedLocation;
 
-	private static HashMap<String, Integer> playerExistedTicks = new HashMap<String, Integer>();
-
 	@SubscribeEvent
 	public static void onPlayerLoginEvent(PlayerLoggedInEvent event) {
 		if (!event.getPlayer().world.isRemote) {
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
-			CompoundNBT tag = Repurpose.proxy.proxyConfiguration.ToNBTTagCompound();
+			CompoundNBT tag = CommonProxy.proxyConfiguration.ToNBTTagCompound();
 			ConfigSyncMessage message = new ConfigSyncMessage(tag);
 
 			Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
@@ -163,7 +162,7 @@ public class WuestEventHandler {
 	public static void PlayerRightClicked(PlayerInteractEvent event) {
 		// This only happens during the right-click event.
 		// Can use the proxy's configuration.
-		if (event.getHand() == Hand.OFF_HAND && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest
+		if (event.getHand() == Hand.OFF_HAND && CommonProxy.proxyConfiguration.rightClickCropHarvest
 				&& !event.getWorld().isRemote && !event.isCanceled()) {
 			PlayerEntity p = event.getPlayer();
 
@@ -175,7 +174,7 @@ public class WuestEventHandler {
 				Item boneMeal = boneMealStack.getItem();
 
 				if (currentItem != null && currentItem == boneMeal) {
-					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+					if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 						System.out.println("Cannot harvest a crop when bone meal is being used.");
 					}
 
@@ -189,7 +188,7 @@ public class WuestEventHandler {
 
 			// Only re-plant when this is a fully grown plant.
 			if (crop instanceof CropsBlock || crop instanceof BushBlock) {
-				if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+				if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 					System.out.println("Found a crop, check to see if it's fully grown.");
 				}
 
@@ -214,7 +213,7 @@ public class WuestEventHandler {
 				}
 
 				if (cropIsMaxAge) {
-					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+					if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 						System.out.println("The crop is fully grown, get the drops, and try to re-plant.");
 					}
 
@@ -226,7 +225,7 @@ public class WuestEventHandler {
 							null);
 
 					// Break the original crop block.
-					event.getWorld().removeBlock(event.getPos(), false);
+					event.getWorld().destroyBlock(event.getPos(), false);
 
 					ActionResultType replanted = ActionResultType.FAIL;
 					BlockState tempState = cropState.with(ageInteger, 0);
@@ -251,18 +250,18 @@ public class WuestEventHandler {
 							if (replanted == ActionResultType.SUCCESS || replanted == ActionResultType.PASS) {
 								replanted = ActionResultType.PASS;
 
-								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+								if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 									System.out.println("Found a 'seed' to plant for the crop ["
 											+ crop.getRegistryName().toString()
 											+ "] from the crop's drops. Not including it in the list of drops to be added to the player's inventory.");
 								}
-
-								continue;
 							}
 						}
 
-						p.inventory.addItemStackToInventory(drop);
-						p.openContainer.detectAndSendChanges();
+						if (drop != ItemStack.EMPTY) {
+							p.inventory.addItemStackToInventory(drop);
+							p.openContainer.detectAndSendChanges();
+						}
 					}
 
 					if (replanted != ActionResultType.PASS) {
@@ -278,7 +277,7 @@ public class WuestEventHandler {
 						ItemStack seeds = new ItemStack(seed);
 
 						if (p.inventory.hasItemStack(seeds)) {
-							if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+							if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 								System.out.println("The player has the seed for this crop. Attempting to re-plant.");
 							}
 
@@ -290,7 +289,7 @@ public class WuestEventHandler {
 									&& state.getBlock().canSustainPlant(state, event.getWorld(), farmlandPosition,
 									Direction.UP, (IPlantable) seeds.getItem())
 									&& event.getWorld().isAirBlock(farmlandPosition.up())) {
-								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+								if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 									System.out.println(
 											"The player is able to edit the top of this farmland and the farmland can sustaing this plant and the block above the farmland is air.");
 								}
@@ -310,19 +309,19 @@ public class WuestEventHandler {
 
 									p.openContainer.detectAndSendChanges();
 
-									if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+									if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 										System.out.println(
 												"Right-click harvesting succeeded. Removing 1 'seed' item from the player's inventory since a seed was not included in the block drops.");
 									}
 								}
 							} else {
-								if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+								if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 									System.out.println(
 											"Plant not re-planted. The player either cannot edit the block above the farmland or the farmland cannot sustaing this plant or the block above the farmland is not air.");
 								}
 							}
 						} else {
-							if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+							if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 								System.out.println("Plant not re-planted. The player does not have the seed: ["
 										+ seed.getRegistryName().toString() + "] in their inventory.");
 							}
@@ -331,20 +330,20 @@ public class WuestEventHandler {
 
 					event.setCanceled(true);
 
-					if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+					if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 						System.out.println(
 								"Cancelling future player right-clicked events so multiple right-click harvesting mods don't duplicate drops.");
 					}
 				}
 			} else {
-				if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+				if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 					System.out.println(
 							"The block right-clicked is not a harvestable block. Right-click harvesting did not occur.");
 				}
 			}
-		} else if (!event.getWorld().isRemote && Repurpose.proxy.proxyConfiguration.rightClickCropHarvest
+		} else if (!event.getWorld().isRemote && CommonProxy.proxyConfiguration.rightClickCropHarvest
 				&& event.isCanceled()) {
-			if (Repurpose.proxy.proxyConfiguration.enableVerboseLogging) {
+			if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 				System.out.println(
 						"This event was previously canceled, right-click harvesting did not happen from this mod.");
 			}
@@ -359,8 +358,6 @@ public class WuestEventHandler {
 			// This is needed as the client doesn't properly store the bed location.
 			WuestEventHandler.sendPlayerBedLocation(event);
 		}
-
-		// this.generatePlayerParticles(event);
 	}
 
 	@SubscribeEvent
@@ -403,7 +400,7 @@ public class WuestEventHandler {
 			ItemStack result = new ItemStack(enchantingItem);
 
 			if (result != null) {
-				result.addEnchantment(ModRegistry.StepAssist(), 1);
+				result.addEnchantment(ModRegistry.StepAssist.get(), 1);
 				event.setCost(2);
 			}
 
@@ -487,7 +484,7 @@ public class WuestEventHandler {
 
 							if (!pouchStack.isEmpty()) {
 								// This has an item in it of some kind, determine if they are the same.
-								if (pouchStack.areItemsEqual(pouchStack, eventStack)) {
+								if (ItemStack.areItemsEqual(pouchStack, eventStack)) {
 									int updatedSize = pouchStack.getCount() + eventStack.getCount();
 
 									// Make sure we don't go above the stack limit for this slot.
@@ -560,41 +557,6 @@ public class WuestEventHandler {
 		}
 	}
 
-	private static void generatePlayerParticles(TickEvent.PlayerTickEvent event) {
-		PlayerEntity player = event.player;
-
-		if (WuestEventHandler.playerExistedTicks.containsKey(player.getDisplayName().getString())) {
-			int ticks = WuestEventHandler.playerExistedTicks.get(player.getDisplayName().getString());
-
-			if (ticks % 20 == 0) {
-				Repurpose.proxy.generateParticles(player);
-				ticks = 0;
-			}
-
-			ticks++;
-			WuestEventHandler.playerExistedTicks.put(player.getDisplayName().getString(), ticks);
-		} else {
-			WuestEventHandler.playerExistedTicks.put(player.getDisplayName().getString(), 0);
-		}
-
-	}
-
-	private static void checkChanceAndAddToDrops(World world, List<ItemStack> drops, double maxPercentage,
-												 Item itemToDrop, int quantity) {
-		double randomChance = WuestEventHandler.getRandomChance(world);
-
-		if (randomChance <= maxPercentage) {
-			drops.add(new ItemStack(itemToDrop, quantity));
-		}
-	}
-
-	private static double getRandomChance(World world) {
-		double randomChance = world.rand.nextDouble();
-		BigDecimal bigDecimal = new BigDecimal(Double.toString(randomChance));
-		bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
-		return bigDecimal.doubleValue();
-	}
-
 	private static AnvilUpdateEvent processScrollUpdate(AnvilUpdateEvent event) {
 		ItemStack leftItemStack = event.getLeft();
 		ItemStack rightItemStack = event.getRight();
@@ -660,8 +622,8 @@ public class WuestEventHandler {
 
 			for (Enchantment enchantment1 : map1.keySet()) {
 				if (enchantment1 != null) {
-					int i2 = map.containsKey(enchantment1) ? ((Integer) map.get(enchantment1)).intValue() : 0;
-					int j2 = ((Integer) map1.get(enchantment1)).intValue();
+					int i2 = map.containsKey(enchantment1) ? map.get(enchantment1).intValue() : 0;
+					int j2 = map1.get(enchantment1).intValue();
 					j2 = i2 == j2 ? j2 + 1 : Math.max(j2, i2);
 					boolean canApplyEnchantment = enchantment1.canApply(copyOfLeft);
 

@@ -9,7 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
  */
 public abstract class BaseConfig {
 	/**
-	 * Writes to an NBTTagCombound given an existing CompoundNBT.
+	 * Writes to an CompoundNBT given an existing CompoundNBT.
 	 *
 	 * @param compound The existing tag to add custom values too.
 	 */

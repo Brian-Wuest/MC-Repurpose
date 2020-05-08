@@ -12,7 +12,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.items.IItemHandler;
 
 public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> {
-	public static final int GUI_ID = 8;
 
 	private IItemHandler itemHandler;
 
@@ -23,14 +22,13 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 		this.ySize = 221;
 		ItemStack offHandStack = itemHandler.offHandInventory.get(0);
 
-		ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(offHandStack);
-
-		this.itemHandler = handler;
+		this.itemHandler = ItemBagOfHoldingProvider.GetFromStack(offHandStack);
 	}
 
 	@Override
 	protected void init() {
 		super.init();
+		assert this.minecraft != null;
 		this.minecraft.player.openContainer = this.getContainer();
 	}
 
@@ -53,7 +51,7 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	public void removed() {
 		super.removed();
 
-		if (this.minecraft.player != null && this.itemHandler instanceof ItemBagOfHoldingProvider) {
+		if (this.minecraft != null && this.minecraft.player != null && this.itemHandler instanceof ItemBagOfHoldingProvider) {
 			((ItemBagOfHoldingProvider) this.itemHandler).UpdateStack(this.minecraft.player.getHeldItemOffhand());
 		}
 	}
@@ -71,6 +69,7 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		assert this.minecraft != null;
 		this.minecraft.getTextureManager().bindTexture(new ResourceLocation("textures/gui/container/generic_54.png"));
 		this.blit(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}

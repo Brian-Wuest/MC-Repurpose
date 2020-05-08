@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Blocks;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
@@ -12,7 +11,5 @@ public class BlockGlowstoneSlab extends SlabBlock implements IModBlock {
 	public BlockGlowstoneSlab() {
 		super(Block.Properties.create(Material.GLASS, MaterialColor.SAND).sound(SoundType.GLASS)
 				.hardnessAndResistance(0.5f, 0.5f).harvestTool(ToolType.PICKAXE).harvestLevel(0).lightValue(15));
-
-		ModRegistry.setBlockName(this, "block_glowstone_slab");
 	}
 }

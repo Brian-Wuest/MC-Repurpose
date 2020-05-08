@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -9,16 +10,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class BlockCustomWall extends WallBlock implements IModBlock {
-	public static final EnumProperty<BlockCustomWall.EnumType> VARIANT = EnumProperty.<BlockCustomWall.EnumType>create(
+	public static final EnumProperty<BlockCustomWall.EnumType> VARIANT = EnumProperty.create(
 			"variant", BlockCustomWall.EnumType.class);
 	public BlockCustomWall.EnumType BlockVariant;
 
@@ -29,8 +31,6 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 				.sound(modelBlock.getSoundType(null)));
 
 		this.BlockVariant = variant;
-
-		ModRegistry.setBlockName(this, variant.getUnlocalizedName());
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
+		if (!worldIn.isRemote && CommonProxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {
 					BlockPos blockpos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
@@ -57,11 +57,11 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
-						BlockState grassStairsState = ModRegistry.GrassWall().getDefaultState()
+						BlockState grassStairsState = ModRegistry.GrassWall.get().getDefaultState()
 								.with(FourWayBlock.EAST, state.get(FourWayBlock.EAST))
 								.with(FourWayBlock.WEST, state.get(FourWayBlock.WEST))
 								.with(FourWayBlock.NORTH, state.get(FourWayBlock.NORTH))
@@ -81,7 +81,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos,
 								  PlayerEntity player) {
-		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall()));
+		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall.get()));
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 		builder.add(BlockCustomWall.VARIANT);
 	}
 
-	public static enum EnumType implements IStringSerializable {
+	public enum EnumType implements IStringSerializable {
 		DIRT(0, "block_dirt_wall", "block_dirt_wall", Material.EARTH),
 		GRASS(1, "block_grass_wall", "block_grass_wall", Material.EARTH);
 
@@ -107,7 +107,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 		private String unlocalizedName;
 		private Material material;
 
-		private EnumType(int meta, String name, String unlocalizedName, Material blockMaterial) {
+		EnumType(int meta, String name, String unlocalizedName, Material blockMaterial) {
 			this.meta = meta;
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;
@@ -130,6 +130,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 			return this.name;
 		}
 
+		@Override
 		public String getName() {
 			return this.name;
 		}

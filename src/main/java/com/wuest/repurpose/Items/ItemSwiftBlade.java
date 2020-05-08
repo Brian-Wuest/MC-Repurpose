@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Items;
 
 import com.google.common.collect.Multimap;
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -24,14 +23,12 @@ public class ItemSwiftBlade extends SwordItem {
 	/*
 	 * Initializes a new instance of the ItemSwiftBlade class.
 	 */
-	public ItemSwiftBlade(IItemTier tier, int attackDamageIn, float attackSpeedIn, String name) {
+	public ItemSwiftBlade(IItemTier tier, int attackDamageIn, float attackSpeedIn) {
 		super(tier, attackDamageIn, attackSpeedIn,
 				new Item.Properties().maxStackSize(1).maxDamage(tier.getMaxUses()).group(ItemGroup.COMBAT));
 		this.material = tier;
 		this.attackDamage = 3.0F + material.getAttackDamage();
 		this.attackSpeed = attackSpeedIn;
-
-		ModRegistry.setItemName(this, ItemSwiftBlade.GetUnlocalizedName(name));
 	}
 
 	/*
@@ -79,9 +76,9 @@ public class ItemSwiftBlade extends SwordItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER,
-					"Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
+					"Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
 			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER,
-					"Weapon modifier", (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
+					"Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
 		}
 
 		return multimap;

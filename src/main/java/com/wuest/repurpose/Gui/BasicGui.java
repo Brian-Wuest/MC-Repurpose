@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.wuest.repurpose.Triple;
 import com.wuest.repurpose.Tuple;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -12,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -23,11 +25,15 @@ public abstract class BasicGui extends Screen {
 	public BlockPos pos;
 	protected PlayerEntity player;
 	protected int textColor = Color.DARK_GRAY.getRGB();
+	protected int modifiedInitialXAxis = 128;
+	protected int modifiedInitialYAxis = 83;
+	protected ArrayList<Triple<HoverChecker, String, Integer>> hoverCheckers;
 	private boolean pauseGame;
 
 	public BasicGui() {
 		super(new StringTextComponent(""));
 		this.pauseGame = true;
+		this.hoverCheckers = new ArrayList<>();
 	}
 
 	/**
@@ -43,7 +49,7 @@ public abstract class BasicGui extends Screen {
 	 * @param textureHeight The height of the texture.
 	 */
 	public static void drawModalRectWithCustomSizedTexture(int x, int y, int z, int width, int height,
-														   float textureWidth, float textureHeight) {
+			float textureWidth, float textureHeight) {
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -109,8 +115,8 @@ public abstract class BasicGui extends Screen {
 	}
 
 	/**
-	 * Creates a {@link ExtendedButton} using the button clicked event as the handler.
-	 * Then adds it to the buttons list and returns the created object.
+	 * Creates a {@link ExtendedButton} using the button clicked event as the
+	 * handler. Then adds it to the buttons list and returns the created object.
 	 *
 	 * @param x      The x-axis position.
 	 * @param y      The y-axis position.
@@ -125,6 +131,24 @@ public abstract class BasicGui extends Screen {
 		this.addButton(returnValue);
 
 		return returnValue;
+	}
+
+	public GuiCheckBox createAndAddCheckBox(int xPos, int yPos, String displayString, boolean isChecked,
+			Button.IPressable handler) {
+		GuiCheckBox checkBox = new GuiCheckBox(xPos, yPos, displayString, isChecked, handler);
+
+		this.addButton(checkBox);
+		return checkBox;
+	}
+
+	public Slider createAndAddSlider(int xPos, int yPos, int width, int height, String prefix, String suf,
+			double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr,
+			Button.IPressable handler) {
+		Slider slider = new Slider(xPos, yPos, width, height, prefix, suf, minVal, maxVal, currentVal, showDec,
+				drawStr, handler);
+
+		this.addButton(slider);
+		return slider;
 	}
 
 	protected void drawControlBackground(int grayBoxX, int grayBoxY) {
@@ -148,5 +172,69 @@ public abstract class BasicGui extends Screen {
 
 	protected abstract void postButtonRender(int x, int y, int mouseX, int mouseY);
 
-	protected abstract Tuple<Integer, Integer> getAdjustedXYValue();
+	/**
+	 * Gets the adjusted x/y coordinates for the top-left most part of the screen.
+	 *
+	 * @return A new tuple containing the x/y coordinates.
+	 */
+	protected Tuple<Integer, Integer> getAdjustedXYValue() {
+		return new Tuple<>(this.getCenteredXAxis() - this.modifiedInitialXAxis,
+				this.getCenteredYAxis() - this.modifiedInitialYAxis);
+	}
+
+	/**
+	 * Draws a string on the screen.
+	 *
+	 * @param text  The text to draw.
+	 * @param x     The X-Coordinates of the string to start.
+	 * @param y     The Y-Coordinates of the string to start.
+	 * @param color The color of the text.
+	 * @return Some integer value.
+	 */
+	public int drawString(String text, float x, float y, int color) {
+		return this.getMinecraft().fontRenderer.drawString(text, x, y, color);
+	}
+
+	public void addHoverChecker(AbstractButton parentButton, String displayString, int threshold, int wordWrapWidth) {
+		HoverChecker hoverChecker = new HoverChecker(parentButton, threshold);
+		this.hoverCheckers.add(new Triple<>(hoverChecker, displayString, wordWrapWidth));
+	}
+
+	/**
+	 * Draws a string on the screen with word wrapping.
+	 *
+	 * @param str       The text to draw.
+	 * @param x         The X-Coordinates of the string to start.
+	 * @param y         The Y-Coordinates of the string to start.
+	 * @param wrapWidth The maximum width before wrapping begins.
+	 * @param textColor The color of the text.
+	 */
+	public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor) {
+		this.getMinecraft().fontRenderer.drawSplitString(str, x, y, wrapWidth, textColor);
+	}
+
+	/**
+	 * Breaks a string into a list of pieces where the width of each line is always
+	 * less than or equal to the provided width. Formatting codes will be preserved
+	 * between lines.
+	 */
+	public List<String> listFormattedStringToWidth(String str, int wrapWidth) {
+		return this.getMinecraft().fontRenderer.listFormattedStringToWidth(str, wrapWidth);
+	}
+
+	/**
+	 * Closes the current screen.
+	 */
+	public void closeScreen() {
+		this.getMinecraft().displayGuiScreen(null);
+	}
+
+	/**
+	 * Binds a texture to the texture manager for rendering.
+	 *
+	 * @param resourceLocation The resource location to bind.
+	 */
+	public void bindTexture(ResourceLocation resourceLocation) {
+		this.getMinecraft().getTextureManager().bindTexture(resourceLocation);
+	}
 }

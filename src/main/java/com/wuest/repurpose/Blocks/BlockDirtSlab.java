@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Blocks;
 
 import com.wuest.repurpose.ModRegistry;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,6 @@ public class BlockDirtSlab extends SlabBlock implements IModBlock {
 	public BlockDirtSlab() {
 		super(Block.Properties.create(Material.EARTH, MaterialColor.DIRT).sound(SoundType.GROUND)
 				.hardnessAndResistance(0.5f, 0.5f).harvestTool(ToolType.SHOVEL).harvestLevel(0));
-		ModRegistry.setBlockName(this, "block_dirt_slab");
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class BlockDirtSlab extends SlabBlock implements IModBlock {
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-		if (!worldIn.isRemote && Repurpose.proxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
+		if (!worldIn.isRemote && CommonProxy.proxyConfiguration.enableGrassSpreadToCustomDirt) {
 			if (worldIn.getLight(pos.up()) >= 9) {
 				for (int i = 0; i < 4; ++i) {
 					BlockPos blockpos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
@@ -42,13 +42,13 @@ public class BlockDirtSlab extends SlabBlock implements IModBlock {
 					BlockState iblockstate1 = worldIn.getBlockState(blockpos);
 
 					if ((iblockstate1.getBlock() == Blocks.GRASS_BLOCK
-							|| iblockstate1.getBlock() == ModRegistry.GrassStairs()
-							|| iblockstate1.getBlock() == ModRegistry.GrassWall()
-							|| iblockstate1.getBlock() == ModRegistry.GrassSlab())
+							|| iblockstate1.getBlock() == ModRegistry.GrassStairs.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassWall.get()
+							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
 						BlockState grassSlabsState = null;
 
-						grassSlabsState = ModRegistry.GrassSlab().getDefaultState().with(SlabBlock.TYPE,
+						grassSlabsState = ModRegistry.GrassSlab.get().getDefaultState().with(SlabBlock.TYPE,
 								state.get(SlabBlock.TYPE));
 
 						worldIn.setBlockState(pos, grassSlabsState, 3);

@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Blocks;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -34,9 +33,7 @@ public class BlockEnrichedFarmland extends FarmlandBlock implements IModBlock {
 				.harvestLevel(0).harvestTool(ToolType.SHOVEL));
 
 		// Make sure that this block is always wet.
-		this.setDefaultState(this.stateContainer.getBaseState().with(MOISTURE, Integer.valueOf(7)));
-
-		ModRegistry.setBlockName(this, "block_enriched_farmland");
+		this.setDefaultState(this.stateContainer.getBaseState().with(MOISTURE, 7));
 	}
 
 	/**

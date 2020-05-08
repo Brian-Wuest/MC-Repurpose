@@ -2,6 +2,7 @@ package com.wuest.repurpose.Config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.wuest.repurpose.Proxy.CommonProxy;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -301,7 +302,7 @@ public class ModConfiguration {
 		// Recipe configuration.
 		for (String key : ModConfiguration.recipeKeys) {
 			Repurpose.LOGGER.debug("Setting recipe configuration for key: " + key);
-			Repurpose.proxy.proxyConfiguration.recipeConfiguration.put(key, Repurpose.proxy.proxyConfiguration.configFileSettings.recipeConfiguration.get(key).get());
+			proxyConfiguration.recipeConfiguration.put(key, proxyConfiguration.configFileSettings.recipeConfiguration.get(key).get());
 		}
 	}
 

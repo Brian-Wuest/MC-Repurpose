@@ -1,7 +1,6 @@
 package com.wuest.repurpose.Items;
 
 import com.wuest.repurpose.Events.ClientEventHandler;
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,16 +21,12 @@ import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-;
-
 public class ItemBedCompass extends Item {
 	/**
 	 * Initializes a new instance of the ItemBedCompass class.
 	 */
-	public ItemBedCompass(String itemName) {
+	public ItemBedCompass() {
 		super(new Item.Properties().group(ItemGroup.MISC));
-
-		ModRegistry.setItemName(this, itemName);
 	}
 
 	/**

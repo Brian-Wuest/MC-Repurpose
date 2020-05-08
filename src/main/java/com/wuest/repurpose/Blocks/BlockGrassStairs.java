@@ -1,11 +1,8 @@
 package com.wuest.repurpose.Blocks;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
-
-;
 
 /**
  * This class defines a set of grass stairs.
@@ -15,7 +12,5 @@ import net.minecraft.block.StairsBlock;
 public class BlockGrassStairs extends StairsBlock implements IModBlock {
 	public BlockGrassStairs() {
 		super(Blocks.GRASS_BLOCK.getDefaultState(), Block.Properties.from(Blocks.GRASS_BLOCK));
-
-		ModRegistry.setBlockName(this, "block_grass_stairs");
 	}
 }

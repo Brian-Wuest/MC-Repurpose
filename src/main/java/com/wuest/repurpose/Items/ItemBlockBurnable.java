@@ -1,6 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.wuest.repurpose.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -15,7 +14,6 @@ public class ItemBlockBurnable extends BlockItem {
 
 	public ItemBlockBurnable(Block block, ItemGroup itemGroup) {
 		super(block, new Item.Properties().group(itemGroup));
-		ModRegistry.setItemName(this, block.getRegistryName().getPath());
 	}
 
 	public ItemBlockBurnable setBurnTime(int burnTime) {

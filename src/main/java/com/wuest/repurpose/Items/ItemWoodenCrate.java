@@ -13,13 +13,9 @@ public class ItemWoodenCrate extends Item {
 
 	/**
 	 * Creates a new instance of the ItemWoodenCrateClass.
-	 *
-	 * @param name
 	 */
-	public ItemWoodenCrate(String name, CrateType crateType) {
-		super(new Item.Properties().group(ItemGroup.FOOD).containerItem(crateType == CrateType.Empty ? null : ModRegistry.EmptyWoodenCrate()));
-
-		ModRegistry.setItemName(this, name);
+	public ItemWoodenCrate(CrateType crateType) {
+		super(new Item.Properties().group(ItemGroup.FOOD).containerItem(crateType == CrateType.Empty ? null : ModRegistry.WoodenCrate.get()));
 
 		this.crateType = crateType;
 	}
