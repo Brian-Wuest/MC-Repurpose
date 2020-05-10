@@ -36,7 +36,7 @@ public class ConfigRandomChance implements ILootCondition {
 
 		int randomResult = context.getRandom().nextInt(101);
 
-		return randomResult < chanceValue && randomResult > 0;
+		return randomResult <= chanceValue && chanceValue > 0;
 	}
 
 	public static class Serializer extends ILootCondition.AbstractSerializer<ConfigRandomChance> {
