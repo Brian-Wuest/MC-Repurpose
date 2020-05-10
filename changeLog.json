@@ -4,7 +4,9 @@
 	  "1.12-latest": "1.0.0.20",
 	  "1.12-recommended": "1.0.0.20",
 	  "1.14-latest": "1.1.0.0",
-	  "1.14-recommended": "1.1.0.0"
+	  "1.14-recommended": "1.1.0.0",
+	  "1.15-latest": "1.2.0.0",
+	  "1.15-recommended": "1.2.0.0"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -31,5 +33,8 @@
   },
  "1.14": {
 	 "1.1.0.0": "Initial release for 1.14.4!"
+ },
+ "1.15": {
+	 "1.2.0.0": "Initial release for 1.15.2!"
  }
 }
