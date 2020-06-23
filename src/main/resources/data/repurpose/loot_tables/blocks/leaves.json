@@ -5,15 +5,39 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "conditions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "condition": "repurpose:config_random_chance",
-              "option_name": "Apple Drop Chance",
-              "chance": -1
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "minecraft:air"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "repurpose:config_random_chance",
+                  "option_name": "Apple Drop Chance",
+                  "chance": -1
+                }
+              ],
+              "name": "minecraft:apple"
             }
-          ],
-          "name": "minecraft:apple"
+          ]
         }
       ]
     },
@@ -21,15 +45,39 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "conditions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "condition": "repurpose:config_random_chance",
-              "option_name": "Stick Drop Chance",
-              "chance": -1
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "minecraft:air"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "repurpose:config_random_chance",
+                  "option_name": "Stick Drop Chance",
+                  "chance": -1
+                }
+              ],
+              "name": "minecraft:stick"
             }
-          ],
-          "name": "minecraft:stick"
+          ]
         }
       ]
     }
