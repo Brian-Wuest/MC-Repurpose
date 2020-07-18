@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.wuest.repurpose.Capabilities.IDimensionHome;
 import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Proxy.CommonProxy;
-import com.wuest.repurpose.Repurpose;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
@@ -13,8 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 /**
@@ -44,7 +43,7 @@ public class HomeCommand {
 				return;
 			}
 
-			BlockPos bedLocation = player.getBedLocation(player.dimension);
+			BlockPos bedLocation = player.getBedPosition(player.dimension);
 
 			if (player.dimension != DimensionType.OVERWORLD) {
 				// Check the player's capability for this dimension.
@@ -59,7 +58,7 @@ public class HomeCommand {
 				BlockPos blockpos1 = null;
 
 				if (player.dimension == DimensionType.OVERWORLD) {
-					blockpos1 = player.getBedLocation(player.dimension);
+					blockpos1 = player.getBedPosition(player.dimension);
 				} else {
 					blockpos1 = bedLocation;
 				}
@@ -76,12 +75,12 @@ public class HomeCommand {
 						// Send the player a chat saying that the original
 						// starting position is blocked.
 						player.sendMessage(new StringTextComponent(
-								"The entrance you can in from for this dimension is blocked. You need to find another way out."));
+								"The entrance you can in from for this dimension is blocked. You need to find another way out."), player.getUniqueID());
 					}
 				}
 			} else {
 				// Send the player saying that the bed could not be found.
-				player.sendMessage(new StringTextComponent("Bed Not Found."));
+				player.sendMessage(new StringTextComponent("Bed Not Found."), player.getUniqueID());
 			}
 		}
 	}
@@ -96,7 +95,7 @@ public class HomeCommand {
 		double d2 = player.getPosZ();
 
 		boolean flag = false;
-		BlockPos blockpos = new BlockPos(player);
+		BlockPos blockpos = new BlockPos(d0, d1, d2);
 		World world = player.world;
 
 		if (world.isBlockLoaded(blockpos)) {

@@ -33,7 +33,6 @@ import java.util.List;
 
 public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implements IModBlock {
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
-	protected int tickRate = 20;
 
 	/**
 	 * A simple block that emits redstone signals at regular intervals.
@@ -56,14 +55,6 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 		}
 
 		return ActionResultType.PASS;
-	}
-
-	/**
-	 * How many world ticks before ticking
-	 */
-	@Override
-	public int tickRate(IWorldReader worldIn) {
-		return this.tickRate;
 	}
 
 	@Override

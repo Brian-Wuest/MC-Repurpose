@@ -26,9 +26,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.TableLootEntry;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.Property;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
@@ -38,11 +40,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -58,8 +58,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Repurpose.MODID)
@@ -132,9 +130,12 @@ public class WuestEventHandler {
 	public static void PlayerChangedDimension(PlayerChangedDimensionEvent event) {
 		IDimensionHome dimensionHome = event.getPlayer().getCapability(ModRegistry.DimensionHomes, null)
 				.orElse(null);
+		World currentWorld = event.getPlayer().getEntityWorld();
 
-		if (dimensionHome != null) {
-			dimensionHome.setHomePosition(event.getTo(), event.getPlayer().getPosition());
+		if (dimensionHome != null && currentWorld.isRemote) {
+			ServerWorld worldTransferringTo = event.getPlayer().getServer().getWorld(event.getTo());
+			// TODO: This was the getDimensionType and getPosition functions.
+			dimensionHome.setHomePosition(worldTransferringTo.func_230315_m_(), event.getPlayer().func_233580_cy_());
 		}
 	}
 
@@ -197,7 +198,8 @@ public class WuestEventHandler {
 				// Look for a specific property called "age". All vanilla minecraft crops use
 				// this name for their
 				// property and most other mods do to.
-				for (IProperty property : cropState.getProperties()) {
+				// TODO: This was the "getProperties" Method
+				for (Property property : cropState.func_235904_r_()) {
 					if (property.getName().toLowerCase().equals("age") && property instanceof IntegerProperty) {
 						// Found the age property, get the max age.
 						ageInteger = (IntegerProperty) property;
@@ -238,7 +240,7 @@ public class WuestEventHandler {
 						if (dropItem.getClass() == seed.getClass() && replanted != ActionResultType.PASS) {
 							Direction facing = event.getFace();
 
-							BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(
+							BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(
 									farmlandPosition.getX(),
 									farmlandPosition.up().getY(),
 									farmlandPosition.getZ()),
@@ -534,7 +536,7 @@ public class WuestEventHandler {
 		BedLocationMessage message = new BedLocationMessage();
 		CompoundNBT tag = new CompoundNBT();
 		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
-		BlockPos bedPosition = player.getBedLocation();
+		BlockPos bedPosition = player.getBedPosition().orElse(null);
 
 		if (bedPosition != null) {
 			tag.putInt("bedX", bedPosition.getX());

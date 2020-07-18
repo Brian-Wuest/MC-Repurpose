@@ -5,8 +5,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -35,7 +38,8 @@ public class DimensionHomeStorage implements Capability.IStorage<IDimensionHome>
 			dimensionTag.putInt(posYTag, entry.getValue().getY());
 			dimensionTag.putInt(posZTag, entry.getValue().getZ());
 
-			dimensionTag.putInt(dimensionIDTag, entry.getKey().getId());
+			// TODO: Fix this later
+			//dimensionTag.putInt(dimensionIDTag, entry.getKey().getId());
 
 			tag.put(entry.getKey().toString(), dimensionTag);
 		}
@@ -53,8 +57,10 @@ public class DimensionHomeStorage implements Capability.IStorage<IDimensionHome>
 			BlockPos pos = new BlockPos(dimensionTag.getInt(posXTag), dimensionTag.getInt(posYTag),
 					dimensionTag.getInt(posZTag));
 
-			DimensionType dimensionType = DimensionType.getById(dimensionID);
-			instance.setHomePosition(dimensionType, pos);
+
+			// TODO: Fix this later
+			//DimensionType dimensionType = DimensionType.getById(dimensionID);
+			//instance.setHomePosition(dimensionType, pos);
 		}
 	}
 }

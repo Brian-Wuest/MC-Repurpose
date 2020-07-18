@@ -24,7 +24,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 
 	public BlockCustomWall(Block modelBlock, BlockCustomWall.EnumType variant) {
 		super(Block.Properties.create(Material.ROCK)
-				.hardnessAndResistance(modelBlock.getBlockHardness(null, null, null),
+				.hardnessAndResistance(modelBlock.getDefaultState().getBlockHardness(null, null),
 						modelBlock.getExplosionResistance() * 5.0F / 3.0F)
 				.sound(modelBlock.getSoundType(null)));
 
@@ -129,7 +129,7 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return this.name;
 		}
 

@@ -6,6 +6,7 @@ import com.wuest.repurpose.ModRegistry;
 import com.wuest.repurpose.Repurpose;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -21,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -42,13 +43,13 @@ public class ItemBagOfHolding extends Item {
 	public static final String bagOpenName = "bag_opened";
 
 	public ItemBagOfHolding() {
-		super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1));
+		super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
 
 		// This will determine what model is shown to the user when the bag is opened or closed.
-		this.addPropertyOverride(new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
-
+		// TODO: This used to be addPropertyOverride on the Item class.
+		ItemModelsProperties.func_239418_a_(this, new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
 			@OnlyIn(Dist.CLIENT)
-			public float call(ItemStack itemStack, @Nullable World world, @Nullable LivingEntity entity) {
+			public float call(ItemStack itemStack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(itemStack);
 
 				if (handler.opened) {
@@ -68,9 +69,9 @@ public class ItemBagOfHolding extends Item {
 
 	@Nullable
 	public static BlockRayTraceResult rayTrace(PlayerEntity player, double blockReachDistance, float partialTicks) {
-		Vec3d vec3d = player.getEyePosition(partialTicks);
-		Vec3d vec3d1 = player.getLook(partialTicks);
-		Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
+		Vector3d vec3d = player.getEyePosition(partialTicks);
+		Vector3d vec3d1 = player.getLook(partialTicks);
+		Vector3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance,
 				vec3d1.z * blockReachDistance);
 
 		RayTraceContext rayTraceContext = new RayTraceContext(vec3d, vec3d2, RayTraceContext.BlockMode.COLLIDER,

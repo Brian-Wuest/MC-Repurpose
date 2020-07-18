@@ -5,18 +5,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.Level;
 
@@ -139,23 +139,24 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world,
-										   BlockPos pos1, BlockPos pos2, Hand hand) {
-		World world1 = (World) world;
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		World world = context.getWorld();
+		BlockPos pos1 = context.getPos();
+		BlockState state = this.getDefaultState();
 
 		for (Direction enumfacing : Direction.values()) {
-			world1.notifyNeighborsOfStateChange(pos1.offset(enumfacing), state.getBlock());
+			world.notifyNeighborsOfStateChange(context.getPos().offset(enumfacing), state.getBlock());
 		}
 
-		world1.getPendingBlockTicks().scheduleTick(pos1, this, this.tickRate(world));
+		world.getPendingBlockTicks().scheduleTick(pos1, this, 20);
 
 		if (world.getTileEntity(pos1) == null) {
 			T tile = this.createNewTileEntity();
 
-			world1.setTileEntity(pos1, tile);
+			world.setTileEntity(pos1, tile);
 		}
 
-		return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand);
+		return super.getStateForPlacement(context);
 	}
 
 	@Override

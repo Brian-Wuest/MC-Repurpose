@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Items.Containers.BagOfHoldingContainer;
@@ -36,10 +37,10 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		if (this.minecraft != null) {
-			super.render(mouseX, mouseY, partialTicks);
-			this.renderHoveredToolTip(mouseX, mouseY);
+			super.render(matrixStack, mouseX, mouseY, partialTicks);
+			this.renderHoveredToolTip(matrixStack, mouseX, mouseY);
 		}
 	}
 
@@ -60,16 +61,16 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	 * items)
 	 */
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		this.font.drawString("Pouch", 8, 6, 4210752);
-		this.font.drawString("Inventory", 8, this.ySize - 96 + 2, 4210752);
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+		this.font.drawString(matrixStack,"Pouch", 8, 6, 4210752);
+		this.font.drawString(matrixStack,"Inventory", 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		assert this.minecraft != null;
 		this.minecraft.getTextureManager().bindTexture(new ResourceLocation("textures/gui/container/generic_54.png"));
-		this.blit(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+		this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}
 }

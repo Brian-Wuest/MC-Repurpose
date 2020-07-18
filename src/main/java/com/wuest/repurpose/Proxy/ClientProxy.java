@@ -100,7 +100,8 @@ public class ClientProxy extends CommonProxy {
 				}
 
 				if (paintBlock) {
-					BlockPos pos = Minecraft.getInstance().player.getPosition();
+					// TODO: This used to be the getPosition method.
+					BlockPos pos = Minecraft.getInstance().player.func_233580_cy_();
 					ClientWorld world = Minecraft.getInstance().world;
 					return BiomeColors.getGrassColor(world, pos);
 				}

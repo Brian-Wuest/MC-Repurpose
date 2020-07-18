@@ -2,6 +2,7 @@ package com.wuest.repurpose.Base;
 
 import com.wuest.repurpose.Capabilities.ITransferable;
 import com.wuest.repurpose.Repurpose;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -128,7 +129,7 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	 */
 	@Override
 	public void onDataPacket(net.minecraft.network.NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(pkt.getNbtCompound());
+		this.read(this.getBlockState(), pkt.getNbtCompound());
 	}
 
 	@Override
@@ -157,8 +158,8 @@ public abstract class TileEntityBase<T extends BaseConfig> extends TileEntity {
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState stateIn, CompoundNBT compound) {
+		super.read(stateIn, compound);
 
 		this.config = this.createConfigInstance().ReadFromCompoundNBT(compound);
 	}

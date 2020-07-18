@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.wuest.repurpose.Config.RedstoneScannerConfig;
 import com.wuest.repurpose.Proxy.Messages.RedstoneScannerMessage;
 import com.wuest.repurpose.Repurpose;
@@ -10,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fml.client.gui.HoverChecker;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 
@@ -128,21 +128,21 @@ public class GuiRedstoneScanner extends BasicGui {
 	}
 
 	@Override
-	protected void preButtonRender(int x, int y) {
-		this.drawControlBackground(x, y);
+	protected void preButtonRender(MatrixStack matrixStack, int x, int y) {
+		this.drawControlBackground(matrixStack, x, y);
 
-		this.drawString("Active Sides", x + 170, y + 10, this.textColor);
-		this.drawString("Horizontal Scan Radius", x + 5, y + 5, this.textColor);
-		this.drawString("Up Scan Range", x + 5, y + 40, this.textColor);
-		this.drawString("Down Scan Range", x + 90, y + 40, this.textColor);
-		this.drawString("Types of entities to scan for:", x + 5, y + 85, this.textColor);
+		this.drawString(matrixStack, "Active Sides", x + 170, y + 10, this.textColor);
+		this.drawString(matrixStack, "Horizontal Scan Radius", x + 5, y + 5, this.textColor);
+		this.drawString(matrixStack, "Up Scan Range", x + 5, y + 40, this.textColor);
+		this.drawString(matrixStack, "Down Scan Range", x + 90, y + 40, this.textColor);
+		this.drawString(matrixStack, "Types of entities to scan for:", x + 5, y + 85, this.textColor);
 	}
 
 	@Override
-	protected void postButtonRender(int x, int y, int mouseX, int mouseY) {
+	protected void postButtonRender(MatrixStack matrixStack, int x, int y, int mouseX, int mouseY) {
 		for (Triple<HoverChecker, String, Integer> triple : this.hoverCheckers) {
 			if (triple.getFirst().checkHover(mouseX, mouseY)) {
-				this.renderTooltip(this.listFormattedStringToWidth(triple.getSecond(), triple.getThird()), mouseX, mouseY);
+				this.renderTooltip(matrixStack, this.listFormattedStringToWidth(triple.getSecond(), triple.getThird()), mouseX, mouseY);
 				break;
 			}
 		}

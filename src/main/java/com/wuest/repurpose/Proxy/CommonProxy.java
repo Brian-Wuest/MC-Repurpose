@@ -10,11 +10,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.conditions.LootConditionManager;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -56,7 +57,10 @@ public class CommonProxy {
 		CraftingHelper.register(new SmeltingCondition.Serializer());
 
 		// Register loot table conditions.
-		LootConditionManager.registerCondition(new ConfigRandomChance.Serializer());
+		// TODO: Need to be able to register loot conditions.
+		// NOTE: this will register the condition but seems kinda hacky.
+		LootConditionType lootConditionType = ConfigRandomChance.lootConditionType;
+		//LootConditionManager.registerCondition(new ConfigRandomChance.Serializer());
 
 		Repurpose.network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Repurpose.MODID, "main_channel"))
 				.clientAcceptedVersions(Repurpose.PROTOCOL_VERSION::equals)

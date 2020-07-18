@@ -1,5 +1,6 @@
 package com.wuest.repurpose.Gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.wuest.repurpose.Config.RedstoneClockPowerConfiguration;
 import com.wuest.repurpose.Proxy.Messages.RedstoneClockMessage;
 import com.wuest.repurpose.Repurpose;
@@ -10,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fml.client.gui.HoverChecker;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 
@@ -94,25 +94,25 @@ public class GuiRedstoneClock extends BasicGui {
 	}
 
 	@Override
-	protected void preButtonRender(int x, int y) {
-		this.drawControlBackground(x, y);
+	protected void preButtonRender(MatrixStack matrixStack, int x, int y) {
+		this.drawControlBackground(matrixStack, x, y);
 	}
 
 	@Override
-	protected void postButtonRender(int x, int y, int mouseX, int mouseY) {
-		this.drawString("Powered Sides", x + 150, y + 10, this.textColor);
-		this.drawString("Powered Duration", x + 10, y + 10, this.textColor);
-		this.drawString("(In Seconds)", x + 10, y + 20, this.textColor);
+	protected void postButtonRender(MatrixStack matrixStack, int x, int y, int mouseX, int mouseY) {
+		this.drawString(matrixStack,  "Powered Sides", x + 150, y + 10, this.textColor);
+		this.drawString(matrixStack,"Powered Duration", x + 10, y + 10, this.textColor);
+		this.drawString(matrixStack,"(In Seconds)", x + 10, y + 20, this.textColor);
 
-		this.drawString("Un-Powered Duration", x + 10, y + 60, this.textColor);
-		this.drawString("(In Seconds)", x + 10, y + 70, this.textColor);
+		this.drawString(matrixStack,"Un-Powered Duration", x + 10, y + 60, this.textColor);
+		this.drawString(matrixStack,"(In Seconds)", x + 10, y + 70, this.textColor);
 
-		this.drawString("Changes reflected after current state", x + 10, y + 116, this.textColor);
-		this.drawString("is complete.", x + 10, y + 126, this.textColor);
+		this.drawString(matrixStack,"Changes reflected after current state", x + 10, y + 116, this.textColor);
+		this.drawString(matrixStack,"is complete.", x + 10, y + 126, this.textColor);
 
 		for (Triple<HoverChecker, String, Integer> triple : this.hoverCheckers) {
 			if (triple.getFirst().checkHover(mouseX, mouseY)) {
-				this.renderTooltip(this.listFormattedStringToWidth(triple.getSecond(), triple.getThird()), mouseX, mouseY);
+				this.renderTooltip(matrixStack, this.listFormattedStringToWidth(triple.getSecond(), triple.getThird()), mouseX, mouseY);
 				break;
 			}
 		}

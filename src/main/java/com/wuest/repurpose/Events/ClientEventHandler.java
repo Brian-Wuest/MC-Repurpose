@@ -99,7 +99,7 @@ public class ClientEventHandler {
 				int offHandSlotLocationY = scaledHeighht - 23;
 				int selectedSlotLocationY = offHandSlotLocationY - 23;
 
-				mc.fontRenderer.drawString(((Integer) currentSlot).toString(), offHandSlotLocationX - 12,
+				mc.fontRenderer.drawString(event.getMatrixStack(), ((Integer) currentSlot).toString(), offHandSlotLocationX - 12,
 						selectedSlotLocationY + 8, ClientEventHandler.GREEN_TEXT);
 
 				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -109,7 +109,7 @@ public class ClientEventHandler {
 				Screen screen = new Screen(new StringTextComponent("some title")) {
 				};
 
-				screen.blit(offHandSlotLocationX, selectedSlotLocationY, 24, 23, 22, 23);
+				screen.blit(event.getMatrixStack(), offHandSlotLocationX, selectedSlotLocationY, 24, 23, 22, 23);
 
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.enableBlend();
@@ -198,7 +198,8 @@ public class ClientEventHandler {
 			int x = event.getWindow().getScaledWidth() / 4;
 			int y = event.getWindow().getScaledHeight() / 2 - 23;
 
-			BlockPos playerPosition = player.getPosition();
+			// TODO: This used to be the getPosition method
+			BlockPos playerPosition = player.func_233580_cy_();
 
 			if (ClientEventHandler.bedLocation != null) {
 				// If yOffset is positive, the player is higher than the bed, if it's negative
@@ -218,15 +219,15 @@ public class ClientEventHandler {
 				// the bed.
 				int zOffSet = playerPosition.getZ() - ClientEventHandler.bedLocation.getZ();
 
-				Minecraft.getInstance().fontRenderer.drawString("Your bed is...", x, y, Color.WHITE.getRGB());
+				Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), "Your bed is...", x, y, Color.WHITE.getRGB());
 
 				y = y + 10;
 
 				if (yOffSet > 0) {
-					Minecraft.getInstance().fontRenderer.drawString(((Integer) yOffSet).toString() + " Block(s) Lower",
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), ((Integer) yOffSet).toString() + " Block(s) Lower",
 							x, y, (new Color(200, 117, 51).getRGB()));
 				} else if (yOffSet < 0) {
-					Minecraft.getInstance().fontRenderer.drawString(
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(),
 							((Integer) Math.abs(yOffSet)).toString() + " Block(s) Higher", x, y,
 							(new Color(52, 221, 221).getRGB()));
 				} else {
@@ -236,10 +237,10 @@ public class ClientEventHandler {
 				y = y + 10;
 
 				if (xOffSet > 0) {
-					Minecraft.getInstance().fontRenderer.drawString(((Integer) xOffSet).toString() + " Block(s) West",
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), ((Integer) xOffSet).toString() + " Block(s) West",
 							x, y, (new Color(207, 83, 0).getRGB()));
 				} else if (xOffSet < 0) {
-					Minecraft.getInstance().fontRenderer.drawString(
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(),
 							((Integer) Math.abs(xOffSet)).toString() + " Block(s) East", x, y,
 							(new Color(255, 204, 0).getRGB()));
 				} else {
@@ -249,10 +250,10 @@ public class ClientEventHandler {
 				y = y + 10;
 
 				if (zOffSet > 0) {
-					Minecraft.getInstance().fontRenderer.drawString(((Integer) zOffSet).toString() + " Block(s) North",
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), ((Integer) zOffSet).toString() + " Block(s) North",
 							x, y, (new Color(204, 204, 255).getRGB()));
 				} else if (zOffSet < 0) {
-					Minecraft.getInstance().fontRenderer.drawString(
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(),
 							((Integer) Math.abs(zOffSet)).toString() + " Block(s) South", x, y,
 							(new Color(91, 194, 54).getRGB()));
 				} else {
@@ -262,9 +263,9 @@ public class ClientEventHandler {
 				y = y + 10;
 
 				if (xOffSet == 0 && yOffSet == 0 && zOffSet == 0) {
-					Minecraft.getInstance().fontRenderer.drawString("Right next to you", x, y, Color.WHITE.getRGB());
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), "Right next to you", x, y, Color.WHITE.getRGB());
 				} else {
-					Minecraft.getInstance().fontRenderer.drawString("Of you", x, y, Color.WHITE.getRGB());
+					Minecraft.getInstance().fontRenderer.drawString(event.getMatrixStack(), "Of you", x, y, Color.WHITE.getRGB());
 				}
 			} else {
 				// Send a chat to the user that their bed was not found.
