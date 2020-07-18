@@ -1,6 +1,7 @@
 package com.wuest.repurpose.Items;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ShearsItem;
 
 import java.util.UUID;
@@ -13,7 +14,7 @@ public class ItemStoneShears extends ShearsItem {
 	 * Initializes a new instance of the ItemStoneShears class.
 	 */
 	public ItemStoneShears() {
-		super(new Item.Properties().maxDamage(124));
+		super(new Item.Properties().maxDamage(124).group(ItemGroup.TOOLS));
 	}
 
 	public static final UUID getAttackSpeedID() {
