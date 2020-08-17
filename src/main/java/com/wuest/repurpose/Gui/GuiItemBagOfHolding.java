@@ -40,7 +40,9 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		if (this.minecraft != null) {
 			super.render(matrixStack, mouseX, mouseY, partialTicks);
-			this.renderHoveredToolTip(matrixStack, mouseX, mouseY);
+
+			// TODO: This was the "renderHoveredToolTip" function.
+			this.func_230459_a_(matrixStack, mouseX, mouseY);
 		}
 	}
 
@@ -48,8 +50,8 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	 * Called when the screen is unloaded. Used to disable keyboard repeat events
 	 */
 	@Override
-	public void removed() {
-		super.removed();
+	public void onClose() {
+		super.onClose();
 
 		if (this.minecraft != null && this.minecraft.player != null && this.itemHandler instanceof ItemBagOfHoldingProvider) {
 			((ItemBagOfHoldingProvider) this.itemHandler).UpdateStack(this.minecraft.player.getHeldItemOffhand());

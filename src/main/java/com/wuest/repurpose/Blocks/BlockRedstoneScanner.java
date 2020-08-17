@@ -115,14 +115,6 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 		return ActionResultType.PASS;
 	}
 
-	/**
-	 * How many world ticks before ticking
-	 */
-	@Override
-	public int tickRate(IWorldReader worldIn) {
-		return this.tickRate;
-	}
-
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockRedstoneScanner.POWERED);
@@ -168,7 +160,7 @@ public class BlockRedstoneScanner extends TileBlockBase<TileEntityRedstoneScanne
 			return;
 		}
 
-		this.updateNeighbors(worldIn.getBlockState(pos), worldIn, pos, 3);
+		worldIn.notifyNeighborsOfStateChange(pos, blockType);
 	}
 
 	/**

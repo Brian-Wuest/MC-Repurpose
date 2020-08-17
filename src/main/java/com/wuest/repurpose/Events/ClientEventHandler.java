@@ -198,8 +198,7 @@ public class ClientEventHandler {
 			int x = event.getWindow().getScaledWidth() / 4;
 			int y = event.getWindow().getScaledHeight() / 2 - 23;
 
-			// TODO: This used to be the getPosition method
-			BlockPos playerPosition = player.func_233580_cy_();
+			BlockPos playerPosition = player.getPosition();
 
 			if (ClientEventHandler.bedLocation != null) {
 				// If yOffset is positive, the player is higher than the bed, if it's negative
@@ -282,6 +281,7 @@ public class ClientEventHandler {
 	private static void setStepHeight(TickEvent.PlayerTickEvent event) {
 		PlayerEntity player = event.player;
 		ItemStack bootsStack = player.inventory.armorInventory.get(0);
+		String playerName = player.getName().getString();
 
 		// Check to see if the player is wearing a pair of enchanted boots with step
 		// assist.
@@ -289,12 +289,12 @@ public class ClientEventHandler {
 		// auto-jump was enabled.
 		// If it was, re-set their step height to the original step height and remove
 		// them from the hashset.
-		if (ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText()) && (!bootsStack.isEnchanted() || Minecraft.getInstance().gameSettings.autoJump)) {
+		if (ClientEventHandler.playerStepAssists.containsKey(playerName) && (!bootsStack.isEnchanted() || Minecraft.getInstance().gameSettings.autoJump)) {
 			// Reset the player step height to the original step height and remove this
 			// record from the hashset.
-			StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName().getFormattedText());
+			StepAssistInfo info = ClientEventHandler.playerStepAssists.get(playerName);
 			player.stepHeight = info.oldStepHeight;
-			ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
+			ClientEventHandler.playerStepAssists.remove(playerName);
 			return;
 		}
 
@@ -304,14 +304,14 @@ public class ClientEventHandler {
 		// the configuration.
 		if (!Minecraft.getInstance().gameSettings.autoJump
 				&& Repurpose.proxy.getServerConfiguration().enableStepAssistEnchantment) {
-			if (ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText()) && bootsStack.isEnchanted()) {
+			if (ClientEventHandler.playerStepAssists.containsKey(playerName) && bootsStack.isEnchanted()) {
 				// The player was in the list and still has boots. Make sure they have the
 				// enchantment.
 				// If they don't remove the player from the list and re-set the step height to
 				// the difference between
 				// the old step height and the new step height.
 				boolean foundStepAssist = false;
-				StepAssistInfo info = ClientEventHandler.playerStepAssists.get(player.getName().getFormattedText());
+				StepAssistInfo info = ClientEventHandler.playerStepAssists.get(playerName);
 
 				for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet()) {
 					if (entry.getKey() instanceof EnchantmentStepAssist) {
@@ -339,7 +339,7 @@ public class ClientEventHandler {
 
 							if (player.stepHeight < 0.0F) {
 								player.stepHeight = 0.0F;
-								ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
+								ClientEventHandler.playerStepAssists.remove(playerName);
 							}
 						}
 
@@ -356,9 +356,9 @@ public class ClientEventHandler {
 						player.stepHeight = 0.0F;
 					}
 
-					ClientEventHandler.playerStepAssists.remove(player.getName().getFormattedText());
+					ClientEventHandler.playerStepAssists.remove(playerName);
 				}
-			} else if (!ClientEventHandler.playerStepAssists.containsKey(player.getName().getFormattedText()) && bootsStack.isEnchanted()) {
+			} else if (!ClientEventHandler.playerStepAssists.containsKey(playerName) && bootsStack.isEnchanted()) {
 				// The player has equipped enchanted boots.
 				for (Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(bootsStack).entrySet()) {
 					if (entry.getKey() instanceof EnchantmentStepAssist) {
@@ -385,7 +385,7 @@ public class ClientEventHandler {
 							}
 
 							player.stepHeight = info.newStepHeight;
-							ClientEventHandler.playerStepAssists.put(player.getName().getFormattedText(), info);
+							ClientEventHandler.playerStepAssists.put(playerName, info);
 						}
 
 						break;

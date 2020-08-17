@@ -96,7 +96,7 @@ public class RedstoneClock extends TileBlockBase<TileEntityRedstoneClock> implem
 			return;
 		}
 
-		this.updateNeighbors(worldIn.getBlockState(pos), worldIn, pos, 3);
+		worldIn.notifyNeighborsOfStateChange(pos, blockType);
 	}
 
 	/**

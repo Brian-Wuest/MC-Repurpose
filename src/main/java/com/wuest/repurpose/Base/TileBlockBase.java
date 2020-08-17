@@ -91,7 +91,9 @@ public abstract class TileBlockBase<T extends TileEntityBase> extends Block {
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		List<ItemStack> items = super.getDrops(state, builder);
-		BlockPos pos = builder.get(LootParameters.POSITION);
+
+		// This used to be POSITION
+		BlockPos pos = new BlockPos(builder.get(LootParameters.field_237457_g_));
 		World world = builder.getWorld();
 
 		T tileEntity = this.getLocalTileEntity(world, pos);

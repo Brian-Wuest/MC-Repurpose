@@ -28,7 +28,7 @@ public class ConfigRandomChance implements ILootCondition {
 	}
 
 	private static LootConditionType register(String registryNameIn, ILootSerializer<? extends ILootCondition> serializerIn) {
-		return Registry.register(Registry.field_239704_ba_, new ResourceLocation(Repurpose.MODID, registryNameIn), new LootConditionType(serializerIn));
+		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(Repurpose.MODID, registryNameIn), new LootConditionType(serializerIn));
 	}
 
 	public LootConditionType func_230419_b_()

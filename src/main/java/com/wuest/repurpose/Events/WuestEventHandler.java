@@ -134,8 +134,8 @@ public class WuestEventHandler {
 
 		if (dimensionHome != null && currentWorld.isRemote) {
 			ServerWorld worldTransferringTo = event.getPlayer().getServer().getWorld(event.getTo());
-			// TODO: This was the getDimensionType and getPosition functions.
-			dimensionHome.setHomePosition(worldTransferringTo.func_230315_m_(), event.getPlayer().func_233580_cy_());
+			// TODO: This was the getDimensionType function.
+			dimensionHome.setHomePosition(worldTransferringTo.func_230315_m_(), event.getPlayer().getPosition());
 		}
 	}
 
@@ -198,8 +198,7 @@ public class WuestEventHandler {
 				// Look for a specific property called "age". All vanilla minecraft crops use
 				// this name for their
 				// property and most other mods do to.
-				// TODO: This was the "getProperties" Method
-				for (Property property : cropState.func_235904_r_()) {
+				for (Property property : cropState.getProperties()) {
 					if (property.getName().toLowerCase().equals("age") && property instanceof IntegerProperty) {
 						// Found the age property, get the max age.
 						ageInteger = (IntegerProperty) property;

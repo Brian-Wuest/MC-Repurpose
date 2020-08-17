@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextProperties;
@@ -226,7 +227,7 @@ public abstract class BasicGui extends Screen {
 	 * less than or equal to the provided width. Formatting codes will be preserved
 	 * between lines.
 	 */
-	public List<ITextProperties> listFormattedStringToWidth(String str, int wrapWidth) {
+	public List<IReorderingProcessor> listFormattedStringToWidth(String str, int wrapWidth) {
 		return this.getMinecraft().fontRenderer.func_238425_b_(new StringTextComponent(str), wrapWidth);
 	}
 
