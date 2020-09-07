@@ -1,10 +1,5 @@
 package com.wuest.repurpose.Items;
 
-import com.google.common.collect.Multimap;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -17,19 +12,12 @@ import net.minecraft.item.SwordItem;
  * @author WuestMan
  */
 public class ItemSwiftBlade extends SwordItem {
-	protected final float attackDamage;
-	protected final IItemTier material;
-	protected final float attackSpeed;
-
 	/*
 	 * Initializes a new instance of the ItemSwiftBlade class.
 	 */
 	public ItemSwiftBlade(IItemTier tier, int attackDamageIn, float attackSpeedIn) {
 		super(tier, attackDamageIn, attackSpeedIn,
 				new Item.Properties().maxStackSize(1).maxDamage(tier.getMaxUses()).group(ItemGroup.COMBAT));
-		this.material = tier;
-		this.attackDamage = 3.0F + material.getAttackDamage();
-		this.attackSpeed = attackSpeedIn;
 	}
 
 	/*
@@ -44,19 +32,14 @@ public class ItemSwiftBlade extends SwordItem {
 	 * equal to 2 damage points.
 	 */
 	public float getDamageVsEntity() {
-		return this.material.getAttackDamage();
+		return this.getTier().getAttackDamage();
 	}
 
 	/**
 	 * Return the name for this tool's material.
 	 */
 	public String getToolMaterialName() {
-		return this.material.toString();
-	}
-
-	@Override
-	public IItemTier getTier() {
-		return this.material;
+		return this.getTier().toString();
 	}
 
 	/**
@@ -65,23 +48,7 @@ public class ItemSwiftBlade extends SwordItem {
 	 */
 	@Override
 	public int getItemEnchantability() {
-		return this.material.getEnchantability();
+		return this.getTier().getEnchantability();
 	}
 
-	/**
-	 * Gets a map of item attribute modifiers, used by ItemSword to increase hit
-	 * damage.
-	 */
-	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
-		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER,
-					"Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
-			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER,
-					"Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
-		}
-
-		return multimap;
-	}
 }
