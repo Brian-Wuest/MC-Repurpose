@@ -58,11 +58,11 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 							|| iblockstate1.getBlock() == ModRegistry.GrassSlab.get())
 							&& worldIn.getLight(blockpos.up()) >= 4) {
 						BlockState grassStairsState = ModRegistry.GrassWall.get().getDefaultState()
-								.with(FourWayBlock.EAST, state.get(FourWayBlock.EAST))
-								.with(FourWayBlock.WEST, state.get(FourWayBlock.WEST))
-								.with(FourWayBlock.NORTH, state.get(FourWayBlock.NORTH))
-								.with(FourWayBlock.SOUTH, state.get(FourWayBlock.SOUTH))
-								.with(FourWayBlock.WATERLOGGED, state.get(FourWayBlock.WATERLOGGED))
+								.with(WallBlock.WALL_HEIGHT_EAST, state.get(WallBlock.WALL_HEIGHT_EAST))
+								.with(WallBlock.WALL_HEIGHT_WEST, state.get(WallBlock.WALL_HEIGHT_WEST))
+								.with(WallBlock.WALL_HEIGHT_NORTH, state.get(WallBlock.WALL_HEIGHT_NORTH))
+								.with(WallBlock.WALL_HEIGHT_SOUTH, state.get(WallBlock.WALL_HEIGHT_SOUTH))
+								.with(WallBlock.WATERLOGGED, state.get(WallBlock.WATERLOGGED))
 								.with(WallBlock.UP, state.get(WallBlock.UP));
 						worldIn.setBlockState(pos, grassStairsState, 3);
 					}
