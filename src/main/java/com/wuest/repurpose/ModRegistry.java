@@ -72,8 +72,8 @@ public class ModRegistry {
 	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Repurpose.MODID);
 
 	/* *********************************** Blocks *********************************** */
-	public static final RegistryObject<BlockCustomWall> DirtWall = BLOCKS.register("block_dirt_wall", () -> new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
-	public static final RegistryObject<BlockCustomWall> GrassWall = BLOCKS.register("block_grass_wall", () -> new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
+	public static final RegistryObject<BlockCustomWall> DirtWall = BLOCKS.register(BlockCustomWall.EnumType.DIRT.getUnlocalizedName(), () -> new BlockCustomWall(Blocks.DIRT, BlockCustomWall.EnumType.DIRT));
+	public static final RegistryObject<BlockCustomWall> GrassWall = BLOCKS.register(BlockCustomWall.EnumType.GRASS.getUnlocalizedName(), () -> new BlockCustomWall(Blocks.GRASS, BlockCustomWall.EnumType.GRASS));
 	public static final RegistryObject<RedstoneClock> RedStoneClock = BLOCKS.register("block_redstone_clock", com.wuest.repurpose.Blocks.RedstoneClock::new);
 	public static final RegistryObject<BlockDirtStairs> DirtStairs = BLOCKS.register("block_dirt_stairs", BlockDirtStairs::new);
 	public static final RegistryObject<BlockGrassStairs> GrassStairs = BLOCKS.register("block_grass_stairs", BlockGrassStairs::new);
@@ -86,8 +86,8 @@ public class ModRegistry {
 
 
 	/* *********************************** Item Blocks *********************************** */
-	public static final RegistryObject<BlockItem> DirtWallItem = ITEMS.register("block_dirt_wall", () -> new BlockItem(DirtWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
-	public static final RegistryObject<BlockItem> GrassWallItem = ITEMS.register("block_grass_wall", () -> new BlockItem(GrassWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> DirtWallItem = ITEMS.register(BlockCustomWall.EnumType.DIRT.getUnlocalizedName(), () -> new BlockItem(DirtWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	public static final RegistryObject<BlockItem> GrassWallItem = ITEMS.register(BlockCustomWall.EnumType.GRASS.getUnlocalizedName(), () -> new BlockItem(GrassWall.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	public static final RegistryObject<BlockItem> RedstoneClockItem = ITEMS.register("block_redstone_clock", () -> new BlockItem(RedStoneClock.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
 	public static final RegistryObject<BlockItem> DirtStairsItem = ITEMS.register("block_dirt_stairs", () -> new BlockItem(DirtStairs.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	public static final RegistryObject<BlockItem> GrassStairsItem = ITEMS.register("block_grass_stairs", () -> new BlockItem(GrassStairs.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));

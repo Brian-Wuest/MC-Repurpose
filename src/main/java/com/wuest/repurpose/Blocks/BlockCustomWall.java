@@ -18,8 +18,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 
 public class BlockCustomWall extends WallBlock implements IModBlock {
-	public static final EnumProperty<BlockCustomWall.EnumType> VARIANT = EnumProperty.create(
-			"variant", BlockCustomWall.EnumType.class);
 	public BlockCustomWall.EnumType BlockVariant;
 
 	public BlockCustomWall(Block modelBlock, BlockCustomWall.EnumType variant) {
@@ -80,12 +78,6 @@ public class BlockCustomWall extends WallBlock implements IModBlock {
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos,
 								  PlayerEntity player) {
 		return new ItemStack(Item.getItemFromBlock(ModRegistry.DirtWall.get()));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(BlockCustomWall.VARIANT);
 	}
 
 	public enum EnumType implements IStringSerializable {
