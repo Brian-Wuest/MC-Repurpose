@@ -34,10 +34,7 @@ import net.minecraft.state.Property;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
@@ -48,12 +45,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -62,7 +59,7 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Repurpose.MODID)
 public class WuestEventHandler {
-	private static HashMap<String, BlockPos> playerBedLocation;
+	public static HashMap<String, BlockPos> playerBedLocation;
 
 	@SubscribeEvent
 	public static void onPlayerLoginEvent(PlayerLoggedInEvent event) {
@@ -128,15 +125,7 @@ public class WuestEventHandler {
 
 	@SubscribeEvent
 	public static void PlayerChangedDimension(PlayerChangedDimensionEvent event) {
-		IDimensionHome dimensionHome = event.getPlayer().getCapability(ModRegistry.DimensionHomes, null)
-				.orElse(null);
-		World currentWorld = event.getPlayer().getEntityWorld();
-
-		if (dimensionHome != null && currentWorld.isRemote) {
-			ServerWorld worldTransferringTo = event.getPlayer().getServer().getWorld(event.getTo());
-			// TODO: This was the getDimensionType function.
-			dimensionHome.setHomePosition(worldTransferringTo.func_230315_m_(), event.getPlayer().getPosition());
-		}
+		WuestEventHandler.setPlayerHomeLocation(event.getPlayer(), event.getTo());
 	}
 
 	@SubscribeEvent
@@ -352,12 +341,26 @@ public class WuestEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void PlayerTickEvent(TickEvent.PlayerTickEvent event) {
-		if (event.side.isServer()) {
-			// Send the player's actual bed location to the client for the bed compass
-			// object.
-			// This is needed as the client doesn't properly store the bed location.
-			WuestEventHandler.sendPlayerBedLocation(event);
+	public static void PlayerWakeUp(PlayerWakeUpEvent event) {
+		if (!event.getPlayer().world.isRemote) {
+			if (WuestEventHandler.playerBedLocation == null) {
+				WuestEventHandler.playerBedLocation = new HashMap<String, BlockPos>();
+			}
+
+			PlayerEntity playerEntity = event.getPlayer();
+			BlockPos playerPos = event.getPlayer().getPosition();
+
+			if (WuestEventHandler.playerBedLocation.containsKey(playerEntity.getDisplayName().getString())) {
+				WuestEventHandler.playerBedLocation.replace(playerEntity.getDisplayName().getString(), playerPos);
+			} else {
+				WuestEventHandler.playerBedLocation.put(playerEntity.getDisplayName().getString(), playerPos);
+			}
+
+			// Set the dimension capability.
+			WuestEventHandler.setPlayerHomeLocation(playerEntity, playerEntity.world.func_234923_W_());
+
+			// Set the client-side bed location for the bed compass.
+			WuestEventHandler.sendPlayerBedLocation((ServerPlayerEntity) playerEntity, playerPos);
 		}
 	}
 
@@ -526,7 +529,7 @@ public class WuestEventHandler {
 		}
 	}
 
-	private static void sendPlayerBedLocation(TickEvent.PlayerTickEvent event) {
+	private static void sendPlayerBedLocation(ServerPlayerEntity player, BlockPos bedPosition) {
 		if (WuestEventHandler.playerBedLocation == null) {
 			WuestEventHandler.playerBedLocation = new HashMap<String, BlockPos>();
 		}
@@ -534,8 +537,6 @@ public class WuestEventHandler {
 		// Send the updated bed information to the client.
 		BedLocationMessage message = new BedLocationMessage();
 		CompoundNBT tag = new CompoundNBT();
-		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
-		BlockPos bedPosition = player.getBedPosition().orElse(null);
 
 		if (bedPosition != null) {
 			tag.putInt("bedX", bedPosition.getX());
@@ -544,18 +545,11 @@ public class WuestEventHandler {
 		}
 
 		message.setMessageTag(tag);
-		BlockPos existingBedPosition = null;
-
-		if (WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
-			existingBedPosition = WuestEventHandler.playerBedLocation.get(player.getDisplayName().getString());
-		} else {
+		if (!WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
 			WuestEventHandler.playerBedLocation.put(player.getDisplayName().getString(), bedPosition);
 		}
 
-		if (existingBedPosition != bedPosition) {
-			// Only send the message to the client if the bed position changes.
-			Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-		}
+		Repurpose.network.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 	}
 
 	private static AnvilUpdateEvent processScrollUpdate(AnvilUpdateEvent event) {
@@ -719,5 +713,17 @@ public class WuestEventHandler {
 		}
 
 		return event;
+	}
+
+	private static void setPlayerHomeLocation(PlayerEntity playerEntity, RegistryKey<World> targetWorld) {
+		IDimensionHome dimensionHome = playerEntity.getCapability(ModRegistry.DimensionHomes, null)
+				.orElse(null);
+		World currentWorld = playerEntity.getEntityWorld();
+
+		if (dimensionHome != null && currentWorld.isRemote) {
+			//ServerWorld worldTransferringTo = playerEntity.getServer().getWorld(targetWorld);
+			// TODO: This was the getDimensionType function.
+			dimensionHome.setHomePosition(currentWorld.func_230315_m_(), playerEntity.getPosition());
+		}
 	}
 }

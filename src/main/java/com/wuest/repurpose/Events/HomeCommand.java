@@ -10,14 +10,12 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Optional;
 
 /**
  * This class is used to create a command which will send the user back to the
@@ -40,13 +38,14 @@ public class HomeCommand {
 		 * it's a player.
 		 */
 		if (sender instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) sender;
+			ServerPlayerEntity player = (ServerPlayerEntity) sender;
 
 			if (!CommonProxy.proxyConfiguration.enableHomeCommand) {
 				return;
 			}
 
-			BlockPos bedLocation = player.getBedPosition().get();
+
+			BlockPos bedLocation = null;
 			RegistryKey<World> worldRegistryKey = server.func_234923_W_();
 			boolean currentWorldIsOverworld = World.field_234918_g_.compareTo(worldRegistryKey) == 0;
 
@@ -58,35 +57,31 @@ public class HomeCommand {
 
 					bedLocation = dimensionHome.getHomePosition(server.func_230315_m_());
 				}
+			} else if (WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
+				// Player slept since joining the world; just grab the player bed location which was saved when the player woke up.
+				bedLocation = WuestEventHandler.playerBedLocation.get(player.getDisplayName().getString());
+			} else {
+				// Player hasn't slept since joining the world and this is the overworld; pull the bed location from the capability if it is set.
+				IDimensionHome dimensionHome = player.getCapability(ModRegistry.DimensionHomes).orElse(null);
+
+				if (dimensionHome != null) {
+					bedLocation = dimensionHome.getHomePosition(server.func_230315_m_());
+				}
 			}
 
 			if (bedLocation != null) {
-				BlockPos blockpos1 = null;
+				HomeCommand.attemptTeleport(player, true, (float) bedLocation.getX() + 0.5F,
+						(float) bedLocation.getY() + 0.5F, (float) bedLocation.getZ() + 0.5F);
 
-				if (currentWorldIsOverworld) {
-					blockpos1 = player.getBedPosition().get();
-				} else {
-					blockpos1 = bedLocation;
-				}
-
-				if (blockpos1 != null) {
-					HomeCommand.attemptTeleport(player, true, (float) blockpos1.getX() + 0.5F,
-							(float) blockpos1.getY() + 0.1F, (float) blockpos1.getZ() + 0.5F);
-				} else {
-					if (currentWorldIsOverworld) {
-						// Send the player saying that the bed could not be
-						// found.
-						player.sendMessage(new StringTextComponent("Bed Not Found."), player.getUniqueID());
-					} else {
-						// Send the player a chat saying that the original
-						// starting position is blocked.
-						player.sendMessage(new StringTextComponent(
-								"The entrance you can in from for this dimension is blocked. You need to find another way out."), player.getUniqueID());
-					}
-				}
 			} else {
-				// Send the player saying that the bed could not be found.
-				player.sendMessage(new StringTextComponent("Bed Not Found."), player.getUniqueID());
+				if (currentWorldIsOverworld) {
+					// Send the player saying that the bed could not be found.
+					player.sendMessage(new StringTextComponent("Bed Not Found."), player.getUniqueID());
+				} else {
+					// Send the player a chat saying that the original starting position is blocked.
+					player.sendMessage(new StringTextComponent(
+							"The entrance you can in from for this dimension is blocked. You need to find another way out."), player.getUniqueID());
+				}
 			}
 		}
 	}
