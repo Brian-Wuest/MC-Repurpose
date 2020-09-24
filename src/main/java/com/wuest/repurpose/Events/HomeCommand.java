@@ -57,7 +57,7 @@ public class HomeCommand {
 
 					bedLocation = dimensionHome.getHomePosition(server.func_230315_m_());
 				}
-			} else if (WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
+			} else if (WuestEventHandler.playerBedLocation != null && WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
 				// Player slept since joining the world; just grab the player bed location which was saved when the player woke up.
 				bedLocation = WuestEventHandler.playerBedLocation.get(player.getDisplayName().getString());
 			} else {

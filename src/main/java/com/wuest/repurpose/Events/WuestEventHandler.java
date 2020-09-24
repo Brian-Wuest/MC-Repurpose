@@ -720,7 +720,7 @@ public class WuestEventHandler {
 				.orElse(null);
 		World currentWorld = playerEntity.getEntityWorld();
 
-		if (dimensionHome != null && currentWorld.isRemote) {
+		if (dimensionHome != null && !currentWorld.isRemote) {
 			//ServerWorld worldTransferringTo = playerEntity.getServer().getWorld(targetWorld);
 			// TODO: This was the getDimensionType function.
 			dimensionHome.setHomePosition(currentWorld.func_230315_m_(), playerEntity.getPosition());
