@@ -228,7 +228,7 @@ public abstract class BasicGui extends Screen {
 	 * between lines.
 	 */
 	public List<IReorderingProcessor> listFormattedStringToWidth(String str, int wrapWidth) {
-		return this.getMinecraft().fontRenderer.func_238425_b_(new StringTextComponent(str), wrapWidth);
+		return this.getMinecraft().fontRenderer.trimStringToWidth(new StringTextComponent(str), wrapWidth);
 	}
 
 	/**

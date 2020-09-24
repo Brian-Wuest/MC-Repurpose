@@ -46,8 +46,7 @@ public class ItemBagOfHolding extends Item {
 		super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
 
 		// This will determine what model is shown to the user when the bag is opened or closed.
-		// TODO: This used to be addPropertyOverride on the Item class.
-		ItemModelsProperties.func_239418_a_(this, new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
+		ItemModelsProperties.registerProperty(this, new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
 			@OnlyIn(Dist.CLIENT)
 			public float call(ItemStack itemStack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(itemStack);

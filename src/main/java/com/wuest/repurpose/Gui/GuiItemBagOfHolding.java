@@ -41,8 +41,7 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 		if (this.minecraft != null) {
 			super.render(matrixStack, mouseX, mouseY, partialTicks);
 
-			// TODO: This was the "renderHoveredToolTip" function.
-			this.func_230459_a_(matrixStack, mouseX, mouseY);
+			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 		}
 	}
 

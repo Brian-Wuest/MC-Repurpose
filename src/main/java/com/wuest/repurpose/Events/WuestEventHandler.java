@@ -357,7 +357,7 @@ public class WuestEventHandler {
 			}
 
 			// Set the dimension capability.
-			WuestEventHandler.setPlayerHomeLocation(playerEntity, playerEntity.world.func_234923_W_());
+			WuestEventHandler.setPlayerHomeLocation(playerEntity, playerEntity.world.getDimensionKey());
 
 			// Set the client-side bed location for the bed compass.
 			WuestEventHandler.sendPlayerBedLocation((ServerPlayerEntity) playerEntity, playerPos);
@@ -722,8 +722,7 @@ public class WuestEventHandler {
 
 		if (dimensionHome != null && !currentWorld.isRemote) {
 			//ServerWorld worldTransferringTo = playerEntity.getServer().getWorld(targetWorld);
-			// TODO: This was the getDimensionType function.
-			dimensionHome.setHomePosition(currentWorld.func_230315_m_(), playerEntity.getPosition());
+			dimensionHome.setHomePosition(currentWorld.getDimensionType(), playerEntity.getPosition());
 		}
 	}
 }

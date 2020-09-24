@@ -40,8 +40,7 @@ public class ExtendedCookingRecipeSerializer extends ForgeRegistryEntry<IRecipeS
 			String s1 = JSONUtils.getString(json, "result");
 			ResourceLocation resourcelocation = new ResourceLocation(s1);
 
-			// TODO: This used to be "getValue"
-			itemstack = new ItemStack(Registry.ITEM.func_241873_b(resourcelocation).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
+			itemstack = new ItemStack(Registry.ITEM.getOptional(resourcelocation).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
 		}
 
 		float experience = JSONUtils.getFloat(json, "experience", 0.0F);

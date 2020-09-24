@@ -55,16 +55,14 @@ public class ConfigRandomChance implements ILootCondition {
 			//super(new ResourceLocation(Repurpose.MODID, "config_random_chance"), ConfigRandomChance.class);
 		}
 
-		// TODO: This was the serialize method.
 		@Override
-		public void func_230424_a_(JsonObject json, ConfigRandomChance value, JsonSerializationContext context) {
+		public void serialize(JsonObject json, ConfigRandomChance value, JsonSerializationContext context) {
 			json.addProperty("chance", value.chance);
 			json.addProperty("option_name", value.configOptionName);
 		}
 
-		// TODO: This was the deserialize method.
 		@Override
-		public ConfigRandomChance func_230423_a_(JsonObject json, JsonDeserializationContext context) {
+		public ConfigRandomChance deserialize(JsonObject json, JsonDeserializationContext context) {
 			return new ConfigRandomChance(JSONUtils.getInt(json, "chance"), JSONUtils.getString(json, "option_name"));
 		}
 	}

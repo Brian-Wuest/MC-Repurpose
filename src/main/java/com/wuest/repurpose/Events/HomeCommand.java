@@ -46,16 +46,15 @@ public class HomeCommand {
 
 
 			BlockPos bedLocation = null;
-			RegistryKey<World> worldRegistryKey = server.func_234923_W_();
-			boolean currentWorldIsOverworld = World.field_234918_g_.compareTo(worldRegistryKey) == 0;
+			RegistryKey<World> worldRegistryKey = server.getDimensionKey();
+			boolean currentWorldIsOverworld = World.OVERWORLD.compareTo(worldRegistryKey) == 0;
 
 			if (!currentWorldIsOverworld) {
 				// Check the player's capability for this dimension.
 				IDimensionHome dimensionHome = player.getCapability(ModRegistry.DimensionHomes).orElse(null);
 
 				if (dimensionHome != null) {
-
-					bedLocation = dimensionHome.getHomePosition(server.func_230315_m_());
+					bedLocation = dimensionHome.getHomePosition(server.getDimensionType());
 				}
 			} else if (WuestEventHandler.playerBedLocation != null && WuestEventHandler.playerBedLocation.containsKey(player.getDisplayName().getString())) {
 				// Player slept since joining the world; just grab the player bed location which was saved when the player woke up.
@@ -65,7 +64,7 @@ public class HomeCommand {
 				IDimensionHome dimensionHome = player.getCapability(ModRegistry.DimensionHomes).orElse(null);
 
 				if (dimensionHome != null) {
-					bedLocation = dimensionHome.getHomePosition(server.func_230315_m_());
+					bedLocation = dimensionHome.getHomePosition(server.getDimensionType());
 				}
 			}
 
