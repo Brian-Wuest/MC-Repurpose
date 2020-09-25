@@ -220,37 +220,43 @@ public class WuestEventHandler {
 					ActionResultType replanted = ActionResultType.FAIL;
 					BlockState tempState = cropState.with(ageInteger, 0);
 					Item seed = crop.getItem(event.getWorld(), event.getPos(), cropState).getItem();
+					Block plantBlockForSeeds = null;
 
-					for (ItemStack drop : drops) {
-						Item dropItem = drop.getItem();
+					if (seed instanceof BlockNamedItem) {
+						plantBlockForSeeds = ((BlockNamedItem)seed).getBlock();
 
-						// Make sure this is the same class as the crop's seed.
-						if (dropItem.getClass() == seed.getClass() && replanted != ActionResultType.PASS) {
-							Direction facing = event.getFace();
+						for (ItemStack drop : drops) {
+							Item dropItem = drop.getItem();
 
-							BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(
-									farmlandPosition.getX(),
-									farmlandPosition.up().getY(),
-									farmlandPosition.getZ()),
-									facing, farmlandPosition.up(), false);
+							// Make sure this is the same class as the crop's seed.
+							if (dropItem.getClass() == seed.getClass() && replanted != ActionResultType.PASS) {
+								Direction facing = event.getFace();
 
-							ItemUseContext context = new CustomItemUseContext(event.getWorld(), p, event.getHand(), drop, rayTraceResult);
-							replanted = drop.onItemUse(context);
+								BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(
+										farmlandPosition.getX(),
+										farmlandPosition.up().getY(),
+										farmlandPosition.getZ()),
+										facing, farmlandPosition.up(), false);
 
-							if (replanted == ActionResultType.SUCCESS || replanted == ActionResultType.PASS) {
-								replanted = ActionResultType.PASS;
+								ItemUseContext context = new CustomItemUseContext(event.getWorld(), p, event.getHand(), drop, rayTraceResult);
+								replanted = drop.onItemUse(context);
 
-								if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
-									System.out.println("Found a 'seed' to plant for the crop ["
-											+ crop.getRegistryName().toString()
-											+ "] from the crop's drops. Not including it in the list of drops to be added to the player's inventory.");
+								if (replanted == ActionResultType.SUCCESS || replanted == ActionResultType.PASS
+									|| replanted == ActionResultType.CONSUME) {
+									replanted = ActionResultType.PASS;
+
+									if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
+										System.out.println("Found a 'seed' to plant for the crop ["
+												+ crop.getRegistryName().toString()
+												+ "] from the crop's drops. Not including it in the list of drops to be added to the player's inventory.");
+									}
 								}
 							}
-						}
 
-						if (drop != ItemStack.EMPTY) {
-							p.inventory.addItemStackToInventory(drop);
-							p.openContainer.detectAndSendChanges();
+							if (drop != ItemStack.EMPTY) {
+								p.inventory.addItemStackToInventory(drop);
+								p.openContainer.detectAndSendChanges();
+							}
 						}
 					}
 
@@ -277,7 +283,7 @@ public class WuestEventHandler {
 
 							if (p.canPlayerEdit(farmlandPosition.offset(facing), facing, seeds)
 									&& state.getBlock().canSustainPlant(state, event.getWorld(), farmlandPosition,
-									Direction.UP, (IPlantable) seeds.getItem())
+									Direction.UP, (IPlantable) plantBlockForSeeds)
 									&& event.getWorld().isAirBlock(farmlandPosition.up())) {
 								if (CommonProxy.proxyConfiguration.enableVerboseLogging) {
 									System.out.println(
@@ -285,7 +291,7 @@ public class WuestEventHandler {
 								}
 
 								event.getWorld().setBlockState(farmlandPosition.up(),
-										((IPlantable) seeds.getItem()).getPlant(event.getWorld(), farmlandPosition));
+										((IPlantable) plantBlockForSeeds).getPlant(event.getWorld(), farmlandPosition));
 
 								if (p instanceof ServerPlayerEntity) {
 									CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) p, farmlandPosition.up(),
