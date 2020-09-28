@@ -1,0 +1,19 @@
+{
+    "conditions": [
+        {
+            "type": "repurpose:config_recipe",
+            "recipeKey": "Mini Redstone"
+        }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "group": "Mini Redstone",
+    "ingredients": [
+        {
+            "item": "repurpose:block_mini_redstone"
+        }
+    ],
+    "result": {
+        "item": "minecraft:redstone",
+        "count": 4
+    }
+}
