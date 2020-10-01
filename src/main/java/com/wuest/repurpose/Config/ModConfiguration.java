@@ -49,7 +49,6 @@ public class ModConfiguration {
 	public static String goldNuggetDropChanceName = "Gold Nugget Drop Chance";
 
 	public static String appleDropChanceName = "Apple Drop Chance";
-	public static String stickDropChanceName = "Stick Drop Chance";
 	public static String monsterHeadDropChanceName = "Monster Head Drop Chance";
 
 	public static String addMetalRecipesName = "Metal Recipes";
@@ -121,7 +120,6 @@ public class ModConfiguration {
 	public int ironNuggetDropChance;
 	public int goldNuggetDropChance;
 	public int appleDropChance;
-	public int stickDropChance;
 	public int monsterHeadDropChance;
 	private ConfigFileSettings configFileSettings;
 
@@ -234,10 +232,6 @@ public class ModConfiguration {
 				"Defines the drop chance of apples from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
 				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.appleDropChanceName, 4, 0, 100);
 
-		proxyConfiguration.configFileSettings.stickDropChance = builder.comment(
-				"Defines the drop chance of sticks from leaves (all varieties) blocks. This is percent based so 1 = 1%. Server configuration overrides client.")
-				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.stickDropChanceName, 6, 0, 100);
-
 		proxyConfiguration.configFileSettings.monsterHeadDropChance = builder.comment(
 				"Defines the drop chance of monster heads when zombies or skeletons die. This is percent based so 1 = 1%. Server configuration overrides client.")
 				.defineInRange(ModConfiguration.ExtraDropOptions + ModConfiguration.monsterHeadDropChanceName, 4, 0,
@@ -296,7 +290,6 @@ public class ModConfiguration {
 		proxyConfiguration.ironNuggetDropChance = proxyConfiguration.configFileSettings.ironNuggetDropChance.get();
 		proxyConfiguration.goldNuggetDropChance = proxyConfiguration.configFileSettings.goldNuggetDropChance.get();
 		proxyConfiguration.appleDropChance = proxyConfiguration.configFileSettings.appleDropChance.get();
-		proxyConfiguration.stickDropChance = proxyConfiguration.configFileSettings.stickDropChance.get();
 		proxyConfiguration.monsterHeadDropChance = proxyConfiguration.configFileSettings.monsterHeadDropChance.get();
 
 		// Recipe configuration.
@@ -335,7 +328,6 @@ public class ModConfiguration {
 		config.ironNuggetDropChance = tag.getInt(ModConfiguration.ironNuggetDropChanceName);
 		config.goldNuggetDropChance = tag.getInt(ModConfiguration.goldNuggetDropChanceName);
 		config.appleDropChance = tag.getInt(ModConfiguration.appleDropChanceName);
-		config.stickDropChance = tag.getInt(ModConfiguration.stickDropChanceName);
 
 		for (String key : ModConfiguration.recipeKeys) {
 			config.recipeConfiguration.put(key, tag.getBoolean(key));
@@ -375,7 +367,6 @@ public class ModConfiguration {
 		tag.putInt(ModConfiguration.ironNuggetDropChanceName, this.ironNuggetDropChance);
 		tag.putInt(ModConfiguration.goldNuggetDropChanceName, this.goldNuggetDropChance);
 		tag.putInt(ModConfiguration.appleDropChanceName, this.appleDropChance);
-		tag.putInt(ModConfiguration.stickDropChanceName, this.stickDropChance);
 
 		return tag;
 	}
