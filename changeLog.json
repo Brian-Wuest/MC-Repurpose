@@ -5,10 +5,10 @@
 	  "1.12-recommended": "1.0.0.20",
 	  "1.14-latest": "1.1.0.1",
 	  "1.14-recommended": "1.1.0.1",
-	  "1.15-latest": "1.2.0.1",
-	  "1.15-recommended": "1.2.0.1",
-	  "1.16-latest": "1.3.0.0",
-	  "1.16-recommended": "1.3.0.0"
+	  "1.15-latest": "1.2.0.2",
+	  "1.15-recommended": "1.2.0.2",
+	  "1.16-latest": "1.3.0.1",
+	  "1.16-recommended": "1.3.0.1"
   },
   "1.12": {
 	  "1.0.0.0": "Initial release.",
@@ -39,9 +39,11 @@
  },
  "1.15": {
 	 "1.2.0.0": "Initial release for 1.15.2!",
-	 "1.2.0.1": "Fixes an issue where the additional drop functionality was working with silk touch tools"
+	 "1.2.0.1": "Fixes an issue where the additional drop functionality was working with silk touch tools",
+	 "1.2.0.2": "Adds reverse recipe for mini block of redstone. Fixes leaf drops"
  },
  "1.16": {
-	 "1.3.0.0": "Initial release for 1.16.3!"
+	 "1.3.0.0": "Initial release for 1.16.3!",
+	 "1.3.0.1": "Adds reverse recipe for mini block of redstone. Fixes leaf drops"
  }
 }
