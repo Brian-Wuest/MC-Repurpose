@@ -38,6 +38,6 @@ issueTrackerURL="https://github.com/Brian-Wuest/MC-Repurpose/issues" #optional
 [[dependencies.repurpose]]
     modId="forge" #mandatory
     mandatory=false #mandatory
-    versionRange="[31.2.22,)" #mandatory
+    versionRange="[35,)" #mandatory
     ordering="NONE"
     side="BOTH"
