@@ -434,24 +434,30 @@ public class WuestEventHandler {
 		}
 
 		eventName = new ResourceLocation(modID, path);
-
+		String tableName = "";
 		if (eventName.equals(Blocks.DIRT.getRegistryName()) || eventName.equals(Blocks.GRASS_BLOCK.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "blocks/dirt");
+			tableName = "dirt";
 		} else if (eventName.equals(Blocks.GRASS.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "blocks/grass");
+			tableName = "grass";
 		} else if (eventName.equals(Blocks.STONE.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "blocks/stone");
+			tableName = "stone";
 		} else if (eventName.equals(Blocks.COAL_ORE.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "blocks/coal_ore");
+			tableName = "coal";
 		} else if (eventName.equals(EntityType.ZOMBIE.getRegistryName())
 				|| eventName.equals(EntityType.SKELETON.getRegistryName())
 				|| eventName.equals(EntityType.CREEPER.getRegistryName())) {
 			newTable = new ResourceLocation(Repurpose.MODID, "entities/" + eventName.getPath());
+			tableName = eventName.getPath();
 		} else if (eventName.getPath().toLowerCase().contains("_leaves")) {
 			boolean foundBlock = false;
 			for (Block block : BlockTags.LEAVES.getAllElements()) {
 				if (eventName.getPath().equals(block.getRegistryName().getPath())) {
 					foundBlock = true;
+					tableName = eventName.getPath();
 					break;
 				}
 			}
@@ -462,7 +468,9 @@ public class WuestEventHandler {
 		}
 
 		if (newTable != null) {
-			event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(newTable)).build());
+			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(newTable)).name("prefab_" + tableName.toLowerCase()).build();
+
+			event.getTable().addPool(pool);
 		}
 	}
 
