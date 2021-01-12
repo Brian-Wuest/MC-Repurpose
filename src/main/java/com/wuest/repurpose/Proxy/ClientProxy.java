@@ -4,6 +4,7 @@ import com.wuest.repurpose.Blocks.BlockCustomWall;
 import com.wuest.repurpose.Blocks.BlockCustomWall.EnumType;
 import com.wuest.repurpose.Blocks.BlockGrassSlab;
 import com.wuest.repurpose.Blocks.BlockGrassStairs;
+import com.wuest.repurpose.Capabilities.ItemBagOfHoldingProvider;
 import com.wuest.repurpose.Config.ModConfiguration;
 import com.wuest.repurpose.Events.ClientEventHandler;
 import com.wuest.repurpose.Gui.BasicGui;
@@ -20,13 +21,12 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.*;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.World;
@@ -40,6 +40,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -137,6 +138,8 @@ public class ClientProxy extends CommonProxy {
 	public void clientSetup(FMLClientSetupEvent event) {
 		this.RegisterKeyBindings();
 
+		this.setupClientItemProperties();
+
 		// This render type (func_228643_e_) is the "cutout" render type.
 		RenderTypeLookup.setRenderLayer(ModRegistry.DirtWall.get(), RenderType.getCutoutMipped());
 
@@ -209,6 +212,22 @@ public class ClientProxy extends CommonProxy {
 					KeyModifier.ALT, InputMappings.Type.KEYSYM, GLFW_KEY_X, "Repurpose - Bag of Holding");
 			ClientEventHandler.keyBindings.add(binding);
 			ClientRegistry.registerKeyBinding(binding);
+		});
+	}
+
+	private void setupClientItemProperties() {
+		// This will determine what model is shown to the user when the bag is opened or closed.
+		ItemModelsProperties.registerProperty(ModRegistry.BagOfHolding.get(), new ResourceLocation(Repurpose.MODID, "bag_of_holding"), new IItemPropertyGetter() {
+			@OnlyIn(Dist.CLIENT)
+			public float call(ItemStack itemStack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+				ItemBagOfHoldingProvider handler = ItemBagOfHoldingProvider.GetFromStack(itemStack);
+
+				if (handler.opened) {
+					return 1f;
+				}
+
+				return 0f;
+			}
 		});
 	}
 }
