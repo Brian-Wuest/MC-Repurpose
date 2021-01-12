@@ -39,6 +39,8 @@ public class GuiItemBagOfHolding extends ContainerScreen<BagOfHoldingContainer> 
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		if (this.minecraft != null) {
+			this.renderBackground(matrixStack);
+			
 			super.render(matrixStack, mouseX, mouseY, partialTicks);
 
 			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
