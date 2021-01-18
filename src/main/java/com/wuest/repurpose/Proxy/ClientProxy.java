@@ -136,7 +136,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void clientSetup(FMLClientSetupEvent event) {
-		this.RegisterKeyBindings();
+		this.RegisterKeyBindings(event);
 
 		this.setupClientItemProperties();
 
@@ -199,8 +199,8 @@ public class ClientProxy extends CommonProxy {
 	private void RegisterEventListeners() {
 	}
 
-	private void RegisterKeyBindings() {
-		DeferredWorkQueue.runLater(() -> {
+	private void RegisterKeyBindings(FMLClientSetupEvent clientSetupEvent) {
+		clientSetupEvent.enqueueWork(() -> {
 			KeyBinding binding = new KeyBinding("Previous Item",
 					KeyConflictContext.IN_GAME, KeyModifier.ALT,
 					InputMappings.Type.KEYSYM, GLFW_KEY_Z, "Repurpose - Bag of Holding");
