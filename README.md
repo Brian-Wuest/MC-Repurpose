@@ -1,6 +1,7 @@
-This mod is designed to be an "Ease of Life" mod.
+This repository is archived and will no longer receive updates.
 
-You can find information on all of the features of this mod in the [wiki](https://github.com/Brian-Wuest/MC-WuestUtilities/wiki)
+
+This mod is designed to be an "Ease of Life" mod.
 
 # Notes:
 You can use this in any mod pack.
